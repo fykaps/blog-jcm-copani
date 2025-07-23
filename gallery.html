@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Escolar - Galería</title>
+    <link rel="stylesheet" href="assets/css/variables.css">
+    <link rel="stylesheet" href="assets/css/animations.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="icon" href="assets/img/favicon.ico">
+</head>
+
+<body>
+    <div id="app">
+        <header id="main-header" class="header-fixed"></header>
+
+        <main class="container">
+            <section class="hero animate-fade-in">
+                <h1 class="animate-slide-up">Galería del Colegio</h1>
+                <p class="animate-slide-up delay-1">Momentos especiales y actividades de nuestra comunidad educativa.
+                </p>
+            </section>
+
+            <div class="gallery-section">
+                <div class="gallery-filters animate-fade-in delay-2">
+                    <button class="filter-button active" data-filter="all">Todas</button>
+                    <button class="filter-button" data-filter="Eventos">Eventos</button>
+                    <button class="filter-button" data-filter="Deportes">Deportes</button>
+                    <button class="filter-button" data-filter="Académico">Académico</button>
+                    <button class="filter-button" data-filter="Arte">Arte</button>
+                    <button class="filter-button" data-filter="Actividades">Actividades</button>
+                </div>
+
+                <div class="gallery-container animate-fade-in delay-3" id="gallery-container">
+                    <!-- Las imágenes se cargarán dinámicamente con JavaScript -->
+                </div>
+            </div>
+        </main>
+
+        <footer id="main-footer"></footer>
+
+        <button id="scroll-top" class="scroll-top-btn" aria-label="Subir al inicio">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+                <path fill="currentColor" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
+            </svg>
+        </button>
+    </div>
+
+    <script src="assets/js/components.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/scroll.js"></script>
+    <script src="assets/js/gallery.js"></script>
+    <script src="assets/data/galleries.js"></script>
+</body>
+
+</html>

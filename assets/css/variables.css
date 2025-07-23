@@ -1,0 +1,81 @@
+:root {
+    /* Colores principales */
+    --primary-color: #2c3e50;
+    --primary-light: #3a516f;
+    --primary-dark: #1a252f;
+    --secondary-color: #3498db;
+    --secondary-light: #5dade2;
+    --secondary-dark: #2980b9;
+    --accent-color: #e74c3c;
+    --accent-light: #ec7063;
+    --accent-dark: #c0392b;
+    --success-color: #2ecc71;
+    --warning-color: #f39c12;
+    --danger-color: #e74c3c;
+    
+    /* Colores neutros */
+    --light-color: #ecf0f1;
+    --light-gray: #dfe6e9;
+    --medium-gray: #bdc3c7;
+    --dark-gray: #7f8c8d;
+    --dark-color: #2c3e50;
+    --white: #ffffff;
+    --black: #000000;
+    
+    /* Texto */
+    --text-color: #333333;
+    --text-light: #7f8c8d;
+    --text-on-primary: #ffffff;
+    --text-on-secondary: #ffffff;
+    --text-on-accent: #ffffff;
+    
+    /* Tipografía */
+    --font-main: 'Segoe UI', Roboto, -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-heading: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
+    --font-size-base: 16px;
+    --font-size-small: 14px;
+    --font-size-medium: 18px;
+    --font-size-large: 24px;
+    --font-size-xlarge: 32px;
+    --font-size-xxlarge: 48px;
+    --font-size-xxxlarge: 64px;
+    
+    /* Espaciado */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+    --space-xxl: 48px;
+    --space-xxxl: 64px;
+    
+    /* Bordes */
+    --border-radius: 6px;
+    --border-radius-lg: 12px;
+    --border-radius-xl: 20px;
+    --border-radius-circle: 50%;
+    
+    /* Sombras */
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.2);
+    --shadow-inset: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    --shadow-text: 0 2px 4px rgba(0, 0, 0, 0.3);
+    
+    /* Transiciones */
+    --transition-fast: 0.2s ease;
+    --transition-medium: 0.3s ease;
+    --transition-slow: 0.5s ease;
+    --transition-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    
+    /* Z-index */
+    --z-header: 1000;
+    --z-modal: 2000;
+    --z-scroll-top: 999;
+    --z-overlay: 1500;
+    
+    /* Tamaños */
+    --max-width: 1200px;
+    --header-height: 80px;
+    --footer-height: 300px;
+}

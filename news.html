@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Escolar - Noticias</title>
+    <link rel="stylesheet" href="assets/css/variables.css">
+    <link rel="stylesheet" href="assets/css/animations.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="icon" href="assets/img/favicon.ico">
+</head>
+
+<body>
+    <div id="app">
+        <header id="main-header"></header>
+
+        <main class="container">
+            <section class="hero">
+                <h1>Noticias del Colegio</h1>
+                <p>Mantente informado sobre las últimas novedades y eventos de nuestra institución.</p>
+            </section>
+
+            <div class="content-wrapper">
+                <div class="main-content">
+                    <div class="news-filters">
+                        <h2 id="filter-title">Todas las noticias</h2>
+                        <p id="filter-description">Las últimas publicaciones de nuestro blog escolar.</p>
+                    </div>
+
+                    <div class="all-news animate-fade-in delay-3" id="all-news-container"></div>
+                    <div class="pagination-wrapper animate-fade-in delay-4" id="pagination-container">
+                        <div class="pagination" id="news-pagination"></div>
+                    </div>
+                </div>
+
+                <aside class="sidebar">
+                    <div class="sidebar-widget">
+                        <h3>Buscar</h3>
+                        <div class="search-box">
+                            <input type="text" id="search-input" placeholder="Buscar noticias...">
+                            <button id="search-button">Buscar</button>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-widget">
+                        <h3>Categorías</h3>
+                        <ul class="categories-list" id="categories-container"></ul>
+                    </div>
+
+                    <div class="sidebar-widget">
+                        <h3>Etiquetas Populares</h3>
+                        <div class="tags-cloud" id="tags-container"></div>
+                    </div>
+
+                    <div class="sidebar-widget">
+                        <h3>Noticias Más Vistas</h3>
+                        <div class="popular-news" id="popular-news-container"></div>
+                    </div>
+                </aside>
+            </div>
+        </main>
+
+        <footer id="main-footer"></footer>
+
+        <button id="scroll-top" class="scroll-top-btn" aria-label="Subir al inicio">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+                <path fill="currentColor" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
+            </svg>
+        </button>
+    </div>
+
+    <script src="assets/js/components.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/news.js"></script>
+    <script src="assets/js/scroll.js"></script>
+    <script src="assets/data/news.js"></script>
+</body>
+
+</html>
