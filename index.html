@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="es">
 
@@ -153,4 +154,161 @@
     </style>
 </body>
 
+=======
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <!-- Metadatos básicos -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Blog oficial de la institución educativa con noticias, eventos y logros de nuestra comunidad escolar">
+
+    <!-- Información del sitio -->
+    <title>Blog Escolar - Inicio</title>
+    <link rel="icon" href="assets/img/favicon.ico" type="image/x-icon">
+
+    <!-- Hojas de estilo -->
+    <link rel="stylesheet" href="assets/css/variables.css">
+    <link rel="stylesheet" href="assets/css/animations.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <!-- Preconexión para mejorar performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+
+<body>
+    <div id="app">
+        <!-- Cabecera del sitio (se carga dinámicamente) -->
+        <header id="main-header" class="header-fixed" aria-label="Cabecera principal">
+            <!-- El contenido del header se inyecta via components.js -->
+        </header>
+
+        <!-- Contenido principal -->
+        <main class="container" id="main-content">
+            <!-- Sección Hero -->
+            <section class="hero animate-fade-in" aria-labelledby="hero-heading">
+                <div class="hero-content">
+                    <h1 id="hero-heading" class="animate-slide-up">Bienvenidos al Blog del Colegio</h1>
+                    <p class="hero-description animate-slide-up delay-1">
+                        Un espacio para compartir noticias, eventos y logros de nuestra comunidad escolar.
+                    </p>
+                    <a href="#content-section" class="btn btn-primary animate-slide-up delay-2"
+                        aria-label="Explorar contenido">
+                        Explorar
+                    </a>
+                </div>
+            </section>
+
+            <!-- Contenido principal con grid layout -->
+            <div class="content-wrapper" id="content-section">
+                <!-- Columna principal -->
+                <div class="main-content">
+                    <!-- Sección de noticias destacadas -->
+                    <section class="featured-news animate-fade-in delay-3" aria-labelledby="featured-news-heading">
+                        <h2 id="featured-news-heading">Noticias Destacadas</h2>
+                        <div class="news-grid" id="featured-news-container" role="list">
+                            <!-- Las noticias destacadas se cargarán aquí dinámicamente -->
+                        </div>
+                    </section>
+
+                    <!-- Sección de noticias recientes -->
+                    <section class="recent-news animate-fade-in delay-4" aria-labelledby="recent-news-heading">
+                        <h2 id="recent-news-heading">Noticias Recientes</h2>
+                        <div class="news-list" id="recent-news-container" role="list">
+                            <!-- Las noticias recientes se cargarán aquí dinámicamente -->
+                        </div>
+                        <!-- Paginación -->
+                        <nav class="pagination-wrapper" aria-label="Paginación de noticias">
+                            <div class="pagination" id="news-pagination" role="navigation">
+                                <!-- Los controles de paginación se generarán aquí dinámicamente -->
+                            </div>
+                        </nav>
+                    </section>
+                </div>
+
+                <!-- Sidebar -->
+                <aside class="sidebar" aria-label="Barra lateral">
+                    <!-- Widget de búsqueda -->
+                    <div class="sidebar-widget animate-slide-left delay-5" aria-labelledby="search-widget-heading">
+                        <h3 id="search-widget-heading">Buscar</h3>
+                        <div class="search-box">
+                            <label for="search-input" class="sr-only">Buscar noticias</label>
+                            <input type="text" id="search-input" placeholder="Buscar noticias..."
+                                aria-label="Campo de búsqueda">
+                            <button id="search-button" class="btn btn-icon" aria-label="Buscar">
+                                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+                                    <path fill="currentColor"
+                                        d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 0 0 1.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 0 0-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 0 0 5.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Widget de categorías -->
+                    <div class="sidebar-widget animate-slide-left delay-6" aria-labelledby="categories-widget-heading">
+                        <h3 id="categories-widget-heading">Categorías</h3>
+                        <ul class="categories-list" id="categories-container" role="list">
+                            <!-- Las categorías se cargarán aquí dinámicamente -->
+                        </ul>
+                    </div>
+
+                    <!-- Widget de etiquetas -->
+                    <div class="sidebar-widget animate-slide-left delay-7" aria-labelledby="tags-widget-heading">
+                        <h3 id="tags-widget-heading">Etiquetas Populares</h3>
+                        <div class="tags-cloud" id="tags-container" role="list">
+                            <!-- Las etiquetas se cargarán aquí dinámicamente -->
+                        </div>
+                    </div>
+
+                    <!-- Widget de noticias populares -->
+                    <div class="sidebar-widget animate-slide-left delay-8" aria-labelledby="popular-widget-heading">
+                        <h3 id="popular-widget-heading">Noticias Más Vistas</h3>
+                        <div class="popular-news" id="popular-news-container" role="list">
+                            <!-- Las noticias populares se cargarán aquí dinámicamente -->
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </main>
+
+        <!-- Pie de página (se carga dinámicamente) -->
+        <footer id="main-footer" aria-label="Pie de página">
+            <!-- El contenido del footer se inyecta via components.js -->
+        </footer>
+
+        <!-- Botón para volver arriba -->
+        <button id="scroll-top" class="scroll-top-btn" aria-label="Volver al inicio" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+                <path fill="currentColor" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/components.js" defer></script>
+    <script src="assets/js/main.js" defer></script>
+    <script src="assets/js/news.js" defer></script>
+    <script src="assets/js/scroll.js" defer></script>
+    <script src="assets/data/news.js" defer></script>
+
+    <!-- Estilos para screen readers (accesibilidad) -->
+    <style>
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+    </style>
+</body>
+
+>>>>>>> f544b31e5157af84e4703e6538865ca99e6358ab
 </html>
