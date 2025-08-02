@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /**
  * Manejo del localStorage para likes, comentarios y vistas
  */
