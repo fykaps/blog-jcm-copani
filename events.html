@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Escolar - Eventos</title>
+    <link rel="stylesheet" href="assets/css/variables.css">
+    <link rel="stylesheet" href="assets/css/animations.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="icon" href="assets/img/favicon.ico">
+</head>
+
+<body>
+    <div id="app">
+        <header id="main-header" class="header-fixed"></header>
+
+        <main class="container">
+            <section class="hero animate-fade-in">
+                <h1 class="animate-slide-up">Eventos Escolares</h1>
+                <p class="animate-slide-up delay-1">Próximas actividades y eventos programados para nuestra comunidad.
+                </p>
+            </section>
+
+            <div class="content-wrapper">
+                <div class="main-content">
+                    <div class="events-filters animate-fade-in delay-2">
+                        <div class="filters-container">
+                            <button class="filter-button active" data-filter="all">Todos</button>
+                            <button class="filter-button" data-filter="Académico">Académicos</button>
+                            <button class="filter-button" data-filter="Cultural">Culturales</button>
+                            <button class="filter-button" data-filter="Deportivo">Deportivos</button>
+                            <button class="filter-button" data-filter="Reunión">Reuniones</button>
+                        </div>
+                        <!-- <div class="mini-calendar" id="mini-calendar"></div> -->
+                    </div>
+
+                    <div class="events-list animate-fade-in delay-3" id="events-list"></div>
+                </div>
+
+                <aside class="sidebar">
+                    <div class="sidebar-widget animate-slide-left delay-4">
+                        <h3>Calendario</h3>
+                        <div id="mini-calendar" class="mini-calendar"></div>
+                    </div>
+                    <div class="sidebar-widget animate-slide-left delay-4">
+                        <h3>Próximos Eventos</h3>
+                        <div class="upcoming-events" id="upcoming-events"></div>
+                    </div>
+
+                    <div class="sidebar-widget animate-slide-left delay-5">
+                        <h3>Categorías</h3>
+                        <div class="events-categories">
+                            <button class="category-tag" data-filter="all">Todos</button>
+                            <button class="category-tag" data-filter="Académico">Académicos</button>
+                            <button class="category-tag" data-filter="Cultural">Culturales</button>
+                            <button class="category-tag" data-filter="Deportivo">Deportivos</button>
+                            <button class="category-tag" data-filter="Reunión">Reuniones</button>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-widget animate-slide-left delay-6">
+                        <h3>Eventos Destacados</h3>
+                        <div class="featured-events" id="featured-events"></div>
+                    </div>
+                </aside>
+            </div>
+        </main>
+
+        <footer id="main-footer"></footer>
+
+        <button id="scroll-top" class="scroll-top-btn" aria-label="Subir al inicio">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+                <path fill="currentColor" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
+            </svg>
+        </button>
+    </div>
+
+    <script src="assets/js/components.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/scroll.js"></script>
+    <script src="assets/js/events.js"></script>
+    <script src="assets/data/events.js"></script>
+</body>
+
+</html>
