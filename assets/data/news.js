@@ -143,22 +143,78 @@ const commentsData = [
 
 // Categorías disponibles
 const categories = [
-    { name: "Infraestructura", count: 1 },
-    { name: "Logros", count: 1 },
-    { name: "Programas", count: 1 },
-    { name: "Talleres", count: 1 },
-    { name: "Eventos", count: 1 },
-    { name: "Deportes", count: 1 }
+    {
+        id: 1,
+        name: "Infraestructura",
+        count: 1
+    },
+    {
+        id: 2,
+        name: "Logros",
+        count: 1
+    },
+    {
+        id: 3,
+        name: "Programas",
+        count: 1
+    },
+    {
+        id: 4,
+        name: "Talleres",
+        count: 1
+    },
+    {
+        id: 5,
+        name: "Eventos",
+        count: 1
+    },
+    {
+        id: 6,
+        name: "Deportes",
+        count: 1
+    }
 ];
 
 // Etiquetas populares
 const popularTags = [
-    { name: "ciencia", count: 1 },
-    { name: "matemáticas", count: 1 },
-    { name: "intercambio", count: 1 },
-    { name: "deportes", count: 1 },
-    { name: "lectura", count: 1 },
-    { name: "tecnología", count: 1 },
-    { name: "educación", count: 2 },
-    { name: "estudiantes", count: 2 }
+    {
+        id: 1,
+        name: "ciencia",
+        count: 1
+    },
+    {
+        id: 2,
+        name: "matemáticas",
+        count: 1
+    },
+    {
+        id: 3,
+        name: "intercambio",
+        count: 1
+    },
+    {
+        id: 4,
+        name: "deportes",
+        count: 1
+    },
+    {
+        id: 5,
+        name: "lectura",
+        count: 1
+    },
+    {
+        id: 6,
+        name: "tecnología",
+        count: 1
+    },
+    {
+        id: 7,
+        name: "educación",
+        count: 2
+    },
+    {
+        id: 8,
+        name: "estudiantes",
+        count: 2
+    }
 ];

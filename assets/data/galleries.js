@@ -1,75 +1,55 @@
-// Datos de la galería
+// Datos completos de la galería con múltiples imágenes por evento
 const galleryData = [
     {
         id: 1,
-        title: "Acto de graduación 2023",
-        image: "assets/img/galleries/img9.jpg",
-        category: "Eventos"
+        title: "Graduación 2023",
+        coverImage: "assets/img/galleries/graduacion/cover.jpg",
+        images: [
+            "assets/img/galleries/graduacion/img1.jpg",
+            "assets/img/galleries/graduacion/img2.jpg",
+            "assets/img/galleries/graduacion/img3.jpg",
+            "assets/img/galleries/graduacion/img4.jpg"
+        ],
+        category: "Eventos",
+        date: "2023-06-15",
+        description: "Ceremonia de graduación de nuestra promoción 2023. Un día lleno de emociones y logros celebrados."
     },
     {
         id: 2,
-        title: "Olimpiadas deportivas",
-        image: "assets/img/galleries/img9.jpg",
-        category: "Deportes"
+        title: "Olimpiadas Interescolares",
+        coverImage: "assets/img/galleries/olimpiadas/cover.jpg",
+        images: [
+            "assets/img/galleries/olimpiadas/img1.jpg",
+            "assets/img/galleries/olimpiadas/img2.jpg",
+            "assets/img/galleries/olimpiadas/img3.jpg"
+        ],
+        category: "Deportes",
+        date: "2023-05-20",
+        description: "Participación destacada en las olimpiadas interescolares regionales."
     },
     {
         id: 3,
-        title: "Feria de ciencias",
-        image: "assets/img/galleries/img9.jpg",
-        category: "Académico"
+        title: "Feria Científica Anual",
+        coverImage: "assets/img/galleries/feria/cover.jpg",
+        images: [
+            "assets/img/galleries/feria/img1.jpg",
+            "assets/img/galleries/feria/img2.jpg"
+        ],
+        category: "Académico",
+        date: "2023-04-10",
+        description: "Exhibición de proyectos científicos realizados por nuestros estudiantes."
     },
     {
         id: 4,
-        title: "Coro escolar",
-        image: "assets/img/galleries/img9.jpg",
-        category: "Arte"
-    },
-    {
-        id: 5,
-        title: "Excursión ecológica",
-        image: "assets/img/galleries/img9.jpg",
-        category: "Actividades"
-    },
-    {
-        id: 6,
-        title: "Taller de robótica",
-        image: "assets/img/galleries/img9.jpg",
-        category: "Talleres"
-    },
-    {
-        id: 7,
-        title: "Presentación teatral",
-        image: "assets/img/galleries/img9.jpg",
-        category: "Arte"
-    },
-    {
-        id: 8,
-        title: "Clase al aire libre",
-        image: "assets/img/galleries/img9.jpg",
-        category: "Académico"
-    },
-    {
-        id: 9,
-        title: "Torneo de ajedrez",
-        image: "assets/img/galleries/img9.jpg",
-        category: "Deportes"
-    },
-    {
-        id: 10,
-        title: "Día del libro",
-        image: "assets/img/galleries/img9.jpg",
-        category: "Eventos"
-    },
-    {
-        id: 11,
-        title: "Laboratorio de química",
-        image: "assets/img/galleries/img9.jpg",
-        category: "Académico"
-    },
-    {
-        id: 12,
-        title: "Concierto de primavera",
-        image: "assets/img/galleries/img9.jpg",
-        category: "Arte"
+        title: "Concierto de Primavera",
+        coverImage: "assets/img/galleries/concierto/cover.jpg",
+        images: [
+            "assets/img/galleries/concierto/img1.jpg",
+            "assets/img/galleries/concierto/img2.jpg",
+            "assets/img/galleries/concierto/img3.jpg"
+        ],
+        category: "Arte",
+        date: "2023-09-22",
+        description: "Presentación musical de nuestros talentosos estudiantes."
     }
 ];
