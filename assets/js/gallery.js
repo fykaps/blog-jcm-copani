@@ -33,14 +33,14 @@ function displayGallery(filter = currentFilter) {
         } else {
             container.innerHTML = filteredEvents.map(event => `
                 <article class="event-card" data-id="${event.id}">
-                    <!-- Sección superior: Imagen cover -->
                     <div class="event-cover-container">
                         <div class="event-cover" style="background-image: url('${event.coverImage}')">
-                            <span class="photo-count">${event.images.length} ${event.images.length === 1 ? 'foto' : 'fotos'}</span>
+                            <span class="media-count">
+                                ${getMediaCount(event.media)}
+                            </span>
                         </div>
                     </div>
                     
-                    <!-- Sección inferior: Información del evento -->
                     <div class="event-info">
                         <div class="event-header">
                             <h2 class="event-title">${event.title}</h2>
@@ -66,6 +66,65 @@ function displayGallery(filter = currentFilter) {
 
         container.style.opacity = '1';
     }, 300);
+}
+
+// Obtener conteo de medios con iconos
+function getMediaCount(media) {
+    const counts = {
+        image: media.filter(m => m.type === 'image').length,
+        video: media.filter(m => m.type === 'video').length,
+        audio: media.filter(m => m.type === 'audio').length
+    };
+
+    let html = '';
+
+    if (counts.image > 0) {
+        html += `
+            <span class="media-count-item">
+                ${counts.image}
+                <svg class="media-count-icon image" viewBox="0 0 24 24">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                    <circle cx="12" cy="13" r="4"/>
+                </svg>
+            </span>
+        `;
+    }
+
+    if (counts.video > 0) {
+        html += `
+            <span class="media-count-item">
+                ${counts.video}
+                <svg class="media-count-icon video" viewBox="0 0 24 24">
+                    <path d="M23 7l-7 5 7 5V7z"/>
+                    <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                </svg>
+            </span>
+        `;
+    }
+
+    if (counts.audio > 0) {
+        html += `
+            <span class="media-count-item">
+                ${counts.audio}
+                <svg class="media-count-icon audio" viewBox="0 0 24 24">
+                    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                    <path d="M12 19v4"/>
+                    <path d="M8 23h8"/>
+                </svg>
+            </span>
+        `;
+    }
+
+    return html;
+}
+
+// Contar tipos de medios en un evento
+function countMediaTypes(mediaItems) {
+    return mediaItems.reduce((counts, item) => {
+        counts[item.type + 's']++;
+        return counts;
+    }, { images: 0, videos: 0, audios: 0 });
 }
 
 // Función para truncar descripción si es muy larga

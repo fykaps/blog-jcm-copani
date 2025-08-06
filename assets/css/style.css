@@ -780,12 +780,14 @@ background-color: var(--primary-color);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
-/* Contenedor de la imagen cover */
+/* Estilos para el contenedor de la portada */
 .event-cover-container {
     position: relative;
     width: 100%;
-    padding-top: 60%; /* Proporción 3:5 (ajustable) */
+    height: 0;
+    padding-bottom: 56.25%; /* Relación 16:9 */
     overflow: hidden;
+    border-radius: 8px 8px 0 0;
 }
 
 .event-cover {
@@ -799,21 +801,74 @@ background-color: var(--primary-color);
     transition: transform 0.5s ease;
 }
 
-.event-card:hover .event-cover {
-    transform: scale(1.05);
-}
-
-.photo-count {
+/* Estilos para el contador de medios */
+.media-count {
     position: absolute;
     bottom: 12px;
     right: 12px;
-    background: rgba(0, 0, 0, 0.75);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background-color: rgba(0, 0, 0, 0.7);
     color: white;
-    padding: 4px 10px;
     border-radius: 20px;
-    font-size: 0.8rem;
+    font-size: 0;
+    backdrop-filter: blur(4px);
+    transition: all 0.3s ease;
+}
+
+.media-count-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
     font-weight: 500;
-    backdrop-filter: blur(2px);
+}
+
+.media-count-icon {
+    width: 14px;
+    height: 14px;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+}
+
+/* Colores específicos para cada tipo de icono */
+.media-count-icon.image {
+    stroke: var(--success-color);
+}
+
+.media-count-icon.video {
+    stroke: var(--danger-color);
+}
+
+.media-count-icon.audio {
+    stroke: var(--secondary-color);
+}
+
+/* Efecto hover */
+.event-card:hover .media-count {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .media-count {
+        gap: 6px;
+        padding: 4px 8px;
+    }
+    
+    .media-count-item {
+        font-size: 11px;
+    }
+    
+    .media-count-icon {
+        width: 12px;
+        height: 12px;
+    }
 }
 
 /* Sección de información */
@@ -969,17 +1024,46 @@ background-color: var(--primary-color);
 }
 
 .back-btn {
-    display: inline-block;
+    display: inline-flex; /* Cambiado a flex para alinear icono y texto */
+    align-items: center;
+    gap: 8px; /* Espacio entre icono y texto */
     padding: 0.75rem 1.5rem;
     background: #2c3e50;
     color: white;
     text-decoration: none;
     border-radius: 4px;
-    transition: background 0.2s ease;
+    transition: all 0.3s ease; /* Transición para todas las propiedades */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.back-btn svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+    transition: transform 0.3s ease;
+}
+
+.back-btn.icon-left {
+    flex-direction: row-reverse;
 }
 
 .back-btn:hover {
     background: #1a252f;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.back-btn:hover svg {
+    transform: translateX(-4px);
+}
+
+.back-btn.icon-left:hover svg {
+    transform: translateX(4px); 
+}
+
+.back-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 /* Estilos para el lightbox */
@@ -2990,5 +3074,295 @@ background-color: var(--primary-color);
     .values-grid,
     .contact-info {
         grid-template-columns: 1fr;
+    }
+}
+/* Estilos para la galería multimedia */
+.media-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.media-item {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.media-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.media-thumbnail {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.media-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.audio-thumbnail {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    background: #f5f5f5;
+}
+
+.audio-icon {
+    font-size: 3rem;
+}
+
+.media-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.media-item:hover .media-overlay {
+    opacity: 1;
+}
+
+.media-type-icon {
+    font-size: 2rem;
+    color: white;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.media-caption {
+    padding: 1rem;
+    font-size: 0.9rem;
+    color: #333;
+    text-align: center;
+    border-top: 1px solid #eee;
+}
+
+/* Lightbox multimedia */
+.multimedia-lightbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.multimedia-lightbox.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.lightbox-container {
+    position: relative;
+    width: 90%;
+    max-width: 1200px;
+    max-height: 90vh;
+    background: #111;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.5);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background 0.2s ease;
+}
+
+.lightbox-close:hover {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.media-display {
+    width: 100%;
+    height: calc(90vh - 120px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #000;
+    overflow: hidden;
+}
+
+.media-display img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.media-display video {
+    max-width: 100%;
+    max-height: 100%;
+    outline: none;
+}
+
+.audio-container {
+    width: 100%;
+    padding: 2rem;
+    text-align: center;
+    color: white;
+}
+
+.audio-container audio {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    background: #333;
+    border-radius: 50px;
+    padding: 10px;
+}
+
+.audio-visualizer {
+    width: 100%;
+    height: 100px;
+    margin-top: 1rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 2px;
+}
+
+.audio-bar {
+    width: 5px;
+    background: #3498db;
+    border-radius: 2px;
+    transition: height 0.1s ease, opacity 0.1s ease;
+}
+
+.lightbox-info {
+    padding: 1rem;
+    background: #111;
+    color: white;
+    text-align: center;
+}
+
+.lightbox-title {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.2rem;
+}
+
+.lightbox-caption {
+    margin: 0 0 0.5rem 0;
+    color: #ccc;
+    font-size: 0.9rem;
+}
+
+.lightbox-counter {
+    margin: 0;
+    color: #999;
+    font-size: 0.8rem;
+}
+
+.lightbox-controls {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+    padding: 0 1rem;
+    pointer-events: none;
+}
+
+.lightbox-prev,
+.lightbox-next {
+    pointer-events: all;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lightbox-prev:hover,
+.lightbox-next:hover {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+/* Filtros de medios */
+.media-filters {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.media-filter {
+    padding: 0.5rem 1rem;
+    background: #f0f0f0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.media-filter:hover {
+    background: #ddd;
+}
+
+.media-filter.active {
+    background: #2c3e50;
+    color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .media-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    }
+    
+    .media-display {
+        height: calc(90vh - 150px);
+    }
+    
+    .lightbox-container {
+        width: 95%;
+    }
+    
+    .audio-container audio {
+        width: 90%;
     }
 }

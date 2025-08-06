@@ -35,10 +35,10 @@ function loadHeader() {
             </div>
             <nav class="nav-menu">
                 <a href="index.html" class="nav-link">Inicio</a>
-                <a href="about.html" class="nav-link">Acerca del Blog</a>
+                <a href="about.html" class="nav-link">Acerca de</a>
                 <a href="news.html" class="nav-link">Noticias</a>
                 <a href="events.html" class="nav-link">Eventos</a>
-                <a href="gallery.html" class="nav-link">Galería</a>
+                <a href="gallery.html" class="nav-link">Galerías</a>
                 <a href="contact.html" class="nav-link">Contacto</a>
             </nav>
             <button class="menu-toggle" aria-label="Menú" aria-expanded="false">
@@ -110,7 +110,7 @@ function loadFooter() {
                         <li><a href="index.html" class="footer-link">Inicio</a></li>
                         <li><a href="news.html" class="footer-link">Noticias</a></li>
                         <li><a href="events.html" class="footer-link">Eventos</a></li>
-                        <li><a href="gallery.html" class="footer-link">Galería</a></li>
+                        <li><a href="gallery.html" class="footer-link">Galerías</a></li>
                         <li><a href="contact.html" class="footer-link">Contacto</a></li>
                     </ul>
                 </div>
