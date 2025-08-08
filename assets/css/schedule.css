@@ -1,0 +1,91 @@
+/* Estilos para el widget del comedor */
+.menu-container {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.menu-item {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.menu-item:last-child {
+    border-bottom: none;
+}
+
+.menu-item:hover {
+    background: #e9f5ff;
+}
+
+.menu-title {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 5px;
+}
+
+.menu-time {
+    font-size: 0.8rem;
+    color: #7f8c8d;
+}
+
+/* Estilos para el widget de horarios */
+.schedule-container {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.grade-selector {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.grade-option {
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.grade-option:hover, .grade-option.active {
+    background: #3498db;
+    color: white;
+}
+
+.current-schedule {
+    margin-top: 10px;
+}
+
+.current-course {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px dashed #ddd;
+}
+
+.current-course:last-child {
+    border-bottom: none;
+}
+
+.course-name {
+    font-weight: 500;
+}
+
+.course-time {
+    font-size: 0.85rem;
+    color: #7f8c8d;
+}
+
+.current {
+    background: #fff8e1;
+    border-left: 3px solid #ffc107;
+    padding-left: 5px;
+}

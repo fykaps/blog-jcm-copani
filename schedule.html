@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horarios Escolares - Colegio</title>
+    <link rel="stylesheet" href="assets/css/variables.css">
+    <link rel="stylesheet" href="assets/css/animations.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/schedule.css">
+</head>
+
+<body>
+    <div id="app">
+        <header id="main-header"></header>
+
+        <main class="container">
+            <section class="section-header">
+                <h1>Horarios Escolares</h1>
+                <p>Organización académica por grados</p>
+            </section>
+
+            <div class="schedule-selector">
+                <label for="grade-select">Seleccione el grado:</label>
+                <select id="grade-select">
+                    <option value="1A">Primero "A"</option>
+                    <option value="1B">Primero "B"</option>
+                    <option value="2A">Segundo "A"</option>
+                    <option value="2B">Segundo "B"</option>
+                    <option value="3A">Tercero "A"</option>
+                    <option value="3B">Tercero "B"</option>
+                    <option value="4A">Cuarto "A"</option>
+                    <option value="4B">Cuarto "B"</option>
+                    <option value="5A">Quinto "A"</option>
+                    <option value="5B">Quinto "B"</option>
+                </select>
+            </div>
+
+            <div class="full-schedule-container">
+                <table class="schedule-table" id="schedule-table">
+                    <!-- Se llena dinámicamente con JS -->
+                </table>
+            </div>
+        </main>
+
+        <footer id="main-footer"></footer>
+    </div>
+
+    <script src="assets/js/components.js"></script>
+    <script src="assets/js/schedule.js"></script>
+</body>
+
+</html>

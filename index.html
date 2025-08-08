@@ -74,43 +74,19 @@
 
                 <!-- Sidebar -->
                 <aside class="sidebar" aria-label="Barra lateral">
-                    <!-- Widget de búsqueda -->
-                    <div class="sidebar-widget animate-slide-left delay-5" aria-labelledby="search-widget-heading">
-                        <h3 id="search-widget-heading">Buscar</h3>
-                        <div class="search-box">
-                            <label for="search-input" class="sr-only">Buscar noticias</label>
-                            <input type="text" id="search-input" placeholder="Buscar noticias..."
-                                aria-label="Campo de búsqueda">
-                            <button id="search-button" class="btn btn-icon" aria-label="Buscar">
-                                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
-                                    <path fill="currentColor"
-                                        d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 0 0 1.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 0 0-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 0 0 5.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
-                                </svg>
-                            </button>
+                    <!-- Widget del Comedor -->
+                    <div class="sidebar-widget animate-slide-left delay-5" aria-labelledby="comedor-widget-heading">
+                        <h3 id="comedor-widget-heading">Menú del Día - Qaliwarma</h3>
+                        <div class="menu-container" id="menu-del-dia">
+                            <!-- Se llenará dinámicamente con JS -->
                         </div>
                     </div>
 
-                    <!-- Widget de categorías -->
-                    <div class="sidebar-widget animate-slide-left delay-6" aria-labelledby="categories-widget-heading">
-                        <h3 id="categories-widget-heading">Categorías</h3>
-                        <ul class="categories-list" id="categories-container" role="list">
-                            <!-- Las categorías se cargarán aquí dinámicamente -->
-                        </ul>
-                    </div>
-
-                    <!-- Widget de etiquetas -->
-                    <div class="sidebar-widget animate-slide-left delay-7" aria-labelledby="tags-widget-heading">
-                        <h3 id="tags-widget-heading">Etiquetas Populares</h3>
-                        <div class="tags-cloud" id="tags-container" role="list">
-                            <!-- Las etiquetas se cargarán aquí dinámicamente -->
-                        </div>
-                    </div>
-
-                    <!-- Widget de noticias populares -->
-                    <div class="sidebar-widget animate-slide-left delay-8" aria-labelledby="popular-widget-heading">
-                        <h3 id="popular-widget-heading">Noticias Más Vistas</h3>
-                        <div class="popular-news" id="popular-news-container" role="list">
-                            <!-- Las noticias populares se cargarán aquí dinámicamente -->
+                    <!-- Widget de Horarios -->
+                    <div class="sidebar-widget animate-slide-left delay-6" aria-labelledby="horarios-widget-heading">
+                        <h3 id="horarios-widget-heading">Horario Escolar</h3>
+                        <div class="schedule-container" id="horario-actual">
+                            <!-- Se llenará dinámicamente con JS -->
                         </div>
                     </div>
                 </aside>
@@ -134,8 +110,10 @@
     <script src="assets/js/components.js" defer></script>
     <script src="assets/js/main.js" defer></script>
     <script src="assets/js/news.js" defer></script>
+    <script src="assets/js/menu.js" defer></script>
     <script src="assets/js/scroll.js" defer></script>
     <script src="assets/data/news.js" defer></script>
+    <script src="assets/data/menus.js" defer></script>
 
     <!-- Estilos para screen readers (accesibilidad) -->
     <style>

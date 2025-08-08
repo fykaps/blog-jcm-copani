@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Escolar - Comedor Qaliwarma</title>
+    <link rel="stylesheet" href="assets/css/variables.css">
+    <link rel="stylesheet" href="assets/css/animations.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="icon" href="assets/img/favicon.ico">
+</head>
+
+<body>
+    <div id="app">
+        <header id="main-header" class="header-fixed"></header>
+
+        <main class="container">
+            <section class="hero animate-fade-in">
+                <h1 class="animate-slide-up">Comedor Estudiantil Qaliwarma</h1>
+                <p class="animate-slide-up delay-1">Programa de alimentación escolar para nuestros estudiantes</p>
+            </section>
+
+            <div class="content-wrapper">
+                <div class="main-content">
+                    <section class="section-intro animate-fade-in">
+                        <h2>Menú Semanal</h2>
+                        <p>El programa Qaliwarma ofrece desayunos y almuerzos nutritivos de lunes a viernes, preparados
+                            con ingredientes de calidad por nuestro equipo de cocina.</p>
+
+                        <div class="program-info" id="program-info">
+                            <!-- Se llenará dinámicamente con JS -->
+                        </div>
+                    </section>
+
+                    <section class="weekly-menu-section animate-fade-in delay-1">
+                        <div id="weekly-menu-container">
+                            <!-- El menú semanal se cargará aquí dinámicamente -->
+                        </div>
+                    </section>
+                </div>
+
+                <aside class="sidebar">
+                    <div class="sidebar-widget animate-slide-left delay-4">
+                        <h3>Información del Programa</h3>
+                        <div class="program-details">
+                            <p>El Programa Nacional de Alimentación Escolar Qali Warma brinda servicio alimentario a
+                                estudiantes de secundaria.</p>
+                            <p>Los menús son elaborados por nutricionistas para garantizar una alimentación balanceada y
+                                adecuada para adolescentes en etapa de crecimiento.</p>
+                            <p>El programa promueve hábitos alimenticios saludables y contribuye a mejorar la
+                                concentración y rendimiento escolar.</p>
+                            <a href="https://www.gob.pe/wasimikuna" target="_blank" class="btn btn-small">Más
+                                información</a>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-widget animate-slide-left delay-4">
+                        <h3>Cronograma de Madres</h3>
+                        <div class="mothers-schedule" id="mothers-schedule">
+                            <!-- Se llenará dinámicamente con JS -->
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </main>
+
+        <footer id="main-footer"></footer>
+
+        <button id="scroll-top" class="scroll-top-btn" aria-label="Subir al inicio">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+                <path fill="currentColor" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
+            </svg>
+        </button>
+    </div>
+
+    <script src="assets/js/components.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/menu.js"></script>
+    <script src="assets/js/scroll.js"></script>
+    <script src="assets/data/menus.js"></script>
+</body>
+
+</html>
