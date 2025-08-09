@@ -10,10 +10,16 @@ document.addEventListener('DOMContentLoaded', () => {
   // Cargar el menú del día en el widget del sidebar
   loadTodayMenuWidget();
 
-  // Si estamos en la página de menú completo, cargar toda la semana
-  if (document.getElementById('weekly-menu-container')) {
-    loadWeeklyMenu();
+  // Cargar las secciones organizadas
+  if (document.getElementById('organized-sections')) {
+    loadOrganizedSections();
   }
+
+  // Actualizar el resaltado del día actual
+  updateCurrentDayHighlight();
+
+  // Configurar actualización periódica
+  setInterval(updateCurrentDayHighlight, 60000); // Actualizar cada minuto
 });
 
 // Iconos SVG reutilizables
@@ -25,7 +31,7 @@ const icons = {
         <path fill="currentColor" d="M18 3v2h-2V3H8v2H6V3H4v2h2v2h2V5h8v2h2V5h2V3h-2zM4 9h16v2h2v4h-2v6H4v-6H2v-4h2V9zm2 2v4h12v-4H6z"/>
     </svg>`,
   calendar: `<svg viewBox="0 0 24 24" class="icon-service" width="20" height="20">
-        <path fill="currentColor" d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V9h14v10zM5 7V5h14v2H5zm2 4h10v2H7zm0 4h7v2H7z"/>
+        <path fill="currentColor" d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V9h14v10zM5 7V5h14v2H5z"/>
     </svg>`,
   chef: `<svg viewBox="0 0 24 24" class="icon-service" width="20" height="20">
         <path fill="currentColor" d="M12 15c-3.31 0-6 2.69-6 6h12c0-3.31-2.69-6-6-6zm0-12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm5 5h1c1.1 0 2 .9 2 2v1.17c1.17.41 2 1.52 2 2.83v3h-2v-3c0-1.65-1.35-3-3-3h-1v-2h1c1.65 0 3-1.35 3-3V8c0-1.65-1.35-3-3-3h-1V3h1c1.1 0 2 .9 2 2v1c0 1.65-1.35 3-3 3h-1v2zM7 8H6c-1.1 0-2 .9-2 2v1c0 1.65 1.35 3 3 3h1v2H6c-1.65 0-3 1.35-3 3v3H1v-3c0-1.31.83-2.42 2-2.83V10c0-1.1.9-2 2-2h1V6H6C4.35 6 3 7.35 3 9V8c0-1.1.9-2 2-2h1v2z"/>
@@ -44,40 +50,230 @@ const icons = {
     </svg>`,
   arrowRight: `<svg viewBox="0 0 24 24" width="16" height="16">
         <path fill="currentColor" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+    </svg>`,
+  highlight: `<svg viewBox="0 0 24 24" width="16" height="16">
+        <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
     </svg>`
 };
 
-// Cargar información del programa con iconos
+// Función para convertir hora HH:MM a minutos desde medianoche
+function timeToMinutes(timeStr) {
+  const [hours, minutes] = timeStr.split(':').map(Number);
+  return hours * 60 + minutes;
+}
+
+// Función para formatear minutos a HH:MM
+function minutesToTime(totalMinutes) {
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+}
+
+// Función para obtener el estado del servicio
+function getServiceStatus(serviceHours, currentTime) {
+  const start = timeToMinutes(serviceHours.start);
+  const end = timeToMinutes(serviceHours.end);
+  const now = timeToMinutes(currentTime);
+
+  if (now < start) {
+    return {
+      status: 'pending',
+      text: 'Pendiente',
+      class: 'status-pending',
+      timeRemaining: start - now
+    };
+  } else if (now >= start && now < end) {
+    return {
+      status: 'in-progress',
+      text: 'En proceso',
+      class: 'status-in-progress',
+      timeRemaining: end - now
+    };
+  } else {
+    return {
+      status: 'completed',
+      text: 'Completado',
+      class: 'status-completed',
+      timeRemaining: 0
+    };
+  }
+}
+
+// Función para formatear el tiempo restante
+function formatCountdown(minutes) {
+  if (minutes <= 0) return '';
+
+  const hours = Math.floor(minutes / 60);
+  const mins = minutes % 60;
+
+  let parts = [];
+  if (hours > 0) parts.push(`${hours}h`);
+  if (mins > 0) parts.push(`${mins}m`);
+
+  return parts.join(' ');
+}
+
+// Función para actualizar todos los estados
+function updateAllStatuses() {
+  const today = new Date();
+  const todayDayName = getDayName(today);
+  const isWeekend = today.getDay() === 0 || today.getDay() === 6;
+
+  if (isWeekend) return;
+
+  const currentTime = `${today.getHours().toString().padStart(2, '0')}:${today.getMinutes().toString().padStart(2, '0')}`;
+  const todayMenu = getTodayMenu();
+  const todayHours = getHoursByDay(todayMenu.day);
+
+  // Actualizar estados de desayuno y almuerzo
+  updateServiceUI('breakfast', todayHours.breakfast, currentTime);
+  updateServiceUI('lunch', todayHours.lunch, currentTime);
+
+  // Actualizar estado general del día
+  updateDayStatus();
+}
+
+// Función para actualizar la UI de un servicio
+function updateServiceUI(serviceType, serviceHours, currentTime) {
+  const status = getServiceStatus(serviceHours, currentTime);
+
+  // Actualizar estado
+  const statusElements = document.querySelectorAll(`.${serviceType}-status`);
+  statusElements.forEach(el => {
+    el.textContent = status.text;
+    el.className = `service-status ${serviceType}-status ${status.class}`;
+  });
+
+  // Actualizar contador
+  const countdownElements = document.querySelectorAll(`.${serviceType}-countdown`);
+  countdownElements.forEach(el => {
+    if (status.status === 'pending') {
+      el.textContent = `Faltan ${formatCountdown(status.timeRemaining)}`;
+    } else if (status.status === 'in-progress') {
+      el.textContent = `Termina en ${formatCountdown(status.timeRemaining)}`;
+    } else {
+      el.textContent = '';
+    }
+  });
+}
+
+// Función para actualizar el estado general del día
+function updateDayStatus() {
+  const today = new Date();
+  const currentTime = `${today.getHours().toString().padStart(2, '0')}:${today.getMinutes().toString().padStart(2, '0')}`;
+  const todayMenu = getTodayMenu();
+  const todayHours = getHoursByDay(todayMenu.day);
+
+  const breakfastStatus = getServiceStatus(todayHours.breakfast, currentTime);
+  const lunchStatus = getServiceStatus(todayHours.lunch, currentTime);
+
+  const dayStatusElement = document.querySelector('.day-status');
+  if (!dayStatusElement) return;
+
+  // Nueva lógica mejorada
+  if (lunchStatus.status === 'completed') {
+    dayStatusElement.textContent = 'Completado';
+    dayStatusElement.className = 'day-status status-completed';
+  } else if (breakfastStatus.status === 'in-progress' ||
+    breakfastStatus.status === 'completed' ||
+    lunchStatus.status === 'in-progress') {
+    dayStatusElement.textContent = 'En proceso';
+    dayStatusElement.className = 'day-status status-in-progress';
+  } else {
+    dayStatusElement.textContent = 'Pendiente';
+    dayStatusElement.className = 'day-status status-pending';
+  }
+}
+
+// Cargar información del programa con iconos y días de servicio
 function loadProgramInfo() {
   const container = document.getElementById('program-info');
   if (!container) return;
 
+  const today = new Date();
+  const todayDayName = getDayName(today);
+  const isWeekend = today.getDay() === 0 || today.getDay() === 6;
+
+  // Obtener el menú del día actual
+  const todayMenu = getTodayMenu();
+  const todayHours = getHoursByDay(todayMenu.day);
+
+  // Generar lista de días de servicio
+  const serviceDays = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes"];
+  const serviceDaysHTML = serviceDays.map(day => {
+    const isToday = day === todayDayName && !isWeekend;
+    return `<li class="${isToday ? 'current-day' : ''}">${day}</li>`;
+  }).join('');
+
   container.innerHTML = `
+    <div class="program-info-content">
+      <div class="service-hours">
         <h3>${icons.clock} Horarios de servicio:</h3>
         <ul>
-            <li>${icons.food} <strong>Desayuno:</strong> ${serviceHours.breakfast.start} - ${serviceHours.breakfast.end}</li>
-            <li>${icons.food} <strong>Almuerzo:</strong> ${serviceHours.lunch.start} - ${serviceHours.lunch.end}</li>
+          <li>${icons.food} <strong>Desayuno:</strong> ${todayHours.breakfast.start} - ${todayHours.breakfast.end}</li>
+          <li>${icons.food} <strong>Almuerzo:</strong> ${todayHours.lunch.start} - ${todayHours.lunch.end}</li>
         </ul>
+      </div>
+      
+      <div class="service-days">
+        <h3>${icons.calendar} Días de servicio:</h3>
+        <ul class="days-list">
+          ${serviceDaysHTML}
+        </ul>
+      </div>
+      
+      <div class="kitchen-staff">
         <h3>${icons.chef} Personal del comedor:</h3>
         <ul>
-            <li><strong>Cocinera:</strong> ${kitchenStaff.cook}</li>
-            <li><strong>Madres de familia:</strong> Rotación diaria según cronograma</li>
+          <li><strong>Cocinera:</strong> ${kitchenStaff.cook}</li>
+          <li><strong>Madres de familia:</strong> Rotación diaria según cronograma</li>
         </ul>
-    `;
+      </div>
+    </div>
+  `;
 }
 
-// Cargar cronograma de madres con iconos
+// Función para actualizar el resaltado del día actual
+function updateCurrentDayHighlight() {
+  const today = new Date();
+  const todayDayName = getDayName(today);
+  const isWeekend = today.getDay() === 0 || today.getDay() === 6;
+
+  const dayElements = document.querySelectorAll('.days-list li');
+  dayElements.forEach(dayEl => {
+    dayEl.classList.remove('current-day');
+
+    // Verificar si es el día actual (excepto fines de semana)
+    if (!isWeekend && dayEl.textContent === todayDayName) {
+      dayEl.classList.add('current-day');
+    }
+  });
+}
+
+// Cargar cronograma de madres con iconos y resaltado del día actual
 function loadMothersSchedule() {
   const container = document.getElementById('mothers-schedule');
   if (!container) return;
 
-  let html = '<p>Las madres de familia colaboran según el siguiente cronograma:</p><ul>';
+  let html = '<div class="mothers-schedule-container"><p>Las madres de familia colaboran según el siguiente cronograma:</p>';
 
-  Object.entries(kitchenStaff.helpers).forEach(([day, helpers]) => {
-    html += `<li>${icons.calendar} <strong>${day}:</strong> ${helpers.join(' y ')}</li>`;
+  const today = new Date();
+  const todayDayName = getDayName(today);
+  const isWeekend = today.getDay() === 0 || today.getDay() === 6;
+
+  Object.entries(kitchenStaff.helpers).forEach(([day, data]) => {
+    const isToday = day === todayDayName && !isWeekend;
+    html += `
+            <div class="mother-card ${isToday ? 'highlighted' : ''}">
+                <h4>${icons.calendar} ${day}</h4>
+                <p><strong>Madres:</strong> ${data.names.join(' y ')}</p>
+                <p><strong>Grado:</strong> ${data.grade}</p>
+                ${isToday ? `<div class="today-badge">${icons.highlight} Hoy</div>` : ''}
+            </div>
+        `;
   });
 
-  html += '</ul>';
+  html += '</div>';
   container.innerHTML = html;
 }
 
@@ -87,72 +283,335 @@ function loadTodayMenuWidget() {
   if (!container) return;
 
   const todayMenu = getTodayMenu();
+  const todayHours = getHoursByDay(todayMenu.day);
+  const today = new Date();
+  const currentTime = `${today.getHours().toString().padStart(2, '0')}:${today.getMinutes().toString().padStart(2, '0')}`;
+
+  const breakfastStatus = getServiceStatus(todayHours.breakfast, currentTime);
+  const lunchStatus = getServiceStatus(todayHours.lunch, currentTime);
 
   container.innerHTML = `
-    <div class="menu-widget">
-      <div class="menu-service">
-        <h4>${icons.food} Desayuno (${serviceHours.breakfast.start} - ${serviceHours.breakfast.end})</h4>
-        <p>${todayMenu.breakfast.name}</p>
-        <a href="menu-detail.html?service=breakfast" class="btn btn-small">
-          Ver detalle ${icons.arrowRight}
-        </a>
-      </div>
-      <div class="menu-service">
-        <h4>${icons.food} Almuerzo (${serviceHours.lunch.start} - ${serviceHours.lunch.end})</h4>
-        <p>${todayMenu.lunch.name}</p>
-        <a href="menu-detail.html?service=lunch" class="btn btn-small">
-          Ver detalle ${icons.arrowRight}
-        </a>
-      </div>
-    </div>
-  `;
+        <div class="menu-widget">
+            <h3>${icons.calendar} Menú de hoy (${formatDate(todayMenu.date, { weekday: 'long', day: 'numeric', month: 'long' })})</h3>
+            <div class="menu-service">
+                <h4>${icons.food} Desayuno (${todayHours.breakfast.start} - ${todayHours.breakfast.end})</h4>
+                <p>${todayMenu.breakfast.name}</p>
+                <div class="service-status breakfast-status ${breakfastStatus.class}">${breakfastStatus.text}</div>
+                ${breakfastStatus.status !== 'completed' ? `<div class="countdown">${breakfastStatus.status === 'pending' ? `Faltan ${formatCountdown(breakfastStatus.timeRemaining)}` : `Termina en ${formatCountdown(breakfastStatus.timeRemaining)}`}</div>` : ''}
+                <a href="menu-detail.html?day=${todayMenu.day}&service=breakfast" class="btn btn-small">
+                    Ver detalle ${icons.arrowRight}
+                </a>
+            </div>
+            <div class="menu-service">
+                <h4>${icons.food} Almuerzo (${todayHours.lunch.start} - ${todayHours.lunch.end})</h4>
+                <p>${todayMenu.lunch.name}</p>
+                <div class="service-status lunch-status ${lunchStatus.class}">${lunchStatus.text}</div>
+                ${lunchStatus.status !== 'completed' ? `<div class="countdown">${lunchStatus.status === 'pending' ? `Faltan ${formatCountdown(lunchStatus.timeRemaining)}` : `Termina en ${formatCountdown(lunchStatus.timeRemaining)}`}</div>` : ''}
+                <a href="menu-detail.html?day=${todayMenu.day}&service=lunch" class="btn btn-small">
+                    Ver detalle ${icons.arrowRight}
+                </a>
+            </div>
+        </div>
+    `;
 }
 
-// Cargar el menú semanal completo con iconos
-function loadWeeklyMenu() {
-  const container = document.getElementById('weekly-menu-container');
+// Cargar las secciones organizadas (hoy, próximos, atendidos)
+function loadOrganizedSections() {
+
+  const container = document.getElementById('organized-sections');
   if (!container) return;
 
-  let html = '<div class="weekly-menu">';
+  const today = new Date();
+  const todayDayName = getDayName(today);
+  const isWeekend = today.getDay() === 0 || today.getDay() === 6;
+  const currentTime = `${today.getHours().toString().padStart(2, '0')}:${today.getMinutes().toString().padStart(2, '0')}`;
 
-  weeklyMenu.forEach(day => {
+  // Obtener índices de los días
+  const dayIndex = {
+    "Lunes": 0, "Martes": 1, "Miércoles": 2,
+    "Jueves": 3, "Viernes": 4
+  };
+
+  let html = '';
+
+  // 1. Sección de hoy (si no es fin de semana)
+  if (!isWeekend) {
+    const todayMenu = getTodayMenu();
+    const todayHours = getHoursByDay(todayMenu.day);
+    const todayStaff = getTodayStaff();
+
+    // Determinar estado inicial
+    const breakfastStatus = getServiceStatus(todayHours.breakfast, currentTime);
+    const lunchStatus = getServiceStatus(todayHours.lunch, currentTime);
+
     html += `
-      <div class="day-menu">
-        <h3>${icons.calendar} ${day.day}, ${formatDate(day.date)}</h3>
-        <div class="services">
-          <div class="service breakfast">
-            <h4>${icons.food} Desayuno</h4>
-            <img src="${day.breakfast.image}" alt="${day.breakfast.name}" loading="lazy">
-            <p><strong>${day.breakfast.name}</strong></p>
-            <p>${day.breakfast.description}</p>
-            <p class="additional-tag">${icons.bread} ${day.breakfast.additional}</p>
-            <a href="menu-detail.html?day=${day.day}&service=breakfast" class="btn btn-small">
-              Ver receta ${icons.arrowRight}
-            </a>
+      <section class="menu-section today-section">
+        <div class="section-header">
+          <h2 class="section-title">${icons.calendar} Desayuno y almuerzo de hoy</h2>
+          <span class="section-date">${formatDate(todayMenu.date, { weekday: 'long', day: 'numeric', month: 'long' })}</span>
+        </div>
+        <div class="day-card">
+<div class="day-header">
+  <h3>${todayMenu.day}</h3>
+  <span class="day-status ${lunchStatus.status === 'completed' ? 'status-completed' :
+        breakfastStatus.status === 'in-progress' || breakfastStatus.status === 'completed' ||
+          lunchStatus.status === 'in-progress' ? 'status-in-progress' : 'status-pending'
+      }">
+    ${lunchStatus.status === 'completed' ? 'Completado' :
+        breakfastStatus.status === 'in-progress' || breakfastStatus.status === 'completed' ||
+          lunchStatus.status === 'in-progress' ? 'En proceso' : 'Pendiente'
+      }
+  </span>
+</div>
+          <div class="services">
+            <div class="service">
+              <div class="service-header">
+                <div class="service-title">
+                  <h4>${icons.food} Desayuno (${todayHours.breakfast.start} - ${todayHours.breakfast.end})</h4>
+                  <span class="service-status breakfast-status ${breakfastStatus.class}">${breakfastStatus.text}</span>
+                </div>
+                <div class="countdown breakfast-countdown">
+                  ${breakfastStatus.status === 'pending' ? `Faltan ${formatCountdown(breakfastStatus.timeRemaining)}` :
+        breakfastStatus.status === 'in-progress' ? `Termina en ${formatCountdown(breakfastStatus.timeRemaining)}` : ''}
+                </div>
+                <img src="${todayMenu.breakfast.image}" alt="${todayMenu.breakfast.name}" loading="lazy">
+              </div>
+              <p><strong>${todayMenu.breakfast.name}</strong></p>
+              <p class="additional">${icons.cookie} ${todayMenu.breakfast.additional}</p>
+              <a href="menu-detail.html?day=${todayMenu.day}&service=breakfast" class="btn btn-recipe">
+                Ver receta ${icons.arrowRight}
+              </a>
+            </div>
+            <div class="service">
+              <div class="service-header">
+                <div class="service-title">
+                  <h4>${icons.food} Almuerzo (${todayHours.lunch.start} - ${todayHours.lunch.end})</h4>
+                  <span class="service-status lunch-status ${lunchStatus.class}">${lunchStatus.text}</span>
+                </div>
+                <div class="countdown lunch-countdown">
+                  ${lunchStatus.status === 'pending' ? `Faltan ${formatCountdown(lunchStatus.timeRemaining)}` :
+        lunchStatus.status === 'in-progress' ? `Termina en ${formatCountdown(lunchStatus.timeRemaining)}` : ''}
+                </div>
+                <img src="${todayMenu.lunch.image}" alt="${todayMenu.lunch.name}" loading="lazy">
+              </div>
+              <p><strong>${todayMenu.lunch.name}</strong></p>
+              <p class="additional">${icons.fruit} ${todayMenu.lunch.additional}</p>
+              <a href="menu-detail.html?day=${todayMenu.day}&service=lunch" class="btn btn-recipe">
+                Ver receta ${icons.arrowRight}
+              </a>
+            </div>
           </div>
-          <div class="service lunch">
-            <h4>${icons.food} Almuerzo</h4>
-            <img src="${day.lunch.image}" alt="${day.lunch.name}" loading="lazy">
-            <p><strong>${day.lunch.name}</strong></p>
-            <p>${day.lunch.description}</p>
-            ${day.lunch.additional ? `
-            <p class="additional-tag">${icons.fruit} ${day.lunch.additional}</p>
-                      ` : ''}
-            <a href="menu-detail.html?day=${day.day}&service=lunch" class="btn btn-small">
-              Ver receta ${icons.arrowRight}
-            </a>
+          <div class="staff-info">
+            <p><strong>Cocinera:</strong> ${todayStaff.cook}</p>
+            <p><strong>Madres de familia:</strong> ${todayStaff.helpers.join(' y ')}</p>
+            <p><strong>Grado:</strong> ${todayStaff.grade}</p>
           </div>
         </div>
+      </section>
+    `;
+  }
+
+  // 2. Sección de próximos
+  html += `
+    <section class="menu-section next-section">
+      <div class="section-header">
+        <h2 class="section-title">${icons.calendar} Próximos menús</h2>
+      </div>
+  `;
+
+  if (isWeekend) {
+    html += `
+      <div class="info-message">
+        <p>No hay atención hoy. El próximo servicio será el Lunes.</p>
       </div>
     `;
-  });
+  } else {
+    // Encontrar el próximo día (mañana)
+    let nextDayIndex = (dayIndex[todayDayName] + 1) % 5;
+    if (nextDayIndex === 0 && todayDayName === "Viernes") {
+      html += `
+        <div class="info-message">
+          <p>No hay más atención esta semana. El próximo servicio será el Lunes.</p>
+        </div>
+      `;
+    } else {
+      const nextDayMenu = weeklyMenu[nextDayIndex];
+      const nextDayHours = getHoursByDay(nextDayMenu.day);
+      const nextDayStaff = getStaffByDay(nextDayMenu.day);
 
-  html += '</div>';
+      html += `
+        <div class="day-card">
+          <div class="day-header">
+            <h3>${nextDayMenu.day}</h3>
+            <span class="status-badge status-pending">Pendiente</span>
+          </div>
+          <div class="services">
+            <div class="service">
+              <div class="service-header">
+                <div class="service-title">
+                  <h4>${icons.food} Desayuno (${nextDayHours.breakfast.start} - ${nextDayHours.breakfast.end})</h4>
+                  <span class="service-status status-pending">Pendiente</span>
+                </div>
+                <div class="countdown"></div>
+                <img src="${nextDayMenu.breakfast.image}" alt="${nextDayMenu.breakfast.name}" loading="lazy">
+              </div>
+              <p><strong>${nextDayMenu.breakfast.name}</strong></p>
+              <p class="additional">${icons.cookie} ${nextDayMenu.breakfast.additional}</p>
+              <a href="menu-detail.html?day=${nextDayMenu.day}&service=breakfast" class="btn btn-recipe">
+                Ver receta ${icons.arrowRight}
+              </a>
+            </div>
+            <div class="service">
+              <div class="service-header">
+                <div class="service-title">
+                  <h4>${icons.food} Almuerzo (${nextDayHours.lunch.start} - ${nextDayHours.lunch.end})</h4>
+                  <span class="service-status status-pending">Pendiente</span>
+                </div>
+                <div class="countdown"></div>
+                <img src="${nextDayMenu.lunch.image}" alt="${nextDayMenu.lunch.name}" loading="lazy">
+              </div>
+              <p><strong>${nextDayMenu.lunch.name}</strong></p>
+              <p class="additional">${icons.fruit} ${nextDayMenu.lunch.additional}</p>
+              <a href="menu-detail.html?day=${nextDayMenu.day}&service=lunch" class="btn btn-recipe">
+                Ver receta ${icons.arrowRight}
+              </a>
+            </div>
+          </div>
+          <div class="staff-info">
+            <p><strong>Cocinera:</strong> ${nextDayStaff.cook}</p>
+            <p><strong>Madres de familia:</strong> ${nextDayStaff.helpers.join(' y ')}</p>
+            <p><strong>Grado:</strong> ${nextDayStaff.grade}</p>
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  html += `</section>`;
+
+  // 3. Sección de atendidos (días pasados)
+  html += `
+    <section class="menu-section attended-section">
+      <div class="section-header">
+        <h2 class="section-title">${icons.calendar} Menús atendidos</h2>
+      </div>
+      <div class="attended-days">
+  `;
+
+  if (!isWeekend) {
+    // Mostrar días anteriores en la semana
+    for (let i = dayIndex[todayDayName] - 1; i >= 0; i--) {
+      const pastDayMenu = weeklyMenu[i];
+      const pastDayHours = getHoursByDay(pastDayMenu.day);
+      const pastDayStaff = getStaffByDay(pastDayMenu.day);
+
+      html += `
+        <div class="day-card">
+          <div class="day-header">
+            <h3>${pastDayMenu.day}</h3>
+            <span class="status-badge status-completed">Completado</span>
+          </div>
+          <div class="services">
+            <div class="service">
+              <div class="service-header">
+                <div class="service-title">
+                  <h4>${icons.food} Desayuno (${pastDayHours.breakfast.start} - ${pastDayHours.breakfast.end})</h4>
+                  <span class="service-status status-completed">Completado</span>
+                </div>
+                <div class="countdown"></div>
+                <img src="${pastDayMenu.breakfast.image}" alt="${pastDayMenu.breakfast.name}" loading="lazy">
+              </div>
+              <p><strong>${pastDayMenu.breakfast.name}</strong></p>
+              <p class="additional">${icons.cookie} ${pastDayMenu.breakfast.additional}</p>
+              <a href="menu-detail.html?day=${pastDayMenu.day}&service=breakfast" class="btn btn-recipe">
+                Ver receta ${icons.arrowRight}
+              </a>
+            </div>
+            <div class="service">
+              <div class="service-header">
+                <div class="service-title">
+                  <h4>${icons.food} Almuerzo (${pastDayHours.lunch.start} - ${pastDayHours.lunch.end})</h4>
+                  <span class="service-status status-completed">Completado</span>
+                </div>
+                <div class="countdown"></div>
+                <img src="${pastDayMenu.lunch.image}" alt="${pastDayMenu.lunch.name}" loading="lazy">
+              </div>
+              <p><strong>${pastDayMenu.lunch.name}</strong></p>
+              <p class="additional">${icons.fruit} ${pastDayMenu.lunch.additional}</p>
+              <a href="menu-detail.html?day=${pastDayMenu.day}&service=lunch" class="btn btn-recipe">
+                Ver receta ${icons.arrowRight}
+              </a>
+            </div>
+          </div>
+          <div class="staff-info">
+            <p><strong>Cocinera:</strong> ${pastDayStaff.cook}</p>
+            <p><strong>Madres de familia:</strong> ${pastDayStaff.helpers.join(' y ')}</p>
+            <p><strong>Grado:</strong> ${pastDayStaff.grade}</p>
+          </div>
+        </div>
+      `;
+    }
+  } else {
+    // Si es fin de semana, mostrar toda la semana pasada
+    for (let i = 4; i >= 0; i--) {
+      const pastDayMenu = weeklyMenu[i];
+      const pastDayHours = getHoursByDay(pastDayMenu.day);
+      const pastDayStaff = getStaffByDay(pastDayMenu.day);
+
+      html += `
+        <div class="day-card">
+          <div class="day-header">
+            <h3>${pastDayMenu.day}</h3>
+            <span class="status-badge status-completed">Completado</span>
+          </div>
+          <div class="services">
+            <div class="service">
+              <div class="service-header">
+                <div class="service-title">
+                  <h4>${icons.food} Desayuno (${pastDayHours.breakfast.start} - ${pastDayHours.breakfast.end})</h4>
+                  <span class="service-status status-completed">Completado</span>
+                </div>
+                <div class="countdown"></div>
+                <img src="${pastDayMenu.breakfast.image}" alt="${pastDayMenu.breakfast.name}" loading="lazy">
+              </div>
+              <p><strong>${pastDayMenu.breakfast.name}</strong></p>
+              <p class="additional">${icons.cookie} ${pastDayMenu.breakfast.additional}</p>
+              <a href="menu-detail.html?day=${pastDayMenu.day}&service=breakfast" class="btn btn-recipe">
+                Ver receta ${icons.arrowRight}
+              </a>
+            </div>
+            <div class="service">
+              <div class="service-header">
+                <div class="service-title">
+                  <h4>${icons.food} Almuerzo (${pastDayHours.lunch.start} - ${pastDayHours.lunch.end})</h4>
+                  <span class="service-status status-completed">Completado</span>
+                </div>
+                <div class="countdown"></div>
+                <img src="${pastDayMenu.lunch.image}" alt="${pastDayMenu.lunch.name}" loading="lazy">
+              </div>
+              <p><strong>${pastDayMenu.lunch.name}</strong></p>
+              <p class="additional">${icons.fruit} ${pastDayMenu.lunch.additional}</p>
+              <a href="menu-detail.html?day=${pastDayMenu.day}&service=lunch" class="btn btn-recipe">
+                Ver receta ${icons.arrowRight}
+              </a>
+            </div>
+          </div>
+          <div class="staff-info">
+            <p><strong>Cocinera:</strong> ${pastDayStaff.cook}</p>
+            <p><strong>Madres de familia:</strong> ${pastDayStaff.helpers.join(' y ')}</p>
+            <p><strong>Grado:</strong> ${pastDayStaff.grade}</p>
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  html += `</div></section>`;
   container.innerHTML = html;
-}
 
-// Formatear fecha
-function formatDate(dateString) {
-  const options = { year: 'numeric', month: 'long', day: 'numeric' };
-  return new Date(dateString).toLocaleDateString('es-PE', options);
+  // Iniciar la actualización en tiempo real
+  if (!isWeekend) {
+    updateAllStatuses();
+    setInterval(updateAllStatuses, 60000); // Actualizar cada minuto
+  }
 }

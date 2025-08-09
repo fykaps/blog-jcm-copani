@@ -1,28 +1,55 @@
 /**
- * Datos del menú del comedor estudiantil Qaliwarma
+ * Datos del menú del comedor estudiantil Qaliwarma (Versión Mejorada)
  */
 
 // Personal del comedor
 const kitchenStaff = {
     cook: "Rosa Pérez",
     helpers: {
-        "Lunes": ["María Gómez", "Luisa Fernández"],
-        "Martes": ["Carmen Díaz", "Ana López"],
-        "Miércoles": ["Sofía Martínez", "Elena Sánchez"],
-        "Jueves": ["Patricia Ramírez", "Laura González"],
-        "Viernes": ["Teresa Jiménez", "Isabel Ruiz"]
+        "Lunes": {
+            names: ["Lucía Pérez", "Ana Tejada"],
+            grade: "5to A"
+        },
+        "Martes": {
+            names: ["Olga Bernabé", "Lidia Herrera"],
+            grade: "5to B"
+        },
+        "Miércoles": {
+            names: ["Sofía Martínez", "Elena Sánchez"],
+            grade: "4to A"
+        },
+        "Jueves": {
+            names: ["Patricia Ramírez", "Laura González"],
+            grade: "4to B"
+        },
+        "Viernes": {
+            names: ["Matías Oro", "Elsa Plata"],
+            grade: "3ro A"
+        }
     }
 };
 
-// Horarios de los servicios
+// Horarios de los servicios (pueden variar por día)
 const serviceHours = {
-    breakfast: {
-        start: "07:30",
-        end: "08:30"
+    "Lunes": {
+        breakfast: { start: "07:00", end: "08:00" },
+        lunch: { start: "12:30", end: "14:00" }
     },
-    lunch: {
-        start: "12:30",
-        end: "14:00"
+    "Martes": {
+        breakfast: { start: "07:15", end: "08:15" },
+        lunch: { start: "12:30", end: "14:00" }
+    },
+    "Miércoles": {
+        breakfast: { start: "07:00", end: "08:00" },
+        lunch: { start: "12:45", end: "14:15" }
+    },
+    "Jueves": {
+        breakfast: { start: "07:30", end: "08:40" }, // Horario modificado
+        lunch: { start: "12:30", end: "14:00" }
+    },
+    "Viernes": {
+        breakfast: { start: "19:38", end: "19:39" },
+        lunch: { start: "20:00", end: "20:02" }
     }
 };
 
@@ -30,7 +57,7 @@ const serviceHours = {
 const weeklyMenu = [
     {
         day: "Lunes",
-        date: "2023-11-20",
+        date: "2025-08-04",
         breakfast: {
             name: "Leche con avena y pan con huevo",
             description: "Nutritivo desayuno para empezar el día con energía",
@@ -64,7 +91,7 @@ const weeklyMenu = [
     },
     {
         day: "Martes",
-        date: "2023-11-21",
+        date: "2025-08-05",
         breakfast: {
             name: "Quinua con leche y pan con palta",
             description: "Desayuno alto en proteínas y grasas saludables",
@@ -97,10 +124,9 @@ const weeklyMenu = [
             additional: "Pera"
         }
     },
-    // ... Continuar con miércoles, jueves y viernes
     {
         day: "Miércoles",
-        date: "2023-11-22",
+        date: "2025-08-06",
         breakfast: {
             name: "Leche con kiwicha y pan con queso",
             description: "Desayuno rico en calcio y fibra",
@@ -134,7 +160,7 @@ const weeklyMenu = [
     },
     {
         day: "Jueves",
-        date: "2023-11-23",
+        date: "2025-08-07",
         breakfast: {
             name: "Leche con maca y pan con mermelada",
             description: "Desayuno energético con propiedades nutritivas",
@@ -168,7 +194,7 @@ const weeklyMenu = [
     },
     {
         day: "Viernes",
-        date: "2023-11-24",
+        date: "2025-08-08",
         breakfast: {
             name: "Leche con cacao y pan con mantequilla y miel",
             description: "Desayuno clásico y nutritivo",
@@ -206,6 +232,13 @@ const weeklyMenu = [
 // Obtener el menú del día actual
 function getTodayMenu() {
     const today = new Date();
+    const todayDateStr = today.toISOString().split('T')[0];
+
+    // Buscar por fecha exacta
+    const todayMenu = weeklyMenu.find(item => item.date === todayDateStr);
+    if (todayMenu) return todayMenu;
+
+    // Si no coincide la fecha, buscar por día de la semana
     const dayOfWeek = today.getDay() - 1; // Ajuste porque el array empieza en lunes (0)
 
     // Si es fin de semana, mostrar el lunes
@@ -214,6 +247,11 @@ function getTodayMenu() {
     }
 
     return weeklyMenu[dayOfWeek];
+}
+
+// Obtener el menú de días específicos
+function getMenuByDay(dayName) {
+    return weeklyMenu.find(item => item.day === dayName);
 }
 
 // Obtener el personal de hoy
@@ -226,12 +264,43 @@ function getTodayStaff() {
     if (dayOfWeek < 0 || dayOfWeek > 4) {
         return {
             cook: kitchenStaff.cook,
-            helpers: kitchenStaff.helpers["Lunes"]
+            helpers: kitchenStaff.helpers["Lunes"].names,
+            grade: kitchenStaff.helpers["Lunes"].grade
         };
     }
 
+    const dayName = days[dayOfWeek];
     return {
         cook: kitchenStaff.cook,
-        helpers: kitchenStaff.helpers[days[dayOfWeek]]
+        helpers: kitchenStaff.helpers[dayName].names,
+        grade: kitchenStaff.helpers[dayName].grade
     };
+}
+
+// Obtener el personal por día
+function getStaffByDay(dayName) {
+    return {
+        cook: kitchenStaff.cook,
+        helpers: kitchenStaff.helpers[dayName].names,
+        grade: kitchenStaff.helpers[dayName].grade
+    };
+}
+
+// Obtener horarios por día
+function getHoursByDay(dayName) {
+    return serviceHours[dayName] || {
+        breakfast: { start: "07:30", end: "08:30" },
+        lunch: { start: "12:30", end: "14:00" }
+    };
+}
+
+// Obtener el día de la semana en español
+function getDayName(date) {
+    const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    return days[date.getDay()];
+}
+
+// Formatear fecha en formato local
+function formatDate(dateString, options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) {
+    return new Date(dateString).toLocaleDateString('es-PE', options);
 }

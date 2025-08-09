@@ -1,7 +1,45 @@
 /**
- * Página de detalle del menú del comedor Qaliwarma
+ * Página de detalle del menú del comedor Qaliwarma (Versión Mejorada)
  */
 
+// Función para actualizar el estado y el contador en tiempo real
+function updateServiceStatusRealTime() {
+  const serviceStatusElement = document.querySelector('.service-status-container');
+  if (!serviceStatusElement) return;
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const dayParam = urlParams.get('day');
+  const serviceParam = urlParams.get('service');
+
+  const menuItem = dayParam ? getMenuByDay(dayParam) : getTodayMenu();
+  if (!menuItem) return;
+
+  const hours = getHoursByDay(menuItem.day);
+  const serviceHours = serviceParam === 'breakfast' ? hours.breakfast : hours.lunch;
+
+  const today = new Date();
+  const currentTime = `${today.getHours().toString().padStart(2, '0')}:${today.getMinutes().toString().padStart(2, '0')}`;
+  const serviceStatus = getServiceStatus(serviceHours, currentTime);
+
+  // Actualizar el estado y el contador
+  serviceStatusElement.innerHTML = `
+    <div class="service-time">
+      <svg viewBox="0 0 24 24" width="16" height="16">
+        <path fill="currentColor" d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
+      </svg>
+      <span>${serviceHours.start} - ${serviceHours.end}</span>
+    </div>
+    <div class="service-status ${serviceStatus.class}">${serviceStatus.text}</div>
+    ${serviceStatus.status !== 'completed' ? `
+    <div class="service-countdown">
+      <svg viewBox="0 0 24 24" width="16" height="16">
+        <path fill="currentColor" d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
+      </svg>
+      <span>${serviceStatus.status === 'pending' ? 'Faltan' : 'Termina en'} ${formatCountdown(serviceStatus.timeRemaining)}</span>
+    </div>
+    ` : ''}
+  `;
+}
 
 function displayMenuDetail() {
   const container = document.getElementById('menu-detail-container');
@@ -15,18 +53,18 @@ function displayMenuDetail() {
   // Obtener el menú correspondiente
   let menuItem;
   let staff;
+  let hours;
 
   if (dayParam) {
     // Buscar por día específico
-    menuItem = weeklyMenu.find(item => item.day === dayParam);
-    staff = {
-      cook: kitchenStaff.cook,
-      helpers: kitchenStaff.helpers[dayParam]
-    };
+    menuItem = getMenuByDay(dayParam);
+    staff = getStaffByDay(dayParam);
+    hours = getHoursByDay(dayParam);
   } else {
     // Mostrar el menú del día actual
     menuItem = getTodayMenu();
     staff = getTodayStaff();
+    hours = getHoursByDay(menuItem.day);
   }
 
   if (!menuItem) {
@@ -43,9 +81,12 @@ function displayMenuDetail() {
   // Determinar si es desayuno o almuerzo
   const service = serviceParam === 'breakfast' ? menuItem.breakfast : menuItem.lunch;
   const serviceName = serviceParam === 'breakfast' ? 'Desayuno' : 'Almuerzo';
-  const serviceHoursText = serviceParam === 'breakfast' ?
-    `${serviceHours.breakfast.start} - ${serviceHours.breakfast.end}` :
-    `${serviceHours.lunch.start} - ${serviceHours.lunch.end}`;
+  const serviceHours = serviceParam === 'breakfast' ? hours.breakfast : hours.lunch;
+
+  // Obtener estado inicial
+  const today = new Date();
+  const currentTime = `${today.getHours().toString().padStart(2, '0')}:${today.getMinutes().toString().padStart(2, '0')}`;
+  const serviceStatus = getServiceStatus(serviceHours, currentTime);
 
   // Mostrar el detalle
   container.innerHTML = `
@@ -66,7 +107,7 @@ function displayMenuDetail() {
             <svg viewBox="0 0 24 24" width="16" height="16">
               <path fill="currentColor" d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
             </svg>
-            <span>${serviceName}: ${serviceHoursText}</span>
+            <span>${serviceName}</span>
           </div>
           ${service.additional ? `
           <div class="meta-item">
@@ -77,6 +118,9 @@ function displayMenuDetail() {
           </div>
           ` : ''}
         </div>
+        
+        <!-- Nueva sección para estado y horario -->
+        <div class="service-status-container"></div>
       </header>
       
       <div class="menu-detail-content">
@@ -106,6 +150,7 @@ function displayMenuDetail() {
             <div class="staff-member">
               <h3>Madres de familia</h3>
               <p>${staff.helpers.join('</p><p>')}</p>
+              <p><strong>Grado:</strong> ${staff.grade}</p>
             </div>
           </div>
         </div>
@@ -121,12 +166,60 @@ function displayMenuDetail() {
       </div>
     </article>
   `;
+
+  // Actualizar el estado inicial
+  updateServiceStatusRealTime();
+
+  // Configurar la actualización en tiempo real (cada minuto)
+  setInterval(updateServiceStatusRealTime, 60000);
 }
 
-// Formatear fecha
-function formatDate(dateString) {
-  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-  return new Date(dateString).toLocaleDateString('es-PE', options);
+// Funciones auxiliares (deben estar disponibles)
+function timeToMinutes(timeStr) {
+  const [hours, minutes] = timeStr.split(':').map(Number);
+  return hours * 60 + minutes;
+}
+
+function getServiceStatus(serviceHours, currentTime) {
+  const start = timeToMinutes(serviceHours.start);
+  const end = timeToMinutes(serviceHours.end);
+  const now = timeToMinutes(currentTime);
+
+  if (now < start) {
+    return {
+      status: 'pending',
+      text: 'Pendiente',
+      class: 'status-pending',
+      timeRemaining: start - now
+    };
+  } else if (now >= start && now < end) {
+    return {
+      status: 'in-progress',
+      text: 'En proceso',
+      class: 'status-in-progress',
+      timeRemaining: end - now
+    };
+  } else {
+    return {
+      status: 'completed',
+      text: 'Completado',
+      class: 'status-completed',
+      timeRemaining: 0
+    };
+  }
+}
+
+function formatCountdown(minutes) {
+  if (minutes <= 0) return '';
+
+  const hours = Math.floor(minutes / 60);
+  const mins = minutes % 60;
+
+  let parts = [];
+  if (hours > 0) parts.push(`${hours}h`);
+  if (mins > 0) parts.push(`${mins}m`);
+
+  return parts.join(' ');
 }
 
 // Inicializar la página

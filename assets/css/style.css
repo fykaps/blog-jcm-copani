@@ -3832,3 +3832,377 @@ background-color: var(--primary-color);
     font-size: var(--font-size-small);
     color: var(--primary-dark);
 }
+
+/* Estilos para las secciones organizadas */
+#organized-sections {
+    margin-top: 2rem;
+}
+
+.menu-section {
+    margin-bottom: 3rem;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+
+.day-card {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
+}
+
+.day-card.highlighted {
+    border-left: 4px solid var(--primary-color);
+    background-color: #f8f9fa;
+}
+
+.day-card h3 {
+    margin-top: 0;
+    color: var(--primary-color);
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.5rem;
+}
+
+.services {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 1rem 0;
+}
+
+.service {
+    padding: 1rem;
+    background: #f9f9f9;
+    border-radius: 6px;
+}
+
+.service h4 {
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.additional {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #666;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+.staff-info {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px dashed #ddd;
+    font-size: 0.9rem;
+}
+
+.staff-info p {
+    margin: 0.3rem 0;
+}
+
+.info-message {
+    background: #f0f7ff;
+    padding: 1rem;
+    border-radius: 6px;
+    text-align: center;
+    color: #0066cc;
+}
+
+/* Estilos para el cronograma de madres */
+.mothers-schedule-container {
+    display: grid;
+    gap: 1rem;
+}
+
+.mother-card {
+    background: white;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    position: relative;
+}
+
+.mother-card.highlighted {
+    border: 2px solid var(--primary-color);
+    background-color: #f8f9fa;
+}
+
+.mother-card h4 {
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--primary-color);
+}
+
+.today-badge {
+    position: absolute;
+    top: -10px;
+    right: 10px;
+    background: var(--primary-color);
+    color: white;
+    padding: 0.3rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+/* Estilos para el menú semanal */
+.weekly-menu {
+    display: grid;
+    gap: 2rem;
+}
+
+.day-menu {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.day-menu h3 {
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--primary-color);
+}
+
+.additional-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #f0f7ff;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    margin: 0.5rem 0;
+}
+
+/* Estados de servicio */
+.status-pending {
+  background-color: #ff9800;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  display: inline-block;
+}
+
+.status-in-progress {
+  background-color: #4caf50;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  display: inline-block;
+}
+
+.status-completed {
+  background-color: #9e9e9e;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  display: inline-block;
+}
+
+/* Contador regresivo */
+.countdown {
+  font-size: 0.9em;
+  color: #666;
+  margin-top: 4px;
+}
+
+/* Estado general del día */
+.day-status {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.9em;
+  margin-left: auto;
+}
+
+/* Estilos para las secciones */
+.menu-section {
+  margin-bottom: 2rem;
+}
+
+.day-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.day-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.services {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.service {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.service-header {
+  margin-bottom: 1rem;
+}
+
+.service-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.service-title h4 {
+  margin: 0;
+}
+
+.staff-info {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.additional {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #666;
+}
+
+/* Estilos para las tarjetas */
+.day-card {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5rem;
+  border-left: 3px solid;
+}
+
+.today-section .day-card {
+  border-left-color: #ffc107;
+}
+
+.next-section .day-card {
+  border-left-color: #17a2b8;
+}
+
+.attended-section .day-card {
+  border-left-color: #28a745;
+}
+
+
+/* Estilos para la sección de estado y horario */
+.service-status-container {
+  background: #f5f5f5;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 1rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.service-time {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: bold;
+}
+
+.service-status {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.9em;
+  font-weight: bold;
+}
+
+.service-countdown {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #666;
+}
+
+/* Estados de servicio */
+.status-pending {
+  background-color: #ff9800;
+  color: white;
+}
+
+.status-in-progress {
+  background-color: #4caf50;
+  color: white;
+}
+
+.status-completed {
+  background-color: #9e9e9e;
+  color: white;
+}
+
+/* Estilos para los días de servicio */
+.service-days ul.days-list {
+  display: flex;
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-wrap: wrap;
+}
+
+.service-days ul.days-list li {
+  padding: 6px 12px;
+  border-radius: 20px;
+  background-color: #f5f5f5;
+  font-weight: 500;
+}
+
+.service-days ul.days-list li.current-day {
+  background-color: #2196F3;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Organización del layout */
+.program-info-content {
+  display: grid;
+  gap: 20px;
+}
+
+@media (min-width: 768px) {
+  .program-info-content {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .kitchen-staff {
+    grid-column: span 2;
+  }
+}
