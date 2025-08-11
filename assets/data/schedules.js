@@ -124,7 +124,7 @@ const classSchedules = {
         { grade: "5to A", subject: "Receso", start: "09:45", end: "10:00", type: "receso", isBreak: true },
         { grade: "5to A", subject: "Arte", teacher: "Carmen Ortega", start: "10:00", end: "11:30", type: "práctica" }
     ],
-    "Domingo": [
+    "Viernes": [
         // 1ro A
         { grade: "1ro A", subject: "Matemáticas", teacher: "Mengoa Mamani David", start: "08:00", end: "09:00", type: "examen" },
         { grade: "1ro A", subject: "Receso", start: "09:00", end: "09:15", type: "receso", isBreak: true },
@@ -151,7 +151,7 @@ const classSchedules = {
         { grade: "5to B", subject: "Preparación Universitaria", teacher: "María Gómez", start: "09:00", end: "12:00", type: "especial" },
         { grade: "5to C", subject: "Preparación Universitaria", teacher: "Carlos López", start: "09:00", end: "12:00", type: "especial" }
     ],
-
+    "Domingo": []
 };
 
 // Función para obtener el horario del día actual
