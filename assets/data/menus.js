@@ -32,24 +32,24 @@ const kitchenStaff = {
 // Horarios de los servicios (pueden variar por día)
 const serviceHours = {
     "Lunes": {
-        breakfast: { start: "07:00", end: "08:00" },
-        lunch: { start: "12:30", end: "14:00" }
+        breakfast: { start: "09:35", end: "09:50" },
+        lunch: { start: "12:30", end: "13:00" }
     },
     "Martes": {
-        breakfast: { start: "07:15", end: "08:15" },
-        lunch: { start: "12:30", end: "14:00" }
+        breakfast: { start: "09:35", end: "09:50" },
+        lunch: { start: "12:30", end: "13:00" }
     },
     "Miércoles": {
-        breakfast: { start: "07:00", end: "08:00" },
-        lunch: { start: "12:45", end: "14:15" }
+        breakfast: { start: "09:35", end: "09:50" },
+        lunch: { start: "12:30", end: "13:00" }
     },
     "Jueves": {
-        breakfast: { start: "07:30", end: "08:40" }, // Horario modificado
-        lunch: { start: "12:30", end: "14:00" }
+        breakfast: { start: "09:35", end: "09:50" }, // Horario modificado
+        lunch: { start: "12:30", end: "13:00" }
     },
     "Viernes": {
-        breakfast: { start: "19:38", end: "19:39" },
-        lunch: { start: "20:00", end: "20:02" }
+        breakfast: { start: "09:35", end: "09:50" },
+        lunch: { start: "12:30", end: "13:00" }
     }
 };
 
@@ -57,7 +57,7 @@ const serviceHours = {
 const weeklyMenu = [
     {
         day: "Lunes",
-        date: "2025-08-04",
+        date: "2025-08-11",
         breakfast: {
             name: "Leche con avena y pan con huevo",
             description: "Nutritivo desayuno para empezar el día con energía",
@@ -91,7 +91,7 @@ const weeklyMenu = [
     },
     {
         day: "Martes",
-        date: "2025-08-05",
+        date: "2025-08-12",
         breakfast: {
             name: "Quinua con leche y pan con palta",
             description: "Desayuno alto en proteínas y grasas saludables",
@@ -126,7 +126,7 @@ const weeklyMenu = [
     },
     {
         day: "Miércoles",
-        date: "2025-08-06",
+        date: "2025-08-13",
         breakfast: {
             name: "Leche con kiwicha y pan con queso",
             description: "Desayuno rico en calcio y fibra",
@@ -160,7 +160,7 @@ const weeklyMenu = [
     },
     {
         day: "Jueves",
-        date: "2025-08-07",
+        date: "2025-08-14",
         breakfast: {
             name: "Leche con maca y pan con mermelada",
             description: "Desayuno energético con propiedades nutritivas",
@@ -194,7 +194,7 @@ const weeklyMenu = [
     },
     {
         day: "Viernes",
-        date: "2025-08-08",
+        date: "2025-08-15",
         breakfast: {
             name: "Leche con cacao y pan con mantequilla y miel",
             description: "Desayuno clásico y nutritivo",
