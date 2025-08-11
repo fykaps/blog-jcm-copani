@@ -30,7 +30,7 @@ function loadHeader() {
     header.innerHTML = `
         <div class="container header-container">
             <div class="logo">
-                <img src="assets/img/Logo.png" alt="Logo del colegio" class="logo-img">
+                <img src="assets/img/logo.png" alt="Logo del colegio" class="logo-img">
                 <h1 class="logo-title">Blog Escolar</h1>
             </div>
             <nav class="nav-menu">
