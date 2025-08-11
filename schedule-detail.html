@@ -1,11 +1,11 @@
-<!-- schedule.html -->
+<!-- schedule-detail.html -->
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Horario de Clases</title>
+    <title>Detalle de Horario</title>
     <link rel="stylesheet" href="assets/css/variables.css">
     <link rel="stylesheet" href="assets/css/animations.css">
     <link rel="stylesheet" href="assets/css/style.css">
@@ -17,27 +17,25 @@
         <header id="main-header"></header>
 
         <main class="container">
-            <section class="schedule-section">
-                <h1 class="schedule-title">Horario de Clases</h1>
-
-                <div class="grade-selector">
-                    <label for="grade-selector">Ver horario específico:</label>
-                    <select id="grade-selector">
-                        <option value="">Todos los grados</option>
-                    </select>
-                </div>
-
-                <div id="schedule-container">
-                    <!-- Horario se cargará aquí dinámicamente -->
+            <section class="schedule-detail-section">
+                <div id="grade-schedule-detail">
+                    <!-- Detalle del horario se cargará aquí dinámicamente -->
                 </div>
             </section>
         </main>
 
         <footer id="main-footer"></footer>
+
+        <button id="scroll-top" class="scroll-top-btn" aria-label="Subir al inicio">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+                <path fill="currentColor" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
+            </svg>
+        </button>
+
     </div>
 
     <script src="assets/data/schedules.js"></script>
-    <script src="assets/js/schedule.js"></script>
+    <script src="assets/js/schedule-detail.js"></script>
     <script src="assets/js/components.js"></script>
     <script src="assets/js/scroll.js"></script>
 </body>

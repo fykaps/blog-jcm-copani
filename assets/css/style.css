@@ -4206,3 +4206,430 @@ background-color: var(--primary-color);
     grid-column: span 2;
   }
 }
+
+/* ==============================================
+   Estilos Profesionales para Horarios de Clases
+   ============================================== */
+
+/* Variables de color para estados */
+:root {
+  --primary-color: #2c3e50;
+  --primary-light: #3a516f;
+  --primary-dark: #1a252f;
+  --secondary-color: #3498db;
+  --secondary-light: #5dade2;
+  --secondary-dark: #2980b9;
+  --accent-color: #e74c3c;
+  --accent-light: #ec7063;
+  --accent-dark: #c0392b;
+  --success-color: #2ecc71;
+  --warning-color: #f39c12;
+  --danger-color: #e74c3c;
+  
+  --status-pending: #FFA000;
+  --status-pending-bg: rgba(255, 160, 0, 0.1);
+  --status-in-progress: #4CAF50;
+  --status-in-progress-bg: rgba(76, 175, 80, 0.1);
+  --status-completed: #607D8B;
+  --status-completed-bg: rgba(96, 125, 139, 0.1);
+  --recess-bg: rgba(100, 181, 246, 0.1);
+  --recess-text: #1565C0;
+  --type-normal: #9C27B0;
+  --type-examen: #F44336;
+  --type-practica: #2196F3;
+  --type-label-bg: rgba(156, 39, 176, 0.1);
+  --countdown-bg: rgba(0, 0, 0, 0.05);
+  --border-color: rgba(0, 0, 0, 0.08);
+  --card-background: #FFFFFF;
+  --text-primary: #263238;
+  --text-secondary: #546E7A;
+  --light-gray: #f5f7fa;
+}
+
+/* Estructura general */
+.schedule-section, .schedule-detail-section {
+  padding: 24px;
+  background: var(--card-background);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03);
+  margin-bottom: 24px;
+  border: 1px solid var(--border-color);
+}
+
+.schedule-title {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: var(--primary-color);
+  text-align: center;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+/* Selector de grado */
+.grade-selector {
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.02);
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.grade-selector label {
+  font-weight: 500;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.grade-selector select {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  font-size: 1em;
+  min-width: 180px;
+  background-color: var(--card-background);
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+.grade-selector select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(44, 62, 80, 0.2);
+}
+
+/* Encabezado del horario */
+.schedule-header, .detail-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.current-time {
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  font-size: 0.95em;
+  background-color: rgba(0, 0, 0, 0.03);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Secciones por grado */
+.grade-section {
+  margin-bottom: 32px;
+  background: var(--card-background);
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.grade-section h3 {
+  margin: 0 0 16px 0;
+  color: var(--secondary-color);
+  font-size: 1.3rem;
+  font-weight: 600;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.grade-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+/* Lista de clases - Diseño en línea */
+.class-list, .class-list-detail {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.class-item, .class-item-detail {
+  display: flex;
+  padding: 14px 16px;
+  border-radius: 8px;
+  background: var(--card-background);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.class-item:hover, .class-item-detail:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+}
+
+.class-content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+/* Elementos de la clase */
+.class-time {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  min-width: 100px;
+}
+
+.class-subject {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  color: var(--text-primary);
+  flex-grow: 1;
+  min-width: 120px;
+}
+
+.class-teacher {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  min-width: 150px;
+}
+
+/* Etiqueta de tipo */
+.type-label {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.type-label.examen {
+  background-color: rgba(244, 67, 54, 0.1);
+  color: var(--type-examen);
+}
+
+.type-label.practica {
+  background-color: rgba(33, 150, 243, 0.1);
+  color: var(--type-practica);
+}
+
+.type-label.normal {
+  background-color: rgba(156, 39, 176, 0.1);
+  color: var(--type-normal);
+}
+
+/* Estado de la clase */
+.class-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 500;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.status-pending {
+  background-color: var(--status-pending-bg);
+  color: var(--status-pending);
+}
+
+.status-in-progress {
+  background-color: var(--status-in-progress-bg);
+  color: var(--status-in-progress);
+}
+
+.status-completed {
+  background-color: var(--status-completed-bg);
+  color: var(--status-completed);
+}
+
+/* Contador regresivo */
+.countdown {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background-color: var(--countdown-bg);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Estilos para recesos */
+.recess-item, .recess-item-detail {
+  background-color: var(--recess-bg);
+  border-left: 4px solid var(--recess-text);
+}
+
+.recess-item .class-subject, .recess-item-detail .class-subject {
+  color: var(--recess-text);
+}
+
+/* Botón "Ver más" profesional */
+.btn-view-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--primary-color);
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 0.9em;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-view-more:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Pestañas */
+.schedule-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 20px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.schedule-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab-btn {
+  padding: 12px 24px;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  font-size: 0.95rem;
+}
+
+.tab-btn:hover {
+  color: var(--primary-color);
+}
+
+.tab-btn.active {
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
+  font-weight: 600;
+}
+
+.tab-pane {
+  display: none;
+}
+
+.tab-pane.active {
+  display: block;
+}
+
+/* Mensaje cuando no hay clases */
+.no-classes {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-secondary);
+  font-size: 1em;
+  background-color: rgba(0, 0, 0, 0.02);
+  border-radius: 12px;
+  border: 1px dashed var(--border-color);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .class-content {
+    gap: 12px;
+  }
+  
+  .class-teacher {
+    min-width: 120px;
+  }
+}
+
+@media (max-width: 768px) {
+  .schedule-section, .schedule-detail-section {
+    padding: 16px;
+  }
+  
+  .grade-selector {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .class-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .class-time, .class-subject, .class-teacher, 
+  .class-status, .countdown, .type-label {
+    width: 100%;
+    justify-content: space-between;
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+  }
+  
+  .class-teacher::before {
+    color: var(--text-secondary);
+    font-weight: normal;
+  }
+  
+  .class-status::before {
+    color: var(--text-secondary);
+    font-weight: normal;
+  }
+  
+  .grade-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .btn-view-more {
+    align-self: flex-start;
+  }
+  
+  .schedule-header, .detail-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .class-item, .class-item-detail {
+    padding: 12px;
+  }
+  
+  .type-label {
+    margin-left: 0;
+  }
+}
