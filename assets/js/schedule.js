@@ -1,14 +1,9 @@
 /**
- * Sistema de visualización de horarios de clases (Versión Mejorada)
+ * Sistema de visualización de horarios de clases con temporizador en tiempo real
+ * Incluye manejo de días actuales y futuros con actualización automática
  */
 
-document.addEventListener('DOMContentLoaded', () => {
-    loadTodaySchedule();
-    loadGradeSelector();
-    setInterval(updateClassStatuses, 60000); // Actualizar cada minuto
-});
-
-// Iconos SVG mejorados
+// Definición de iconos SVG
 const icons = {
     clock: `<svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/></svg>`,
     class: `<svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>`,
@@ -18,14 +13,53 @@ const icons = {
     arrowRight: `<svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>`
 };
 
+document.addEventListener('DOMContentLoaded', () => {
+    loadTodaySchedule();
+    loadGradeSelector();
+    startRealTimeUpdates();
+});
+
+// Función para iniciar las actualizaciones en tiempo real
+function startRealTimeUpdates() {
+    // Actualizar inmediatamente
+    updateAllStatuses();
+
+    // Configurar actualización cada minuto
+    setInterval(updateAllStatuses, 60000);
+
+    // Actualizar la hora cada segundo
+    setInterval(updateCurrentTime, 1000);
+}
+
+// Función para actualizar la hora actual
+function updateCurrentTime() {
+    const currentTimeElements = document.querySelectorAll('.current-time');
+    if (currentTimeElements.length > 0) {
+        const currentTime = getCurrentTime();
+        currentTimeElements.forEach(el => {
+            el.textContent = currentTime;
+        });
+    }
+}
+
+// Función para actualizar todos los estados
+function updateAllStatuses() {
+    const today = new Date();
+    const currentDayName = getDayName(today);
+
+    // Actualizar horario del día actual
+    const todaySchedule = getTodaySchedule();
+    displaySchedule(currentDayName, todaySchedule);
+}
+
 // Función para renderizar un ítem de clase en línea
 function renderClassItem(cls, currentTime) {
     const status = getClassStatus(cls, currentTime);
     const isBreak = cls.isBreak || cls.subject === "Receso";
 
     // Etiqueta de tipo (solo si no es normal ni receso)
-    const typeLabel = (cls.type && cls.type !== "normal" && !isBreak) ?
-        `<span class="type-label ${cls.type}">${cls.type}</span>` : '';
+    const typeLabel = (cls.type && cls.type.toLowerCase() !== "normal" && !isBreak) ?
+        `<span class="type-label ${cls.type.toLowerCase()}">${cls.type}</span>` : '';
 
     // Contador regresivo si aplica
     const countdown = status.timeRemaining > 0 ?
@@ -35,7 +69,7 @@ function renderClassItem(cls, currentTime) {
 
     if (isBreak) {
         return `
-        <li class="class-item ${status.class} recess-item">
+        <li class="class-item ${status.class} recess-item" data-start="${cls.start}" data-end="${cls.end}">
             <div class="class-content">
                 <span class="class-time">${icons.clock} ${cls.start} - ${cls.end}</span>
                 <span class="class-subject">${icons.recess} ${cls.subject}</span>
@@ -46,7 +80,7 @@ function renderClassItem(cls, currentTime) {
     }
 
     return `
-    <li class="class-item ${status.class}">
+    <li class="class-item ${status.class}" data-start="${cls.start}" data-end="${cls.end}">
         <div class="class-content">
             <span class="class-time">${icons.clock} ${cls.start} - ${cls.end}</span>
             <span class="class-subject">${icons.class} ${cls.subject}</span>
@@ -58,7 +92,7 @@ function renderClassItem(cls, currentTime) {
     </li>`;
 }
 
-// Cargar selector de grados con mejor estilo
+// Cargar selector de grados
 function loadGradeSelector() {
     const selector = document.getElementById('grade-selector');
     if (!selector) return;
@@ -79,7 +113,7 @@ function loadGradeSelector() {
     });
 }
 
-// Cargar horario del día actual con recesos
+// Cargar horario del día actual
 function loadTodaySchedule() {
     const today = new Date();
     const dayName = getDayName(today);
@@ -88,7 +122,7 @@ function loadTodaySchedule() {
     displaySchedule(dayName, schedule);
 }
 
-// Cargar horario por grado con recesos
+// Cargar horario por grado
 function loadGradeSchedule(grade) {
     const today = new Date();
     const dayName = getDayName(today);
@@ -97,7 +131,7 @@ function loadGradeSchedule(grade) {
     displaySchedule(dayName, schedule, grade);
 }
 
-// Función para mostrar el horario (con botón "Ver más" siempre visible)
+// Función para mostrar el horario
 function displaySchedule(dayName, schedule, specificGrade = null) {
     const container = document.getElementById('schedule-container');
     if (!container) return;
@@ -151,7 +185,7 @@ function renderClassList(classes, currentTime) {
   `;
 }
 
-// Obtener estado de la clase o receso
+// Obtener estado de la clase
 function getClassStatus(cls, currentTime) {
     const start = timeToMinutes(cls.start);
     const end = timeToMinutes(cls.end);
@@ -181,65 +215,6 @@ function getClassStatus(cls, currentTime) {
     }
 }
 
-// Actualizar estados de las clases y recesos
-function updateClassStatuses() {
-    const currentTime = getCurrentTime();
-    const classItems = document.querySelectorAll('.class-item');
-
-    classItems.forEach(item => {
-        const timeText = item.querySelector('.class-time').textContent;
-        const timeMatches = timeText.match(/(\d{2}:\d{2})/g);
-
-        if (!timeMatches || timeMatches.length < 2) return;
-
-        const start = timeMatches[0];
-        const end = timeMatches[1];
-        const isBreak = item.querySelector('.class-time').innerHTML.includes('recess');
-
-        const cls = {
-            start,
-            end,
-            subject: isBreak ? 'Receso' : item.querySelector('h4').textContent.replace(' (Examen)', ''),
-            type: timeText.includes('Examen') ? 'examen' : 'normal',
-            isBreak
-        };
-
-        const status = getClassStatus(cls, currentTime);
-        const statusElement = item.querySelector('.class-status');
-        const countdownElement = item.querySelector('.countdown');
-
-        // Actualizar clases/recesos
-        item.className = `class-item ${status.class} ${isBreak ? 'class-break' : ''}`;
-        if (statusElement) {
-            statusElement.textContent = status.text;
-        }
-
-        // Actualizar contador
-        if (countdownElement) {
-            if (status.timeRemaining > 0) {
-                countdownElement.textContent = status.text === 'Pendiente' ?
-                    `Inicia en ${formatCountdown(status.timeRemaining)}` :
-                    `Termina en ${formatCountdown(status.timeRemaining)}`;
-            } else {
-                countdownElement.remove();
-            }
-        } else if (status.timeRemaining > 0) {
-            const newCountdown = document.createElement('div');
-            newCountdown.className = 'countdown';
-            newCountdown.textContent = status.text === 'Pendiente' ?
-                `Inicia en ${formatCountdown(status.timeRemaining)}` :
-                `Termina en ${formatCountdown(status.timeRemaining)}`;
-            item.querySelector('.class-info').appendChild(newCountdown);
-        }
-    });
-
-    // Actualizar hora actual
-    const currentTimeElement = document.querySelector('.current-time');
-    if (currentTimeElement) {
-        currentTimeElement.textContent = currentTime;
-    }
-}
-
 // Funciones auxiliares
 function timeToMinutes(timeStr) {
     const [hours, minutes] = timeStr.split(':').map(Number);
@@ -255,4 +230,9 @@ function formatCountdown(minutes) {
 function getCurrentTime() {
     const now = new Date();
     return `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+}
+
+function getDayName(date) {
+    const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    return days[date.getDay()];
 }
