@@ -28,7 +28,7 @@ const TimeUtils = (() => {
 
     function getDayName(date = null) {
         const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-        const limaDate = date ? new Date(getNowInLima().setTime(date.getTime())) : getNowInLima();
+        const limaDate = date ? new Date(date.toLocaleString('en-US', { timeZone: 'America/Lima' })) : getNowInLima();
         return days[limaDate.getDay()];
     }
 
@@ -38,9 +38,50 @@ const TimeUtils = (() => {
     }
 
     function formatCountdown(minutes) {
+        if (minutes <= 0) return '';
+
         const hours = Math.floor(minutes / 60);
         const mins = minutes % 60;
-        return `${hours > 0 ? `${hours}h ` : ''}${mins}m`;
+
+        let parts = [];
+        if (hours > 0) parts.push(`${hours}h`);
+        if (mins > 0) parts.push(`${mins}m`);
+
+        return parts.join(' ');
+    }
+
+    // Función para formatear fechas en español
+    function formatDate(dateString, options = {}) {
+        // Opciones por defecto
+        const defaultOptions = {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long',
+            timeZone: TIME_ZONE
+        };
+
+        // Combinar con opciones personalizadas
+        const formatOptions = { ...defaultOptions, ...options };
+
+        // Parsear y formatear la fecha
+        const date = parseDateForLima(dateString);
+        let formattedDate = date.toLocaleDateString('es-PE', formatOptions);
+
+        // Capitalizar la primera letra del día de la semana
+        formattedDate = capitalizeFirstLetter(formattedDate);
+
+        return formattedDate;
+    }
+
+    function parseDateForLima(dateString) {
+        const dateWithTime = `${dateString}T12:00:00-05:00`;
+        const date = new Date(dateWithTime);
+        return new Date(date.toLocaleString('en-US', { timeZone: TIME_ZONE }));
+    }
+
+    // Función auxiliar para capitalizar la primera letra
+    function capitalizeFirstLetter(str) {
+        return str.replace(/^\w/, (firstLetter) => firstLetter.toUpperCase());
     }
 
     return {
@@ -48,6 +89,7 @@ const TimeUtils = (() => {
         getCurrentTime,
         getDayName,
         timeToMinutes,
-        formatCountdown
+        formatCountdown,
+        formatDate
     };
 })();

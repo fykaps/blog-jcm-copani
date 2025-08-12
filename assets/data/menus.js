@@ -44,7 +44,7 @@ const serviceHours = {
         lunch: { start: "12:30", end: "13:00" }
     },
     "Jueves": {
-        breakfast: { start: "09:35", end: "09:50" }, // Horario modificado
+        breakfast: { start: "09:35", end: "09:50" },
         lunch: { start: "12:30", end: "13:00" }
     },
     "Viernes": {
@@ -231,7 +231,7 @@ const weeklyMenu = [
 
 // Obtener el menú del día actual
 function getTodayMenu() {
-    const today = new Date();
+    const today = TimeUtils.getNowInLima();
     const todayDateStr = today.toISOString().split('T')[0];
 
     // Buscar por fecha exacta
@@ -240,7 +240,7 @@ function getTodayMenu() {
 
     // Si no coincide la fecha, buscar por día de la semana
     const dayOfWeek = today.getDay() - 1; // Ajuste porque el array empieza en lunes (0)
-
+    console.log(dayOfWeek)
     // Si es fin de semana, mostrar el lunes
     if (dayOfWeek < 0 || dayOfWeek > 4) {
         return weeklyMenu[0];
@@ -257,7 +257,7 @@ function getMenuByDay(dayName) {
 // Obtener el personal de hoy
 function getTodayStaff() {
     const days = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes"];
-    const today = new Date();
+    const today = TimeUtils.getNowInLima();
     const dayOfWeek = today.getDay() - 1;
 
     // Si es fin de semana, mostrar el lunes
@@ -292,12 +292,6 @@ function getHoursByDay(dayName) {
         breakfast: { start: "07:30", end: "08:30" },
         lunch: { start: "12:30", end: "14:00" }
     };
-}
-
-// Obtener el día de la semana en español
-function getDayName(date) {
-    const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-    return days[date.getDay()];
 }
 
 // Formatear fecha en formato local

@@ -210,7 +210,7 @@ function loadTodayMenuWidget() {
 
   container.innerHTML = `
     <div class="menu-widget">
-      <h3>${iconsMenu.calendar} Menú de hoy (${formatDate(todayMenu.date, { weekday: 'long', day: 'numeric', month: 'long' })})</h3>
+      <h3>${iconsMenu.calendar} Menú de hoy (${TimeUtils.formatDate(todayMenu.date)})</h3>
       <div class="menu-service">
         <h4>${iconsMenu.food} Desayuno (${todayHours.breakfast.start} - ${todayHours.breakfast.end})</h4>
         <p>${todayMenu.breakfast.name}</p>
@@ -250,7 +250,7 @@ function loadOrganizedSections() {
       <section class="menu-section today-section">
         <div class="section-header">
           <h2 class="section-title">${iconsMenu.calendar} Desayuno y almuerzo de hoy</h2>
-          <span class="section-date">${formatDate(todayMenu.date, { weekday: 'long', day: 'numeric', month: 'long' })}</span>
+          <span class="section-date">${TimeUtils.formatDate(todayMenu.date)}</span>
         </div>
         <div class="day-card">
           <div class="day-header">
