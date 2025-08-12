@@ -217,22 +217,17 @@ function getClassStatus(cls, currentTime) {
 
 // Funciones auxiliares
 function timeToMinutes(timeStr) {
-    const [hours, minutes] = timeStr.split(':').map(Number);
-    return hours * 60 + minutes;
+    return TimeUtils.timeToMinutes(timeStr);
 }
 
 function formatCountdown(minutes) {
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    return `${hours > 0 ? `${hours}h ` : ''}${mins}m`;
+    return TimeUtils.formatCountdown(minutes);
 }
 
 function getCurrentTime() {
-    const now = new Date();
-    return `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+    return TimeUtils.getCurrentTime();
 }
 
 function getDayName(date) {
-    const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-    return days[date.getDay()];
+    return TimeUtils.getDayName(date);
 }

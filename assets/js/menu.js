@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Iconos SVG reutilizables
-const icons = {
+const iconsMenu = {
   clock: `<svg viewBox="0 0 24 24" class="icon-service" width="20" height="20">
         <path fill="currentColor" d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
     </svg>`,
@@ -208,22 +208,22 @@ function loadProgramInfo() {
   container.innerHTML = `
     <div class="program-info-content">
       <div class="service-hours">
-        <h3>${icons.clock} Horarios de servicio:</h3>
+        <h3>${iconsMenu.clock} Horarios de servicio:</h3>
         <ul>
-          <li>${icons.food} <strong>Desayuno:</strong> ${todayHours.breakfast.start} - ${todayHours.breakfast.end}</li>
-          <li>${icons.food} <strong>Almuerzo:</strong> ${todayHours.lunch.start} - ${todayHours.lunch.end}</li>
+          <li>${iconsMenu.food} <strong>Desayuno:</strong> ${todayHours.breakfast.start} - ${todayHours.breakfast.end}</li>
+          <li>${iconsMenu.food} <strong>Almuerzo:</strong> ${todayHours.lunch.start} - ${todayHours.lunch.end}</li>
         </ul>
       </div>
       
       <div class="service-days">
-        <h3>${icons.calendar} Días de servicio:</h3>
+        <h3>${iconsMenu.calendar} Días de servicio:</h3>
         <ul class="days-list">
           ${serviceDaysHTML}
         </ul>
       </div>
       
       <div class="kitchen-staff">
-        <h3>${icons.chef} Personal del comedor:</h3>
+        <h3>${iconsMenu.chef} Personal del comedor:</h3>
         <ul>
           <li><strong>Cocinera:</strong> ${kitchenStaff.cook}</li>
           <li><strong>Madres de familia:</strong> Rotación diaria según cronograma</li>
@@ -265,10 +265,10 @@ function loadMothersSchedule() {
     const isToday = day === todayDayName && !isWeekend;
     html += `
             <div class="mother-card ${isToday ? 'highlighted' : ''}">
-                <h4>${icons.calendar} ${day}</h4>
+                <h4>${iconsMenu.calendar} ${day}</h4>
                 <p><strong>Madres:</strong> ${data.names.join(' y ')}</p>
                 <p><strong>Grado:</strong> ${data.grade}</p>
-                ${isToday ? `<div class="today-badge">${icons.highlight} Hoy</div>` : ''}
+                ${isToday ? `<div class="today-badge">${iconsMenu.highlight} Hoy</div>` : ''}
             </div>
         `;
   });
@@ -292,23 +292,23 @@ function loadTodayMenuWidget() {
 
   container.innerHTML = `
         <div class="menu-widget">
-            <h3>${icons.calendar} Menú de hoy (${formatDate(todayMenu.date, { weekday: 'long', day: 'numeric', month: 'long' })})</h3>
+            <h3>${iconsMenu.calendar} Menú de hoy (${formatDate(todayMenu.date, { weekday: 'long', day: 'numeric', month: 'long' })})</h3>
             <div class="menu-service">
-                <h4>${icons.food} Desayuno (${todayHours.breakfast.start} - ${todayHours.breakfast.end})</h4>
+                <h4>${iconsMenu.food} Desayuno (${todayHours.breakfast.start} - ${todayHours.breakfast.end})</h4>
                 <p>${todayMenu.breakfast.name}</p>
                 <div class="service-status breakfast-status ${breakfastStatus.class}">${breakfastStatus.text}</div>
                 ${breakfastStatus.status !== 'completed' ? `<div class="countdown">${breakfastStatus.status === 'pending' ? `Faltan ${formatCountdown(breakfastStatus.timeRemaining)}` : `Termina en ${formatCountdown(breakfastStatus.timeRemaining)}`}</div>` : ''}
                 <a href="menu-detail.html?day=${todayMenu.day}&service=breakfast" class="btn btn-small">
-                    Ver detalle ${icons.arrowRight}
+                    Ver detalle ${iconsMenu.arrowRight}
                 </a>
             </div>
             <div class="menu-service">
-                <h4>${icons.food} Almuerzo (${todayHours.lunch.start} - ${todayHours.lunch.end})</h4>
+                <h4>${iconsMenu.food} Almuerzo (${todayHours.lunch.start} - ${todayHours.lunch.end})</h4>
                 <p>${todayMenu.lunch.name}</p>
                 <div class="service-status lunch-status ${lunchStatus.class}">${lunchStatus.text}</div>
                 ${lunchStatus.status !== 'completed' ? `<div class="countdown">${lunchStatus.status === 'pending' ? `Faltan ${formatCountdown(lunchStatus.timeRemaining)}` : `Termina en ${formatCountdown(lunchStatus.timeRemaining)}`}</div>` : ''}
                 <a href="menu-detail.html?day=${todayMenu.day}&service=lunch" class="btn btn-small">
-                    Ver detalle ${icons.arrowRight}
+                    Ver detalle ${iconsMenu.arrowRight}
                 </a>
             </div>
         </div>
@@ -347,7 +347,7 @@ function loadOrganizedSections() {
     html += `
       <section class="menu-section today-section">
         <div class="section-header">
-          <h2 class="section-title">${icons.calendar} Desayuno y almuerzo de hoy</h2>
+          <h2 class="section-title">${iconsMenu.calendar} Desayuno y almuerzo de hoy</h2>
           <span class="section-date">${formatDate(todayMenu.date, { weekday: 'long', day: 'numeric', month: 'long' })}</span>
         </div>
         <div class="day-card">
@@ -367,7 +367,7 @@ function loadOrganizedSections() {
             <div class="service">
               <div class="service-header">
                 <div class="service-title">
-                  <h4>${icons.food} Desayuno (${todayHours.breakfast.start} - ${todayHours.breakfast.end})</h4>
+                  <h4>${iconsMenu.food} Desayuno (${todayHours.breakfast.start} - ${todayHours.breakfast.end})</h4>
                   <span class="service-status breakfast-status ${breakfastStatus.class}">${breakfastStatus.text}</span>
                 </div>
                 <div class="countdown breakfast-countdown">
@@ -377,15 +377,15 @@ function loadOrganizedSections() {
                 <img src="${todayMenu.breakfast.image}" alt="${todayMenu.breakfast.name}" loading="lazy">
               </div>
               <p><strong>${todayMenu.breakfast.name}</strong></p>
-              <p class="additional">${icons.cookie} ${todayMenu.breakfast.additional}</p>
+              <p class="additional">${iconsMenu.cookie} ${todayMenu.breakfast.additional}</p>
               <a href="menu-detail.html?day=${todayMenu.day}&service=breakfast" class="btn btn-recipe">
-                Ver receta ${icons.arrowRight}
+                Ver receta ${iconsMenu.arrowRight}
               </a>
             </div>
             <div class="service">
               <div class="service-header">
                 <div class="service-title">
-                  <h4>${icons.food} Almuerzo (${todayHours.lunch.start} - ${todayHours.lunch.end})</h4>
+                  <h4>${iconsMenu.food} Almuerzo (${todayHours.lunch.start} - ${todayHours.lunch.end})</h4>
                   <span class="service-status lunch-status ${lunchStatus.class}">${lunchStatus.text}</span>
                 </div>
                 <div class="countdown lunch-countdown">
@@ -395,9 +395,9 @@ function loadOrganizedSections() {
                 <img src="${todayMenu.lunch.image}" alt="${todayMenu.lunch.name}" loading="lazy">
               </div>
               <p><strong>${todayMenu.lunch.name}</strong></p>
-              <p class="additional">${icons.fruit} ${todayMenu.lunch.additional}</p>
+              <p class="additional">${iconsMenu.fruit} ${todayMenu.lunch.additional}</p>
               <a href="menu-detail.html?day=${todayMenu.day}&service=lunch" class="btn btn-recipe">
-                Ver receta ${icons.arrowRight}
+                Ver receta ${iconsMenu.arrowRight}
               </a>
             </div>
           </div>
@@ -415,7 +415,7 @@ function loadOrganizedSections() {
   html += `
     <section class="menu-section next-section">
       <div class="section-header">
-        <h2 class="section-title">${icons.calendar} Próximos menús</h2>
+        <h2 class="section-title">${iconsMenu.calendar} Próximos menús</h2>
       </div>
   `;
 
@@ -449,31 +449,31 @@ function loadOrganizedSections() {
             <div class="service">
               <div class="service-header">
                 <div class="service-title">
-                  <h4>${icons.food} Desayuno (${nextDayHours.breakfast.start} - ${nextDayHours.breakfast.end})</h4>
+                  <h4>${iconsMenu.food} Desayuno (${nextDayHours.breakfast.start} - ${nextDayHours.breakfast.end})</h4>
                   <span class="service-status status-pending">Pendiente</span>
                 </div>
                 <div class="countdown"></div>
                 <img src="${nextDayMenu.breakfast.image}" alt="${nextDayMenu.breakfast.name}" loading="lazy">
               </div>
               <p><strong>${nextDayMenu.breakfast.name}</strong></p>
-              <p class="additional">${icons.cookie} ${nextDayMenu.breakfast.additional}</p>
+              <p class="additional">${iconsMenu.cookie} ${nextDayMenu.breakfast.additional}</p>
               <a href="menu-detail.html?day=${nextDayMenu.day}&service=breakfast" class="btn btn-recipe">
-                Ver receta ${icons.arrowRight}
+                Ver receta ${iconsMenu.arrowRight}
               </a>
             </div>
             <div class="service">
               <div class="service-header">
                 <div class="service-title">
-                  <h4>${icons.food} Almuerzo (${nextDayHours.lunch.start} - ${nextDayHours.lunch.end})</h4>
+                  <h4>${iconsMenu.food} Almuerzo (${nextDayHours.lunch.start} - ${nextDayHours.lunch.end})</h4>
                   <span class="service-status status-pending">Pendiente</span>
                 </div>
                 <div class="countdown"></div>
                 <img src="${nextDayMenu.lunch.image}" alt="${nextDayMenu.lunch.name}" loading="lazy">
               </div>
               <p><strong>${nextDayMenu.lunch.name}</strong></p>
-              <p class="additional">${icons.fruit} ${nextDayMenu.lunch.additional}</p>
+              <p class="additional">${iconsMenu.fruit} ${nextDayMenu.lunch.additional}</p>
               <a href="menu-detail.html?day=${nextDayMenu.day}&service=lunch" class="btn btn-recipe">
-                Ver receta ${icons.arrowRight}
+                Ver receta ${iconsMenu.arrowRight}
               </a>
             </div>
           </div>
@@ -493,7 +493,7 @@ function loadOrganizedSections() {
   html += `
     <section class="menu-section attended-section">
       <div class="section-header">
-        <h2 class="section-title">${icons.calendar} Menús atendidos</h2>
+        <h2 class="section-title">${iconsMenu.calendar} Menús atendidos</h2>
       </div>
       <div class="attended-days">
   `;
@@ -515,31 +515,31 @@ function loadOrganizedSections() {
             <div class="service">
               <div class="service-header">
                 <div class="service-title">
-                  <h4>${icons.food} Desayuno (${pastDayHours.breakfast.start} - ${pastDayHours.breakfast.end})</h4>
+                  <h4>${iconsMenu.food} Desayuno (${pastDayHours.breakfast.start} - ${pastDayHours.breakfast.end})</h4>
                   <span class="service-status status-completed">Completado</span>
                 </div>
                 <div class="countdown"></div>
                 <img src="${pastDayMenu.breakfast.image}" alt="${pastDayMenu.breakfast.name}" loading="lazy">
               </div>
               <p><strong>${pastDayMenu.breakfast.name}</strong></p>
-              <p class="additional">${icons.cookie} ${pastDayMenu.breakfast.additional}</p>
+              <p class="additional">${iconsMenu.cookie} ${pastDayMenu.breakfast.additional}</p>
               <a href="menu-detail.html?day=${pastDayMenu.day}&service=breakfast" class="btn btn-recipe">
-                Ver receta ${icons.arrowRight}
+                Ver receta ${iconsMenu.arrowRight}
               </a>
             </div>
             <div class="service">
               <div class="service-header">
                 <div class="service-title">
-                  <h4>${icons.food} Almuerzo (${pastDayHours.lunch.start} - ${pastDayHours.lunch.end})</h4>
+                  <h4>${iconsMenu.food} Almuerzo (${pastDayHours.lunch.start} - ${pastDayHours.lunch.end})</h4>
                   <span class="service-status status-completed">Completado</span>
                 </div>
                 <div class="countdown"></div>
                 <img src="${pastDayMenu.lunch.image}" alt="${pastDayMenu.lunch.name}" loading="lazy">
               </div>
               <p><strong>${pastDayMenu.lunch.name}</strong></p>
-              <p class="additional">${icons.fruit} ${pastDayMenu.lunch.additional}</p>
+              <p class="additional">${iconsMenu.fruit} ${pastDayMenu.lunch.additional}</p>
               <a href="menu-detail.html?day=${pastDayMenu.day}&service=lunch" class="btn btn-recipe">
-                Ver receta ${icons.arrowRight}
+                Ver receta ${iconsMenu.arrowRight}
               </a>
             </div>
           </div>
@@ -568,31 +568,31 @@ function loadOrganizedSections() {
             <div class="service">
               <div class="service-header">
                 <div class="service-title">
-                  <h4>${icons.food} Desayuno (${pastDayHours.breakfast.start} - ${pastDayHours.breakfast.end})</h4>
+                  <h4>${iconsMenu.food} Desayuno (${pastDayHours.breakfast.start} - ${pastDayHours.breakfast.end})</h4>
                   <span class="service-status status-completed">Completado</span>
                 </div>
                 <div class="countdown"></div>
                 <img src="${pastDayMenu.breakfast.image}" alt="${pastDayMenu.breakfast.name}" loading="lazy">
               </div>
               <p><strong>${pastDayMenu.breakfast.name}</strong></p>
-              <p class="additional">${icons.cookie} ${pastDayMenu.breakfast.additional}</p>
+              <p class="additional">${iconsMenu.cookie} ${pastDayMenu.breakfast.additional}</p>
               <a href="menu-detail.html?day=${pastDayMenu.day}&service=breakfast" class="btn btn-recipe">
-                Ver receta ${icons.arrowRight}
+                Ver receta ${iconsMenu.arrowRight}
               </a>
             </div>
             <div class="service">
               <div class="service-header">
                 <div class="service-title">
-                  <h4>${icons.food} Almuerzo (${pastDayHours.lunch.start} - ${pastDayHours.lunch.end})</h4>
+                  <h4>${iconsMenu.food} Almuerzo (${pastDayHours.lunch.start} - ${pastDayHours.lunch.end})</h4>
                   <span class="service-status status-completed">Completado</span>
                 </div>
                 <div class="countdown"></div>
                 <img src="${pastDayMenu.lunch.image}" alt="${pastDayMenu.lunch.name}" loading="lazy">
               </div>
               <p><strong>${pastDayMenu.lunch.name}</strong></p>
-              <p class="additional">${icons.fruit} ${pastDayMenu.lunch.additional}</p>
+              <p class="additional">${iconsMenu.fruit} ${pastDayMenu.lunch.additional}</p>
               <a href="menu-detail.html?day=${pastDayMenu.day}&service=lunch" class="btn btn-recipe">
-                Ver receta ${icons.arrowRight}
+                Ver receta ${iconsMenu.arrowRight}
               </a>
             </div>
           </div>
@@ -615,3 +615,8 @@ function loadOrganizedSections() {
     setInterval(updateAllStatuses, 60000); // Actualizar cada minuto
   }
 }
+
+// Hacer las funciones accesibles globalmente
+window.getServiceStatus = getServiceStatus;
+window.timeToMinutes = timeToMinutes;
+window.formatCountdown = formatCountdown;

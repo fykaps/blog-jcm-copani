@@ -304,3 +304,8 @@ function getDayName(date) {
 function formatDate(dateString, options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) {
     return new Date(dateString).toLocaleDateString('es-PE', options);
 }
+
+// Hacer las funciones accesibles globalmente
+window.getMenuByDay = getMenuByDay;
+window.getTodayMenu = getTodayMenu;
+window.getHoursByDay = getHoursByDay;
