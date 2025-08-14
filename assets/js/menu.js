@@ -185,11 +185,23 @@ function updateNextMenusCountdowns(todayDayName) {
     const dayName = Object.keys(dayIndex)[i];
     const dayMenu = getMenuByDay(dayName);
     const dayHours = getHoursByDay(dayName);
-    const targetDate = new Date(`${dayMenu.date}T${dayHours.breakfast.start}:00-05:00`);
-    const remaining = getTimeRemaining(targetDate);
 
-    document.querySelectorAll(`.next-day-${dayName} .countdown`).forEach(el => {
-      el.textContent = `Faltan ${formatTimeRemaining(remaining)}`;
+    // Calcular tiempo para desayuno
+    const breakfastTarget = new Date(`${dayMenu.date}T${dayHours.breakfast.start}:00-05:00`);
+    const breakfastRemaining = getTimeRemaining(breakfastTarget);
+
+    // Calcular tiempo para almuerzo
+    const lunchTarget = new Date(`${dayMenu.date}T${dayHours.lunch.start}:00-05:00`);
+    const lunchRemaining = getTimeRemaining(lunchTarget);
+
+    // Actualizar contadores de desayuno
+    document.querySelectorAll(`.next-day-${dayName} .breakfast-countdown`).forEach(el => {
+      el.textContent = breakfastRemaining.total > 0 ? `Faltan ${formatTimeRemaining(breakfastRemaining)}` : '';
+    });
+
+    // Actualizar contadores de almuerzo
+    document.querySelectorAll(`.next-day-${dayName} .lunch-countdown`).forEach(el => {
+      el.textContent = lunchRemaining.total > 0 ? `Faltan ${formatTimeRemaining(lunchRemaining)}` : '';
     });
   }
 }
@@ -421,7 +433,10 @@ function loadOrganizedSections() {
     const nextMondayStaff = getStaffByDay(nextMondayMenu.day);
 
     const nextMondayDate = new Date(nextMondayMenu.date);
-    const remaining = getTimeRemaining(nextMondayDate);
+    const breakfastTarget = new Date(`${nextMondayMenu.date}T${nextMondayHours.breakfast.start}:00-05:00`);
+    const breakfastRemaining = getTimeRemaining(breakfastTarget);
+    const lunchTarget = new Date(`${nextMondayMenu.date}T${nextMondayHours.lunch.start}:00-05:00`);
+    const lunchRemaining = getTimeRemaining(lunchTarget);
 
     html += `
             <div class="day-card next-day-Lunes">
@@ -436,7 +451,7 @@ function loadOrganizedSections() {
                                 <h4>${icons.food} Desayuno (${nextMondayHours.breakfast.start} - ${nextMondayHours.breakfast.end})</h4>
                                 <span class="service-status status-pending">Pendiente</span>
                             </div>
-                            <div class="countdown">Faltan ${formatTimeRemaining(remaining)}</div>
+                            <div class="countdown breakfast-countdown">${breakfastRemaining.total > 0 ? `Faltan ${formatTimeRemaining(breakfastRemaining)}` : ''}</div>
                             <img src="${nextMondayMenu.breakfast.image}" alt="${nextMondayMenu.breakfast.name}" loading="lazy">
                         </div>
                         <p><strong>${nextMondayMenu.breakfast.name}</strong></p>
@@ -451,7 +466,7 @@ function loadOrganizedSections() {
                                 <h4>${icons.food} Almuerzo (${nextMondayHours.lunch.start} - ${nextMondayHours.lunch.end})</h4>
                                 <span class="service-status status-pending">Pendiente</span>
                             </div>
-                            <div class="countdown">Faltan ${formatTimeRemaining(remaining)}</div>
+                            <div class="countdown lunch-countdown">${lunchRemaining.total > 0 ? `Faltan ${formatTimeRemaining(lunchRemaining)}` : ''}</div>
                             <img src="${nextMondayMenu.lunch.image}" alt="${nextMondayMenu.lunch.name}" loading="lazy">
                         </div>
                         <p><strong>${nextMondayMenu.lunch.name}</strong></p>
@@ -479,8 +494,10 @@ function loadOrganizedSections() {
       const nextDayHours = getHoursByDay(dayName);
       const nextDayStaff = getStaffByDay(dayName);
 
-      const nextDayDate = new Date(nextDayMenu.date);
-      const remaining = getTimeRemaining(nextDayDate);
+      const breakfastTarget = new Date(`${nextDayMenu.date}T${nextDayHours.breakfast.start}:00-05:00`);
+      const breakfastRemaining = getTimeRemaining(breakfastTarget);
+      const lunchTarget = new Date(`${nextDayMenu.date}T${nextDayHours.lunch.start}:00-05:00`);
+      const lunchRemaining = getTimeRemaining(lunchTarget);
 
       html += `
                 <div class="day-card next-day-${dayName}">
@@ -495,7 +512,7 @@ function loadOrganizedSections() {
                                     <h4>${icons.food} Desayuno (${nextDayHours.breakfast.start} - ${nextDayHours.breakfast.end})</h4>
                                     <span class="service-status status-pending">Pendiente</span>
                                 </div>
-                                <div class="countdown">Faltan ${formatTimeRemaining(remaining)}</div>
+                                <div class="countdown breakfast-countdown">${breakfastRemaining.total > 0 ? `Faltan ${formatTimeRemaining(breakfastRemaining)}` : ''}</div>
                                 <img src="${nextDayMenu.breakfast.image}" alt="${nextDayMenu.breakfast.name}" loading="lazy">
                             </div>
                             <p><strong>${nextDayMenu.breakfast.name}</strong></p>
@@ -510,7 +527,7 @@ function loadOrganizedSections() {
                                     <h4>${icons.food} Almuerzo (${nextDayHours.lunch.start} - ${nextDayHours.lunch.end})</h4>
                                     <span class="service-status status-pending">Pendiente</span>
                                 </div>
-                                <div class="countdown">Faltan ${formatTimeRemaining(remaining)}</div>
+                                <div class="countdown lunch-countdown">${lunchRemaining.total > 0 ? `Faltan ${formatTimeRemaining(lunchRemaining)}` : ''}</div>
                                 <img src="${nextDayMenu.lunch.image}" alt="${nextDayMenu.lunch.name}" loading="lazy">
                             </div>
                             <p><strong>${nextDayMenu.lunch.name}</strong></p>
@@ -535,12 +552,18 @@ function loadOrganizedSections() {
       const nextMondayMenu = weeklyMenu[0]; // Lunes
       const nextMondayDate = new Date(nextMondayMenu.date);
       nextMondayDate.setDate(nextMondayDate.getDate() + 7); // Siguiente semana
-      const remaining = getTimeRemaining(nextMondayDate);
+      const breakfastTarget = new Date(`${nextMondayMenu.date}T${nextMondayHours.breakfast.start}:00-05:00`);
+      breakfastTarget.setDate(breakfastTarget.getDate() + 7);
+      const breakfastRemaining = getTimeRemaining(breakfastTarget);
+      const lunchTarget = new Date(`${nextMondayMenu.date}T${nextMondayHours.lunch.start}:00-05:00`);
+      lunchTarget.setDate(lunchTarget.getDate() + 7);
+      const lunchRemaining = getTimeRemaining(lunchTarget);
 
       html += `
                 <div class="info-message">
                     <p>No hay más atención esta semana. El próximo servicio será el Lunes.</p>
-                    <div class="countdown">Faltan ${formatTimeRemaining(remaining)}</div>
+                    <div class="countdown breakfast-countdown">${breakfastRemaining.total > 0 ? `Faltan ${formatTimeRemaining(breakfastRemaining)}` : ''}</div>
+                    <div class="countdown lunch-countdown">${lunchRemaining.total > 0 ? `Faltan ${formatTimeRemaining(lunchRemaining)}` : ''}</div>
                 </div>
             `;
     }
