@@ -170,7 +170,13 @@ function updateServiceUI(serviceType, serviceHours, currentTime) {
   });
 
   countdownElements.forEach(el => {
-    el.textContent = status.timeRemaining;
+    if (status.status === 'pending') {
+      el.textContent = `Falta ${status.timeRemaining}`;
+    } else if (status.status === 'in-progress') {
+      el.textContent = `Termina en ${status.timeRemaining}`;
+    } else {
+      el.textContent = '';
+    }
   });
 }
 
@@ -295,28 +301,30 @@ function loadTodayMenuWidget() {
   const lunchStatus = getServiceStatus(todayHours.lunch, currentTime);
 
   container.innerHTML = `
-        <div class="menu-widget">
-            <h3>${icons.calendar} Menú de hoy (${TimeUtils.formatDate(todayMenu.date, { weekday: 'long', day: 'numeric', month: 'long' })})</h3>
-            <div class="menu-service">
-                <h4>${icons.food} Desayuno (${todayHours.breakfast.start} - ${todayHours.breakfast.end})</h4>
-                <p>${todayMenu.breakfast.name}</p>
-                <div class="service-status breakfast-status ${breakfastStatus.class}">${breakfastStatus.text}</div>
-                ${breakfastStatus.timeRemaining ? `<div class="countdown">${breakfastStatus.timeRemaining}</div>` : ''}
-                <a href="menu-detail.html?day=${todayMenu.day}&service=breakfast" class="btn btn-small">
-                    Ver detalle ${icons.arrowRight}
-                </a>
-            </div>
-            <div class="menu-service">
-                <h4>${icons.food} Almuerzo (${todayHours.lunch.start} - ${todayHours.lunch.end})</h4>
-                <p>${todayMenu.lunch.name}</p>
-                <div class="service-status lunch-status ${lunchStatus.class}">${lunchStatus.text}</div>
-                ${lunchStatus.timeRemaining ? `<div class="countdown">${lunchStatus.timeRemaining}</div>` : ''}
-                <a href="menu-detail.html?day=${todayMenu.day}&service=lunch" class="btn btn-small">
-                    Ver detalle ${icons.arrowRight}
-                </a>
-            </div>
+    <div class="menu-widget">
+        <h3>${icons.calendar} Menú de hoy (${TimeUtils.formatDate(todayMenu.date, { weekday: 'long', day: 'numeric', month: 'long' })})</h3>
+        <div class="menu-service">
+            <h4>${icons.food} Desayuno (${todayHours.breakfast.start} - ${todayHours.breakfast.end})</h4>
+            <p>${todayMenu.breakfast.name}</p>
+            <div class="service-status breakfast-status ${breakfastStatus.class}">${breakfastStatus.text}</div>
+            ${breakfastStatus.status === 'pending' ? `<div class="countdown">Falta ${breakfastStatus.timeRemaining}</div>` :
+      breakfastStatus.status === 'in-progress' ? `<div class="countdown">Termina en ${breakfastStatus.timeRemaining}</div>` : ''}
+            <a href="menu-detail.html?day=${todayMenu.day}&service=breakfast" class="btn btn-small">
+                Ver detalle ${icons.arrowRight}
+            </a>
         </div>
-    `;
+        <div class="menu-service">
+            <h4>${icons.food} Almuerzo (${todayHours.lunch.start} - ${todayHours.lunch.end})</h4>
+            <p>${todayMenu.lunch.name}</p>
+            <div class="service-status lunch-status ${lunchStatus.class}">${lunchStatus.text}</div>
+            ${lunchStatus.status === 'pending' ? `<div class="countdown">Falta ${lunchStatus.timeRemaining}</div>` :
+      lunchStatus.status === 'in-progress' ? `<div class="countdown">Termina en ${lunchStatus.timeRemaining}</div>` : ''}
+            <a href="menu-detail.html?day=${todayMenu.day}&service=lunch" class="btn btn-small">
+                Ver detalle ${icons.arrowRight}
+            </a>
+        </div>
+    </div>
+`;
 }
 
 // Cargar las secciones organizadas (hoy, próximos, atendidos)
@@ -365,36 +373,38 @@ function loadOrganizedSections() {
                         </span>
                     </div>
                     <div class="services">
-                        <div class="service">
-                            <div class="service-header">
-                                <div class="service-title">
-                                    <h4>${icons.food} Desayuno (${todayHours.breakfast.start} - ${todayHours.breakfast.end})</h4>
-                                    <span class="service-status breakfast-status ${breakfastStatus.class}">${breakfastStatus.text}</span>
-                                </div>
-                                ${breakfastStatus.timeRemaining ? `<div class="countdown breakfast-countdown">${breakfastStatus.timeRemaining}</div>` : ''}
-                                <img src="${todayMenu.breakfast.image}" alt="${todayMenu.breakfast.name}" loading="lazy">
-                            </div>
-                            <p><strong>${todayMenu.breakfast.name}</strong></p>
-                            <p class="additional">${icons.cookie} ${todayMenu.breakfast.additional}</p>
-                            <a href="menu-detail.html?day=${todayMenu.day}&service=breakfast" class="btn btn-recipe">
-                                Ver receta ${icons.arrowRight}
-                            </a>
-                        </div>
-                        <div class="service">
-                            <div class="service-header">
-                                <div class="service-title">
-                                    <h4>${icons.food} Almuerzo (${todayHours.lunch.start} - ${todayHours.lunch.end})</h4>
-                                    <span class="service-status lunch-status ${lunchStatus.class}">${lunchStatus.text}</span>
-                                </div>
-                                ${lunchStatus.timeRemaining ? `<div class="countdown lunch-countdown">${lunchStatus.timeRemaining}</div>` : ''}
-                                <img src="${todayMenu.lunch.image}" alt="${todayMenu.lunch.name}" loading="lazy">
-                            </div>
-                            <p><strong>${todayMenu.lunch.name}</strong></p>
-                            <p class="additional">${icons.fruit} ${todayMenu.lunch.additional}</p>
-                            <a href="menu-detail.html?day=${todayMenu.day}&service=lunch" class="btn btn-recipe">
-                                Ver receta ${icons.arrowRight}
-                            </a>
-                        </div>
+                      <div class="service">
+                          <div class="service-header">
+                              <div class="service-title">
+                                  <h4>${icons.food} Desayuno (${todayHours.breakfast.start} - ${todayHours.breakfast.end})</h4>
+                                  <span class="service-status breakfast-status ${breakfastStatus.class}">${breakfastStatus.text}</span>
+                              </div>
+                              ${breakfastStatus.status === 'pending' ? `<div class="countdown breakfast-countdown">Falta ${breakfastStatus.timeRemaining}</div>` :
+        breakfastStatus.status === 'in-progress' ? `<div class="countdown breakfast-countdown">Termina en ${breakfastStatus.timeRemaining}</div>` : ''}
+                              <img src="${todayMenu.breakfast.image}" alt="${todayMenu.breakfast.name}" loading="lazy">
+                          </div>
+                          <p><strong>${todayMenu.breakfast.name}</strong></p>
+                          <p class="additional">${icons.cookie} ${todayMenu.breakfast.additional}</p>
+                          <a href="menu-detail.html?day=${todayMenu.day}&service=breakfast" class="btn btn-recipe">
+                              Ver receta ${icons.arrowRight}
+                          </a>
+                      </div>
+                      <div class="service">
+                          <div class="service-header">
+                              <div class="service-title">
+                                  <h4>${icons.food} Almuerzo (${todayHours.lunch.start} - ${todayHours.lunch.end})</h4>
+                                  <span class="service-status lunch-status ${lunchStatus.class}">${lunchStatus.text}</span>
+                              </div>
+                              ${lunchStatus.status === 'pending' ? `<div class="countdown lunch-countdown">Falta ${lunchStatus.timeRemaining}</div>` :
+        lunchStatus.status === 'in-progress' ? `<div class="countdown lunch-countdown">Termina en ${lunchStatus.timeRemaining}</div>` : ''}
+                              <img src="${todayMenu.lunch.image}" alt="${todayMenu.lunch.name}" loading="lazy">
+                          </div>
+                          <p><strong>${todayMenu.lunch.name}</strong></p>
+                          <p class="additional">${icons.fruit} ${todayMenu.lunch.additional}</p>
+                          <a href="menu-detail.html?day=${todayMenu.day}&service=lunch" class="btn btn-recipe">
+                              Ver receta ${icons.arrowRight}
+                          </a>
+                      </div>
                     </div>
                     <div class="staff-info">
                         <p><strong>Cocinera:</strong> ${todayStaff.cook}</p>
