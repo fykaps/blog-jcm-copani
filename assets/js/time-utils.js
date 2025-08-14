@@ -84,12 +84,18 @@ const TimeUtils = (() => {
         return str.replace(/^\w/, (firstLetter) => firstLetter.toUpperCase());
     }
 
+    function getDayIndex(dayName) {
+        const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+        return days.indexOf(dayName);
+    }
+
     return {
         getNowInLima,
         getCurrentTime,
         getDayName,
         timeToMinutes,
         formatCountdown,
-        formatDate
+        formatDate,
+        getDayIndex
     };
 })();

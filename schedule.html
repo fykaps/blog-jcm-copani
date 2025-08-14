@@ -14,22 +14,28 @@
 
 <body>
     <div id="app">
-        <header id="main-header"></header>
+        <header id="main-header" class="header-fixed"></header>
 
         <main class="container">
-            <section class="schedule-section">
-                <h1 class="schedule-title">Horario de Clases</h1>
+            <section class="hero animate-fade-in">
+                <h1 class="animate-slide-up">Horario de Clases</h1>
+                <p class="animate-slide-up delay-1">Horario de clases de todo el colegio</p>
+            </section>
 
-                <div class="grade-selector">
-                    <label for="grade-selector">Ver horario específico:</label>
-                    <select id="grade-selector">
-                        <option value="">Todos los grados</option>
-                    </select>
-                </div>
+            <div class="content-wrapper">
+                <div class="main-content">
+                    <div class="grade-selector">
+                        <label for="grade-selector">Ver horario específico:</label>
+                        <select id="grade-selector">
+                            <option value="">Todos los grados</option>
+                        </select>
+                    </div>
 
-                <div id="schedule-container">
-                    <!-- Horario se cargará aquí dinámicamente -->
+                    <div id="schedule-container">
+                        <!-- Horario se cargará aquí dinámicamente -->
+                    </div>
                 </div>
+            </div>
             </section>
         </main>
 
@@ -46,8 +52,10 @@
     <script src="assets/js/components.js"></script>
     <script src="assets/js/main.js"></script>
     <script src="assets/js/schedule.js"></script>
+    <script src="assets/js/menu.js"></script>
     <script src="assets/js/scroll.js"></script>
     <script src="assets/data/schedules.js"></script>
+    <script src="assets/data/menus.js"></script>
 </body>
 
 </html>
