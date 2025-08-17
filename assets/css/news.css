@@ -131,7 +131,7 @@
     flex: 1;
     padding: var(--space-3) var(--space-4);
     border: 1px solid var(--border-color);
-    border-radius: var(--radius-full);
+    border-radius: var(--radius);
     font-size: var(--text-sm);
     transition: all var(--duration-200) var(--ease-in-out);
     box-shadow: var(--shadow-sm);
@@ -151,7 +151,7 @@
     background-color: var(--color-primary);
     color: white;
     border: none;
-    border-radius: var(--radius-full);
+    border-radius: var(--radius-lg);
     font-weight: var(--font-medium);
     cursor: pointer;
     transition: all var(--duration-200) var(--ease-in-out);
