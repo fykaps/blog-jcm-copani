@@ -529,8 +529,6 @@
     gap: var(--space-1);
 }
 
-
-
 .newsletter-widget {
     display: flex;
     flex-direction: column;
