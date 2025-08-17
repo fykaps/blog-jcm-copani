@@ -5,10 +5,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog Escolar - Detalle de Noticia</title>
+    <meta name="description" content="Detalle completo de la noticia del blog escolar">
+
+    <!-- Preload de recursos críticos -->
+    <link rel="preload" href="assets/css/variables.css" as="style">
+    <link rel="preload" href="assets/css/news-detail.css" as="style">
+    <link rel="preload" href="assets/js/news-detail.js" as="script">
+
+    <!-- Hojas de estilo -->
     <link rel="stylesheet" href="assets/css/variables.css">
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/news-detail.css">
     <link rel="stylesheet" href="assets/css/animations.css">
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="icon" href="assets/img/favicon.ico">
+
+    <!-- Favicon -->
+    <link rel="icon" href="assets/img/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://tusitio.com/news-detail.html">
+    <meta property="og:title" content="Blog Escolar - Detalle de Noticia">
+    <meta property="og:description" content="Detalle completo de la noticia del blog escolar">
+    <meta property="og:image" content="https://tusitio.com/assets/img/og-image.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://tusitio.com/news-detail.html">
+    <meta property="twitter:title" content="Blog Escolar - Detalle de Noticia">
+    <meta property="twitter:description" content="Detalle completo de la noticia del blog escolar">
+    <meta property="twitter:image" content="https://tusitio.com/assets/img/og-image.jpg">
 </head>
 
 <body>
@@ -19,6 +45,11 @@
             <div class="news-detail-container animate-fade-in">
                 <!-- Contenido de la noticia se cargará dinámicamente aquí -->
             </div>
+
+            <section class="related-news animate-fade-in delay-3">
+                <h2>Noticias relacionadas</h2>
+                <div class="related-news-grid" id="related-news-container"></div>
+            </section>
         </main>
 
         <footer id="main-footer"></footer>
@@ -30,11 +61,12 @@
         </button>
     </div>
 
-    <script src="assets/js/components.js"></script>
-    <script src="assets/js/main.js"></script>
-    <script src="assets/js/scroll.js"></script>
-    <script src="assets/js/news-detail.js"></script>
-    <script src="assets/data/news.js"></script>
+    <!-- Scripts -->
+    <script src="assets/js/components.js" defer></script>
+    <script src="assets/js/main.js" defer></script>
+    <script src="assets/js/news-detail.js" defer></script>
+    <script src="assets/js/scroll-top.js" defer></script>
+    <script src="assets/data/news.js" defer></script>
 </body>
 
 </html>
