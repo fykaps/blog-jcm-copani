@@ -1,6 +1,6 @@
 /**
- * Sistema de Menú Qaliwarma - Versión Completa y Corregida
- * Con contador regresivo en tiempo real, estados dinámicos y modal mejorado
+ * Sistema de Menú Qaliwarma - Versión E-commerce Premium
+ * Con interfaz moderna, efectos visuales y modal mejorado
  */
 
 class CountdownSystem {
@@ -21,7 +21,7 @@ class CountdownSystem {
 
   renderCountdown() {
     this.container.innerHTML = `
-      <div class="meal-countdown">
+      <div class="countdown-container">
         <div class="countdown"></div>
         <div class="meal-status"></div>
       </div>
@@ -71,12 +71,14 @@ class CountdownSystem {
 
     this.statusElement.className = 'meal-status ' + status;
     this.statusElement.textContent = this.getStatusText(status);
+    this.currentState = status;
   }
 
   displayCompleted() {
     this.countdownElement.innerHTML = '';
     this.statusElement.className = 'meal-status completed';
     this.statusElement.textContent = 'Completado';
+    this.currentState = 'completed';
   }
 
   calculateTimeUnits(timeInMs) {
@@ -105,7 +107,7 @@ class CountdownSystem {
   getStatusText(status) {
     const statusTexts = {
       'pending': 'Pendiente',
-      'in-progress': 'En proceso',
+      'in-progress': 'En Progreso',
       'completed': 'Completado'
     };
     return statusTexts[status] || '';
@@ -196,18 +198,33 @@ class MenuSystem {
 
       Array.from(upcomingCards.children).forEach((card, index) => {
         const menu = menus.upcoming[index];
+        const statusContainer = card.querySelector('.menu-card-status');
         const mealsContainer = card.querySelector('.menu-card-meals');
 
         if (menu.breakfast) {
           const container = document.createElement('div');
           mealsContainer.appendChild(container);
-          this.countdowns.push(new CountdownSystem(menu.breakfast, 'breakfast', menu.date).init(container));
+          const countdown = new CountdownSystem(menu.breakfast, 'breakfast', menu.date).init(container);
+          this.countdowns.push(countdown);
+
+          // Actualizar estado en la imagen
+          if (countdown.currentState) {
+            statusContainer.className = `menu-card-status ${countdown.currentState}`;
+            statusContainer.textContent = countdown.getStatusText(countdown.currentState);
+          }
         }
 
         if (menu.lunch) {
           const container = document.createElement('div');
           mealsContainer.appendChild(container);
-          this.countdowns.push(new CountdownSystem(menu.lunch, 'lunch', menu.date).init(container));
+          const countdown = new CountdownSystem(menu.lunch, 'lunch', menu.date).init(container);
+          this.countdowns.push(countdown);
+
+          // Usar el estado del almuerzo si no hay desayuno o si está completado
+          if (!menu.breakfast || countdown.currentState === 'in-progress') {
+            statusContainer.className = `menu-card-status ${countdown.currentState}`;
+            statusContainer.textContent = countdown.getStatusText(countdown.currentState);
+          }
         }
       });
 
@@ -308,15 +325,43 @@ class MenuSystem {
     }
 
     return `
-      <div class="menu-card-header">
-        <h4>${menu.day || 'Día no especificado'}, ${this.formatDisplayDate(menuDate)}</h4>
-        <div class="menu-meta">
-          <span class="cook-info">${menu.cook || 'Cocinera no especificada'}</span>
-          <span class="helpers-info">${menu.helpers?.names?.join(' y ') || 'Ayudantes no especificados'} (${menu.helpers?.grade || 'Grado no especificado'})</span>
-        </div>
+      <div class="menu-card-image">
+        <img src="${menu.breakfast?.image || menu.lunch?.image || 'assets/img/default-food.jpg'}" alt="Menú del día">
+        <div class="menu-card-status pending">Pendiente</div>
       </div>
-      <div class="menu-card-meals">
-        ${mealsHtml || '<p class="no-meals">No hay servicios programados</p>'}
+      <div class="menu-card-content">
+        <div class="menu-card-header">
+          <div class="menu-card-date">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+            ${menu.day || 'Día no especificado'}, ${this.formatDisplayDate(menuDate)}
+          </div>
+          <h3 class="menu-card-title">Menú del Día</h3>
+          <div class="menu-card-meta">
+            <span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+              </svg>
+              ${menu.cook || 'Cocinera no especificada'}
+            </span>
+            <span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+              </svg>
+              ${menu.helpers?.names?.join(' y ') || 'Ayudantes no especificados'}
+            </span>
+          </div>
+        </div>
+        <div class="menu-card-meals">
+          ${mealsHtml || '<p class="no-meals">No hay servicios programados</p>'}
+        </div>
+        <button class="btn-details" data-meal="desayuno" data-date="${menuDate || ''}">
+          Ver detalles del menú
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+          </svg>
+        </button>
       </div>
     `;
   }
@@ -328,17 +373,14 @@ class MenuSystem {
     return `
       <div class="meal-card ${compactClass}">
         <div class="meal-header">
-          <h5>${title}</h5>
+          <h5 class="meal-title">${title}</h5>
           <span class="meal-time">${meal?.start || '--:--'} - ${meal?.end || '--:--'}</span>
         </div>
         <div class="meal-content">
           <p class="meal-name">${meal?.name || 'Menú no especificado'}</p>
-          ${!isCompact ? `<p class="meal-description">${meal?.description || ''}</p>` : ''}
         </div>
         ${!isCompact ? `
-        <button class="btn-details" data-meal="${title.toLowerCase()}" data-date="${menuDate || ''}">
-          Ver detalles
-        </button>
+        <div class="meal-countdown-container"></div>
         ` : ''}
       </div>
     `;
@@ -349,6 +391,9 @@ class MenuSystem {
     emptyState.className = 'empty-section';
     emptyState.innerHTML = `
       <div class="empty-state">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+        </svg>
         <h3>No hay menús programados</h3>
         <p>Actualmente no hay menús en ninguna categoría.</p>
       </div>
@@ -358,14 +403,15 @@ class MenuSystem {
 
   setupEventListeners() {
     document.addEventListener('click', (e) => {
-      if (e.target.classList.contains('btn-details')) {
-        const mealType = e.target.getAttribute('data-meal');
-        const date = e.target.getAttribute('data-date');
-        const menuCard = e.target.closest('.menu-card');
+      if (e.target.classList.contains('btn-details') || e.target.closest('.btn-details')) {
+        const btn = e.target.classList.contains('btn-details') ? e.target : e.target.closest('.btn-details');
+        const mealType = btn.getAttribute('data-meal');
+        const date = btn.getAttribute('data-date');
+        const menuCard = btn.closest('.menu-card');
 
-        const menuDate = menuCard.querySelector('.menu-card-header h4').textContent.split(',')[1].trim();
+        const menuDate = menuCard.querySelector('.menu-card-date').textContent.split(',')[1].trim();
         const menu = this.menuData.find(m =>
-          `${m.day}, ${this.formatDisplayDate(m.date)}` === `${menuCard.querySelector('.menu-card-header h4').textContent}`
+          `${m.day}, ${this.formatDisplayDate(m.date)}` === `${menuCard.querySelector('.menu-card-date').textContent}`
         );
 
         if (menu) {
@@ -388,12 +434,12 @@ class MenuSystem {
     if (now < startTime) {
       const timeLeft = startTime - now;
       const { days, hours, minutes, seconds } = this.calculateTimeUnits(timeLeft);
-      countdownText = `Falta: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+      countdownText = `${days}d ${hours}h ${minutes}m ${seconds}s`;
       status = 'pending';
     } else if (now >= startTime && now <= endTime) {
       const timeLeft = endTime - now;
       const { days, hours, minutes, seconds } = this.calculateTimeUnits(timeLeft);
-      countdownText = `Termina en: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+      countdownText = `${days}d ${hours}h ${minutes}m ${seconds}s`;
       status = 'in-progress';
     } else {
       countdownText = 'Servicio completado';
@@ -405,7 +451,7 @@ class MenuSystem {
     modal.innerHTML = `
       <div class="modal-overlay"></div>
       <div class="modal-content">
-<button class="modal-close" aria-label="Cerrar modal">
+        <button class="modal-close" aria-label="Cerrar modal">
           <svg viewBox="0 0 24 24" width="24" height="24">
             <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
           </svg>
@@ -418,28 +464,33 @@ class MenuSystem {
               <span class="meal-time">${meal.start} - ${meal.end}</span>
               <span class="meal-status ${status}">${this.getStatusText(status)}</span>
             </div>
-            <div class="meal-countdown">${countdownText}</div>
+            <div class="meal-countdown">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              ${countdownText}
+            </div>
           </div>
           
           <div class="meal-details-content">
             <div class="meal-image-container">
-              <img src="${meal.image}" alt="${meal.name}" class="meal-image">
+              <img src="${meal.image || 'assets/img/default-food.jpg'}" alt="${meal.name}" class="meal-image">
             </div>
             
             <div class="meal-info">
               <h4>${meal.name}</h4>
-              <p class="meal-description">${meal.description}</p>
+              <p class="meal-description">${meal.description || 'Descripción no disponible'}</p>
               
               <div class="meal-ingredients">
                 <h5>Ingredientes:</h5>
                 <ul>
-                  ${meal.ingredients.map(ing => `<li>${ing}</li>`).join('')}
+                  ${meal.ingredients.map(ing => `<li>${ing}</li>`).join('') || '<li>No se especificaron ingredientes</li>'}
                 </ul>
               </div>
               
               ${meal.additional ? `
               <div class="meal-additional">
-                <span class="label">Adicional:</span>
+                <span class="label">Información adicional:</span>
                 <span class="value">${meal.additional}</span>
               </div>
               ` : ''}
@@ -451,15 +502,32 @@ class MenuSystem {
 
     document.body.appendChild(modal);
 
+    // Activar modal con animación
+    setTimeout(() => {
+      modal.classList.add('active');
+    }, 10);
+
     const closeModal = () => {
-      document.body.removeChild(modal);
+      modal.classList.remove('active');
+      setTimeout(() => {
+        document.body.removeChild(modal);
+      }, 500);
     };
 
     modal.querySelector('.modal-overlay').addEventListener('click', closeModal);
     modal.querySelector('.modal-close').addEventListener('click', closeModal);
 
-    document.addEventListener('keydown', function escHandler(e) {
+    const escHandler = (e) => {
       if (e.key === 'Escape') closeModal();
+    };
+
+    document.addEventListener('keydown', escHandler);
+
+    // Limpiar event listener cuando se cierre el modal
+    modal.addEventListener('transitionend', () => {
+      if (!modal.classList.contains('active')) {
+        document.removeEventListener('keydown', escHandler);
+      }
     });
   }
 
@@ -492,18 +560,18 @@ class MenuSystem {
 
     try {
       const [year, month, day] = dateString.split('-');
-      if (!year || !month || !day) return dateString; // Si no tiene formato esperado
+      if (!year || !month || !day) return dateString;
       return `${day}/${month}/${year}`;
     } catch (error) {
       console.error('Error al formatear fecha:', error);
-      return dateString; // Devuelve el valor original si hay error
+      return dateString;
     }
   }
 
   getStatusText(status) {
     const statusTexts = {
       'pending': 'Pendiente',
-      'in-progress': 'En proceso',
+      'in-progress': 'En Progreso',
       'completed': 'Completado'
     };
     return statusTexts[status] || '';
