@@ -4,10 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog Escolar - Detalle del Menú</title>
+    <title>Detalle del Menú - Comedor Qaliwarma</title>
     <link rel="stylesheet" href="assets/css/variables.css">
-    <link rel="stylesheet" href="assets/css/animations.css">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/menu.css">
     <link rel="icon" href="assets/img/favicon.ico">
 </head>
 
@@ -16,8 +15,17 @@
         <header id="main-header" class="header-fixed"></header>
 
         <main class="container">
-            <div class="news-detail-container animate-fade-in" id="menu-detail-container">
-                <!-- El detalle del menú se cargará aquí dinámicamente -->
+            <section class="hero">
+                <h1>Detalle del Menú</h1>
+                <p>Información completa sobre el servicio de alimentación</p>
+            </section>
+
+            <div class="content-wrapper">
+                <div class="main-content full-width">
+                    <div id="meal-detail-container" class="meal-detail-page">
+                        <!-- Se llenará dinámicamente con JS -->
+                    </div>
+                </div>
             </div>
         </main>
 
@@ -30,10 +38,7 @@
         </button>
     </div>
 
-    <script src="assets/js/time-utils.js"></script>
     <script src="assets/js/components.js"></script>
-    <script src="assets/js/main.js"></script>
-    <script src="assets/js/scroll.js"></script>
     <script src="assets/js/menu-detail.js"></script>
     <script src="assets/data/menus.js"></script>
 </body>
