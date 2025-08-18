@@ -1,5 +1,11 @@
 /**
- * Validación de formulario de contacto
+ * Formulario de Contacto - Versión Profesional
+ * 
+ * Funcionalidades:
+ * - Validación en tiempo real
+ * - Envío asíncrono
+ * - Manejo de estados
+ * - Accesibilidad mejorada
  */
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -7,113 +13,173 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!contactForm) return;
 
     // Elementos del formulario
-    const nameInput = document.getElementById('contact-name');
-    const emailInput = document.getElementById('contact-email');
-    const phoneInput = document.getElementById('contact-phone');
-    const subjectInput = document.getElementById('contact-subject');
-    const messageInput = document.getElementById('contact-message');
-    const successMessage = document.getElementById('success-message');
-    const submitButton = contactForm.querySelector('button[type="submit"]');
-    const submitText = submitButton.querySelector('.submit-text');
-    const loadingSpinner = submitButton.querySelector('.loading-spinner');
+    const formElements = {
+        name: document.getElementById('contact-name'),
+        email: document.getElementById('contact-email'),
+        phone: document.getElementById('contact-phone'),
+        subject: document.getElementById('contact-subject'),
+        message: document.getElementById('contact-message'),
+        newsletter: document.getElementById('contact-newsletter'),
+        submitBtn: contactForm.querySelector('button[type="submit"]'),
+        successMessage: document.getElementById('success-message')
+    };
 
     // Expresiones regulares para validación
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const phoneRegex = /^[0-9\-\+\(\)\s]{7,}$/;
+    const patterns = {
+        name: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{2,50}$/,
+        email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+        phone: /^[0-9\s+-]{0,20}$/,
+        message: /^[\s\S]{10,500}$/
+    };
 
-    // Manejar envío del formulario
-    contactForm.addEventListener('submit', function (e) {
-        e.preventDefault();
+    // Mensajes de error
+    const errorMessages = {
+        name: 'Por favor ingresa un nombre válido (2-50 caracteres)',
+        email: 'Por favor ingresa un email válido',
+        phone: 'Por favor ingresa un teléfono válido',
+        subject: 'Por favor selecciona un asunto',
+        message: 'El mensaje debe tener entre 10 y 500 caracteres',
+        generic: 'Este campo es requerido'
+    };
 
-        // Validar campos
-        const isNameValid = validateField(nameInput, 'name-error', value => value.trim() !== '', 'Por favor ingresa tu nombre');
-        const isEmailValid = validateField(emailInput, 'email-error', value => emailRegex.test(value), 'Por favor ingresa un email válido');
-        const isPhoneValid = validateField(phoneInput, 'phone-error', value => value === '' || phoneRegex.test(value), 'Por favor ingresa un teléfono válido');
-        const isSubjectValid = validateField(subjectInput, 'subject-error', value => value.trim() !== '', 'Por favor ingresa un asunto');
-        const isMessageValid = validateField(messageInput, 'message-error', value => value.trim().length >= 10, 'El mensaje debe tener al menos 10 caracteres');
+    // Estado del formulario
+    let formState = {
+        isValid: false,
+        isSubmitting: false
+    };
 
-        // Si todo es válido, enviar formulario (simulado)
-        if (isNameValid && isEmailValid && isPhoneValid && isSubjectValid && isMessageValid) {
-            submitForm();
-        }
-    });
+    // Inicializar eventos
+    initFormEvents();
 
-    // Función para validar campos
-    function validateField(input, errorId, validationFn, errorMessage) {
-        const errorElement = document.getElementById(errorId);
-        const value = input.value.trim();
-        const isValid = validationFn(value);
+    function initFormEvents() {
+        // Validación en tiempo real
+        formElements.name.addEventListener('input', () => validateField('name'));
+        formElements.email.addEventListener('input', () => validateField('email'));
+        formElements.phone.addEventListener('input', () => validateField('phone'));
+        formElements.subject.addEventListener('change', () => validateField('subject'));
+        formElements.message.addEventListener('input', () => validateField('message'));
 
-        if (isValid) {
-            input.classList.remove('error');
-            errorElement.textContent = '';
-            errorElement.style.display = 'none';
+        // Envío del formulario
+        contactForm.addEventListener('submit', handleSubmit);
+    }
+
+    function validateField(fieldName) {
+        const field = formElements[fieldName];
+        const errorElement = document.getElementById(`${fieldName}-error`);
+        let isValid = false;
+        let errorMessage = '';
+
+        if (field.required && !field.value.trim()) {
+            errorMessage = errorMessages.generic;
         } else {
-            input.classList.add('error');
-            errorElement.textContent = errorMessage;
-            errorElement.style.display = 'block';
+            switch (fieldName) {
+                case 'name':
+                    isValid = patterns.name.test(field.value.trim());
+                    errorMessage = isValid ? '' : errorMessages.name;
+                    break;
+                case 'email':
+                    isValid = patterns.email.test(field.value.trim());
+                    errorMessage = isValid ? '' : errorMessages.email;
+                    break;
+                case 'phone':
+                    isValid = field.value === '' || patterns.phone.test(field.value);
+                    errorMessage = isValid ? '' : errorMessages.phone;
+                    break;
+                case 'subject':
+                    isValid = field.value !== '';
+                    errorMessage = isValid ? '' : errorMessages.subject;
+                    break;
+                case 'message':
+                    isValid = patterns.message.test(field.value.trim());
+                    errorMessage = isValid ? '' : errorMessages.message;
+                    break;
+                case 'newsletter':
+                    isValid = true;
+                    break;
+            }
         }
 
+        // Actualizar UI
+        if (errorMessage) {
+            field.setAttribute('aria-invalid', 'true');
+            errorElement.textContent = errorMessage;
+            formState.isValid = false;
+        } else {
+            field.removeAttribute('aria-invalid');
+            errorElement.textContent = '';
+        }
+
+        // Verificar estado general del formulario
+        checkFormValidity();
         return isValid;
     }
 
-    // Función para enviar el formulario (simulado)
-    function submitForm() {
-        // Mostrar estado de carga
-        submitText.style.display = 'none';
-        loadingSpinner.style.display = 'inline-block';
-        submitButton.disabled = true;
-
-        // Simular envío al servidor (en un caso real sería una petición fetch)
-        setTimeout(() => {
-            // Ocultar estado de carga
-            submitText.style.display = 'inline-block';
-            loadingSpinner.style.display = 'none';
-            submitButton.disabled = false;
-
-            // Mostrar mensaje de éxito
-            successMessage.style.display = 'block';
-            contactForm.reset();
-
-            // Ocultar mensaje después de 5 segundos
-            setTimeout(() => {
-                successMessage.style.display = 'none';
-            }, 5000);
-
-            // En un caso real, aquí iría el código para enviar los datos al servidor
-            // const formData = new FormData(contactForm);
-            // fetch('url-del-servidor', {
-            //     method: 'POST',
-            //     body: formData
-            // })
-            // .then(response => response.json())
-            // .then(data => {
-            //     // Manejar respuesta del servidor
-            // })
-            // .catch(error => {
-            //     // Manejar errores
-            // });
-        }, 1500);
+    function checkFormValidity() {
+        const requiredFields = ['name', 'email', 'subject', 'message'];
+        formState.isValid = requiredFields.every(field => {
+            const element = formElements[field];
+            return element.value.trim() !== '' && !element.hasAttribute('aria-invalid');
+        });
     }
 
-    // Validación en tiempo real
-    nameInput.addEventListener('blur', () => {
-        validateField(nameInput, 'name-error', value => value.trim() !== '', 'Por favor ingresa tu nombre');
-    });
+    async function handleSubmit(e) {
+        e.preventDefault();
 
-    emailInput.addEventListener('blur', () => {
-        validateField(emailInput, 'email-error', value => emailRegex.test(value), 'Por favor ingresa un email válido');
-    });
+        // Validar todos los campos antes de enviar
+        const fieldsToValidate = ['name', 'email', 'subject', 'message'];
+        const allValid = fieldsToValidate.every(field => validateField(field));
 
-    phoneInput.addEventListener('blur', () => {
-        validateField(phoneInput, 'phone-error', value => value === '' || phoneRegex.test(value), 'Por favor ingresa un teléfono válido');
-    });
+        if (!allValid || formState.isSubmitting) return;
 
-    subjectInput.addEventListener('blur', () => {
-        validateField(subjectInput, 'subject-error', value => value.trim() !== '', 'Por favor ingresa un asunto');
-    });
+        // Cambiar estado a "enviando"
+        formState.isSubmitting = true;
+        contactForm.classList.add('is-loading');
+        formElements.submitBtn.setAttribute('disabled', 'true');
+        formElements.submitBtn.setAttribute('aria-busy', 'true');
 
-    messageInput.addEventListener('blur', () => {
-        validateField(messageInput, 'message-error', value => value.trim().length >= 10, 'El mensaje debe tener al menos 10 caracteres');
-    });
+        try {
+            // Simular envío (en producción sería una llamada fetch)
+            await simulateFormSubmit();
+
+            // Mostrar mensaje de éxito
+            contactForm.reset();
+            contactForm.style.display = 'none';
+            formElements.successMessage.style.display = 'flex';
+
+            // Enfocar el mensaje de éxito para lectores de pantalla
+            formElements.successMessage.focus();
+        } catch (error) {
+            console.error('Error al enviar el formulario:', error);
+            showFormError('Ocurrió un error al enviar el mensaje. Por favor intenta nuevamente.');
+        } finally {
+            // Restaurar estado
+            formState.isSubmitting = false;
+            contactForm.classList.remove('is-loading');
+            formElements.submitBtn.removeAttribute('disabled');
+            formElements.submitBtn.removeAttribute('aria-busy');
+        }
+    }
+
+    function simulateFormSubmit() {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                // Simular éxito 90% de las veces para pruebas
+                Math.random() > 0.1 ? resolve() : reject(new Error('Simulated server error'));
+            }, 1500);
+        });
+    }
+
+    function showFormError(message) {
+        const errorElement = document.createElement('div');
+        errorElement.className = 'error-message form-error';
+        errorElement.textContent = message;
+        errorElement.setAttribute('role', 'alert');
+
+        contactForm.insertBefore(errorElement, contactForm.firstChild);
+
+        // Desaparecer después de 5 segundos
+        setTimeout(() => {
+            errorElement.remove();
+        }, 5000);
+    }
 });
