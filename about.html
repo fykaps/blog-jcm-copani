@@ -1,43 +1,71 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="no-js">
 
 <head>
+    <!-- Metadatos mejorados -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog Escolar - Acerca del Blog</title>
+    <meta name="description"
+        content="Conoce más sobre nuestro blog escolar, su historia, equipo y valores fundamentales">
+    <meta name="keywords" content="acerca de, blog escolar, historia, equipo, valores, misión, visión">
+    <meta property="og:title" content="Acerca de Nosotros - Blog Escolar">
+    <meta property="og:description" content="Descubre la historia y el equipo detrás de nuestro blog escolar">
+    <title>Acerca de Nosotros | Blog Escolar</title>
+    <link rel="icon" href="assets/img/favicon.ico" type="image/x-icon">
+
+    <!-- Preload para mejor performance -->
+    <link rel="preload" href="assets/css/variables.css" as="style">
+    <link rel="preload" href="assets/css/base.css" as="style">
+    <link rel="preload" href="assets/css/about.css" as="style">
+    <link rel="preload" href="assets/js/components.js" as="script">
+
+    <!-- Hojas de estilo -->
     <link rel="stylesheet" href="assets/css/variables.css">
-    <link rel="stylesheet" href="assets/css/animations.css">
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="icon" href="assets/img/favicon.ico">
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/about.css">
 </head>
 
 <body>
     <div id="app">
-        <header id="main-header" class="header-fixed"></header>
+        <!-- Header dinámico -->
+        <header id="main-header" class="header-fixed" aria-label="Cabecera principal"></header>
 
-        <main class="container">
-            <section class="hero animate-fade-in">
-                <h1 class="animate-slide-up">Acerca del Blog Escolar</h1>
-                <p class="animate-slide-up delay-1">Conoce más sobre nuestro proyecto, misión y valores</p>
+        <!-- Contenido principal -->
+        <main class="container" id="main-content">
+            <!-- Hero section mejorada -->
+            <section class="hero about-hero animate-fade-in" aria-labelledby="about-heading">
+                <div class="hero-content">
+                    <h1 id="about-heading" class="animate-slide-up">Nuestra Historia</h1>
+                    <p class="hero-description animate-slide-up delay-1">
+                        Conoce el equipo, valores y propósito detrás de nuestro blog escolar
+                    </p>
+                    <button id="creator-btn" class="btn btn-secondary animate-slide-up delay-2">
+                        Conoce a la creadora
+                    </button>
+                </div>
+                <div class="hero-image" aria-hidden="true">
+                    <img src="assets/img/about-hero.jpg" alt="" loading="lazy">
+                </div>
             </section>
 
+            <!-- Contenido modular -->
             <div class="about-content">
-                <article class="about-section animate-fade-in delay-2">
+                <!-- Sección Propósito -->
+                <article class="about-section animate-fade-in delay-2" aria-labelledby="purpose-heading">
                     <div class="section-header">
-                        <h2>Nuestro Propósito</h2>
+                        <h2 id="purpose-heading">Nuestro Propósito</h2>
                         <div class="section-divider"></div>
                     </div>
                     <div class="section-content">
                         <p>El Blog Escolar nació con el objetivo de crear un espacio digital donde la comunidad
                             educativa pueda mantenerse informada sobre las actividades, logros y noticias relevantes de
                             nuestra institución.</p>
-                        <p>Creemos en la importancia de la comunicación transparente y en la creación de un sentido de
-                            comunidad entre estudiantes, profesores, padres y personal administrativo.</p>
+
                         <div class="mission-vision">
-                            <div class="mission-card hover-scale">
+                            <div class="mission-card hover-scale" tabindex="0">
                                 <div class="card-icon">
-                                    <svg viewBox="0 0 24 24" width="48" height="48">
-                                        <path fill="var(--secondary-color)"
+                                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <path fill="currentColor"
                                             d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm-1.06 13.54L7.4 12l1.41-1.41 2.12 2.12 4.24-4.24 1.41 1.41-5.64 5.66z" />
                                     </svg>
                                 </div>
@@ -45,10 +73,11 @@
                                 <p>Informar, educar y conectar a la comunidad escolar a través de contenido relevante y
                                     de calidad.</p>
                             </div>
-                            <div class="vision-card hover-scale">
+
+                            <div class="vision-card hover-scale" tabindex="0">
                                 <div class="card-icon">
-                                    <svg viewBox="0 0 24 24" width="48" height="48">
-                                        <path fill="var(--primary-color)"
+                                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <path fill="currentColor"
                                             d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
                                     </svg>
                                 </div>
@@ -59,14 +88,15 @@
                     </div>
                 </article>
 
-                <article class="about-section animate-fade-in delay-3">
+                <!-- Sección Historia -->
+                <article class="about-section animate-fade-in delay-3" aria-labelledby="history-heading">
                     <div class="section-header">
-                        <h2>Historia</h2>
+                        <h2 id="history-heading">Nuestra Historia</h2>
                         <div class="section-divider"></div>
                     </div>
                     <div class="section-content">
                         <div class="timeline">
-                            <div class="timeline-item">
+                            <div class="timeline-item" tabindex="0">
                                 <div class="timeline-date">2020</div>
                                 <div class="timeline-content hover-scale">
                                     <h3>Fundación</h3>
@@ -74,14 +104,16 @@
                                         publicaciones esporádicas sobre eventos escolares.</p>
                                 </div>
                             </div>
-                            <div class="timeline-item">
+
+                            <div class="timeline-item" tabindex="0">
                                 <div class="timeline-date">2021</div>
                                 <div class="timeline-content hover-scale">
                                     <h3>Expansión</h3>
                                     <p>Se incorporaron más secciones y se formó el equipo de estudiantes reporteros.</p>
                                 </div>
                             </div>
-                            <div class="timeline-item">
+
+                            <div class="timeline-item" tabindex="0">
                                 <div class="timeline-date">2023</div>
                                 <div class="timeline-content hover-scale">
                                     <h3>Actualidad</h3>
@@ -93,18 +125,17 @@
                     </div>
                 </article>
 
-                <article class="about-section animate-fade-in delay-4">
+                <!-- Sección Equipo -->
+                <article class="about-section animate-fade-in delay-4" aria-labelledby="team-heading">
                     <div class="section-header">
-                        <h2>Equipo</h2>
+                        <h2 id="team-heading">Nuestro Equipo</h2>
                         <div class="section-divider"></div>
                     </div>
                     <div class="section-content">
-                        <p>Nuestro equipo está compuesto por miembros comprometidos de nuestra comunidad educativa:</p>
-
                         <div class="team-grid">
-                            <div class="team-member hover-scale">
+                            <div class="team-member hover-scale" tabindex="0">
                                 <div class="member-image">
-                                    <img src="assets/img/teams/img7.jpg" alt="Profesor" loading="lazy">
+                                    <img src="assets/img/team/teachers.jpg" alt="Equipo de profesores" loading="lazy">
                                 </div>
                                 <div class="member-info">
                                     <h3>Profesores</h3>
@@ -112,9 +143,9 @@
                                 </div>
                             </div>
 
-                            <div class="team-member hover-scale">
+                            <div class="team-member hover-scale" tabindex="0">
                                 <div class="member-image">
-                                    <img src="assets/img/teams/img7.jpg" alt="Estudiantes" loading="lazy">
+                                    <img src="assets/img/team/students.jpg" alt="Estudiantes reporteros" loading="lazy">
                                 </div>
                                 <div class="member-info">
                                     <h3>Estudiantes</h3>
@@ -122,12 +153,12 @@
                                 </div>
                             </div>
 
-                            <div class="team-member hover-scale">
+                            <div class="team-member hover-scale" tabindex="0">
                                 <div class="member-image">
-                                    <img src="assets/img/teams/img7.jpg" alt="Administrativo" loading="lazy">
+                                    <img src="assets/img/team/staff.jpg" alt="Personal administrativo" loading="lazy">
                                 </div>
                                 <div class="member-info">
-                                    <h3>Personal administrativo</h3>
+                                    <h3>Administrativo</h3>
                                     <p>Proporcionan información oficial sobre políticas y eventos institucionales.</p>
                                 </div>
                             </div>
@@ -135,73 +166,73 @@
                     </div>
                 </article>
 
-                <article class="about-section animate-fade-in delay-5">
+                <!-- Sección Valores -->
+                <article class="about-section animate-fade-in delay-5" aria-labelledby="values-heading">
                     <div class="section-header">
-                        <h2>Valores</h2>
+                        <h2 id="values-heading">Nuestros Valores</h2>
                         <div class="section-divider"></div>
                     </div>
                     <div class="section-content">
                         <div class="values-grid">
-                            <div class="value-card hover-scale">
+                            <div class="value-card hover-scale" tabindex="0">
                                 <div class="value-icon">
-                                    <svg viewBox="0 0 24 24" width="40" height="40">
-                                        <path fill="var(--secondary-color)"
+                                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <path fill="currentColor"
                                             d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
                                     </svg>
                                 </div>
                                 <h3>Transparencia</h3>
-                                <p>Nos comprometemos a compartir información veraz y oportuna con nuestra comunidad.</p>
+                                <p>Información veraz y oportuna para nuestra comunidad educativa.</p>
                             </div>
 
-                            <div class="value-card hover-scale">
+                            <div class="value-card hover-scale" tabindex="0">
                                 <div class="value-icon">
-                                    <svg viewBox="0 0 24 24" width="40" height="40">
-                                        <path fill="var(--primary-color)"
+                                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <path fill="currentColor"
                                             d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" />
                                     </svg>
                                 </div>
                                 <h3>Inclusión</h3>
-                                <p>Buscamos representar todas las voces y perspectivas de nuestra diversa comunidad
-                                    escolar.</p>
+                                <p>Representamos todas las voces de nuestra diversa comunidad.</p>
                             </div>
 
-                            <div class="value-card hover-scale">
+                            <div class="value-card hover-scale" tabindex="0">
                                 <div class="value-icon">
-                                    <svg viewBox="0 0 24 24" width="40" height="40">
-                                        <path fill="var(--accent-color)"
+                                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <path fill="currentColor"
                                             d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z" />
                                     </svg>
                                 </div>
                                 <h3>Educación</h3>
-                                <p>Además de informar, nuestro contenido tiene un propósito educativo y formativo.</p>
+                                <p>Contenido con propósito educativo y formativo.</p>
                             </div>
 
-                            <div class="value-card hover-scale">
+                            <div class="value-card hover-scale" tabindex="0">
                                 <div class="value-icon">
-                                    <svg viewBox="0 0 24 24" width="40" height="40">
-                                        <path fill="var(--secondary-dark)"
+                                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <path fill="currentColor"
                                             d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm0 16c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zm1-11h-2v3H8v2h3v3h2v-3h3v-2h-3V8z" />
                                     </svg>
                                 </div>
                                 <h3>Innovación</h3>
-                                <p>Constantemente exploramos nuevas formas de contar historias y compartir conocimiento.
-                                </p>
+                                <p>Exploramos nuevas formas de compartir conocimiento.</p>
                             </div>
                         </div>
                     </div>
                 </article>
 
-                <article class="about-section animate-fade-in delay-6">
+                <!-- Sección Contacto -->
+                <article class="about-section animate-fade-in delay-6" aria-labelledby="contact-heading">
                     <div class="section-header">
-                        <h2>Contacto</h2>
+                        <h2 id="contact-heading">Contacto</h2>
                         <div class="section-divider"></div>
                     </div>
                     <div class="section-content">
                         <div class="contact-info">
-                            <div class="contact-card hover-scale">
+                            <div class="contact-card hover-scale" tabindex="0">
                                 <div class="contact-icon">
-                                    <svg viewBox="0 0 24 24" width="32" height="32">
-                                        <path fill="var(--secondary-color)"
+                                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <path fill="currentColor"
                                             d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
                                     </svg>
                                 </div>
@@ -211,10 +242,10 @@
                                 </div>
                             </div>
 
-                            <div class="contact-card hover-scale">
+                            <div class="contact-card hover-scale" tabindex="0">
                                 <div class="contact-icon">
-                                    <svg viewBox="0 0 24 24" width="32" height="32">
-                                        <path fill="var(--primary-color)"
+                                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <path fill="currentColor"
                                             d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56-.35-.12-.74-.03-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z" />
                                     </svg>
                                 </div>
@@ -224,10 +255,10 @@
                                 </div>
                             </div>
 
-                            <div class="contact-card hover-scale">
+                            <div class="contact-card hover-scale" tabindex="0">
                                 <div class="contact-icon">
-                                    <svg viewBox="0 0 24 24" width="32" height="32">
-                                        <path fill="var(--accent-color)"
+                                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <path fill="currentColor"
                                             d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
                                     </svg>
                                 </div>
@@ -239,7 +270,6 @@
                         </div>
 
                         <div class="contact-cta">
-                            <p>¿Tienes preguntas o sugerencias? Estamos aquí para ayudarte.</p>
                             <a href="contact.html" class="btn btn-primary">Contáctanos</a>
                         </div>
                     </div>
@@ -247,8 +277,35 @@
             </div>
         </main>
 
-        <footer id="main-footer"></footer>
+        <!-- Footer dinámico -->
+        <footer id="main-footer" aria-label="Pie de página"></footer>
 
+        <!-- Modal de la Creadora -->
+        <div id="creator-modal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="modal-title">
+            <div class="modal-content">
+                <button class="modal-close" aria-label="Cerrar modal">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill="currentColor"
+                            d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                    </svg>
+                </button>
+                <div class="creator-modal-content">
+                    <div class="creator-image">
+                        <img src="assets/img/creator.jpg" alt="Retrato de KAG" loading="lazy">
+                    </div>
+                    <div class="creator-info">
+                        <h3 id="modal-title">KAG</h3>
+                        <p class="creator-grade">1ro A</p>
+                        <div class="creator-bio">
+                            <p>Estudiante apasionada por la tecnología y comunicación, creadora de este blog escolar
+                                como proyecto para mejorar la comunicación en nuestra institución educativa.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botón scroll top -->
         <button id="scroll-top" class="scroll-top-btn" aria-label="Subir al inicio">
             <svg viewBox="0 0 24 24" width="24" height="24">
                 <path fill="currentColor" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
@@ -256,9 +313,72 @@
         </button>
     </div>
 
-    <script src="assets/js/components.js"></script>
-    <script src="assets/js/main.js"></script>
-    <script src="assets/js/scroll.js"></script>
+    <!-- Scripts optimizados -->
+    <script src="assets/js/components.js" defer></script>
+    <script src="assets/js/main.js" defer></script>
+    <script src="assets/js/scroll-top.js" defer></script>
+
+    <!-- Script específico para about -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Control del modal de la creadora
+            const modal = document.getElementById('creator-modal');
+            const openBtn = document.getElementById('creator-btn');
+            const closeBtn = document.querySelector('.modal-close');
+
+            function openModal() {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                modal.setAttribute('aria-hidden', 'false');
+            }
+
+            function closeModal() {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+                modal.setAttribute('aria-hidden', 'true');
+            }
+
+            openBtn.addEventListener('click', openModal);
+            closeBtn.addEventListener('click', closeModal);
+
+            // Cerrar al hacer clic fuera del contenido
+            modal.addEventListener('click', function (e) {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+
+            // Cerrar con tecla Escape
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && modal.classList.contains('active')) {
+                    closeModal();
+                }
+            });
+
+            // Focus trapping para accesibilidad
+            const focusableElements = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+            const modalContent = modal.querySelector('.modal-content');
+            const focusableContent = modalContent.querySelectorAll(focusableElements);
+            const firstFocusableElement = focusableContent[0];
+            const lastFocusableElement = focusableContent[focusableContent.length - 1];
+
+            modal.addEventListener('keydown', function (e) {
+                if (e.key !== 'Tab') return;
+
+                if (e.shiftKey) {
+                    if (document.activeElement === firstFocusableElement) {
+                        lastFocusableElement.focus();
+                        e.preventDefault();
+                    }
+                } else {
+                    if (document.activeElement === lastFocusableElement) {
+                        firstFocusableElement.focus();
+                        e.preventDefault();
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
