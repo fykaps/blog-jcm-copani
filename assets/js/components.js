@@ -38,7 +38,7 @@ function loadHeader() {
                 <a href="index.html" class="nav-link">Inicio</a>
                 <a href="about.html" class="nav-link">Acerca de</a>
                 <a href="news.html" class="nav-link">Noticias</a>
-                <a href="events.html" class="nav-link">Eventos</a>
+                <a href="event.html" class="nav-link">Eventos</a>
                 <a href="menu.html" class="nav-link">Menú</a>
                 <a href="schedule.html" class="nav-link">Horario</a>
                 <a href="gallery.html" class="nav-link">Galerías</a>
@@ -118,7 +118,7 @@ function loadFooter() {
                     <ul class="footer-links">
                         <li><a href="index.html" class="footer-link">Inicio</a></li>
                         <li><a href="news.html" class="footer-link">Noticias</a></li>
-                        <li><a href="events.html" class="footer-link">Eventos</a></li>
+                        <li><a href="event.html" class="footer-link">Eventos</a></li>
                         <li><a href="menu.html" class="footer-link">Menú</a></li>
                         <li><a href="schedule.html" class="footer-link">Horario</a></li>
                         <li><a href="gallery.html" class="footer-link">Galerías</a></li>

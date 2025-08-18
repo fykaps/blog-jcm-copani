@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="no-js">
 
 <head>
     <meta charset="UTF-8">
@@ -7,8 +7,14 @@
     <title>Blog Escolar - Eventos</title>
     <link rel="stylesheet" href="assets/css/variables.css">
     <link rel="stylesheet" href="assets/css/animations.css">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/event.css">
     <link rel="icon" href="assets/img/favicon.ico">
+
+    <!-- Preconexión para mejorar performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="assets/css/event.css" as="style">
 </head>
 
 <body>
@@ -17,14 +23,28 @@
 
         <main class="container">
             <section class="hero animate-fade-in">
-                <h1 class="animate-slide-up">Eventos Escolares</h1>
-                <p class="animate-slide-up delay-1">Próximas actividades y eventos programados para nuestra comunidad.
-                </p>
+                <div class="hero-content">
+                    <h1 class="animate-slide-up">Eventos Escolares</h1>
+                    <p class="hero-description animate-slide-up delay-1">
+                        Próximas actividades y eventos programados para nuestra comunidad educativa.
+                    </p>
+                    <div class="hero-actions animate-slide-up delay-2">
+                        <a href="#events-list" class="btn btn-primary" aria-label="Ver eventos">
+                            Ver Eventos
+                        </a>
+                        <a href="shop.html" class="btn btn-secondary" aria-label="Visitar tienda">
+                            Tienda Escolar
+                        </a>
+                    </div>
+                </div>
+                <div class="hero-image" aria-hidden="true">
+                    <img src="assets/img/events-hero.jpg" alt="" loading="lazy">
+                </div>
             </section>
 
             <div class="content-wrapper">
                 <div class="main-content">
-                    <div class="events-filters animate-fade-in delay-2">
+                    <div class="events-filters animate-fade-in delay-3">
                         <div class="filters-container">
                             <button class="filter-button active" data-filter="all">Todos</button>
                             <button class="filter-button" data-filter="Académico">Académicos</button>
@@ -32,24 +52,24 @@
                             <button class="filter-button" data-filter="Deportivo">Deportivos</button>
                             <button class="filter-button" data-filter="Reunión">Reuniones</button>
                         </div>
-                        <!-- <div class="mini-calendar" id="mini-calendar"></div> -->
                     </div>
 
-                    <div class="events-list animate-fade-in delay-3" id="events-list"></div>
+                    <div class="events-list animate-fade-in delay-4" id="events-list"></div>
                 </div>
 
                 <aside class="sidebar">
-                    <div class="sidebar-widget animate-slide-left delay-4">
-                        <h3>Calendario</h3>
+                    <div class="sidebar-widget animate-slide-left delay-5">
+                        <h3>Calendario de Eventos</h3>
                         <div id="mini-calendar" class="mini-calendar"></div>
                     </div>
-                    <div class="sidebar-widget animate-slide-left delay-4">
+
+                    <div class="sidebar-widget animate-slide-left delay-5">
                         <h3>Próximos Eventos</h3>
                         <div class="upcoming-events" id="upcoming-events"></div>
                     </div>
 
-                    <div class="sidebar-widget animate-slide-left delay-5">
-                        <h3>Categorías</h3>
+                    <div class="sidebar-widget animate-slide-left delay-6">
+                        <h3>Filtrar por Categoría</h3>
                         <div class="events-categories">
                             <button class="category-tag" data-filter="all">Todos</button>
                             <button class="category-tag" data-filter="Académico">Académicos</button>
@@ -59,7 +79,7 @@
                         </div>
                     </div>
 
-                    <div class="sidebar-widget animate-slide-left delay-6">
+                    <div class="sidebar-widget animate-slide-left delay-7">
                         <h3>Eventos Destacados</h3>
                         <div class="featured-events" id="featured-events"></div>
                     </div>
@@ -76,11 +96,17 @@
         </button>
     </div>
 
-    <script src="assets/js/components.js"></script>
-    <script src="assets/js/main.js"></script>
-    <script src="assets/js/scroll.js"></script>
-    <script src="assets/js/events.js"></script>
-    <script src="assets/data/events.js"></script>
+    <!-- Scripts con carga optimizada -->
+    <script src="assets/js/components.js" defer></script>
+    <script src="assets/js/main.js" defer></script>
+    <script src="assets/js/scroll-top.js" defer></script>
+    <script src="assets/js/event.js" defer></script>
+    <script src="assets/data/events.js" defer></script>
+
+    <!-- Modernizr para características modernas -->
+    <script>
+        document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+    </script>
 </body>
 
 </html>
