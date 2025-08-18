@@ -129,5 +129,18 @@ const eventsData = [
         image: "assets/img/events/banner2.png",
         status: "in-progress",
         featured: true
-    }
+    },
+    {
+        id: 11,
+        title: "Escuela de padres",
+        description: "La dirección en cordicnacion con APAFA de la I.E.S. José Carlos Mariátegui de Copani, cita a los padres de familia para participar en ESCUELA DE PADRES, programado para el día lunes 18 de agosto de 2025, en Sala de usos múltiples a parti de las 09:00 A.M. temas a dearrollar: 1.- Deberes y responsabilidades de los padres de faminlia. 2.- Cancer del cuello uterino, preventivo y promocional. 3.- Charla de reflexión sobre logros de aprendizaje y enteega de boletas de notas.",
+        date: "2025-08-18",
+        startTime: "09:00",
+        endTime: "10:00",
+        location: "Salade de usos múltiples",
+        category: "Formativo",
+        image: "assets/img/events/banner2.png",
+        featured: true,
+        status: "active"
+    },
 ];

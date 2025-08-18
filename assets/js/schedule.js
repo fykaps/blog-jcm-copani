@@ -92,21 +92,21 @@ function renderClassItem(cls, currentTime, dayName) {
             `${iconsSchedule.clock} Inicia en ${TimeUtils.formatCountdown(status.timeRemaining)}` :
             `${iconsSchedule.clock} Termina en ${TimeUtils.formatCountdown(status.timeRemaining)}`}</div>` : '';
 
-    if (isBreak) {
-        // Obtener menú para este receso
-        const menuContent = getRecessMenuContent(cls.start, dayName);
+    // if (isBreak) {
+    //     // Obtener menú para este receso
+    //     const menuContent = getRecessMenuContent(cls.start, dayName);
 
-        return `
-        <li class="class-item ${status.class} recess-item" data-start="${cls.start}" data-end="${cls.end}">
-            <div class="class-content">
-                <span class="class-time">${iconsSchedule.clock} ${cls.start} - ${cls.end}</span>
-                <span class="class-subject">${iconsSchedule.recess} ${cls.subject}</span>
-                <span class="class-status">${status.status === 'in-progress' ? 'En receso' : status.text}</span>
-                ${countdown}
-                ${menuContent}
-            </div>
-        </li>`;
-    }
+    //     return `
+    //     <li class="class-item ${status.class} recess-item" data-start="${cls.start}" data-end="${cls.end}">
+    //         <div class="class-content">
+    //             <span class="class-time">${iconsSchedule.clock} ${cls.start} - ${cls.end}</span>
+    //             <span class="class-subject">${iconsSchedule.recess} ${cls.subject}</span>
+    //             <span class="class-status">${status.status === 'in-progress' ? 'En receso' : status.text}</span>
+    //             ${countdown}
+    //             ${menuContent}
+    //         </div>
+    //     </li>`;
+    // }
 
     return `
     <li class="class-item ${status.class}" data-start="${cls.start}" data-end="${cls.end}">
@@ -121,50 +121,50 @@ function renderClassItem(cls, currentTime, dayName) {
 }
 
 // Obtener contenido del menú para el receso
-function getRecessMenuContent(recessTime, dayName) {
-    const menu = getMenuForDay(dayName);
-    if (!menu) return '';
+// function getRecessMenuContent(recessTime, dayName) {
+//     const menu = getMenuForDay(dayName);
+//     if (!menu) return '';
 
-    const recessMinutes = TimeUtils.timeToMinutes(recessTime);
-    const breakfastEnd = TimeUtils.timeToMinutes(menu.breakfast.hours.end);
-    const lunchStart = TimeUtils.timeToMinutes(menu.lunch.hours.start);
+//     const recessMinutes = TimeUtils.timeToMinutes(recessTime);
+//     const breakfastEnd = TimeUtils.timeToMinutes(menu.breakfast.hours.end);
+//     const lunchStart = TimeUtils.timeToMinutes(menu.lunch.hours.start);
 
-    let menuType, menuData;
+//     let menuType, menuData;
 
-    if (recessMinutes < breakfastEnd) {
-        menuType = 'breakfast';
-        menuData = menu.breakfast;
-    } else if (recessMinutes >= lunchStart) {
-        menuType = 'lunch';
-        menuData = menu.lunch;
-    } else {
-        // Entre desayuno y almuerzo, mostramos el desayuno
-        menuType = 'breakfast';
-        menuData = menu.breakfast;
-    }
+//     if (recessMinutes < breakfastEnd) {
+//         menuType = 'breakfast';
+//         menuData = menu.breakfast;
+//     } else if (recessMinutes >= lunchStart) {
+//         menuType = 'lunch';
+//         menuData = menu.lunch;
+//     } else {
+//         // Entre desayuno y almuerzo, mostramos el desayuno
+//         menuType = 'breakfast';
+//         menuData = menu.breakfast;
+//     }
 
-    const currentTime = TimeUtils.getCurrentTime();
-    const menuStatus = getServiceStatus(menuData.hours, currentTime);
+//     const currentTime = TimeUtils.getCurrentTime();
+//     const menuStatus = getServiceStatus(menuData.hours, currentTime);
 
-    return `
-    <div class="recess-menu ${menuType}-menu">
-        <div class="menu-header">
-            <h4>${iconsSchedule.food} Menú ${menuType === 'breakfast' ? 'Desayuno' : 'Almuerzo'}</h4>
-            <span class="menu-status ${menuStatus.class}">${menuStatus.text}</span>
-        </div>
-        <div class="menu-details">
-            <p class="menu-name">${menuData.name}</p>
-            <p class="menu-additional">${menuData.additional}</p>
-            ${menuStatus.status !== 'completed' ?
-            `<div class="menu-countdown">
-                ${menuStatus.status === 'pending' ?
-                `Inicia: ${menuData.hours.start}` :
-                `Termina: ${menuData.hours.end} (${TimeUtils.formatCountdown(menuStatus.timeRemaining)})`
-            }
-            </div>` : ''}
-        </div>
-    </div>`;
-}
+//     return `
+//     <div class="recess-menu ${menuType}-menu">
+//         <div class="menu-header">
+//             <h4>${iconsSchedule.food} Menú ${menuType === 'breakfast' ? 'Desayuno' : 'Almuerzo'}</h4>
+//             <span class="menu-status ${menuStatus.class}">${menuStatus.text}</span>
+//         </div>
+//         <div class="menu-details">
+//             <p class="menu-name">${menuData.name}</p>
+//             <p class="menu-additional">${menuData.additional}</p>
+//             ${menuStatus.status !== 'completed' ?
+//             `<div class="menu-countdown">
+//                 ${menuStatus.status === 'pending' ?
+//                 `Inicia: ${menuData.hours.start}` :
+//                 `Termina: ${menuData.hours.end} (${TimeUtils.formatCountdown(menuStatus.timeRemaining)})`
+//             }
+//             </div>` : ''}
+//         </div>
+//     </div>`;
+// }
 
 // Cargar selector de grados
 function loadGradeSelector() {
@@ -290,16 +290,16 @@ function getClassStatus(cls, currentTime) {
 }
 
 // Obtener menú para un día específico
-function getMenuForDay(dayName) {
-    const menu = getMenuByDay(dayName);
-    if (!menu) return null;
+// function getMenuForDay(dayName) {
+//     const menu = getMenuByDay(dayName);
+//     if (!menu) return null;
 
-    const hours = getHoursByDay(dayName);
-    return {
-        breakfast: { ...menu.breakfast, hours: hours.breakfast },
-        lunch: { ...menu.lunch, hours: hours.lunch }
-    };
-}
+//     const hours = getHoursByDay(dayName);
+//     return {
+//         breakfast: { ...menu.breakfast, hours: hours.breakfast },
+//         lunch: { ...menu.lunch, hours: hours.lunch }
+//     };
+// }
 
 // Obtener estado del servicio de comedor
 function getServiceStatus(serviceHours, currentTime) {
