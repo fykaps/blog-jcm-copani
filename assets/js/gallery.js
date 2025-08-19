@@ -1,8 +1,9 @@
 /**
- * GALERÍA DE EVENTOS - VERSIÓN PROFESIONAL MEJORADA
+ * GALERÍA DE EVENTOS - VERSIÓN PROFESIONAL MEJORADA CON PAGINACIÓN
  * 
  * Características:
  * - Filtrado por categorías
+ * - Paginación avanzada (similar a news.js)
  * - Animaciones fluidas
  * - Carga diferida de imágenes
  * - Sistema de conteo de medios con colores distintivos
@@ -11,11 +12,19 @@
  */
 
 class GalleryManager {
-    constructor() {
+    constructor(galleryData, options = {}) {
+        this.galleryData = galleryData;
+        this.options = {
+            eventsPerPage: 6,
+            ...options
+        };
         this.currentFilter = 'all';
+        this.currentPage = 1;
+        this.totalPages = 1;
         this.filteredEvents = [];
         this.initialized = false;
         this.isLoading = false;
+        this.imageObserver = null;
     }
 
     init() {
@@ -45,6 +54,7 @@ class GalleryManager {
     displayGallery(filter = this.currentFilter) {
         this.currentFilter = filter;
         const container = document.getElementById('galleries-container');
+        const paginationWrapper = document.getElementById('gallery-pagination-wrapper');
 
         if (!container) return;
 
@@ -54,25 +64,192 @@ class GalleryManager {
 
         // Filtrar eventos
         this.filteredEvents = filter === 'all'
-            ? [...galleryData]
-            : galleryData.filter(event => event.category === filter);
+            ? [...this.galleryData]
+            : this.galleryData.filter(event => event.category === filter);
+
+        this.totalPages = Math.ceil(this.filteredEvents.length / this.options.eventsPerPage);
+
+        // Asegurar que la página actual sea válida
+        if (this.currentPage > this.totalPages) {
+            this.currentPage = this.totalPages > 0 ? this.totalPages : 1;
+        }
+
+        // Obtener eventos para la página actual
+        const startIndex = (this.currentPage - 1) * this.options.eventsPerPage;
+        const endIndex = startIndex + this.options.eventsPerPage;
+        const paginatedEvents = this.filteredEvents.slice(startIndex, endIndex);
 
         setTimeout(() => {
             container.innerHTML = '';
 
             if (this.filteredEvents.length === 0) {
                 container.innerHTML = this.createNoResultsMessage();
+                if (paginationWrapper) paginationWrapper.style.display = 'none';
             } else {
-                container.innerHTML = this.filteredEvents.map(event =>
+                container.innerHTML = paginatedEvents.map(event =>
                     this.createEventCard(event)
                 ).join('');
+
+                // Mostrar paginación solo si hay más de una página
+                if (paginationWrapper) {
+                    if (this.totalPages > 1) {
+                        paginationWrapper.style.display = 'flex';
+                    } else {
+                        paginationWrapper.style.display = 'none';
+                    }
+                }
             }
 
             container.style.opacity = '1';
             this.setupIntersectionObserver();
             this.updateFilterCounts();
+            this.renderPagination();
         }, 300);
     }
+
+    // ======================
+    //  PAGINACIÓN (similar a news.js)
+    // ======================
+
+    renderPagination() {
+        const paginationContainer = document.getElementById('gallery-pagination');
+        if (!paginationContainer || this.totalPages <= 1) {
+            if (paginationContainer) paginationContainer.innerHTML = '';
+            return;
+        }
+
+        let html = `
+            <button class="pagination-button ${this.currentPage === 1 ? 'disabled' : ''}" 
+                    onclick="galleryManager.changePage(${this.currentPage - 1})" ${this.currentPage === 1 ? 'disabled' : ''}>
+                &lt;
+            </button>
+        `;
+
+        // Mostrar siempre la primera página
+        html += `
+            <button class="pagination-button ${this.currentPage === 1 ? 'active' : ''}" 
+                    onclick="galleryManager.changePage(1)">
+                1
+            </button>
+        `;
+
+        // Mostrar puntos suspensivos si hay muchas páginas
+        if (this.totalPages > 5 && this.currentPage > 3) {
+            html += `<span class="pagination-ellipsis">...</span>`;
+        }
+
+        // Mostrar páginas alrededor de la actual
+        const startPage = Math.max(2, this.currentPage - 1);
+        const endPage = Math.min(this.totalPages - 1, this.currentPage + 1);
+
+        for (let i = startPage; i <= endPage; i++) {
+            if (i > 1 && i < this.totalPages) {
+                html += `
+                    <button class="pagination-button ${this.currentPage === i ? 'active' : ''}" 
+                            onclick="galleryManager.changePage(${i})">
+                        ${i}
+                    </button>
+                `;
+            }
+        }
+
+        // Mostrar puntos suspensivos si hay muchas páginas
+        if (this.totalPages > 5 && this.currentPage < this.totalPages - 2) {
+            html += `<span class="pagination-ellipsis">...</span>`;
+        }
+
+        // Mostrar siempre la última página
+        if (this.totalPages > 1) {
+            html += `
+                <button class="pagination-button ${this.currentPage === this.totalPages ? 'active' : ''}" 
+                        onclick="galleryManager.changePage(${this.totalPages})">
+                    ${this.totalPages}
+                </button>
+            `;
+        }
+
+        html += `
+            <button class="pagination-button ${this.currentPage === this.totalPages ? 'disabled' : ''}" 
+                    onclick="galleryManager.changePage(${this.currentPage + 1})" ${this.currentPage === this.totalPages ? 'disabled' : ''}>
+                &gt;
+            </button>
+        `;
+
+        paginationContainer.innerHTML = html;
+    }
+
+    changePage(page) {
+        if (page < 1 || page > this.totalPages) return;
+        this.currentPage = page;
+        this.displayGallery(this.currentFilter);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ======================
+    //  FILTROS
+    // ======================
+
+    setupGalleryFilters() {
+        const filterButtons = document.querySelectorAll('.gallery-filters .filter-button');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Actualizar botones activos
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                // Aplicar filtro y resetear a página 1
+                const filter = button.getAttribute('data-filter');
+                this.currentPage = 1;
+                this.displayGallery(filter);
+
+                // Scroll suave al contenido
+                document.getElementById('galleries-container').scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            });
+        });
+    }
+
+    updateFilterCounts() {
+        const filterButtons = document.querySelectorAll('.gallery-filters .filter-button');
+
+        filterButtons.forEach(button => {
+            const filter = button.getAttribute('data-filter');
+            if (filter === 'all') return;
+
+            const count = this.galleryData.filter(event => event.category === filter).length;
+            const countSpan = button.querySelector('.filter-count') || document.createElement('span');
+
+            if (!button.querySelector('.filter-count')) {
+                countSpan.className = 'filter-count';
+                button.appendChild(countSpan);
+            }
+
+            countSpan.textContent = ` (${count})`;
+        });
+    }
+
+    resetFilters() {
+        this.currentFilter = 'all';
+        this.currentPage = 1;
+
+        document.querySelectorAll('.filter-button').forEach(btn => {
+            btn.classList.remove('active');
+        });
+
+        const allFilterButton = document.querySelector('.filter-button[data-filter="all"]');
+        if (allFilterButton) {
+            allFilterButton.classList.add('active');
+        }
+
+        this.displayGallery();
+    }
+
+    // ======================
+    //  FUNCIONES UTILITARIAS
+    // ======================
 
     createEventCard(event) {
         return `
@@ -187,74 +364,35 @@ class GalleryManager {
         `;
     }
 
-    setupGalleryFilters() {
-        const filterButtons = document.querySelectorAll('.gallery-filters .filter-button');
-
-        filterButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                // Actualizar botones activos
-                filterButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-
-                // Aplicar filtro
-                const filter = button.getAttribute('data-filter');
-                this.displayGallery(filter);
-
-                // Scroll suave al contenido
-                document.getElementById('galleries-container').scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            });
-        });
-    }
-
-    updateFilterCounts() {
-        const filterButtons = document.querySelectorAll('.gallery-filters .filter-button');
-
-        filterButtons.forEach(button => {
-            const filter = button.getAttribute('data-filter');
-            if (filter === 'all') return;
-
-            const count = galleryData.filter(event => event.category === filter).length;
-            const countSpan = button.querySelector('.filter-count') || document.createElement('span');
-
-            if (!button.querySelector('.filter-count')) {
-                countSpan.className = 'filter-count';
-                button.appendChild(countSpan);
-            }
-
-            countSpan.textContent = ` (${count})`;
-        });
-    }
-
     setupIntersectionObserver() {
-        // Carga diferida de imágenes de fondo
-        const lazyBackgrounds = document.querySelectorAll('.event-cover[data-bg]');
+        // Limpiar observer existente si hay uno
+        if (this.imageObserver) {
+            this.imageObserver.disconnect();
+        }
 
-        const observer = new IntersectionObserver((entries) => {
+        // Crear nuevo observer para imágenes
+        this.imageObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    const cover = entry.target;
-                    cover.style.backgroundImage = `url('${cover.dataset.bg}')`;
-                    cover.removeAttribute('data-bg');
-                    observer.unobserve(cover);
+                    const img = entry.target;
+                    if (img.dataset.src) {
+                        img.src = img.dataset.src;
+                        img.removeAttribute('data-src');
+                        img.classList.remove('lazy-image');
+                        img.classList.add('loaded-image');
+                    }
+                    this.imageObserver.unobserve(img);
                 }
             });
         }, {
-            rootMargin: '200px'
+            rootMargin: '200px',
+            threshold: 0.01
         });
 
-        lazyBackgrounds.forEach(cover => observer.observe(cover));
-    }
-
-    resetFilters() {
-        this.currentFilter = 'all';
-        document.querySelectorAll('.filter-button').forEach(btn => {
-            btn.classList.remove('active');
+        // Observar todas las imágenes con carga diferida
+        document.querySelectorAll('.lazy-image').forEach(img => {
+            this.imageObserver.observe(img);
         });
-        document.querySelector('.filter-button[data-filter="all"]').classList.add('active');
-        this.displayGallery();
     }
 
     truncateDescription(text, maxLength) {
@@ -270,16 +408,47 @@ class GalleryManager {
             return dateString;
         }
     }
+
+    destroy() {
+        if (this.imageObserver) {
+            this.imageObserver.disconnect();
+        }
+        this.initialized = false;
+    }
 }
 
 // Instanciar y exportar el manager
-const galleryManager = new GalleryManager();
+let galleryManager;
 
 // Inicializar cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
-    // Pequeño retraso para simular carga de datos
-    setTimeout(() => galleryManager.init(), 500);
-});
+    try {
+        if (typeof galleryData !== 'undefined') {
+            // Configuración personalizable
+            const options = {
+                eventsPerPage: 6 // Puedes cambiar este valor según sea necesario
+            };
 
-// Hacer accesible globalmente
-window.galleryManager = galleryManager;
+            galleryManager = new GalleryManager(galleryData, options);
+            galleryManager.init();
+            window.galleryManager = galleryManager; // Hacer accesible globalmente
+        } else {
+            console.error('Error: galleryData no está definido');
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#e74c3c" width="48" height="48">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                </svg>
+                <h3>Error al cargar la galería</h3>
+                <p>Los datos de la galería no están disponibles</p>
+            `;
+            const galleryContainer = document.getElementById('galleries-container');
+            if (galleryContainer) {
+                galleryContainer.appendChild(errorDiv);
+            }
+        }
+    } catch (error) {
+        console.error('Error al inicializar GalleryManager:', error);
+    }
+});
