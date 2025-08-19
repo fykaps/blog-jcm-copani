@@ -1,11 +1,15 @@
 /**
  * Sistema de Eventos Escolares - Versión Premium
- * Con diseño ecommerce, modal interactivo y contador regresivo
+ * Con diseño ecommerce, modal interactivo, paginación y contador regresivo
  */
 
 class EventSystem {
-  constructor(eventsData) {
+  constructor(eventsData, options = {}) {
     this.events = eventsData;
+    this.options = {
+      eventsPerPage: 4, // Valor por defecto, personalizable
+      ...options
+    };
     this.currentFilter = 'all';
     this.currentDate = new Date();
     this.currentMonth = this.currentDate.getMonth();
@@ -13,6 +17,8 @@ class EventSystem {
     this.activeEvents = [];
     this.updateInterval = null;
     this.modal = null;
+    this.currentPage = 1;
+    this.totalPages = 1;
 
     this.init();
   }
@@ -25,6 +31,7 @@ class EventSystem {
     this.setupEventFilters();
     this.setupEventModal();
     this.setupEventCardInteractions();
+    this.setupPagination();
   }
 
   // ======================
@@ -46,27 +53,27 @@ class EventSystem {
     });
 
     miniCalendar.innerHTML = `
-      <div class="mini-calendar-header">
-        <button id="prev-month" class="mini-calendar-nav" aria-label="Mes anterior">
-          <svg width="16" height="16" viewBox="0 0 24 24">
-            <path fill="currentColor" d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/>
-          </svg>
-        </button>
-        <h4>${this.getMonthName(this.currentMonth)} ${this.currentYear}</h4>
-        <button id="next-month" class="mini-calendar-nav" aria-label="Mes siguiente">
-          <svg width="16" height="16" viewBox="0 0 24 24">
-            <path fill="currentColor" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
-          </svg>
-        </button>
-      </div>
-      <div class="mini-calendar-grid">
-        ${['D', 'L', 'M', 'M', 'J', 'V', 'S'].map(day => `
-          <div class="mini-calendar-weekday">${day}</div>
-        `).join('')}
-        ${Array(firstDay.getDay()).fill().map(() => `
-          <div class="mini-calendar-day empty"></div>
-        `).join('')}
-        ${Array(daysInMonth).fill().map((_, i) => {
+            <div class="mini-calendar-header">
+                <button id="prev-month" class="mini-calendar-nav" aria-label="Mes anterior">
+                    <svg width="16" height="16" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/>
+                    </svg>
+                </button>
+                <h4>${this.getMonthName(this.currentMonth)} ${this.currentYear}</h4>
+                <button id="next-month" class="mini-calendar-nav" aria-label="Mes siguiente">
+                    <svg width="16" height="16" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="mini-calendar-grid">
+                ${['D', 'L', 'M', 'M', 'J', 'V', 'S'].map(day => `
+                    <div class="mini-calendar-weekday">${day}</div>
+                `).join('')}
+                ${Array(firstDay.getDay()).fill().map(() => `
+                    <div class="mini-calendar-day empty"></div>
+                `).join('')}
+                ${Array(daysInMonth).fill().map((_, i) => {
       const day = i + 1;
       const dateStr = `${this.currentYear}-${this.padZero(this.currentMonth + 1)}-${this.padZero(day)}`;
       const dayEvents = monthEvents.filter(event => event.date === dateStr);
@@ -74,22 +81,22 @@ class EventSystem {
       const dayStatus = this.getDayStatus(dateStr, dayEvents);
 
       return `
-            <div class="mini-calendar-day ${hasEvent ? 'has-event' : ''} 
-              ${dayStatus} 
-              ${this.currentDate.getDate() === day &&
+                        <div class="mini-calendar-day ${hasEvent ? 'has-event' : ''} 
+                            ${dayStatus} 
+                            ${this.currentDate.getDate() === day &&
           this.currentDate.getMonth() === this.currentMonth ? 'today' : ''}"
-              data-date="${dateStr}">
-              ${day}
-              ${hasEvent ? `
-                <div class="day-event-dots">
-                  ${dayEvents.map(e => `<span class="event-dot ${this.getEventStatusClass(e)}"></span>`).join('')}
-                </div>
-              ` : ''}
-            </div>
-          `;
+                            data-date="${dateStr}">
+                            ${day}
+                            ${hasEvent ? `
+                                <div class="day-event-dots">
+                                    ${dayEvents.map(e => `<span class="event-dot ${this.getEventStatusClass(e)}"></span>`).join('')}
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
     }).join('')}
-      </div>
-    `;
+            </div>
+        `;
 
     // Event listeners para navegación
     document.getElementById('prev-month').addEventListener('click', () => {
@@ -145,6 +152,12 @@ class EventSystem {
     });
 
     this.activeEvents = filteredEvents;
+    this.totalPages = Math.ceil(filteredEvents.length / this.options.eventsPerPage);
+
+    // Asegurar que la página actual sea válida
+    if (this.currentPage > this.totalPages) {
+      this.currentPage = this.totalPages > 0 ? this.totalPages : 1;
+    }
 
     // Mostrar mensaje si no hay eventos
     if (filteredEvents.length === 0) {
@@ -153,67 +166,81 @@ class EventSystem {
         const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
         const formattedDate = new Date(dateFilter).toLocaleDateString('es-ES', options);
         message = `
-          <div class="no-results">
-            <svg width="48" height="48" viewBox="0 0 24 24">
-              <path fill="currentColor" d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
-            </svg>
-            <h3>No hay eventos programados para el ${formattedDate}</h3>
-            <p>Intenta con otra fecha.</p>
-            <button class="reset-filter">Mostrar todos los eventos</button>
-          </div>
-        `;
+                    <div class="no-results">
+                        <svg width="48" height="48" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
+                        </svg>
+                        <h3>No hay eventos programados para el ${formattedDate}</h3>
+                        <p>Intenta con otra fecha.</p>
+                        <button class="reset-filter">Mostrar todos los eventos</button>
+                    </div>
+                `;
       } else {
         message = `
-          <div class="no-results">
-            <svg width="48" height="48" viewBox="0 0 24 24">
-              <path fill="currentColor" d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
-            </svg>
-            <p>No hay eventos programados con los criterios seleccionados</p>
-            <button class="reset-filter">Mostrar todos los eventos</button>
-          </div>
-        `;
+                    <div class="no-results">
+                        <svg width="48" height="48" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
+                        </svg>
+                        <p>No hay eventos programados con los criterios seleccionados</p>
+                        <button class="reset-filter">Mostrar todos los eventos</button>
+                    </div>
+                `;
       }
 
       eventsList.innerHTML = message;
       document.querySelector('.reset-filter')?.addEventListener('click', () => {
         this.resetFilters();
       });
+
+      // Ocultar paginación si no hay resultados
+      document.getElementById('events-pagination-wrapper').style.display = 'none';
       return;
     }
 
+    // Mostrar paginación
+    document.getElementById('events-pagination-wrapper').style.display = 'flex';
+
+    // Obtener eventos para la página actual
+    const startIndex = (this.currentPage - 1) * this.options.eventsPerPage;
+    const endIndex = startIndex + this.options.eventsPerPage;
+    const paginatedEvents = filteredEvents.slice(startIndex, endIndex);
+
     // Renderizar eventos
-    eventsList.innerHTML = filteredEvents.map(event => {
+    eventsList.innerHTML = paginatedEvents.map(event => {
       const { state, timeRemaining } = this.calculateEventStatus(event);
 
       return `
-        <article class="event-card" data-id="${event.id}" data-category="${event.category}" data-status="${state}">
-          <div class="event-date">
-            <span class="event-day">${this.formatDay(event.date)}</span>
-            <span class="event-month">${this.formatMonth(event.date)}</span>
-          </div>
-          <div class="event-content">
-            <div class="event-meta">
-              <span class="event-category">${event.category}</span>
-              <span class="event-time">${event.startTime} - ${event.endTime}</span>
-            </div>
-            <h3 class="event-title">${event.title}</h3>
-            <p class="event-description">${event.description}</p>
-            <div class="event-details">
-              <p>
-                <svg viewBox="0 0 24 24" width="16" height="16">
-                  <path fill="currentColor" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-                </svg> 
-                ${event.location}
-              </p>
-            </div>
-            <div class="event-counter-container" data-id="${event.id}">
-              ${this.renderCounterContent(timeRemaining, state)}
-            </div>
-          </div>
-          ${event.featured ? '<span class="event-badge">Destacado</span>' : ''}
-        </article>
-      `;
+                <article class="event-card" data-id="${event.id}" data-category="${event.category}" data-status="${state}">
+                    <div class="event-date">
+                        <span class="event-day">${this.formatDay(event.date)}</span>
+                        <span class="event-month">${this.formatMonth(event.date)}</span>
+                    </div>
+                    <div class="event-content">
+                        <div class="event-meta">
+                            <span class="event-category">${event.category}</span>
+                            <span class="event-time">${event.startTime} - ${event.endTime}</span>
+                        </div>
+                        <h3 class="event-title">${event.title}</h3>
+                        <p class="event-description">${event.description}</p>
+                        <div class="event-details">
+                            <p>
+                                <svg viewBox="0 0 24 24" width="16" height="16">
+                                    <path fill="currentColor" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                                </svg> 
+                                ${event.location}
+                            </p>
+                        </div>
+                        <div class="event-counter-container" data-id="${event.id}">
+                            ${this.renderCounterContent(timeRemaining, state)}
+                        </div>
+                    </div>
+                    ${event.featured ? '<span class="event-badge">Destacado</span>' : ''}
+                </article>
+            `;
     }).join('');
+
+    // Renderizar paginación
+    this.renderPagination();
 
     // Iniciar contador de eventos
     this.updateInterval = setInterval(() => this.updateCounters(), 1000);
@@ -245,25 +272,25 @@ class EventSystem {
       const { state, timeRemaining } = this.calculateEventStatus(event);
 
       return `
-        <div class="upcoming-event">
-          <div class="upcoming-event-date">
-            <span>${this.formatDay(event.date)}</span>
-            <small>${this.formatShortMonth(event.date)}</small>
-          </div>
-          <div class="upcoming-event-info">
-            <h4>${event.title}</h4>
-            <p>${event.startTime} - ${event.endTime}</p>
-            <div class="upcoming-event-counter ${state}">
-              ${state === 'upcoming' ?
+                <div class="upcoming-event" data-id="${event.id}">
+                    <div class="upcoming-event-date">
+                        <span>${this.formatDay(event.date)}</span>
+                        <small>${this.formatShortMonth(event.date)}</small>
+                    </div>
+                    <div class="upcoming-event-info">
+                        <h4>${event.title}</h4>
+                        <p>${event.startTime} - ${event.endTime}</p>
+                        <div class="upcoming-event-counter ${state}">
+                            ${state === 'upcoming' ?
           `<span>En ${timeRemaining.days > 0 ?
             `${timeRemaining.days} días` :
             `${this.padZero(timeRemaining.hours)}:${this.padZero(timeRemaining.minutes)}`}
-                </span>` :
+                            </span>` :
           '<span>Próximamente</span>'}
-            </div>
-          </div>
-        </div>
-      `;
+                        </div>
+                    </div>
+                </div>
+            `;
     }).join('');
   }
 
@@ -282,24 +309,106 @@ class EventSystem {
       const { state } = this.calculateEventStatus(event);
 
       return `
-        <div class="featured-event">
-          <div class="featured-event-image">
-            <img src="${event.image}" alt="${event.title}" loading="lazy">
-          </div>
-          <div class="featured-event-content">
-            <h4>${event.title}</h4>
-            <p>${this.formatFullDate(event.date)} • ${event.startTime}</p>
-            <div class="featured-event-status ${state}">
-              ${state === 'upcoming' ? 'Próximamente' :
+                <div class="featured-event" data-id="${event.id}">
+                    <div class="featured-event-image">
+                        <img src="${event.image}" alt="${event.title}" loading="lazy">
+                    </div>
+                    <div class="featured-event-content">
+                        <h4>${event.title}</h4>
+                        <p>${this.formatFullDate(event.date)} • ${event.startTime}</p>
+                        <div class="featured-event-status ${state}">
+                            ${state === 'upcoming' ? 'Próximamente' :
           state === 'in-progress' ? 'En curso' :
             state === 'finished' ? 'Finalizado' :
               state === 'cancelled' ? 'Cancelado' : 'Postergado'}
-            </div>
-            <a href="#" class="read-more" data-event-id="${event.id}">Más info</a>
-          </div>
-        </div>
-      `;
+                        </div>
+                        <a href="#" class="read-more" data-event-id="${event.id}">Más info</a>
+                    </div>
+                </div>
+            `;
     }).join('');
+  }
+
+  // ======================
+  //  PAGINACIÓN
+  // ======================
+
+  setupPagination() {
+    this.renderPagination();
+  }
+
+  renderPagination() {
+    const paginationContainer = document.getElementById('events-pagination');
+    if (!paginationContainer || this.totalPages <= 1) {
+      if (paginationContainer) paginationContainer.innerHTML = '';
+      return;
+    }
+
+    let html = `
+            <button class="pagination-button ${this.currentPage === 1 ? 'disabled' : ''}" 
+                    onclick="eventSystem.changePage(${this.currentPage - 1})" ${this.currentPage === 1 ? 'disabled' : ''}>
+                &lt;
+            </button>
+        `;
+
+    // Mostrar siempre la primera página
+    html += `
+            <button class="pagination-button ${this.currentPage === 1 ? 'active' : ''}" 
+                    onclick="eventSystem.changePage(1)">
+                1
+            </button>
+        `;
+
+    // Mostrar puntos suspensivos si hay muchas páginas
+    if (this.totalPages > 5 && this.currentPage > 3) {
+      html += `<span class="pagination-ellipsis">...</span>`;
+    }
+
+    // Mostrar páginas alrededor de la actual
+    const startPage = Math.max(2, this.currentPage - 1);
+    const endPage = Math.min(this.totalPages - 1, this.currentPage + 1);
+
+    for (let i = startPage; i <= endPage; i++) {
+      if (i > 1 && i < this.totalPages) {
+        html += `
+                    <button class="pagination-button ${this.currentPage === i ? 'active' : ''}" 
+                            onclick="eventSystem.changePage(${i})">
+                        ${i}
+                    </button>
+                `;
+      }
+    }
+
+    // Mostrar puntos suspensivos si hay muchas páginas
+    if (this.totalPages > 5 && this.currentPage < this.totalPages - 2) {
+      html += `<span class="pagination-ellipsis">...</span>`;
+    }
+
+    // Mostrar siempre la última página
+    if (this.totalPages > 1) {
+      html += `
+                <button class="pagination-button ${this.currentPage === this.totalPages ? 'active' : ''}" 
+                        onclick="eventSystem.changePage(${this.totalPages})">
+                    ${this.totalPages}
+                </button>
+            `;
+    }
+
+    html += `
+            <button class="pagination-button ${this.currentPage === this.totalPages ? 'disabled' : ''}" 
+                    onclick="eventSystem.changePage(${this.currentPage + 1})" ${this.currentPage === this.totalPages ? 'disabled' : ''}>
+                &gt;
+            </button>
+        `;
+
+    paginationContainer.innerHTML = html;
+  }
+
+  changePage(page) {
+    if (page < 1 || page > this.totalPages) return;
+    this.currentPage = page;
+    this.renderEventsList(this.currentFilter);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   // ======================
@@ -320,6 +429,7 @@ class EventSystem {
         button.classList.add('active');
 
         this.currentFilter = button.getAttribute('data-filter');
+        this.currentPage = 1;
         this.renderEventsList(this.currentFilter);
       });
     });
@@ -335,6 +445,7 @@ class EventSystem {
 
         const filter = button.getAttribute('data-filter');
         this.currentFilter = filter;
+        this.currentPage = 1;
 
         document.querySelectorAll('.filter-button, .category-tag').forEach(btn => {
           btn.classList.remove('active');
@@ -350,6 +461,7 @@ class EventSystem {
 
   filterEventsByDate(dateStr) {
     this.currentFilter = 'date';
+    this.currentPage = 1;
 
     document.querySelectorAll('.mini-calendar-day').forEach(day => {
       day.classList.remove('selected');
@@ -363,6 +475,7 @@ class EventSystem {
 
   resetFilters() {
     this.currentFilter = 'all';
+    this.currentPage = 1;
     document.querySelectorAll('.filter-button.active, .category-tag.active').forEach(el => {
       el.classList.remove('active');
     });
@@ -379,19 +492,20 @@ class EventSystem {
 
   setupEventModal() {
     const modalHTML = `
-      <div class="event-modal" id="event-modal">
-        <div class="event-modal-content">
-          <div class="event-modal-header">
-            <button class="event-modal-close" aria-label="Cerrar modal">
-              <svg viewBox="0 0 24 24" width="24" height="24">
-                <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-              </svg>
-            </button>
-          </div>
-          <div class="event-modal-body" id="event-modal-body"></div>
-        </div>
-      </div>
-    `;
+            <div class="event-modal" id="event-modal">
+                <div class="event-modal-content">
+                    <div class="event-modal-header">
+                        <h3>Detalles del Evento</h3>
+                        <button class="event-modal-close" aria-label="Cerrar modal">
+                            <svg viewBox="0 0 24 24" width="24" height="24">
+                                <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="event-modal-body" id="event-modal-body"></div>
+                </div>
+            </div>
+        `;
 
     document.body.insertAdjacentHTML('beforeend', modalHTML);
     this.modal = document.getElementById('event-modal');
@@ -426,64 +540,83 @@ class EventSystem {
       year: 'numeric'
     });
 
+    // Construir HTML para los topics si existen
+    const topicsHTML = event.topics && event.topics.length > 0 ? `
+            <div class="event-modal-topics">
+                <h4 class="topics-title">
+                    <svg viewBox="0 0 24 24" width="20" height="20">
+                        <path fill="currentColor" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                    </svg>
+                    Temas a tratar
+                </h4>
+                <div class="topics-list">
+                    ${event.topics.map(topic => `
+                        <div class="topic-item">${topic}</div>
+                    `).join('')}
+                </div>
+            </div>
+        ` : '';
+
     const modalContent = `
-      <div class="event-modal-image">
-        <img src="${event.image || 'assets/img/event-default.jpg'}" alt="${event.title}" loading="lazy">
-      </div>
-      
-      <div class="event-modal-meta">
-        <div class="event-modal-date">
-          <svg viewBox="0 0 24 24" width="20" height="20">
-            <path fill="currentColor" d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/>
-          </svg>
-          <span>${formattedDate}</span>
-        </div>
-        
-        <div class="event-modal-time">
-          <svg viewBox="0 0 24 24" width="20" height="20">
-            <path fill="currentColor" d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
-          </svg>
-          <span>${event.startTime} - ${event.endTime}</span>
-        </div>
-        
-        <div class="event-modal-location">
-          <svg viewBox="0 0 24 24" width="20" height="20">
-            <path fill="currentColor" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-          </svg>
-          <span>${event.location}</span>
-        </div>
-        
-        <div class="event-modal-category">
-          ${event.category}
-        </div>
-      </div>
-      
-      <h1 class="event-modal-title">${event.title}</h1>
-      
-      <div class="event-modal-description">
-        ${event.fullDescription || event.description}
-      </div>
-      
-      <div class="event-modal-counter">
-        ${this.renderCounterContent(timeRemaining, state)}
-      </div>
-      
-      <div class="event-modal-footer">
-        <button class="event-modal-button primary" data-action="register">
-          <svg viewBox="0 0 24 24" width="18" height="18">
-            <path fill="currentColor" d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm9 14H5v-1c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1z"/>
-          </svg>
-          Registrarse
-        </button>
-        
-        <button class="event-modal-button secondary" data-action="share">
-          <svg viewBox="0 0 24 24" width="18" height="18">
-            <path fill="currentColor" d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
-          </svg>
-          Compartir
-        </button>
-      </div>
-    `;
+            <div class="event-modal-image">
+                <img src="${event.image || 'assets/img/event-default.jpg'}" alt="${event.title}" loading="lazy">
+            </div>
+            
+            <div class="event-modal-meta">
+                <div class="event-modal-date">
+                    <svg viewBox="0 0 24 24" width="20" height="20">
+                        <path fill="currentColor" d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/>
+                    </svg>
+                    <span>${formattedDate}</span>
+                </div>
+                
+                <div class="event-modal-time">
+                    <svg viewBox="0 0 24 24" width="20" height="20">
+                        <path fill="currentColor" d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                    </svg>
+                    <span>${event.startTime} - ${event.endTime}</span>
+                </div>
+                
+                <div class="event-modal-location">
+                    <svg viewBox="0 0 24 24" width="20" height="20">
+                        <path fill="currentColor" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                    </svg>
+                    <span>${event.location}</span>
+                </div>
+                
+                <div class="event-modal-category">
+                    ${event.category}
+                </div>
+            </div>
+            
+            <h1 class="event-modal-title">${event.title}</h1>
+            
+            <div class="event-modal-description">
+                ${event.description}
+            </div>
+            
+            ${topicsHTML}
+            
+            <div class="event-modal-counter">
+                ${this.renderCounterContent(timeRemaining, state)}
+            </div>
+            
+            <div class="event-modal-footer">
+                <button class="event-modal-button primary" data-action="register">
+                    <svg viewBox="0 0 24 24" width="18" height="18">
+                        <path fill="currentColor" d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm9 14H5v-1c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1z"/>
+                    </svg>
+                    Registrarse
+                </button>
+                
+                <button class="event-modal-button secondary" data-action="share">
+                    <svg viewBox="0 0 24 24" width="18" height="18">
+                        <path fill="currentColor" d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
+                    </svg>
+                    Compartir
+                </button>
+            </div>
+        `;
 
     document.getElementById('event-modal-body').innerHTML = modalContent;
 
@@ -556,6 +689,8 @@ class EventSystem {
     document.addEventListener('click', (e) => {
       const moreInfoBtn = e.target.closest('.read-more');
       const eventCard = e.target.closest('.event-card');
+      const upcomingEvent = e.target.closest('.upcoming-event');
+      const featuredEvent = e.target.closest('.featured-event');
 
       if (moreInfoBtn) {
         e.preventDefault();
@@ -565,6 +700,16 @@ class EventSystem {
         }
       } else if (eventCard) {
         const eventId = eventCard.getAttribute('data-id');
+        if (eventId) {
+          this.showEventModal(eventId);
+        }
+      } else if (upcomingEvent) {
+        const eventId = upcomingEvent.getAttribute('data-id');
+        if (eventId) {
+          this.showEventModal(eventId);
+        }
+      } else if (featuredEvent) {
+        const eventId = featuredEvent.getAttribute('data-id');
         if (eventId) {
           this.showEventModal(eventId);
         }
@@ -642,97 +787,97 @@ class EventSystem {
     // Estado: Finalizado
     if (state === 'finished') {
       return `
-        <div class="event-status-badge finished">
-          <svg width="16" height="16" viewBox="0 0 24 24">
-            <path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
-          </svg>
-          <span>Finalizado</span>
-        </div>
-      `;
+                <div class="event-status-badge finished">
+                    <svg width="16" height="16" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                    </svg>
+                    <span>Finalizado</span>
+                </div>
+            `;
     }
 
     // Estado: Cancelado
     if (state === 'cancelled') {
       return `
-        <div class="event-status-badge cancelled">
-          <svg width="16" height="16" viewBox="0 0 24 24">
-            <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-          </svg>
-          <span>Cancelado</span>
-        </div>
-      `;
+                <div class="event-status-badge cancelled">
+                    <svg width="16" height="16" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                    </svg>
+                    <span>Cancelado</span>
+                </div>
+            `;
     }
 
     // Estado: Postergado
     if (state === 'postponed') {
       return `
-        <div class="event-status-badge postponed">
-          <svg width="16" height="16" viewBox="0 0 24 24">
-            <path fill="currentColor" d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46A7.93 7.93 0 0020 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74A7.93 7.93 0 004 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
-          </svg>
-          <span>Postergado</span>
-        </div>
-      `;
+                <div class="event-status-badge postponed">
+                    <svg width="16" height="16" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46A7.93 7.93 0 0020 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74A7.93 7.93 0 004 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
+                    </svg>
+                    <span>Postergado</span>
+                </div>
+            `;
     }
 
     // Estado: En progreso
     if (state === 'in-progress') {
       return `
-        <div class="event-status-badge in-progress">
-          <svg width="16" height="16" viewBox="0 0 24 24">
-            <path fill="currentColor" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
-          </svg>
-          <span>En curso</span>
-          <div class="time-remaining">
-            <span class="time-value">${this.padZero(timeObj.hours)}:${this.padZero(timeObj.minutes)}:${this.padZero(timeObj.seconds)}</span>
-            <span class="time-label">para finalizar</span>
-          </div>
-        </div>
-      `;
+                <div class="event-status-badge in-progress">
+                    <svg width="16" height="16" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+                    </svg>
+                    <span>En curso</span>
+                    <div class="time-remaining">
+                        <span class="time-value">${this.padZero(timeObj.hours)}:${this.padZero(timeObj.minutes)}:${this.padZero(timeObj.seconds)}</span>
+                        <span class="time-label">para finalizar</span>
+                    </div>
+                </div>
+            `;
     }
 
     // Estado "próximamente" con días
     if (timeObj.days > 0) {
       return `
-        <div class="counter-label">Comienza en</div>
-        <div class="digital-counter">
-          <div class="time-block large">
-            <span class="time-value">${timeObj.days}</span>
-            <span class="time-label">DÍAS</span>
-          </div>
-          <div class="time-block">
-            <span class="time-value">${this.padZero(timeObj.hours)}</span>
-            <span class="time-label">HRS</span>
-          </div>
-          <span class="time-separator">:</span>
-          <div class="time-block">
-            <span class="time-value">${this.padZero(timeObj.minutes)}</span>
-            <span class="time-label">MIN</span>
-          </div>
-        </div>
-      `;
+                <div class="counter-label">Comienza en</div>
+                <div class="digital-counter">
+                    <div class="time-block large">
+                        <span class="time-value">${timeObj.days}</span>
+                        <span class="time-label">DÍAS</span>
+                    </div>
+                    <div class="time-block">
+                        <span class="time-value">${this.padZero(timeObj.hours)}</span>
+                        <span class="time-label">HRS</span>
+                    </div>
+                    <span class="time-separator">:</span>
+                    <div class="time-block">
+                        <span class="time-value">${this.padZero(timeObj.minutes)}</span>
+                        <span class="time-label">MIN</span>
+                    </div>
+                </div>
+            `;
     }
 
     // Estado "próximamente" (menos de 1 día)
     return `
-      <div class="counter-label">Comienza en</div>
-      <div class="digital-counter">
-        <div class="time-block">
-          <span class="time-value">${this.padZero(timeObj.hours)}</span>
-          <span class="time-label">HRS</span>
-        </div>
-        <span class="time-separator">:</span>
-        <div class="time-block">
-          <span class="time-value">${this.padZero(timeObj.minutes)}</span>
-          <span class="time-label">MIN</span>
-        </div>
-        <span class="time-separator">:</span>
-        <div class="time-block">
-          <span class="time-value">${this.padZero(timeObj.seconds)}</span>
-          <span class="time-label">SEG</span>
-        </div>
-      </div>
-    `;
+            <div class="counter-label">Comienza en</div>
+            <div class="digital-counter">
+                <div class="time-block">
+                    <span class="time-value">${this.padZero(timeObj.hours)}</span>
+                    <span class="time-label">HRS</span>
+                </div>
+                <span class="time-separator">:</span>
+                <div class="time-block">
+                    <span class="time-value">${this.padZero(timeObj.minutes)}</span>
+                    <span class="time-label">MIN</span>
+                </div>
+                <span class="time-separator">:</span>
+                <div class="time-block">
+                    <span class="time-value">${this.padZero(timeObj.seconds)}</span>
+                    <span class="time-label">SEG</span>
+                </div>
+            </div>
+        `;
   }
 
   getDayStatus(dateStr, dayEvents) {
@@ -812,21 +957,29 @@ class EventSystem {
 }
 
 // Inicialización del sistema de eventos
+let eventSystem;
+
 document.addEventListener('DOMContentLoaded', () => {
   try {
     if (typeof eventsData !== 'undefined') {
-      new EventSystem(eventsData);
+      // Configuración personalizable
+      const options = {
+        eventsPerPage: 4 // Puedes cambiar este valor según sea necesario
+      };
+
+      eventSystem = new EventSystem(eventsData, options);
+      window.eventSystem = eventSystem; // Hacer accesible globalmente
     } else {
       console.error('Error: eventsData no está definido');
       const errorDiv = document.createElement('div');
       errorDiv.className = 'error-message';
       errorDiv.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#e74c3c" width="48" height="48">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
-        </svg>
-        <h3>Error al cargar los eventos</h3>
-        <p>Los datos de eventos no están disponibles</p>
-      `;
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#e74c3c" width="48" height="48">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                </svg>
+                <h3>Error al cargar los eventos</h3>
+                <p>Los datos de eventos no están disponibles</p>
+            `;
       document.getElementById('events-list')?.appendChild(errorDiv);
     }
   } catch (error) {

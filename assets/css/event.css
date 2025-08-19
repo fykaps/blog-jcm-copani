@@ -157,6 +157,7 @@
 .events-list {
     display: grid;
     gap: var(--space-4);
+    margin-bottom: var(--space-6);
 }
 
 .event-card {
@@ -170,6 +171,7 @@
     transition: all var(--duration-300) var(--ease-in-out);
     position: relative;
     overflow: hidden;
+    cursor: pointer;
 }
 
 .event-card:hover {
@@ -397,6 +399,7 @@
     gap: var(--space-3);
     padding: var(--space-3) 0;
     border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
 }
 
 .upcoming-event:last-child {
@@ -503,6 +506,7 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
+    cursor: pointer;
 }
 
 .featured-event-image {
@@ -642,6 +646,7 @@
 .event-modal-header {
     position: relative;
     padding: var(--space-6) var(--space-6) var(--space-4);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .event-modal-close {
@@ -734,8 +739,50 @@
 
 .event-modal-description {
     line-height: var(--leading-relaxed);
-    margin-bottom: var(--space-6);
+    margin-bottom: var(--space-4);
     color: var(--color-gray-700);
+}
+
+/* Sección de temas/topics */
+.event-modal-topics {
+    margin-bottom: var(--space-6);
+}
+
+.topics-title {
+    font-size: var(--text-lg);
+    font-weight: var(--font-semibold);
+    margin-bottom: var(--space-3);
+    color: var(--color-gray-900);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.topics-title svg {
+    color: var(--color-primary);
+}
+
+.topics-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.topic-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+    padding: var(--space-3);
+    background-color: var(--color-gray-50);
+    border-radius: var(--radius);
+    border-left: 3px solid var(--color-primary);
+}
+
+.topic-item::before {
+    content: "•";
+    color: var(--color-primary);
+    font-weight: var(--font-bold);
+    flex-shrink: 0;
 }
 
 .event-modal-counter {
@@ -825,6 +872,57 @@
     background-color: var(--color-primary-dark);
 }
 
+/* Paginación */
+.pagination-wrapper {
+    margin-top: var(--space-6);
+    display: flex;
+    justify-content: center;
+}
+
+.pagination {
+    display: flex;
+    gap: var(--space-2);
+    align-items: center;
+}
+
+.pagination-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.5rem;
+    height: 2.5rem;
+    padding: 0 var(--space-2);
+    border-radius: var(--radius);
+    background-color: var(--bg-secondary);
+    color: var(--text-color);
+    font-weight: var(--font-medium);
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: all var(--duration-200) var(--ease-in-out);
+}
+
+.pagination-button:hover:not(.disabled, .active) {
+    background-color: var(--color-primary-light);
+    color: white;
+    border-color: var(--color-primary-light);
+}
+
+.pagination-button.active {
+    background-color: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+}
+
+.pagination-button.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.pagination-ellipsis {
+    padding: 0 var(--space-2);
+    color: var(--color-gray-500);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .event-card {
@@ -837,7 +935,7 @@
         gap: var(--space-2);
     }
 
-.event-modal {
+    .event-modal {
         padding: var(--space-2);
     }
     
@@ -868,6 +966,11 @@
     
     .event-modal-button {
         width: 100%;
+        justify-content: center;
+    }
+    
+    .pagination {
+        flex-wrap: wrap;
         justify-content: center;
     }
 }
