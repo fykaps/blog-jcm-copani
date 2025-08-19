@@ -57,13 +57,20 @@ class NewsManager {
         let filteredNews = [...this.news];
 
         if (filter === 'search' && searchQuery) {
+            const normalizedQuery = this.normalizeText(searchQuery);
             filteredNews = filteredNews.filter(news => {
-                const query = searchQuery.toLowerCase();
+                // Normalizar todos los campos de texto para la búsqueda
+                const normalizedTitle = this.normalizeText(news.title);
+                const normalizedExcerpt = this.normalizeText(news.excerpt);
+                const normalizedContent = this.normalizeText(news.content);
+                const normalizedTags = news.tags.map(tag => this.normalizeText(tag));
+
+                // Buscar en todos los campos normalizados
                 return (
-                    news.title.toLowerCase().includes(query) ||
-                    news.excerpt.toLowerCase().includes(query) ||
-                    news.content.toLowerCase().includes(query) ||
-                    news.tags.some(tag => tag.toLowerCase().includes(query))
+                    normalizedTitle.includes(normalizedQuery) ||
+                    normalizedExcerpt.includes(normalizedQuery) ||
+                    normalizedContent.includes(normalizedQuery) ||
+                    normalizedTags.some(tag => tag.includes(normalizedQuery))
                 );
             });
         } else if (filter === 'category') {
@@ -87,13 +94,15 @@ class NewsManager {
         if (filteredNews.length === 0) {
             let message = '';
             if (filter === 'search' && searchQuery) {
+                // Mostrar la consulta original, no la normalizada
+                const originalQuery = document.getElementById('search-input')?.value || searchQuery;
                 message = `
                     <div class="no-results">
                         <svg width="48" height="48" viewBox="0 0 24 24">
                             <path fill="currentColor" d="M15.5 12c2.5 0 4.5 2 4.5 4.5 0 .88-.25 1.71-.69 2.4l3.08 3.1L21 23.39l-3.12-3.07c-.69.43-1.51.68-2.38.68-2.5 0-4.5-2-4.5-4.5s2-4.5 4.5-4.5m0 2a2.5 2.5 0 0 0-2.5 2.5 2.5 2.5 0 0 0 2.5 2.5 2.5 2.5 0 0 0 2.5-2.5 2.5 2.5 0 0 0-2.5-2.5M10 4a4 4 0 0 1 4 4c0 .73-.19 1.41-.54 2H18a2 2 0 0 1 2 2v6c0 .24-.04.47-.12.68A6.5 6.5 0 0 0 20 16.5V10l-6-6H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h5.5c.31.75.76 1.42 1.31 2H6a4 4 0 0 1-4-4V6a4 4 0 0 1 4-4h4m0 2H6v2h4V6m0 4H6v2h4v-2m0 4H6v2h4v-2Z"/>
                         </svg>
                         <h3>No se encontraron noticias</h3>
-                        <p>No hay resultados para "${searchQuery}".</p>
+                        <p>No hay resultados para "${originalQuery}".</p>
                         <button class="reset-search" onclick="newsManager.resetFilters()">Mostrar todas las noticias</button>
                     </div>
                 `;
@@ -133,16 +142,20 @@ class NewsManager {
 
             newsContainer.innerHTML = message;
 
-            // Ocultar paginación si existe
+            // Ocultar paginación si no hay resultados
             if (paginationWrapper) {
                 paginationWrapper.style.display = 'none';
             }
             return;
         }
 
-        // Mostrar paginación si existe
+        // Mostrar paginación solo si hay más de una página
         if (paginationWrapper) {
-            paginationWrapper.style.display = 'flex';
+            if (this.totalPages > 1) {
+                paginationWrapper.style.display = 'flex';
+            } else {
+                paginationWrapper.style.display = 'none';
+            }
         }
 
         // Obtener noticias para la página actual
@@ -340,18 +353,57 @@ class NewsManager {
         // Implementar sugerencias de búsqueda si es necesario
     }
 
+    normalizeText(text) {
+        if (!text) return '';
+
+        return text.toString()
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '') // Eliminar diacríticos
+            .replace(/[^a-z0-9\s]/g, '')     // Eliminar caracteres especiales
+            .trim();
+    }
+
     performSearch(query) {
-        this.currentSearchQuery = query.trim();
+        // Normalizar la consulta
+        const normalizedQuery = this.normalizeText(query);
+        this.currentSearchQuery = normalizedQuery;
         this.currentPage = 1;
         this.currentFilter = this.currentSearchQuery === '' ? 'all' : 'search';
 
         if (this.currentSearchQuery === '') {
             this.resetFilters();
-            document.getElementById('search-input').value = '';
+            const searchInput = document.getElementById('search-input');
+            if (searchInput) searchInput.value = '';
             return;
         }
 
-        this.renderNewsList('search', this.currentSearchQuery);
+        // Mostrar estado de carga
+        this.showLoadingState();
+
+        // Pequeño retraso para permitir que la UI se actualice
+        setTimeout(() => {
+            this.renderNewsList('search', this.currentSearchQuery);
+        }, 100);
+    }
+
+    showLoadingState() {
+        const newsContainer = document.getElementById('all-news-container');
+        const paginationWrapper = document.getElementById('news-pagination-wrapper');
+
+        if (!newsContainer) return;
+
+        newsContainer.innerHTML = `
+            <div class="loading-state">
+                <div class="loading-spinner"></div>
+                <p>Buscando noticias...</p>
+            </div>
+        `;
+
+        // Ocultar paginación durante la búsqueda
+        if (paginationWrapper) {
+            paginationWrapper.style.display = 'none';
+        }
     }
 
     filterByCategory(category) {
