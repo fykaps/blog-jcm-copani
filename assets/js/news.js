@@ -1,26 +1,38 @@
 /**
- * Sistema de gestión de noticias profesional
+ * Sistema de gestión de noticias profesional - VERSIÓN CORREGIDA
+ * - Problema de imágenes solucionado
  * - Paginación avanzada
  * - Filtrado por categorías y etiquetas
  * - Búsqueda con sugerencias
  * - Gestión de likes y vistas
- * - Carga diferida de imágenes
+ * - Carga diferida de imágenes mejorada
  */
 
 class NewsManager {
-    constructor() {
-        this.currentPage = 1;
-        this.newsPerPage = 6;
-        this.currentNewsSet = [];
+    constructor(newsData, options = {}) {
+        this.news = newsData;
+        this.options = {
+            newsPerPage: 6,
+            ...options
+        };
         this.currentFilter = 'all';
         this.currentSearchQuery = '';
+        this.currentPage = 1;
+        this.totalPages = 1;
+        this.activeNews = [];
         this.initialized = false;
+        this.imageObserver = null; // Observer para imágenes
     }
 
     init() {
         if (this.initialized) return;
 
-        this.loadNewsData();
+        this.renderNewsList();
+        this.displayFeaturedNews();
+        this.displayRecentNews();
+        this.displayPopularNews();
+        this.displayCategories();
+        this.displayPopularTags();
         this.setupSearch();
         this.setupEventListeners();
         this.setupIntersectionObserver();
@@ -28,15 +40,288 @@ class NewsManager {
         this.initialized = true;
     }
 
-    loadNewsData() {
-        this.currentNewsSet = [...newsData];
-        this.displayAllNews();
-        this.displayFeaturedNews();
-        this.displayRecentNews();
-        this.displayPopularNews();
-        this.displayCategories();
-        this.displayPopularTags();
+    // ======================
+    //  RENDERIZADO PRINCIPAL
+    // ======================
+
+    renderNewsList(filter = 'all', searchQuery = '') {
+        const newsContainer = document.getElementById('all-news-container');
+        const paginationWrapper = document.getElementById('news-pagination-wrapper');
+
+        if (!newsContainer) return;
+
+        // Limpiar contenido anterior
+        this.activeNews = [];
+
+        // Filtrar noticias
+        let filteredNews = [...this.news];
+
+        if (filter === 'search' && searchQuery) {
+            filteredNews = filteredNews.filter(news => {
+                const query = searchQuery.toLowerCase();
+                return (
+                    news.title.toLowerCase().includes(query) ||
+                    news.excerpt.toLowerCase().includes(query) ||
+                    news.content.toLowerCase().includes(query) ||
+                    news.tags.some(tag => tag.toLowerCase().includes(query))
+                );
+            });
+        } else if (filter === 'category') {
+            filteredNews = filteredNews.filter(news => news.category === searchQuery);
+        } else if (filter === 'tag') {
+            filteredNews = filteredNews.filter(news => news.tags.includes(searchQuery));
+        }
+
+        // Ordenar por fecha (más recientes primero)
+        filteredNews.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        this.activeNews = filteredNews;
+        this.totalPages = Math.ceil(filteredNews.length / this.options.newsPerPage);
+
+        // Asegurar que la página actual sea válida
+        if (this.currentPage > this.totalPages) {
+            this.currentPage = this.totalPages > 0 ? this.totalPages : 1;
+        }
+
+        // Mostrar mensaje si no hay noticias
+        if (filteredNews.length === 0) {
+            let message = '';
+            if (filter === 'search' && searchQuery) {
+                message = `
+                    <div class="no-results">
+                        <svg width="48" height="48" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M15.5 12c2.5 0 4.5 2 4.5 4.5 0 .88-.25 1.71-.69 2.4l3.08 3.1L21 23.39l-3.12-3.07c-.69.43-1.51.68-2.38.68-2.5 0-4.5-2-4.5-4.5s2-4.5 4.5-4.5m0 2a2.5 2.5 0 0 0-2.5 2.5 2.5 2.5 0 0 0 2.5 2.5 2.5 2.5 0 0 0 2.5-2.5 2.5 2.5 0 0 0-2.5-2.5M10 4a4 4 0 0 1 4 4c0 .73-.19 1.41-.54 2H18a2 2 0 0 1 2 2v6c0 .24-.04.47-.12.68A6.5 6.5 0 0 0 20 16.5V10l-6-6H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h5.5c.31.75.76 1.42 1.31 2H6a4 4 0 0 1-4-4V6a4 4 0 0 1 4-4h4m0 2H6v2h4V6m0 4H6v2h4v-2m0 4H6v2h4v-2Z"/>
+                        </svg>
+                        <h3>No se encontraron noticias</h3>
+                        <p>No hay resultados para "${searchQuery}".</p>
+                        <button class="reset-search" onclick="newsManager.resetFilters()">Mostrar todas las noticias</button>
+                    </div>
+                `;
+            } else if (filter === 'category') {
+                message = `
+                    <div class="no-results">
+                        <svg width="48" height="48" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                        </svg>
+                        <h3>No hay noticias en esta categoría</h3>
+                        <p>No hay publicaciones en la categoría "${searchQuery}".</p>
+                        <button class="reset-search" onclick="newsManager.resetFilters()">Mostrar todas las noticias</button>
+                    </div>
+                `;
+            } else if (filter === 'tag') {
+                message = `
+                    <div class="no-results">
+                        <svg width="48" height="48" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M5.5 7A1.5 1.5 0 0 1 4 5.5A1.5 1.5 0 0 1 5.5 4A1.5 1.5 0 0 1 7 5.5A1.5 1.5 0 0 1 5.5 7m15.91 4.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.11 0-2 .89-2 2v7c0 .55.22 1.05.59 1.41l8.99 9c.37.36.87.59 1.42.59c.55 0 1.05-.23 1.41-.59l7-7c.37-.36.59-.86.59-1.41c0-.56-.23-1.06-.59-1.42z"/>
+                        </svg>
+                        <h3>No hay noticias con esta etiqueta</h3>
+                        <p>No hay publicaciones con la etiqueta "${searchQuery}".</p>
+                        <button class="reset-search" onclick="newsManager.resetFilters()">Mostrar todas las noticias</button>
+                    </div>
+                `;
+            } else {
+                message = `
+                    <div class="no-results">
+                        <svg width="48" height="48" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M13 13h-2V7h2m0 10h-2v-2h2M12 2A10 10 0 002 12a10 10 0 0010 10a10 10 0 0010-10A10 10 0 0012 2z"/>
+                        </svg>
+                        <h3>No hay noticias disponibles</h3>
+                        <p>Pronto publicaremos nuevas noticias.</p>
+                    </div>
+                `;
+            }
+
+            newsContainer.innerHTML = message;
+
+            // Ocultar paginación si existe
+            if (paginationWrapper) {
+                paginationWrapper.style.display = 'none';
+            }
+            return;
+        }
+
+        // Mostrar paginación si existe
+        if (paginationWrapper) {
+            paginationWrapper.style.display = 'flex';
+        }
+
+        // Obtener noticias para la página actual
+        const startIndex = (this.currentPage - 1) * this.options.newsPerPage;
+        const endIndex = startIndex + this.options.newsPerPage;
+        const paginatedNews = filteredNews.slice(startIndex, endIndex);
+
+        // Renderizar noticias
+        newsContainer.innerHTML = paginatedNews.map(news => `
+            <article class="news-card">
+                <div class="news-image">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 200'%3E%3Crect width='300' height='200' fill='%23f3f4f6'/%3E%3C/svg%3E" 
+                         data-src="${news.image}" 
+                         alt="${news.title}" 
+                         loading="lazy"
+                         class="lazy-image">
+                </div>
+                <div class="news-content">
+                    <div class="news-meta">
+                        <span class="news-date">${this.formatDate(news.date)}</span>
+                        <span class="news-category">${news.category}</span>
+                    </div>
+                    <h3 class="news-title">${news.title}</h3>
+                    <p class="news-excerpt">${news.excerpt}</p>
+                    <div class="news-actions">
+                        <a href="news-detail.html?id=${news.id}" class="read-more">Ver más</a>
+                        <button class="like-button ${this.isNewsLiked(news.id) ? 'liked' : ''}" data-id="${news.id}">
+                            <svg viewBox="0 0 24 24" width="16" height="16">
+                                <path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                            </svg>
+                            <span class="like-count">${this.getLikes(news.id)}</span>
+                        </button>
+                    </div>
+                    <div class="news-tags">
+                        ${news.tags.map(tag => `<a href="#" class="tag" data-tag="${tag}">${tag}</a>`).join('')}
+                    </div>
+                </div>
+            </article>
+        `).join('');
+
+        // Configurar eventos para etiquetas
+        document.querySelectorAll('.tag').forEach(tag => {
+            tag.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.filterByTag(tag.getAttribute('data-tag'));
+            });
+        });
+
+        // Renderizar paginación
+        this.renderPagination();
+
+        // Actualizar UI de filtros
+        this.updateFilterUI(filter, searchQuery);
+
+        // IMPORTANTE: Reactivar el observer para las nuevas imágenes
+        this.setupImageLoading();
     }
+
+    // ======================
+    //  CARGA DE IMÁGENES MEJORADA
+    // ======================
+
+    setupIntersectionObserver() {
+        // Configurar observer para imágenes
+        this.setupImageLoading();
+    }
+
+    setupImageLoading() {
+        // Limpiar observer existente si hay uno
+        if (this.imageObserver) {
+            this.imageObserver.disconnect();
+        }
+
+        // Crear nuevo observer para imágenes
+        this.imageObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    if (img.dataset.src) {
+                        img.src = img.dataset.src;
+                        img.removeAttribute('data-src');
+                        img.classList.remove('lazy-image');
+                        img.classList.add('loaded-image');
+                    }
+                    this.imageObserver.unobserve(img);
+                }
+            });
+        }, {
+            rootMargin: '200px',
+            threshold: 0.01
+        });
+
+        // Observar todas las imágenes con carga diferida
+        document.querySelectorAll('.lazy-image').forEach(img => {
+            this.imageObserver.observe(img);
+        });
+    }
+
+    // ======================
+    //  PAGINACIÓN
+    // ======================
+
+    renderPagination() {
+        const paginationContainer = document.getElementById('news-pagination');
+        if (!paginationContainer || this.totalPages <= 1) {
+            if (paginationContainer) paginationContainer.innerHTML = '';
+            return;
+        }
+
+        let html = `
+            <button class="pagination-button ${this.currentPage === 1 ? 'disabled' : ''}" 
+                    onclick="newsManager.changePage(${this.currentPage - 1})" ${this.currentPage === 1 ? 'disabled' : ''}>
+                &lt;
+            </button>
+        `;
+
+        // Mostrar siempre la primera página
+        html += `
+            <button class="pagination-button ${this.currentPage === 1 ? 'active' : ''}" 
+                    onclick="newsManager.changePage(1)">
+                1
+            </button>
+        `;
+
+        // Mostrar puntos suspensivos si hay muchas páginas
+        if (this.totalPages > 5 && this.currentPage > 3) {
+            html += `<span class="pagination-ellipsis">...</span>`;
+        }
+
+        // Mostrar páginas alrededor de la actual
+        const startPage = Math.max(2, this.currentPage - 1);
+        const endPage = Math.min(this.totalPages - 1, this.currentPage + 1);
+
+        for (let i = startPage; i <= endPage; i++) {
+            if (i > 1 && i < this.totalPages) {
+                html += `
+                    <button class="pagination-button ${this.currentPage === i ? 'active' : ''}" 
+                            onclick="newsManager.changePage(${i})">
+                        ${i}
+                    </button>
+                `;
+            }
+        }
+
+        // Mostrar puntos suspensivos si hay muchas páginas
+        if (this.totalPages > 5 && this.currentPage < this.totalPages - 2) {
+            html += `<span class="pagination-ellipsis">...</span>`;
+        }
+
+        // Mostrar siempre la última página
+        if (this.totalPages > 1) {
+            html += `
+                <button class="pagination-button ${this.currentPage === this.totalPages ? 'active' : ''}" 
+                        onclick="newsManager.changePage(${this.totalPages})">
+                    ${this.totalPages}
+                </button>
+            `;
+        }
+
+        html += `
+            <button class="pagination-button ${this.currentPage === this.totalPages ? 'disabled' : ''}" 
+                    onclick="newsManager.changePage(${this.currentPage + 1})" ${this.currentPage === this.totalPages ? 'disabled' : ''}>
+                &gt;
+            </button>
+        `;
+
+        paginationContainer.innerHTML = html;
+    }
+
+    changePage(page) {
+        if (page < 1 || page > this.totalPages) return;
+        this.currentPage = page;
+        this.renderNewsList(this.currentFilter, this.currentSearchQuery);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ======================
+    //  FILTROS Y BÚSQUEDA
+    // ======================
 
     setupSearch() {
         const searchButton = document.getElementById('search-button');
@@ -66,80 +351,21 @@ class NewsManager {
             return;
         }
 
-        const filteredNews = newsData.filter(news => {
-            const searchText = this.currentSearchQuery.toLowerCase();
-            return (
-                news.title.toLowerCase().includes(searchText) ||
-                news.excerpt.toLowerCase().includes(searchText) ||
-                news.content.toLowerCase().includes(searchText) ||
-                news.tags.some(tag => tag.toLowerCase().includes(searchText))
-            );
-        });
-
-        this.updateFilterUI(`Búsqueda: "${this.currentSearchQuery}"`, `Resultados para "${this.currentSearchQuery}"`);
-        this.currentNewsSet = filteredNews;
-        this.displayPaginatedNews();
+        this.renderNewsList('search', this.currentSearchQuery);
     }
 
-    setupEventListeners() {
-        document.addEventListener('click', (e) => {
-            if (e.target.closest('.like-button')) {
-                const button = e.target.closest('.like-button');
-                this.handleLike(button);
-            }
-        });
-
-        document.getElementById('reset-filters')?.addEventListener('click', () => this.resetFilters());
+    filterByCategory(category) {
+        this.currentFilter = 'category';
+        this.currentSearchQuery = category;
+        this.currentPage = 1;
+        this.renderNewsList('category', category);
     }
 
-    setupIntersectionObserver() {
-        // Carga diferida de imágenes
-        const lazyImages = document.querySelectorAll('.news-image img[loading="lazy"]');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const img = entry.target;
-                    img.src = img.dataset.src || img.src;
-                    img.removeAttribute('data-src');
-                    observer.unobserve(img);
-                }
-            });
-        }, {
-            rootMargin: '200px'
-        });
-
-        lazyImages.forEach(img => observer.observe(img));
-    }
-
-    updateFilterUI(title, description) {
-        const filterTitle = document.getElementById('filter-title');
-        const filterDescription = document.getElementById('filter-description');
-        const resetButton = document.getElementById('reset-filters');
-
-        if (filterTitle) filterTitle.textContent = title;
-        if (filterDescription) filterDescription.textContent = description;
-        if (resetButton) resetButton.style.display = this.currentFilter === 'all' ? 'none' : 'flex';
-    }
-
-    displayAllNews() {
-        let filteredNews = [...newsData];
-        let title = 'Todas las noticias';
-        let description = 'Las últimas publicaciones de nuestro blog escolar';
-
-        if (this.currentFilter === 'category') {
-            filteredNews = filteredNews.filter(news => news.category === this.currentSearchQuery);
-            title = `Categoría: ${this.currentSearchQuery}`;
-            description = `Mostrando noticias de la categoría ${this.currentSearchQuery}`;
-        }
-        else if (this.currentFilter === 'tag') {
-            filteredNews = filteredNews.filter(news => news.tags.includes(this.currentSearchQuery));
-            title = `Etiqueta: ${this.currentSearchQuery}`;
-            description = `Mostrando noticias con la etiqueta ${this.currentSearchQuery}`;
-        }
-
-        this.updateFilterUI(title, description);
-        this.currentNewsSet = filteredNews.sort((a, b) => new Date(b.date) - new Date(a.date));
-        this.displayPaginatedNews();
+    filterByTag(tag) {
+        this.currentFilter = 'tag';
+        this.currentSearchQuery = tag;
+        this.currentPage = 1;
+        this.renderNewsList('tag', tag);
     }
 
     resetFilters() {
@@ -150,116 +376,85 @@ class NewsManager {
         document.querySelectorAll('.filter-button, .category-link, .tag').forEach(btn => {
             btn.classList.remove('active');
         });
-        document.querySelector('.filter-button[data-filter="all"]')?.classList.add('active');
-        document.getElementById('search-input').value = '';
 
-        this.updateFilterUI('Todas las noticias', 'Las últimas publicaciones de nuestro blog escolar');
-        this.loadNewsData();
-    }
-
-    displayPaginatedNews() {
-        const container = document.getElementById('all-news-container');
-        const paginationContainer = document.getElementById('news-pagination');
-        const resetButton = document.getElementById('reset-filters');
-
-        if (!container) return;
-
-        const startIndex = (this.currentPage - 1) * this.newsPerPage;
-        const endIndex = startIndex + this.newsPerPage;
-        const paginatedNews = this.currentNewsSet.slice(startIndex, endIndex);
-        const totalPages = Math.ceil(this.currentNewsSet.length / this.newsPerPage);
-
-        if (this.currentNewsSet.length === 0) {
-            if (resetButton) resetButton.style.display = 'none';
-
-            container.innerHTML = `
-                <div class="no-results">
-                    <svg width="48" height="48" viewBox="0 0 24 24">
-                        <path fill="currentColor" d="M15.5 12c2.5 0 4.5 2 4.5 4.5 0 .88-.25 1.71-.69 2.4l3.08 3.1L21 23.39l-3.12-3.07c-.69.43-1.51.68-2.38.68-2.5 0-4.5-2-4.5-4.5s2-4.5 4.5-4.5m0 2a2.5 2.5 0 0 0-2.5 2.5 2.5 2.5 0 0 0 2.5 2.5 2.5 2.5 0 0 0 2.5-2.5 2.5 2.5 0 0 0-2.5-2.5M10 4a4 4 0 0 1 4 4c0 .73-.19 1.41-.54 2H18a2 2 0 0 1 2 2v6c0 .24-.04.47-.12.68A6.5 6.5 0 0 0 20 16.5V10l-6-6H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h5.5c.31.75.76 1.42 1.31 2H6a4 4 0 0 1-4-4V6a4 4 0 0 1 4-4h4m0 2H6v2h4V6m0 4H6v2h4v-2m0 4H6v2h4v-2Z"/>
-                    </svg>
-                    <h3>No se encontraron noticias</h3>
-                    <p>No hay resultados para los filtros aplicados.</p>
-                    <button class="reset-search" onclick="newsManager.resetFilters()">Mostrar todas las noticias</button>
-                </div>
-            `;
-            if (paginationContainer) paginationContainer.innerHTML = '';
-            return;
+        const allFilterButton = document.querySelector('.filter-button[data-filter="all"]');
+        if (allFilterButton) {
+            allFilterButton.classList.add('active');
         }
 
-        container.innerHTML = paginatedNews.map(news => `
-            <article class="news-card">
-                <div class="news-image">
-                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 200'%3E%3Crect width='300' height='200' fill='%23f3f4f6'/%3E%3C/svg%3E" 
-                         data-src="${news.image}" 
-                         alt="${news.title}" 
-                         loading="lazy">
-                </div>
-                <div class="news-content">
-                    <div class="news-meta">
-                        <span class="news-date">${this.formatDate(news.date)}</span>
-                        <span class="news-category">${news.category}</span>
-                    </div>
-                    <h3 class="news-title">${news.title}</h3>
-                    <p class="news-excerpt">${news.excerpt}</p>
-                    <div class="news-actions">
-                        <a href="news-detail.html?id=${news.id}" class="read-more">Ver más</a>
-                        <button class="like-button ${this.isNewsLiked(news.id) ? 'liked' : ''}" data-id="${news.id}">
-                            <svg viewBox="0 0 24 24" width="16" height="16">
-                                <path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                            </svg>
-                            <span class="like-count">${this.getLikes(news.id)}</span>
-                        </button>
-                    </div>
-                    <div class="news-tags">
-                        ${news.tags.map(tag => `<a href="#" class="tag" data-tag="${tag}">${tag}</a>`).join('')}
-                    </div>
-                </div>
-            </article>
-        `).join('');
+        const searchInput = document.getElementById('search-input');
+        if (searchInput) {
+            searchInput.value = '';
+        }
 
-        document.querySelectorAll('.tag').forEach(tag => {
-            tag.addEventListener('click', (e) => {
-                e.preventDefault();
-                this.currentFilter = 'tag';
-                this.currentSearchQuery = tag.getAttribute('data-tag');
-                this.currentPage = 1;
-                this.displayAllNews();
-            });
-        });
-
-        this.renderPagination(totalPages);
-        this.setupIntersectionObserver();
+        this.renderNewsList('all', '');
     }
+
+    updateFilterUI(filter, query) {
+        const filterTitle = document.getElementById('filter-title');
+        const filterDescription = document.getElementById('filter-description');
+        const resetButton = document.getElementById('reset-filters');
+
+        let title = 'Todas las noticias';
+        let description = 'Las últimas publicaciones de nuestro blog escolar';
+
+        if (filter === 'search') {
+            title = `Búsqueda: "${query}"`;
+            description = `Resultados para "${query}"`;
+        } else if (filter === 'category') {
+            title = `Categoría: ${query}`;
+            description = `Mostrando noticias de la categoría ${query}`;
+        } else if (filter === 'tag') {
+            title = `Etiqueta: ${query}`;
+            description = `Mostrando noticias con la etiqueta ${query}`;
+        }
+
+        if (filterTitle) filterTitle.textContent = title;
+        if (filterDescription) filterDescription.textContent = description;
+        if (resetButton) {
+            resetButton.style.display = this.currentFilter === 'all' ? 'none' : 'flex';
+        }
+    }
+
+    // ======================
+    //  COMPONENTES ADICIONALES
+    // ======================
 
     displayFeaturedNews() {
         const container = document.getElementById('featured-news-container');
         if (!container) return;
 
-        const featuredNews = newsData.filter(news => news.featured).slice(0, 2);
+        const featuredNews = this.news.filter(news => news.featured).slice(0, 2);
 
         container.innerHTML = featuredNews.length === 0 ?
             '<p class="no-results">No hay noticias destacadas.</p>' :
             featuredNews.map(news => this.createNewsCard(news, true)).join('');
+
+        // Asegurar que las imágenes destacadas se carguen
+        setTimeout(() => this.setupImageLoading(), 100);
     }
 
     displayRecentNews() {
         const container = document.getElementById('recent-news-container');
         if (!container) return;
 
-        const recentNews = [...newsData]
+        const recentNews = [...this.news]
             .sort((a, b) => new Date(b.date) - new Date(a.date))
             .slice(0, 4);
 
         container.innerHTML = recentNews.length === 0 ?
             '<p class="no-results">No hay noticias recientes.</p>' :
             recentNews.map(news => this.createNewsCard(news)).join('');
+
+        // Asegurar que las imágenes recientes se carguen
+        setTimeout(() => this.setupImageLoading(), 100);
     }
 
     displayPopularNews() {
         const container = document.getElementById('popular-news-container');
         if (!container) return;
 
-        const popularNews = [...newsData]
+        const popularNews = [...this.news]
             .sort((a, b) => this.getViews(b.id) - this.getViews(a.id))
             .slice(0, 3);
 
@@ -268,7 +463,7 @@ class NewsManager {
             popularNews.map(news => `
                 <div class="popular-news-item">
                     <div class="popular-news-image">
-                        <img src="${news.image}" alt="${news.title}" loading="lazy">
+                        <img src="${news.image}" alt="${news.title}" loading="lazy" class="lazy-image">
                     </div>
                     <div>
                         <h4 class="popular-news-title">
@@ -278,6 +473,9 @@ class NewsManager {
                     </div>
                 </div>
             `).join('');
+
+        // Asegurar que las imágenes populares se carguen
+        setTimeout(() => this.setupImageLoading(), 100);
     }
 
     displayCategories() {
@@ -285,7 +483,7 @@ class NewsManager {
         if (!container) return;
 
         const categoryCounts = {};
-        newsData.forEach(news => {
+        this.news.forEach(news => {
             categoryCounts[news.category] = (categoryCounts[news.category] || 0) + 1;
         });
 
@@ -305,10 +503,7 @@ class NewsManager {
         document.querySelectorAll('.category-link').forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
-                this.currentFilter = 'category';
-                this.currentSearchQuery = link.getAttribute('data-category');
-                this.currentPage = 1;
-                this.displayAllNews();
+                this.filterByCategory(link.getAttribute('data-category'));
             });
         });
     }
@@ -318,7 +513,7 @@ class NewsManager {
         if (!container) return;
 
         const tagCounts = {};
-        newsData.forEach(news => {
+        this.news.forEach(news => {
             news.tags.forEach(tag => {
                 tagCounts[tag] = (tagCounts[tag] || 0) + 1;
             });
@@ -338,93 +533,34 @@ class NewsManager {
         document.querySelectorAll('#tags-container .tag').forEach(tag => {
             tag.addEventListener('click', (e) => {
                 e.preventDefault();
-                this.currentFilter = 'tag';
-                this.currentSearchQuery = tag.getAttribute('data-tag');
-                this.currentPage = 1;
-                this.displayAllNews();
+                this.filterByTag(tag.getAttribute('data-tag'));
             });
         });
     }
 
-    renderPagination(totalPages) {
-        const container = document.getElementById('news-pagination');
-        if (!container || totalPages <= 1) {
-            if (container) container.innerHTML = '';
-            return;
-        }
+    // ======================
+    //  FUNCIONES UTILITARIAS
+    // ======================
 
-        let html = `
-            <button class="pagination-button ${this.currentPage === 1 ? 'disabled' : ''}" 
-                    onclick="newsManager.changePage(${this.currentPage - 1})" ${this.currentPage === 1 ? 'disabled' : ''}>
-                &lt;
-            </button>
-        `;
-
-        // Mostrar siempre la primera página
-        html += `
-            <button class="pagination-button ${this.currentPage === 1 ? 'active' : ''}" 
-                    onclick="newsManager.changePage(1)">
-                1
-            </button>
-        `;
-
-        // Mostrar puntos suspensivos si hay muchas páginas
-        if (totalPages > 5 && this.currentPage > 3) {
-            html += `<span class="pagination-ellipsis">...</span>`;
-        }
-
-        // Mostrar páginas alrededor de la actual
-        const startPage = Math.max(2, this.currentPage - 1);
-        const endPage = Math.min(totalPages - 1, this.currentPage + 1);
-
-        for (let i = startPage; i <= endPage; i++) {
-            if (i > 1 && i < totalPages) {
-                html += `
-                    <button class="pagination-button ${this.currentPage === i ? 'active' : ''}" 
-                            onclick="newsManager.changePage(${i})">
-                        ${i}
-                    </button>
-                `;
+    setupEventListeners() {
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.like-button')) {
+                const button = e.target.closest('.like-button');
+                this.handleLike(button);
             }
+        });
+
+        const resetButton = document.getElementById('reset-filters');
+        if (resetButton) {
+            resetButton.addEventListener('click', () => this.resetFilters());
         }
-
-        // Mostrar puntos suspensivos si hay muchas páginas
-        if (totalPages > 5 && this.currentPage < totalPages - 2) {
-            html += `<span class="pagination-ellipsis">...</span>`;
-        }
-
-        // Mostrar siempre la última página
-        if (totalPages > 1) {
-            html += `
-                <button class="pagination-button ${this.currentPage === totalPages ? 'active' : ''}" 
-                        onclick="newsManager.changePage(${totalPages})">
-                    ${totalPages}
-                </button>
-            `;
-        }
-
-        html += `
-            <button class="pagination-button ${this.currentPage === totalPages ? 'disabled' : ''}" 
-                    onclick="newsManager.changePage(${this.currentPage + 1})" ${this.currentPage === totalPages ? 'disabled' : ''}>
-                &gt;
-            </button>
-        `;
-
-        container.innerHTML = html;
-    }
-
-    changePage(page) {
-        if (page < 1 || page > Math.ceil(this.currentNewsSet.length / this.newsPerPage)) return;
-        this.currentPage = page;
-        this.displayPaginatedNews();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     createNewsCard(news, featured = false) {
         return `
             <article class="news-card ${featured ? 'featured' : ''}">
                 <div class="news-image">
-                    <img src="${news.image}" alt="${news.title}" loading="lazy">
+                    <img src="${news.image}" alt="${news.title}" loading="lazy" class="lazy-image">
                 </div>
                 <div class="news-content">
                     <div class="news-meta">
@@ -474,7 +610,9 @@ class NewsManager {
 
         localStorage.setItem('newsLikes', JSON.stringify(likes));
         localStorage.setItem('userLikes', JSON.stringify(userLikes));
-        likeCount.textContent = likes[newsId] || 0;
+        if (likeCount) {
+            likeCount.textContent = likes[newsId] || 0;
+        }
     }
 
     isNewsLiked(newsId) {
@@ -508,13 +646,47 @@ class NewsManager {
             setTimeout(() => confetti.remove(), 1000);
         }, 3000);
     }
+
+    destroy() {
+        if (this.imageObserver) {
+            this.imageObserver.disconnect();
+        }
+        this.initialized = false;
+    }
 }
 
 // Instanciar y exportar el manager
-const newsManager = new NewsManager();
+let newsManager;
 
 // Inicializar cuando el DOM esté listo
-document.addEventListener('DOMContentLoaded', () => newsManager.init());
+document.addEventListener('DOMContentLoaded', () => {
+    try {
+        if (typeof newsData !== 'undefined') {
+            // Configuración personalizable
+            const options = {
+                newsPerPage: 6 // Puedes cambiar este valor según sea necesario
+            };
 
-// Hacer accesible globalmente
-window.newsManager = newsManager;
+            newsManager = new NewsManager(newsData, options);
+            newsManager.init();
+            window.newsManager = newsManager; // Hacer accesible globalmente
+        } else {
+            console.error('Error: newsData no está definido');
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#e74c3c" width="48" height="48">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                </svg>
+                <h3>Error al cargar las noticias</h3>
+                <p>Los datos de noticias no están disponibles</p>
+            `;
+            const newsContainer = document.getElementById('all-news-container');
+            if (newsContainer) {
+                newsContainer.appendChild(errorDiv);
+            }
+        }
+    } catch (error) {
+        console.error('Error al inicializar NewsManager:', error);
+    }
+});
