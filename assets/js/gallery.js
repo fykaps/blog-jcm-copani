@@ -1,12 +1,13 @@
 /**
- * GALERÍA DE EVENTOS - VERSIÓN PROFESIONAL
+ * GALERÍA DE EVENTOS - VERSIÓN PROFESIONAL MEJORADA
  * 
  * Características:
  * - Filtrado por categorías
  * - Animaciones fluidas
  * - Carga diferida de imágenes
- * - Sistema de conteo de medios
+ * - Sistema de conteo de medios con colores distintivos
  * - Diseño responsive
+ * - Estados de carga
  */
 
 class GalleryManager {
@@ -14,16 +15,31 @@ class GalleryManager {
         this.currentFilter = 'all';
         this.filteredEvents = [];
         this.initialized = false;
+        this.isLoading = false;
     }
 
     init() {
         if (this.initialized) return;
 
+        this.showLoadingState();
         this.displayGallery();
         this.setupGalleryFilters();
         this.setupIntersectionObserver();
 
         this.initialized = true;
+    }
+
+    showLoadingState() {
+        const container = document.getElementById('galleries-container');
+        if (!container) return;
+
+        container.innerHTML = `
+            <div class="gallery-loading">
+                ${Array(6).fill(0).map(() => `
+                    <div class="loading-card"></div>
+                `).join('')}
+            </div>
+        `;
     }
 
     displayGallery(filter = this.currentFilter) {
@@ -54,14 +70,16 @@ class GalleryManager {
 
             container.style.opacity = '1';
             this.setupIntersectionObserver();
+            this.updateFilterCounts();
         }, 300);
     }
 
     createEventCard(event) {
         return `
-            <article class="event-card animate-fade-in" data-id="${event.id}">
+            <article class="event-card animate-fade-in" data-id="${event.id}" data-category="${event.category}">
                 <div class="event-cover-container">
                     <div class="event-cover" style="background-image: url('${event.coverImage}')">
+                        <span class="event-category-badge">${event.category}</span>
                         <span class="media-count">
                             ${this.getMediaCount(event.media)}
                         </span>
@@ -73,7 +91,7 @@ class GalleryManager {
                         <h2 class="event-title">${event.title}</h2>
                         <div class="event-meta">
                             <span class="event-date">${this.formatDate(event.date)}</span>
-                            <span class="event-category">${event.category}</span>
+                            <span class="event-category">${this.getCategoryDisplayName(event.category)}</span>
                         </div>
                     </div>
                     
@@ -102,9 +120,9 @@ class GalleryManager {
 
         if (counts.image > 0) {
             html += `
-                <span class="media-count-item">
+                <span class="media-count-item image" title="${counts.image} imagen${counts.image !== 1 ? 'es' : ''}">
                     ${counts.image}
-                    <svg class="media-count-icon image" viewBox="0 0 24 24">
+                    <svg class="media-count-icon" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
                         <circle cx="12" cy="13" r="4"/>
                     </svg>
@@ -114,9 +132,9 @@ class GalleryManager {
 
         if (counts.video > 0) {
             html += `
-                <span class="media-count-item">
+                <span class="media-count-item video" title="${counts.video} video${counts.video !== 1 ? 's' : ''}">
                     ${counts.video}
-                    <svg class="media-count-icon video" viewBox="0 0 24 24">
+                    <svg class="media-count-icon" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M23 7l-7 5 7 5V7z"/>
                         <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
                     </svg>
@@ -126,9 +144,9 @@ class GalleryManager {
 
         if (counts.audio > 0) {
             html += `
-                <span class="media-count-item">
+                <span class="media-count-item audio" title="${counts.audio} audio${counts.audio !== 1 ? 's' : ''}">
                     ${counts.audio}
-                    <svg class="media-count-icon audio" viewBox="0 0 24 24">
+                    <svg class="media-count-icon" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
                         <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
                         <path d="M12 19v4"/>
@@ -141,14 +159,27 @@ class GalleryManager {
         return html;
     }
 
+    getCategoryDisplayName(category) {
+        const categories = {
+            'academic': 'Académico',
+            'sports': 'Deportes',
+            'cultural': 'Cultural',
+            'social': 'Social',
+            'other': 'Otros'
+        };
+
+        return categories[category] || category;
+    }
+
     createNoResultsMessage() {
         return `
             <div class="no-events">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
                     <path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/>
                     <path d="M9 10a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-4z"/>
                 </svg>
                 <h3>No hay eventos en esta categoría</h3>
+                <p>Intenta con otra categoría o vuelve a ver todos los eventos.</p>
                 <button class="reset-filter" onclick="galleryManager.resetFilters()">
                     Mostrar todos los eventos
                 </button>
@@ -168,7 +199,32 @@ class GalleryManager {
                 // Aplicar filtro
                 const filter = button.getAttribute('data-filter');
                 this.displayGallery(filter);
+
+                // Scroll suave al contenido
+                document.getElementById('galleries-container').scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
             });
+        });
+    }
+
+    updateFilterCounts() {
+        const filterButtons = document.querySelectorAll('.gallery-filters .filter-button');
+
+        filterButtons.forEach(button => {
+            const filter = button.getAttribute('data-filter');
+            if (filter === 'all') return;
+
+            const count = galleryData.filter(event => event.category === filter).length;
+            const countSpan = button.querySelector('.filter-count') || document.createElement('span');
+
+            if (!button.querySelector('.filter-count')) {
+                countSpan.className = 'filter-count';
+                button.appendChild(countSpan);
+            }
+
+            countSpan.textContent = ` (${count})`;
         });
     }
 
@@ -202,13 +258,17 @@ class GalleryManager {
     }
 
     truncateDescription(text, maxLength) {
-        if (text.length <= maxLength) return text;
+        if (!text || text.length <= maxLength) return text || 'Sin descripción disponible';
         return text.substring(0, maxLength) + '...';
     }
 
     formatDate(dateString) {
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        return new Date(dateString).toLocaleDateString('es-ES', options);
+        try {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('es-ES', options);
+        } catch (error) {
+            return dateString;
+        }
     }
 }
 
@@ -216,7 +276,10 @@ class GalleryManager {
 const galleryManager = new GalleryManager();
 
 // Inicializar cuando el DOM esté listo
-document.addEventListener('DOMContentLoaded', () => galleryManager.init());
+document.addEventListener('DOMContentLoaded', () => {
+    // Pequeño retraso para simular carga de datos
+    setTimeout(() => galleryManager.init(), 500);
+});
 
 // Hacer accesible globalmente
 window.galleryManager = galleryManager;
