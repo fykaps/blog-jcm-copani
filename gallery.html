@@ -1,28 +1,61 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="no-js">
 
 <head>
+    <!-- Metadatos mejorados para SEO -->
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog Escolar - Galería</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>Galería de Eventos - Blog Escolar</title>
+    <meta name="description"
+        content="Galería multimedia de eventos escolares con fotos, videos y audios de nuestras actividades">
+    <meta name="keywords" content="galería escolar, eventos colegio, fotos escolares, videos escolares">
+    <meta property="og:title" content="Galería de Eventos - Blog Escolar">
+    <meta property="og:description" content="Revive los mejores momentos de nuestras actividades escolares">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://tudominio.com/gallery.html">
+    <meta property="og:image" content="https://tudominio.com/assets/img/og-gallery.jpg">
+
+    <!-- Preconexión y precarga para mejorar performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="assets/css/variables.css" as="style">
+    <link rel="preload" href="assets/css/base.css" as="style">
+    <link rel="preload" href="assets/css/animations.css" as="style">
+    <link rel="preload" href="assets/css/gallery.css" as="style">
+    <link rel="preload" href="assets/js/gallery.js" as="script">
+
+    <!-- Hojas de estilo -->
     <link rel="stylesheet" href="assets/css/variables.css">
+    <link rel="stylesheet" href="assets/css/base.css">
     <link rel="stylesheet" href="assets/css/animations.css">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/gallery.css">
     <link rel="icon" href="assets/img/favicon.ico">
 </head>
 
 <body>
     <div id="app">
-        <header id="main-header" class="header-fixed"></header>
+        <!-- Cabecera del sitio (se carga dinámicamente) -->
+        <header id="main-header" class="header-fixed" aria-label="Cabecera principal"></header>
 
+        <!-- Contenido principal -->
         <main class="container">
-            <section class="hero animate-fade-in">
-                <h1 class="animate-slide-up">Galería de Eventos</h1>
-                <p class="animate-slide-up delay-1">Revive los mejores momentos de nuestras actividades escolares</p>
+            <!-- Hero section mejorada -->
+            <section class="hero animate-fade-in" aria-labelledby="gallery-heading">
+                <div class="hero-content">
+                    <h1 id="gallery-heading" class="animate-slide-up">Galería de Eventos</h1>
+                    <p class="hero-description animate-slide-up delay-1">
+                        Revive los mejores momentos de nuestras actividades escolares
+                    </p>
+                </div>
+                <div class="hero-image" aria-hidden="true">
+                    <img src="assets/img/gallery-hero.jpg" alt="" loading="lazy">
+                </div>
             </section>
 
-            <div class="gallery-section">
+            <!-- Sección de galería -->
+            <section class="gallery-section" aria-labelledby="gallery-filters-heading">
                 <div class="gallery-filters animate-fade-in delay-2">
+                    <h2 id="gallery-filters-heading" class="sr-only">Filtros de galería</h2>
                     <button class="filter-button active" data-filter="all">Todos</button>
                     <button class="filter-button" data-filter="Eventos">Eventos</button>
                     <button class="filter-button" data-filter="Deportes">Deportes</button>
@@ -30,26 +63,35 @@
                     <button class="filter-button" data-filter="Arte">Arte</button>
                 </div>
 
-                <div class="galleries-container animate-fade-in delay-3" id="galleries-container">
-                    <!-- Eventos se cargarán aquí -->
+                <div class="galleries-container animate-fade-in delay-3" id="galleries-container" aria-live="polite">
+                    <!-- Eventos se cargarán aquí dinámicamente -->
                 </div>
-            </div>
+            </section>
         </main>
 
-        <footer id="main-footer"></footer>
+        <!-- Pie de página (se carga dinámicamente) -->
+        <footer id="main-footer" aria-label="Pie de página"></footer>
 
-        <button id="scroll-top" class="scroll-top-btn" aria-label="Subir al inicio">
+        <!-- Botón para volver arriba -->
+        <button id="scroll-top" class="scroll-top-btn" aria-label="Volver al inicio">
             <svg viewBox="0 0 24 24" width="24" height="24">
                 <path fill="currentColor" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
             </svg>
         </button>
     </div>
 
-    <script src="assets/js/components.js"></script>
-    <script src="assets/js/main.js"></script>
-    <script src="assets/js/scroll.js"></script>
-    <script src="assets/js/gallery.js"></script>
-    <script src="assets/data/galleries.js"></script>
+    <!-- Scripts con carga optimizada -->
+    <script src="assets/js/components.js" defer></script>
+    <script src="assets/js/main.js" defer></script>
+    <script src="assets/js/scroll-top.js" defer></script>
+    <script src="assets/js/gallery.js" defer></script>
+    <script src="assets/data/galleries.js" defer></script>
+
+    <!-- Modernizr para características HTML5 y CSS3 -->
+    <script>
+        // Detección de características modernas
+        document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+    </script>
 </body>
 
 </html>

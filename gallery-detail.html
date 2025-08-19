@@ -1,40 +1,71 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="no-js">
 
 <head>
+    <!-- Metadatos mejorados para SEO -->
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <title>Detalle de Evento - Blog Escolar</title>
+    <meta name="description" content="Detalle completo del evento escolar con galería multimedia">
+    <meta name="keywords" content="evento escolar, galería multimedia, fotos evento, videos evento">
+    <meta property="og:title" content="Detalle de Evento - Blog Escolar">
+    <meta property="og:description" content="Galería multimedia completa del evento escolar">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://tudominio.com/gallery-detail.html">
+    <meta property="og:image" content="https://tudominio.com/assets/img/og-event.jpg">
+
+    <!-- Preconexión y precarga para mejorar performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="assets/css/variables.css" as="style">
+    <link rel="preload" href="assets/css/base.css" as="style">
+    <link rel="preload" href="assets/css/animations.css" as="style">
+    <link rel="preload" href="assets/css/gallery-detail.css" as="style">
+    <link rel="preload" href="assets/js/gallery-detail.js" as="script">
+
+    <!-- Hojas de estilo -->
     <link rel="stylesheet" href="assets/css/variables.css">
+    <link rel="stylesheet" href="assets/css/base.css">
     <link rel="stylesheet" href="assets/css/animations.css">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/gallery-detail.css">
     <link rel="icon" href="assets/img/favicon.ico">
 </head>
 
 <body>
     <div id="app">
-        <header id="main-header" class="header-fixed"></header>
+        <!-- Cabecera del sitio (se carga dinámicamente) -->
+        <header id="main-header" class="header-fixed" aria-label="Cabecera principal"></header>
 
+        <!-- Contenido principal -->
         <main class="container">
-            <div class="event-detail-container animate-fade-in" id="event-detail">
+            <div class="event-detail-container animate-fade-in" id="event-detail" aria-live="polite">
                 <!-- Contenido se cargará dinámicamente -->
             </div>
         </main>
 
-        <footer id="main-footer"></footer>
+        <!-- Pie de página (se carga dinámicamente) -->
+        <footer id="main-footer" aria-label="Pie de página"></footer>
 
-        <button id="scroll-top" class="scroll-top-btn" aria-label="Subir al inicio">
+        <!-- Botón para volver arriba -->
+        <button id="scroll-top" class="scroll-top-btn" aria-label="Volver al inicio">
             <svg viewBox="0 0 24 24" width="24" height="24">
                 <path fill="currentColor" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
             </svg>
         </button>
     </div>
 
-    <script src="assets/js/components.js"></script>
-    <script src="assets/js/main.js"></script>
-    <script src="assets/js/scroll.js"></script>
-    <script src="assets/js/gallery-detail.js"></script>
-    <script src="assets/data/galleries.js"></script>
+    <!-- Scripts con carga optimizada -->
+    <script src="assets/js/components.js" defer></script>
+    <script src="assets/js/main.js" defer></script>
+    <script src="assets/js/scroll-top.js" defer></script>
+    <script src="assets/js/gallery-detail.js" defer></script>
+    <script src="assets/data/galleries.js" defer></script>
+
+    <!-- Modernizr para características HTML5 y CSS3 -->
+    <script>
+        // Detección de características modernas
+        document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+    </script>
 </body>
 
 </html>

@@ -4,48 +4,48 @@
  */
 
 class EventSystem {
-    constructor(eventsData) {
-        this.events = eventsData;
-        this.currentFilter = 'all';
-        this.currentDate = new Date();
-        this.currentMonth = this.currentDate.getMonth();
-        this.currentYear = this.currentDate.getFullYear();
-        this.activeEvents = [];
-        this.updateInterval = null;
-        this.modal = null;
+  constructor(eventsData) {
+    this.events = eventsData;
+    this.currentFilter = 'all';
+    this.currentDate = new Date();
+    this.currentMonth = this.currentDate.getMonth();
+    this.currentYear = this.currentDate.getFullYear();
+    this.activeEvents = [];
+    this.updateInterval = null;
+    this.modal = null;
 
-        this.init();
-    }
+    this.init();
+  }
 
-    init() {
-        this.renderMiniCalendar();
-        this.renderEventsList();
-        this.renderUpcomingEvents();
-        this.renderFeaturedEvents();
-        this.setupEventFilters();
-        this.setupEventModal();
-        this.setupEventCardInteractions();
-    }
+  init() {
+    this.renderMiniCalendar();
+    this.renderEventsList();
+    this.renderUpcomingEvents();
+    this.renderFeaturedEvents();
+    this.setupEventFilters();
+    this.setupEventModal();
+    this.setupEventCardInteractions();
+  }
 
-    // ======================
-    //  RENDERIZADO PRINCIPAL
-    // ======================
+  // ======================
+  //  RENDERIZADO PRINCIPAL
+  // ======================
 
-    renderMiniCalendar() {
-        const miniCalendar = document.getElementById('mini-calendar');
-        if (!miniCalendar) return;
+  renderMiniCalendar() {
+    const miniCalendar = document.getElementById('mini-calendar');
+    if (!miniCalendar) return;
 
-        const firstDay = new Date(this.currentYear, this.currentMonth, 1);
-        const lastDay = new Date(this.currentYear, this.currentMonth + 1, 0);
-        const daysInMonth = lastDay.getDate();
+    const firstDay = new Date(this.currentYear, this.currentMonth, 1);
+    const lastDay = new Date(this.currentYear, this.currentMonth + 1, 0);
+    const daysInMonth = lastDay.getDate();
 
-        const monthEvents = this.events.filter(event => {
-            const eventDate = new Date(event.date);
-            return eventDate.getMonth() === this.currentMonth &&
-                eventDate.getFullYear() === this.currentYear;
-        });
+    const monthEvents = this.events.filter(event => {
+      const eventDate = new Date(event.date);
+      return eventDate.getMonth() === this.currentMonth &&
+        eventDate.getFullYear() === this.currentYear;
+    });
 
-        miniCalendar.innerHTML = `
+    miniCalendar.innerHTML = `
       <div class="mini-calendar-header">
         <button id="prev-month" class="mini-calendar-nav" aria-label="Mes anterior">
           <svg width="16" height="16" viewBox="0 0 24 24">
@@ -67,17 +67,17 @@ class EventSystem {
           <div class="mini-calendar-day empty"></div>
         `).join('')}
         ${Array(daysInMonth).fill().map((_, i) => {
-            const day = i + 1;
-            const dateStr = `${this.currentYear}-${this.padZero(this.currentMonth + 1)}-${this.padZero(day)}`;
-            const dayEvents = monthEvents.filter(event => event.date === dateStr);
-            const hasEvent = dayEvents.length > 0;
-            const dayStatus = this.getDayStatus(dateStr, dayEvents);
+      const day = i + 1;
+      const dateStr = `${this.currentYear}-${this.padZero(this.currentMonth + 1)}-${this.padZero(day)}`;
+      const dayEvents = monthEvents.filter(event => event.date === dateStr);
+      const hasEvent = dayEvents.length > 0;
+      const dayStatus = this.getDayStatus(dateStr, dayEvents);
 
-            return `
+      return `
             <div class="mini-calendar-day ${hasEvent ? 'has-event' : ''} 
               ${dayStatus} 
               ${this.currentDate.getDate() === day &&
-                    this.currentDate.getMonth() === this.currentMonth ? 'today' : ''}"
+          this.currentDate.getMonth() === this.currentMonth ? 'today' : ''}"
               data-date="${dateStr}">
               ${day}
               ${hasEvent ? `
@@ -87,72 +87,72 @@ class EventSystem {
               ` : ''}
             </div>
           `;
-        }).join('')}
+    }).join('')}
       </div>
     `;
 
-        // Event listeners para navegación
-        document.getElementById('prev-month').addEventListener('click', () => {
-            this.currentMonth--;
-            if (this.currentMonth < 0) {
-                this.currentMonth = 11;
-                this.currentYear--;
-            }
-            this.renderMiniCalendar();
-        });
+    // Event listeners para navegación
+    document.getElementById('prev-month').addEventListener('click', () => {
+      this.currentMonth--;
+      if (this.currentMonth < 0) {
+        this.currentMonth = 11;
+        this.currentYear--;
+      }
+      this.renderMiniCalendar();
+    });
 
-        document.getElementById('next-month').addEventListener('click', () => {
-            this.currentMonth++;
-            if (this.currentMonth > 11) {
-                this.currentMonth = 0;
-                this.currentYear++;
-            }
-            this.renderMiniCalendar();
-        });
+    document.getElementById('next-month').addEventListener('click', () => {
+      this.currentMonth++;
+      if (this.currentMonth > 11) {
+        this.currentMonth = 0;
+        this.currentYear++;
+      }
+      this.renderMiniCalendar();
+    });
 
-        // Event listeners para días del calendario
-        document.querySelectorAll('.mini-calendar-day[data-date]').forEach(day => {
-            day.addEventListener('click', () => {
-                const date = day.getAttribute('data-date');
-                this.filterEventsByDate(date);
-            });
-        });
+    // Event listeners para días del calendario
+    document.querySelectorAll('.mini-calendar-day[data-date]').forEach(day => {
+      day.addEventListener('click', () => {
+        const date = day.getAttribute('data-date');
+        this.filterEventsByDate(date);
+      });
+    });
+  }
+
+  renderEventsList(filter = 'all', dateFilter = null) {
+    const eventsList = document.getElementById('events-list');
+    if (!eventsList) return;
+
+    // Limpiar intervalo anterior
+    if (this.updateInterval) {
+      clearInterval(this.updateInterval);
     }
 
-    renderEventsList(filter = 'all', dateFilter = null) {
-        const eventsList = document.getElementById('events-list');
-        if (!eventsList) return;
+    // Filtrar eventos
+    let filteredEvents = [...this.events];
 
-        // Limpiar intervalo anterior
-        if (this.updateInterval) {
-            clearInterval(this.updateInterval);
-        }
+    if (filter === 'date' && dateFilter) {
+      filteredEvents = filteredEvents.filter(event => event.date === dateFilter);
+    } else if (filter !== 'all') {
+      filteredEvents = filteredEvents.filter(event => event.category === filter);
+    }
 
-        // Filtrar eventos
-        let filteredEvents = [...this.events];
+    // Ordenar por fecha y hora
+    filteredEvents.sort((a, b) => {
+      const dateA = new Date(`${a.date}T${a.startTime}`);
+      const dateB = new Date(`${b.date}T${b.startTime}`);
+      return dateA - dateB;
+    });
 
-        if (filter === 'date' && dateFilter) {
-            filteredEvents = filteredEvents.filter(event => event.date === dateFilter);
-        } else if (filter !== 'all') {
-            filteredEvents = filteredEvents.filter(event => event.category === filter);
-        }
+    this.activeEvents = filteredEvents;
 
-        // Ordenar por fecha y hora
-        filteredEvents.sort((a, b) => {
-            const dateA = new Date(`${a.date}T${a.startTime}`);
-            const dateB = new Date(`${b.date}T${b.startTime}`);
-            return dateA - dateB;
-        });
-
-        this.activeEvents = filteredEvents;
-
-        // Mostrar mensaje si no hay eventos
-        if (filteredEvents.length === 0) {
-            let message = '';
-            if (filter === 'date' && dateFilter) {
-                const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
-                const formattedDate = new Date(dateFilter).toLocaleDateString('es-ES', options);
-                message = `
+    // Mostrar mensaje si no hay eventos
+    if (filteredEvents.length === 0) {
+      let message = '';
+      if (filter === 'date' && dateFilter) {
+        const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+        const formattedDate = new Date(dateFilter).toLocaleDateString('es-ES', options);
+        message = `
           <div class="no-results">
             <svg width="48" height="48" viewBox="0 0 24 24">
               <path fill="currentColor" d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
@@ -162,8 +162,8 @@ class EventSystem {
             <button class="reset-filter">Mostrar todos los eventos</button>
           </div>
         `;
-            } else {
-                message = `
+      } else {
+        message = `
           <div class="no-results">
             <svg width="48" height="48" viewBox="0 0 24 24">
               <path fill="currentColor" d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
@@ -172,20 +172,20 @@ class EventSystem {
             <button class="reset-filter">Mostrar todos los eventos</button>
           </div>
         `;
-            }
+      }
 
-            eventsList.innerHTML = message;
-            document.querySelector('.reset-filter')?.addEventListener('click', () => {
-                this.resetFilters();
-            });
-            return;
-        }
+      eventsList.innerHTML = message;
+      document.querySelector('.reset-filter')?.addEventListener('click', () => {
+        this.resetFilters();
+      });
+      return;
+    }
 
-        // Renderizar eventos
-        eventsList.innerHTML = filteredEvents.map(event => {
-            const { state, timeRemaining } = this.calculateEventStatus(event);
+    // Renderizar eventos
+    eventsList.innerHTML = filteredEvents.map(event => {
+      const { state, timeRemaining } = this.calculateEventStatus(event);
 
-            return `
+      return `
         <article class="event-card" data-id="${event.id}" data-category="${event.category}" data-status="${state}">
           <div class="event-date">
             <span class="event-day">${this.formatDay(event.date)}</span>
@@ -213,38 +213,38 @@ class EventSystem {
           ${event.featured ? '<span class="event-badge">Destacado</span>' : ''}
         </article>
       `;
-        }).join('');
+    }).join('');
 
-        // Iniciar contador de eventos
-        this.updateInterval = setInterval(() => this.updateCounters(), 1000);
+    // Iniciar contador de eventos
+    this.updateInterval = setInterval(() => this.updateCounters(), 1000);
+  }
+
+  renderUpcomingEvents() {
+    const upcomingEvents = document.getElementById('upcoming-events');
+    if (!upcomingEvents) return;
+
+    const now = new Date();
+    const futureEvents = [...this.events]
+      .filter(event => {
+        const eventDate = new Date(`${event.date}T${event.startTime}`);
+        return eventDate >= now && event.status === 'active';
+      })
+      .sort((a, b) => {
+        const dateA = new Date(`${a.date}T${a.startTime}`);
+        const dateB = new Date(`${b.date}T${b.startTime}`);
+        return dateA - dateB;
+      })
+      .slice(0, 3);
+
+    if (futureEvents.length === 0) {
+      upcomingEvents.innerHTML = '<p class="no-upcoming">No hay eventos próximos</p>';
+      return;
     }
 
-    renderUpcomingEvents() {
-        const upcomingEvents = document.getElementById('upcoming-events');
-        if (!upcomingEvents) return;
+    upcomingEvents.innerHTML = futureEvents.map(event => {
+      const { state, timeRemaining } = this.calculateEventStatus(event);
 
-        const now = new Date();
-        const futureEvents = [...this.events]
-            .filter(event => {
-                const eventDate = new Date(`${event.date}T${event.startTime}`);
-                return eventDate >= now && event.status === 'active';
-            })
-            .sort((a, b) => {
-                const dateA = new Date(`${a.date}T${a.startTime}`);
-                const dateB = new Date(`${b.date}T${b.startTime}`);
-                return dateA - dateB;
-            })
-            .slice(0, 3);
-
-        if (futureEvents.length === 0) {
-            upcomingEvents.innerHTML = '<p class="no-upcoming">No hay eventos próximos</p>';
-            return;
-        }
-
-        upcomingEvents.innerHTML = futureEvents.map(event => {
-            const { state, timeRemaining } = this.calculateEventStatus(event);
-
-            return `
+      return `
         <div class="upcoming-event">
           <div class="upcoming-event-date">
             <span>${this.formatDay(event.date)}</span>
@@ -255,33 +255,33 @@ class EventSystem {
             <p>${event.startTime} - ${event.endTime}</p>
             <div class="upcoming-event-counter ${state}">
               ${state === 'upcoming' ?
-                    `<span>En ${timeRemaining.days > 0 ?
-                        `${timeRemaining.days} días` :
-                        `${this.padZero(timeRemaining.hours)}:${this.padZero(timeRemaining.minutes)}`}
+          `<span>En ${timeRemaining.days > 0 ?
+            `${timeRemaining.days} días` :
+            `${this.padZero(timeRemaining.hours)}:${this.padZero(timeRemaining.minutes)}`}
                 </span>` :
-                    '<span>Próximamente</span>'}
+          '<span>Próximamente</span>'}
             </div>
           </div>
         </div>
       `;
-        }).join('');
+    }).join('');
+  }
+
+  renderFeaturedEvents() {
+    const featuredEvents = document.getElementById('featured-events');
+    if (!featuredEvents) return;
+
+    const featured = this.events.filter(event => event.featured).slice(0, 2);
+
+    if (featured.length === 0) {
+      featuredEvents.innerHTML = '<p>No hay eventos destacados</p>';
+      return;
     }
 
-    renderFeaturedEvents() {
-        const featuredEvents = document.getElementById('featured-events');
-        if (!featuredEvents) return;
+    featuredEvents.innerHTML = featured.map(event => {
+      const { state } = this.calculateEventStatus(event);
 
-        const featured = this.events.filter(event => event.featured).slice(0, 2);
-
-        if (featured.length === 0) {
-            featuredEvents.innerHTML = '<p>No hay eventos destacados</p>';
-            return;
-        }
-
-        featuredEvents.innerHTML = featured.map(event => {
-            const { state } = this.calculateEventStatus(event);
-
-            return `
+      return `
         <div class="featured-event">
           <div class="featured-event-image">
             <img src="${event.image}" alt="${event.title}" loading="lazy">
@@ -291,94 +291,94 @@ class EventSystem {
             <p>${this.formatFullDate(event.date)} • ${event.startTime}</p>
             <div class="featured-event-status ${state}">
               ${state === 'upcoming' ? 'Próximamente' :
-                    state === 'in-progress' ? 'En curso' :
-                        state === 'finished' ? 'Finalizado' :
-                            state === 'cancelled' ? 'Cancelado' : 'Postergado'}
+          state === 'in-progress' ? 'En curso' :
+            state === 'finished' ? 'Finalizado' :
+              state === 'cancelled' ? 'Cancelado' : 'Postergado'}
             </div>
             <a href="#" class="read-more" data-event-id="${event.id}">Más info</a>
           </div>
         </div>
       `;
-        }).join('');
-    }
+    }).join('');
+  }
 
-    // ======================
-    //  FILTROS Y NAVEGACIÓN
-    // ======================
+  // ======================
+  //  FILTROS Y NAVEGACIÓN
+  // ======================
 
-    setupEventFilters() {
-        // Filtros principales
-        document.querySelectorAll('.filters-container .filter-button').forEach(button => {
-            button.addEventListener('click', () => {
-                document.querySelectorAll('.mini-calendar-day').forEach(day => {
-                    day.classList.remove('selected');
-                });
-
-                document.querySelectorAll('.filters-container .filter-button').forEach(btn => {
-                    btn.classList.remove('active');
-                });
-                button.classList.add('active');
-
-                this.currentFilter = button.getAttribute('data-filter');
-                this.renderEventsList(this.currentFilter);
-            });
+  setupEventFilters() {
+    // Filtros principales
+    document.querySelectorAll('.filters-container .filter-button').forEach(button => {
+      button.addEventListener('click', () => {
+        document.querySelectorAll('.mini-calendar-day').forEach(day => {
+          day.classList.remove('selected');
         });
 
-        // Filtros de categorías en sidebar
-        document.querySelectorAll('.category-tag').forEach(button => {
-            button.addEventListener('click', (e) => {
-                e.preventDefault();
-
-                document.querySelectorAll('.mini-calendar-day').forEach(day => {
-                    day.classList.remove('selected');
-                });
-
-                const filter = button.getAttribute('data-filter');
-                this.currentFilter = filter;
-
-                document.querySelectorAll('.filter-button, .category-tag').forEach(btn => {
-                    btn.classList.remove('active');
-                });
-
-                document.querySelector(`.filter-button[data-filter="${filter}"]`)?.classList.add('active');
-                button.classList.add('active');
-
-                this.renderEventsList(this.currentFilter);
-            });
+        document.querySelectorAll('.filters-container .filter-button').forEach(btn => {
+          btn.classList.remove('active');
         });
-    }
+        button.classList.add('active');
 
-    filterEventsByDate(dateStr) {
-        this.currentFilter = 'date';
+        this.currentFilter = button.getAttribute('data-filter');
+        this.renderEventsList(this.currentFilter);
+      });
+    });
+
+    // Filtros de categorías en sidebar
+    document.querySelectorAll('.category-tag').forEach(button => {
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
 
         document.querySelectorAll('.mini-calendar-day').forEach(day => {
-            day.classList.remove('selected');
-            if (day.getAttribute('data-date') === dateStr) {
-                day.classList.add('selected');
-            }
+          day.classList.remove('selected');
         });
 
-        this.renderEventsList('date', dateStr);
-    }
+        const filter = button.getAttribute('data-filter');
+        this.currentFilter = filter;
 
-    resetFilters() {
-        this.currentFilter = 'all';
-        document.querySelectorAll('.filter-button.active, .category-tag.active').forEach(el => {
-            el.classList.remove('active');
+        document.querySelectorAll('.filter-button, .category-tag').forEach(btn => {
+          btn.classList.remove('active');
         });
-        document.querySelector('.filter-button[data-filter="all"]').classList.add('active');
-        document.querySelectorAll('.mini-calendar-day.selected').forEach(el => {
-            el.classList.remove('selected');
-        });
-        this.renderEventsList('all');
-    }
 
-    // ======================
-    //  MODAL DE EVENTOS
-    // ======================
+        document.querySelector(`.filter-button[data-filter="${filter}"]`)?.classList.add('active');
+        button.classList.add('active');
 
-    setupEventModal() {
-        const modalHTML = `
+        this.renderEventsList(this.currentFilter);
+      });
+    });
+  }
+
+  filterEventsByDate(dateStr) {
+    this.currentFilter = 'date';
+
+    document.querySelectorAll('.mini-calendar-day').forEach(day => {
+      day.classList.remove('selected');
+      if (day.getAttribute('data-date') === dateStr) {
+        day.classList.add('selected');
+      }
+    });
+
+    this.renderEventsList('date', dateStr);
+  }
+
+  resetFilters() {
+    this.currentFilter = 'all';
+    document.querySelectorAll('.filter-button.active, .category-tag.active').forEach(el => {
+      el.classList.remove('active');
+    });
+    document.querySelector('.filter-button[data-filter="all"]').classList.add('active');
+    document.querySelectorAll('.mini-calendar-day.selected').forEach(el => {
+      el.classList.remove('selected');
+    });
+    this.renderEventsList('all');
+  }
+
+  // ======================
+  //  MODAL DE EVENTOS
+  // ======================
+
+  setupEventModal() {
+    const modalHTML = `
       <div class="event-modal" id="event-modal">
         <div class="event-modal-content">
           <div class="event-modal-header">
@@ -393,40 +393,40 @@ class EventSystem {
       </div>
     `;
 
-        document.body.insertAdjacentHTML('beforeend', modalHTML);
-        this.modal = document.getElementById('event-modal');
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    this.modal = document.getElementById('event-modal');
 
-        document.querySelector('.event-modal-close').addEventListener('click', () => this.closeEventModal());
-        this.modal.addEventListener('click', (e) => {
-            if (e.target === this.modal) {
-                this.closeEventModal();
-            }
-        });
+    document.querySelector('.event-modal-close').addEventListener('click', () => this.closeEventModal());
+    this.modal.addEventListener('click', (e) => {
+      if (e.target === this.modal) {
+        this.closeEventModal();
+      }
+    });
 
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && this.modal.classList.contains('active')) {
-                this.closeEventModal();
-            }
-        });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && this.modal.classList.contains('active')) {
+        this.closeEventModal();
+      }
+    });
+  }
+
+  showEventModal(eventId) {
+    const event = this.events.find(e => e.id == eventId);
+
+    if (!event) {
+      return;
     }
 
-    showEventModal(eventId) {
-        const event = this.events.find(e => e.id == eventId);
+    const { state, timeRemaining } = this.calculateEventStatus(event);
+    const eventDate = new Date(`${event.date}T${event.startTime}`);
+    const formattedDate = eventDate.toLocaleDateString('es-ES', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
 
-        if (!event) {
-            return;
-        }
-
-        const { state, timeRemaining } = this.calculateEventStatus(event);
-        const eventDate = new Date(`${event.date}T${event.startTime}`);
-        const formattedDate = eventDate.toLocaleDateString('es-ES', {
-            weekday: 'long',
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric'
-        });
-
-        const modalContent = `
+    const modalContent = `
       <div class="event-modal-image">
         <img src="${event.image || 'assets/img/event-default.jpg'}" alt="${event.title}" loading="lazy">
       </div>
@@ -485,163 +485,163 @@ class EventSystem {
       </div>
     `;
 
-        document.getElementById('event-modal-body').innerHTML = modalContent;
+    document.getElementById('event-modal-body').innerHTML = modalContent;
 
-        // Configurar acciones de los botones
-        document.querySelector('[data-action="register"]')?.addEventListener('click', () => {
-            alert(`Registro para ${event.title}`);
+    // Configurar acciones de los botones
+    document.querySelector('[data-action="register"]')?.addEventListener('click', () => {
+      alert(`Registro para ${event.title}`);
+    });
+
+    document.querySelector('[data-action="share"]')?.addEventListener('click', () => {
+      if (navigator.share) {
+        navigator.share({
+          title: event.title,
+          text: event.description,
+          url: window.location.href
+        }).catch(err => {
+          console.error('Error al compartir:', err);
         });
+      } else {
+        alert('Función de compartir no disponible en este navegador');
+      }
+    });
 
-        document.querySelector('[data-action="share"]')?.addEventListener('click', () => {
-            if (navigator.share) {
-                navigator.share({
-                    title: event.title,
-                    text: event.description,
-                    url: window.location.href
-                }).catch(err => {
-                    console.error('Error al compartir:', err);
-                });
-            } else {
-                alert('Función de compartir no disponible en este navegador');
-            }
-        });
+    // Mostrar el modal
+    this.modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
 
-        // Mostrar el modal
-        this.modal.classList.add('active');
-        document.body.style.overflow = 'hidden';
+    // Iniciar contador si es necesario
+    if (state === 'upcoming' || state === 'in-progress') {
+      this.startModalCounter(eventId);
+    }
+  }
 
-        // Iniciar contador si es necesario
-        if (state === 'upcoming' || state === 'in-progress') {
-            this.startModalCounter(eventId);
+  closeEventModal() {
+    this.modal.classList.remove('active');
+    document.body.style.overflow = '';
+
+    if (this.modalInterval) {
+      clearInterval(this.modalInterval);
+      this.modalInterval = null;
+    }
+
+    setTimeout(() => {
+      document.getElementById('event-modal-body').innerHTML = '';
+    }, 300);
+  }
+
+  startModalCounter(eventId) {
+    const event = this.events.find(e => e.id == eventId);
+
+    if (!event) {
+      return;
+    }
+
+    this.modalInterval = setInterval(() => {
+      const { state, timeRemaining } = this.calculateEventStatus(event);
+      const counterElement = document.querySelector('.event-modal-counter');
+
+      if (counterElement) {
+        counterElement.innerHTML = this.renderCounterContent(timeRemaining, state);
+      }
+
+      if (state === 'finished') {
+        clearInterval(this.modalInterval);
+        this.modalInterval = null;
+      }
+    }, 1000);
+  }
+
+  setupEventCardInteractions() {
+    document.addEventListener('click', (e) => {
+      const moreInfoBtn = e.target.closest('.read-more');
+      const eventCard = e.target.closest('.event-card');
+
+      if (moreInfoBtn) {
+        e.preventDefault();
+        const eventId = moreInfoBtn.getAttribute('data-event-id');
+        if (eventId) {
+          this.showEventModal(eventId);
         }
-    }
-
-    closeEventModal() {
-        this.modal.classList.remove('active');
-        document.body.style.overflow = '';
-
-        if (this.modalInterval) {
-            clearInterval(this.modalInterval);
-            this.modalInterval = null;
+      } else if (eventCard) {
+        const eventId = eventCard.getAttribute('data-id');
+        if (eventId) {
+          this.showEventModal(eventId);
         }
+      }
+    });
+  }
 
-        setTimeout(() => {
-            document.getElementById('event-modal-body').innerHTML = '';
-        }, 300);
+  // ======================
+  //  LÓGICA DE CONTADORES
+  // ======================
+
+  updateCounters() {
+    this.activeEvents.forEach(event => {
+      const { state, timeRemaining } = this.calculateEventStatus(event);
+      const counterElement = document.querySelector(`.event-counter-container[data-id="${event.id}"]`);
+      const eventCard = document.querySelector(`.event-card[data-id="${event.id}"]`);
+
+      if (counterElement) {
+        counterElement.innerHTML = this.renderCounterContent(timeRemaining, state);
+      }
+
+      if (eventCard) {
+        eventCard.setAttribute('data-status', state);
+      }
+    });
+  }
+
+  calculateEventStatus(event) {
+    const now = new Date();
+    const eventStart = new Date(`${event.date}T${event.startTime}`);
+    const eventEnd = new Date(`${event.date}T${event.endTime}`);
+
+    const states = {
+      UPCOMING: 'upcoming',
+      IN_PROGRESS: 'in-progress',
+      FINISHED: 'finished',
+      CANCELLED: 'cancelled',
+      POSTPONED: 'postponed'
+    };
+
+    let state;
+    let timeRemaining = {};
+
+    if (event.status === 'cancelled') {
+      state = states.CANCELLED;
+    } else if (event.status === 'postponed') {
+      state = states.POSTPONED;
+    } else if (now < eventStart) {
+      state = states.UPCOMING;
+      const diff = eventStart - now;
+
+      timeRemaining = {
+        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+        minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
+        seconds: Math.floor((diff % (1000 * 60)) / 1000)
+      };
+    } else if (now >= eventStart && now <= eventEnd) {
+      state = states.IN_PROGRESS;
+      const diff = eventEnd - now;
+
+      timeRemaining = {
+        hours: Math.floor(diff / (1000 * 60 * 60)),
+        minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
+        seconds: Math.floor((diff % (1000 * 60)) / 1000)
+      };
+    } else {
+      state = states.FINISHED;
     }
 
-    startModalCounter(eventId) {
-        const event = this.events.find(e => e.id == eventId);
+    return { state, timeRemaining };
+  }
 
-        if (!event) {
-            return;
-        }
-
-        this.modalInterval = setInterval(() => {
-            const { state, timeRemaining } = this.calculateEventStatus(event);
-            const counterElement = document.querySelector('.event-modal-counter');
-
-            if (counterElement) {
-                counterElement.innerHTML = this.renderCounterContent(timeRemaining, state);
-            }
-
-            if (state === 'finished') {
-                clearInterval(this.modalInterval);
-                this.modalInterval = null;
-            }
-        }, 1000);
-    }
-
-    setupEventCardInteractions() {
-        document.addEventListener('click', (e) => {
-            const moreInfoBtn = e.target.closest('.read-more');
-            const eventCard = e.target.closest('.event-card');
-
-            if (moreInfoBtn) {
-                e.preventDefault();
-                const eventId = moreInfoBtn.getAttribute('data-event-id');
-                if (eventId) {
-                    this.showEventModal(eventId);
-                }
-            } else if (eventCard) {
-                const eventId = eventCard.getAttribute('data-id');
-                if (eventId) {
-                    this.showEventModal(eventId);
-                }
-            }
-        });
-    }
-
-    // ======================
-    //  LÓGICA DE CONTADORES
-    // ======================
-
-    updateCounters() {
-        this.activeEvents.forEach(event => {
-            const { state, timeRemaining } = this.calculateEventStatus(event);
-            const counterElement = document.querySelector(`.event-counter-container[data-id="${event.id}"]`);
-            const eventCard = document.querySelector(`.event-card[data-id="${event.id}"]`);
-
-            if (counterElement) {
-                counterElement.innerHTML = this.renderCounterContent(timeRemaining, state);
-            }
-
-            if (eventCard) {
-                eventCard.setAttribute('data-status', state);
-            }
-        });
-    }
-
-    calculateEventStatus(event) {
-        const now = new Date();
-        const eventStart = new Date(`${event.date}T${event.startTime}`);
-        const eventEnd = new Date(`${event.date}T${event.endTime}`);
-
-        const states = {
-            UPCOMING: 'upcoming',
-            IN_PROGRESS: 'in-progress',
-            FINISHED: 'finished',
-            CANCELLED: 'cancelled',
-            POSTPONED: 'postponed'
-        };
-
-        let state;
-        let timeRemaining = {};
-
-        if (event.status === 'cancelled') {
-            state = states.CANCELLED;
-        } else if (event.status === 'postponed') {
-            state = states.POSTPONED;
-        } else if (now < eventStart) {
-            state = states.UPCOMING;
-            const diff = eventStart - now;
-
-            timeRemaining = {
-                days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-                hours: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-                minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
-                seconds: Math.floor((diff % (1000 * 60)) / 1000)
-            };
-        } else if (now >= eventStart && now <= eventEnd) {
-            state = states.IN_PROGRESS;
-            const diff = eventEnd - now;
-
-            timeRemaining = {
-                hours: Math.floor(diff / (1000 * 60 * 60)),
-                minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
-                seconds: Math.floor((diff % (1000 * 60)) / 1000)
-            };
-        } else {
-            state = states.FINISHED;
-        }
-
-        return { state, timeRemaining };
-    }
-
-    renderCounterContent(timeObj, state) {
-        // Estado: Finalizado
-        if (state === 'finished') {
-            return `
+  renderCounterContent(timeObj, state) {
+    // Estado: Finalizado
+    if (state === 'finished') {
+      return `
         <div class="event-status-badge finished">
           <svg width="16" height="16" viewBox="0 0 24 24">
             <path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
@@ -649,11 +649,11 @@ class EventSystem {
           <span>Finalizado</span>
         </div>
       `;
-        }
+    }
 
-        // Estado: Cancelado
-        if (state === 'cancelled') {
-            return `
+    // Estado: Cancelado
+    if (state === 'cancelled') {
+      return `
         <div class="event-status-badge cancelled">
           <svg width="16" height="16" viewBox="0 0 24 24">
             <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
@@ -661,11 +661,11 @@ class EventSystem {
           <span>Cancelado</span>
         </div>
       `;
-        }
+    }
 
-        // Estado: Postergado
-        if (state === 'postponed') {
-            return `
+    // Estado: Postergado
+    if (state === 'postponed') {
+      return `
         <div class="event-status-badge postponed">
           <svg width="16" height="16" viewBox="0 0 24 24">
             <path fill="currentColor" d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46A7.93 7.93 0 0020 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74A7.93 7.93 0 004 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
@@ -673,11 +673,11 @@ class EventSystem {
           <span>Postergado</span>
         </div>
       `;
-        }
+    }
 
-        // Estado: En progreso
-        if (state === 'in-progress') {
-            return `
+    // Estado: En progreso
+    if (state === 'in-progress') {
+      return `
         <div class="event-status-badge in-progress">
           <svg width="16" height="16" viewBox="0 0 24 24">
             <path fill="currentColor" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
@@ -689,11 +689,11 @@ class EventSystem {
           </div>
         </div>
       `;
-        }
+    }
 
-        // Estado "próximamente" con días
-        if (timeObj.days > 0) {
-            return `
+    // Estado "próximamente" con días
+    if (timeObj.days > 0) {
+      return `
         <div class="counter-label">Comienza en</div>
         <div class="digital-counter">
           <div class="time-block large">
@@ -711,10 +711,10 @@ class EventSystem {
           </div>
         </div>
       `;
-        }
+    }
 
-        // Estado "próximamente" (menos de 1 día)
-        return `
+    // Estado "próximamente" (menos de 1 día)
+    return `
       <div class="counter-label">Comienza en</div>
       <div class="digital-counter">
         <div class="time-block">
@@ -733,103 +733,103 @@ class EventSystem {
         </div>
       </div>
     `;
-    }
+  }
 
-    getDayStatus(dateStr, dayEvents) {
-        if (dayEvents.length === 0) return '';
+  getDayStatus(dateStr, dayEvents) {
+    if (dayEvents.length === 0) return '';
 
-        const now = new Date();
-        const eventDate = new Date(dateStr);
+    const now = new Date();
+    const eventDate = new Date(dateStr);
 
-        if (eventDate < now) {
-            const allFinished = dayEvents.every(event => {
-                const eventEnd = new Date(`${event.date}T${event.endTime}`);
-                return eventEnd < now;
-            });
-            return allFinished ? 'finished' : 'mixed';
-        } else {
-            return 'upcoming';
-        }
-    }
-
-    getEventStatusClass(event) {
-        const now = new Date();
-        const eventStart = new Date(`${event.date}T${event.startTime}`);
+    if (eventDate < now) {
+      const allFinished = dayEvents.every(event => {
         const eventEnd = new Date(`${event.date}T${event.endTime}`);
-
-        if (event.status === 'cancelled') return 'cancelled';
-        if (event.status === 'postponed') return 'postponed';
-        if (now < eventStart) return 'upcoming';
-        if (now >= eventStart && now <= eventEnd) return 'in-progress';
-        return 'finished';
+        return eventEnd < now;
+      });
+      return allFinished ? 'finished' : 'mixed';
+    } else {
+      return 'upcoming';
     }
+  }
 
-    // ======================
-    //  FUNCIONES UTILITARIAS
-    // ======================
+  getEventStatusClass(event) {
+    const now = new Date();
+    const eventStart = new Date(`${event.date}T${event.startTime}`);
+    const eventEnd = new Date(`${event.date}T${event.endTime}`);
 
-    formatDay(dateStr) {
-        const date = new Date(dateStr);
-        return date.getDate();
+    if (event.status === 'cancelled') return 'cancelled';
+    if (event.status === 'postponed') return 'postponed';
+    if (now < eventStart) return 'upcoming';
+    if (now >= eventStart && now <= eventEnd) return 'in-progress';
+    return 'finished';
+  }
+
+  // ======================
+  //  FUNCIONES UTILITARIAS
+  // ======================
+
+  formatDay(dateStr) {
+    const date = new Date(dateStr);
+    return date.getDate();
+  }
+
+  formatMonth(dateStr) {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('es-ES', { month: 'short' }).toUpperCase();
+  }
+
+  formatShortMonth(dateStr) {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('es-ES', { month: 'short' }).slice(0, 3);
+  }
+
+  formatFullDate(dateStr) {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' });
+  }
+
+  getMonthName(monthIndex) {
+    const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    return months[monthIndex];
+  }
+
+  padZero(num) {
+    return num < 10 ? `0${num}` : num;
+  }
+
+  destroy() {
+    if (this.updateInterval) {
+      clearInterval(this.updateInterval);
     }
-
-    formatMonth(dateStr) {
-        const date = new Date(dateStr);
-        return date.toLocaleDateString('es-ES', { month: 'short' }).toUpperCase();
+    if (this.modalInterval) {
+      clearInterval(this.modalInterval);
     }
-
-    formatShortMonth(dateStr) {
-        const date = new Date(dateStr);
-        return date.toLocaleDateString('es-ES', { month: 'short' }).slice(0, 3);
+    if (this.modal) {
+      document.body.removeChild(this.modal);
     }
-
-    formatFullDate(dateStr) {
-        const date = new Date(dateStr);
-        return date.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' });
-    }
-
-    getMonthName(monthIndex) {
-        const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-            'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-        return months[monthIndex];
-    }
-
-    padZero(num) {
-        return num < 10 ? `0${num}` : num;
-    }
-
-    destroy() {
-        if (this.updateInterval) {
-            clearInterval(this.updateInterval);
-        }
-        if (this.modalInterval) {
-            clearInterval(this.modalInterval);
-        }
-        if (this.modal) {
-            document.body.removeChild(this.modal);
-        }
-    }
+  }
 }
 
 // Inicialización del sistema de eventos
 document.addEventListener('DOMContentLoaded', () => {
-    try {
-        if (typeof eventsData !== 'undefined') {
-            new EventSystem(eventsData);
-        } else {
-            console.error('Error: eventsData no está definido');
-            const errorDiv = document.createElement('div');
-            errorDiv.className = 'error-message';
-            errorDiv.innerHTML = `
+  try {
+    if (typeof eventsData !== 'undefined') {
+      new EventSystem(eventsData);
+    } else {
+      console.error('Error: eventsData no está definido');
+      const errorDiv = document.createElement('div');
+      errorDiv.className = 'error-message';
+      errorDiv.innerHTML = `
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#e74c3c" width="48" height="48">
           <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
         </svg>
         <h3>Error al cargar los eventos</h3>
         <p>Los datos de eventos no están disponibles</p>
       `;
-            document.getElementById('events-list')?.appendChild(errorDiv);
-        }
-    } catch (error) {
-        console.error('Error al inicializar EventSystem:', error);
+      document.getElementById('events-list')?.appendChild(errorDiv);
     }
+  } catch (error) {
+    console.error('Error al inicializar EventSystem:', error);
+  }
 });
