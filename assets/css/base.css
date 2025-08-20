@@ -11,6 +11,29 @@
   padding: 0;
 }
 
+/* Personalización de scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-primary) var(--color-gray-200);
+}
+
+*::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(12, 74, 110, 0.3);
+  border-radius: 10px;
+  background-color: var(--color-gray-100);
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  background-color: var(--color-gray-100);
+}
+
+*::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(12, 74, 110, 0.3);
+  background-color: var(--color-primary);
+}
+
 html {
   scroll-behavior: smooth;
   font-size: 16px;
