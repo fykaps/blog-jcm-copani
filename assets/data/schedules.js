@@ -1,5 +1,6 @@
 /**
  * Datos de horarios de clases completos con múltiples grados
+ * Incluye información de contacto de profesores
  */
 
 // Grados y secciones disponibles
@@ -11,20 +12,118 @@ const grades = [
     "5to A", "5to B", "5to C"
 ];
 
-// Docentes por área
+// Información completa de profesores con teléfonos
 const teachers = {
-    "Matemáticas": ["David Mengoa Mamani", "María Gómez", "Carlos López"],
-    "Ciencias Sociales": ["Fidel Severiano Cruz Tiquilloca", "Luis Torres"],
-    "Tutoría": ["Fidel Severiano Cruz Tiquilloca", "Sofía Castro"],
-    "Educación Religiosa": ["Vidal Quiñonez Quispe", "Jorge Ruiz"],
-    "Inglés": ["Madelaine Gonzalo Segura", "Laura Méndez", "David Jiménez"],
-    "Educación Física": ["Nestor Rene Cruz Paye", "Elena Flores"],
-    "Arte y Cultura": ["Nestor Palomino Manzano", "Fernando Silva"],
-    "Desarrollo Personal": ["Julio Amilcar Rivera Aguilar", "Silvia Mendoza"],
-    "Ciencia y Tecnología": ["Alfonso Aruquipa Ccuno", "Lucía Ramírez"],
-    "Comunicación": ["Joel Calisaya Enriquez", "sOtro"],
-    "Aimara": ["Constantino Eulogio Apaza Lopez", "ososo"],
-    "Educación para el Trabajo": ["Geber Yole Chambilla Condori", "fddd"],
+    "David Mengoa Mamani": {
+        subject: "Matemáticas",
+        phone: "+51 987 654 321",
+        email: "david.mengoa@colegio.edu"
+    },
+    "María Gómez": {
+        subject: "Matemáticas",
+        phone: "+51 987 654 322",
+        email: "maria.gomez@colegio.edu"
+    },
+    "Carlos López": {
+        subject: "Matemáticas",
+        phone: "+51 987 654 323",
+        email: "carlos.lopez@colegio.edu"
+    },
+    "Fidel Severiano Cruz Tiquilloca": {
+        subject: "Ciencias Sociales",
+        phone: "+51 987 654 324",
+        email: "fidel.cruz@colegio.edu"
+    },
+    "Luis Torres": {
+        subject: "Ciencias Sociales",
+        phone: "+51 987 654 325",
+        email: "luis.torres@colegio.edu"
+    },
+    "Sofía Castro": {
+        subject: "Tutoría",
+        phone: "+51 987 654 326",
+        email: "sofia.castro@colegio.edu"
+    },
+    "Vidal Quiñonez Quispe": {
+        subject: "Educación Religiosa",
+        phone: "+51 987 654 327",
+        email: "vidal.quinonez@colegio.edu"
+    },
+    "Jorge Ruiz": {
+        subject: "Educación Religiosa",
+        phone: "+51 987 654 328",
+        email: "jorge.ruiz@colegio.edu"
+    },
+    "Madelaine Gonzalo Segura": {
+        subject: "Inglés",
+        phone: "+51 987 654 329",
+        email: "madelaine.gonzalo@colegio.edu"
+    },
+    "Laura Méndez": {
+        subject: "Inglés",
+        phone: "+51 987 654 330",
+        email: "laura.mendez@colegio.edu"
+    },
+    "David Jiménez": {
+        subject: "Inglés",
+        phone: "+51 987 654 331",
+        email: "david.jimenez@colegio.edu"
+    },
+    "Nestor Rene Cruz Paye": {
+        subject: "Educación Física",
+        phone: "+51 987 654 332",
+        email: "nestor.cruz@colegio.edu"
+    },
+    "Elena Flores": {
+        subject: "Educación Física",
+        phone: "+51 987 654 333",
+        email: "elena.flores@colegio.edu"
+    },
+    "Nestor Palomino Manzano": {
+        subject: "Arte y Cultura",
+        phone: "+51 987 654 334",
+        email: "nestor.palomino@colegio.edu"
+    },
+    "Fernando Silva": {
+        subject: "Arte y Cultura",
+        phone: "+51 987 654 335",
+        email: "fernando.silva@colegio.edu"
+    },
+    "Julio Amilcar Rivera Aguilar": {
+        subject: "Desarrollo Personal",
+        phone: "+51 987 654 336",
+        email: "julio.rivera@colegio.edu"
+    },
+    "Silvia Mendoza": {
+        subject: "Desarrollo Personal",
+        phone: "+51 987 654 337",
+        email: "silvia.mendoza@colegio.edu"
+    },
+    "Alfonso Aruquipa Ccuno": {
+        subject: "Ciencia y Tecnología",
+        phone: "+51 987 654 338",
+        email: "alfonso.aruquipa@colegio.edu"
+    },
+    "Lucía Ramírez": {
+        subject: "Ciencia y Tecnología",
+        phone: "+51 987 654 339",
+        email: "lucia.ramirez@colegio.edu"
+    },
+    "Joel Calisaya Enriquez": {
+        subject: "Comunicación",
+        phone: "+51 987 654 340",
+        email: "joel.calisaya@colegio.edu"
+    },
+    "Constantino Eulogio Apaza Lopez": {
+        subject: "Aimara",
+        phone: "+51 987 654 341",
+        email: "constantino.apaza@colegio.edu"
+    },
+    "Geber Yole Chambilla Condori": {
+        subject: "Educación para el Trabajo",
+        phone: "+51 987 654 342",
+        email: "geber.chambilla@colegio.edu"
+    }
 };
 
 // Horarios de clases por día y grado (estructura completa)
@@ -167,12 +266,7 @@ const classSchedules = {
         { grade: "5to C", subject: "Receso", start: "09:30", end: "09:45", type: "receso", isBreak: true },
         { grade: "5to C", subject: "Ciencia y Tecnología", teacher: "Lucía Ramírez", start: "23:20", end: "23:30", type: "Práctica" }
     ],
-    "Sábado": [
-        // Solo actividades especiales los sábados
-        // { grade: "5to A", subject: "Preparación Universitaria", teacher: "David Mengoa Mamani", start: "09:00", end: "12:00", type: "especial" },
-        // { grade: "5to B", subject: "Preparación Universitaria", teacher: "María Gómez", start: "09:00", end: "12:00", type: "especial" },
-        // { grade: "5to C", subject: "Preparación Universitaria", teacher: "Carlos López", start: "09:00", end: "12:00", type: "especial" }
-    ],
+    "Sábado": [],
     "Domingo": []
 };
 
@@ -210,4 +304,13 @@ function getDayName(date) {
 function formatTime(timeStr) {
     const [hours, minutes] = timeStr.split(':');
     return `${hours}:${minutes}`;
+}
+
+// Función para obtener información del profesor
+function getTeacherInfo(teacherName) {
+    return teachers[teacherName] || {
+        subject: "Asignatura no especificada",
+        phone: "No disponible",
+        email: "No disponible"
+    };
 }
