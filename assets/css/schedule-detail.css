@@ -1,555 +1,614 @@
 /* ==============================================
-   Schedule Detail Styles - Ecommerce Professional
+   Estilos para el sistema de detalle de horarios
+   Mismo diseño que schedule.css pero adaptado para vista detallada
    ============================================== */
 
-.schedule-detail-section {
-    padding: var(--space-8) 0;
-    min-height: 80vh;
+.schedule-detail-container {
+  padding: var(--space-6) 0;
+  max-width: var(--max-width);
+  margin: 0 auto;
 }
 
-/* Header del detalle */
 .detail-header {
-    background: linear-gradient(135deg, var(--color-primary-600), var(--color-primary-800));
-    color: white;
-    padding: var(--space-6);
-    border-radius: var(--radius-xl);
-    margin-bottom: var(--space-6);
-    position: relative;
-    overflow: hidden;
-}
-
-.detail-header::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -50%;
-    width: 100%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-    transform: rotate(-15deg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-4);
+  border-bottom: 2px solid var(--border-color);
+  flex-wrap: wrap;
+  gap: var(--space-4);
 }
 
 .detail-header h2 {
-    font-size: var(--text-3xl);
-    margin-bottom: var(--space-2);
-    position: relative;
-    z-index: 2;
+  margin: 0;
+  color: var(--color-gray-900);
+  font-size: var(--text-2xl);
 }
 
-.detail-header .current-time {
-    font-size: var(--text-lg);
-    opacity: 0.9;
-    margin-bottom: var(--space-4);
-    position: relative;
-    z-index: 2;
+.current-time {
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  color: var(--color-primary);
+  background: var(--color-primary-50);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-full);
 }
 
 .btn-back {
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    padding: var(--space-2) var(--space-4);
-    border-radius: var(--radius-lg);
-    transition: all var(--duration-300) var(--ease-in-out);
-    position: relative;
-    z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background-color: var(--color-primary);
+  color: white;
+  text-decoration: none;
+  border-radius: var(--radius);
+  font-weight: var(--font-medium);
+  transition: all var(--duration-200) var(--ease-in-out);
 }
 
 .btn-back:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+  background-color: var(--color-primary-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 /* Sistema de pestañas */
 .schedule-tabs {
-    display: flex;
-    gap: var(--space-2);
-    margin-bottom: var(--space-6);
-    overflow-x: auto;
-    padding-bottom: var(--space-2);
-    scrollbar-width: thin;
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-6);
+  overflow-x: auto;
+  padding-bottom: var(--space-2);
+  scrollbar-width: thin;
 }
 
 .schedule-tabs::-webkit-scrollbar {
-    height: 4px;
+  height: 4px;
 }
 
 .schedule-tabs::-webkit-scrollbar-thumb {
-    background: var(--color-primary-300);
-    border-radius: var(--radius-full);
+  background: var(--color-primary-300);
+  border-radius: var(--radius-full);
 }
 
 .tab-btn {
-    flex: none;
-    padding: var(--space-3) var(--space-6);
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-lg);
-    font-weight: var(--font-medium);
-    cursor: pointer;
-    transition: all var(--duration-200) var(--ease-in-out);
-    white-space: nowrap;
+  flex: none;
+  padding: var(--space-3) var(--space-6);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  font-weight: var(--font-medium);
+  cursor: pointer;
+  transition: all var(--duration-200) var(--ease-in-out);
+  white-space: nowrap;
 }
 
 .tab-btn:hover {
-    background: var(--color-primary-50);
-    border-color: var(--color-primary-300);
+  background: var(--color-primary-50);
+  border-color: var(--color-primary-300);
 }
 
 .tab-btn.active {
-    background: var(--color-primary);
-    color: white;
-    border-color: var(--color-primary);
-    box-shadow: var(--shadow-md);
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-md);
 }
 
 /* Contenido de pestañas */
 .schedule-tab-content {
-    background: white;
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-lg);
-    overflow: hidden;
+  background: white;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
 }
 
 .tab-pane {
-    display: none;
-    padding: var(--space-6);
+  display: none;
+  padding: var(--space-6);
 }
 
 .tab-pane.active {
-    display: block;
-    animation: fadeIn var(--duration-300) var(--ease-in-out);
+  display: block;
+  animation: fadeIn var(--duration-300) var(--ease-in-out);
 }
 
 .tab-pane h3 {
-    font-size: var(--text-xl);
-    color: var(--color-gray-800);
-    margin-bottom: var(--space-4);
-    padding-bottom: var(--space-2);
-    border-bottom: 2px solid var(--color-primary-100);
+  font-size: var(--text-xl);
+  color: var(--color-gray-800);
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-2);
+  border-bottom: 2px solid var(--color-primary-100);
 }
 
-/* Lista de clases detallada */
-.class-list-detail {
-    display: grid;
-    gap: var(--space-4);
+/* Lista de clases detallada - Mismo estilo que schedule.css */
+.grade-section {
+  margin-bottom: var(--space-8);
+  background: var(--bg-primary);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: transform var(--duration-300) var(--ease-in-out);
 }
 
-.class-item-detail {
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-lg);
-    padding: var(--space-4);
-    transition: all var(--duration-300) var(--ease-in-out);
-    position: relative;
+.grade-section:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
-.class-item-detail:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-    border-color: var(--color-primary-300);
+.grade-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-4);
+  background: var(--color-primary-50);
+  border-bottom: 1px solid var(--border-color);
 }
 
-.class-item-detail.status-pending {
-    border-left: 4px solid var(--status-pending);
+.grade-header h3 {
+  margin: 0;
+  color: var(--color-primary-800);
 }
 
-.class-item-detail.status-in-progress {
-    border-left: 4px solid var(--status-in-progress);
-    background: linear-gradient(90deg, var(--status-in-progress-bg) 0%, transparent 20%);
+.class-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
-.class-item-detail.status-completed {
-    border-left: 4px solid var(--status-completed);
-    opacity: 0.8;
+.class-item {
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--border-color);
+  transition: background-color var(--duration-200) var(--ease-in-out);
+}
+
+.class-item:last-child {
+  border-bottom: none;
+}
+
+.class-item:hover {
+  background-color: var(--color-gray-50);
 }
 
 .class-content {
-    display: grid;
-    gap: var(--space-2);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-2);
+}
+
+@media (min-width: 640px) {
+  .class-content {
+    grid-template-columns: 1fr 2fr 1fr;
+    align-items: center;
+  }
 }
 
 .class-time {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    font-weight: var(--font-semibold);
-    color: var(--color-gray-700);
-    font-size: var(--text-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: var(--font-semibold);
+  color: var(--color-gray-700);
 }
 
 .class-subject {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    font-size: var(--text-lg);
-    font-weight: var(--font-semibold);
-    color: var(--color-gray-900);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: var(--font-medium);
+  color: var(--color-gray-800);
 }
 
 .class-teacher {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    color: var(--color-gray-600);
-    font-size: var(--text-sm);
-    cursor: pointer;
-    transition: color var(--duration-200) var(--ease-in-out);
-}
-
-.class-teacher:hover {
-    color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-gray-600);
+  font-size: var(--text-sm);
+  cursor: pointer;
 }
 
 .class-status {
-    display: inline-flex;
-    align-items: center;
-    padding: var(--space-1) var(--space-3);
-    border-radius: var(--radius-full);
-    font-size: var(--text-xs);
-    font-weight: var(--font-medium);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wide);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
 }
 
-.status-pending .class-status {
-    background: var(--status-pending-bg);
-    color: var(--status-pending);
+.status-pending {
+  background-color: var(--status-pending-bg);
+  color: var(--status-pending);
 }
 
-.status-in-progress .class-status {
-    background: var(--status-in-progress-bg);
-    color: var(--status-in-progress);
+.status-in-progress {
+  background-color: var(--status-in-progress-bg);
+  color: var(--status-in-progress);
 }
 
-.status-completed .class-status {
-    background: var(--status-completed-bg);
-    color: var(--status-completed);
+.status-completed {
+  background-color: var(--status-completed-bg);
+  color: var(--status-completed);
 }
 
 .countdown {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-1);
-    padding: var(--space-1) var(--space-3);
-    background: var(--color-gray-100);
-    border-radius: var(--radius-full);
-    font-size: var(--text-xs);
-    font-weight: var(--font-medium);
-    color: var(--color-gray-700);
-    margin-top: var(--space-2);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--color-gray-600);
+  margin-top: var(--space-2);
 }
 
-.type-label {
-    display: inline-flex;
-    padding: var(--space-1) var(--space-2);
-    border-radius: var(--radius);
-    font-size: var(--text-xs);
-    font-weight: var(--font-medium);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wide);
-    background: var(--color-secondary-100);
-    color: var(--color-secondary-800);
-    margin-left: var(--space-2);
+@media (min-width: 640px) {
+  .countdown {
+    margin-top: 0;
+    grid-column: 1 / -1;
+  }
 }
 
-.type-label.practica {
-    background: var(--color-info-light);
-    color: var(--color-info-dark);
+.countdown svg {
+  flex-shrink: 0;
 }
 
-.type-label.laboratorio {
-    background: var(--color-warning-light);
-    color: var(--color-warning-dark);
+.recess-item {
+  background-color: var(--color-gray-50);
 }
 
-.type-label.examen {
-    background: var(--color-danger-light);
-    color: var(--color-danger-dark);
-}
-
-.type-label.centro-de-computo {
-    background: var(--color-accent-light);
-    color: var(--color-accent-dark);
-}
-
-/* Items de receso mejorados */
-.recess-item-detail {
-    background: linear-gradient(135deg, var(--color-gray-50), var(--bg-secondary));
-    border: 2px dashed var(--color-gray-300);
-}
-
-.recess-item-detail:hover {
-    border-style: solid;
-    border-color: var(--color-primary-200);
-}
-
-.recess-menu {
-    margin-top: var(--space-4);
-    padding: var(--space-4);
-    background: white;
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--border-color);
-}
-
-.menu-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: var(--space-3);
-    padding-bottom: var(--space-2);
-    border-bottom: 1px solid var(--border-color);
-}
-
-.menu-header h4 {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    font-size: var(--text-base);
-    color: var(--color-gray-800);
-    margin: 0;
-}
-
-.menu-status {
-    padding: var(--space-1) var(--space-2);
-    border-radius: var(--radius);
-    font-size: var(--text-xs);
-    font-weight: var(--font-medium);
-}
-
-.menu-details {
-    display: grid;
-    gap: var(--space-2);
-}
-
-.menu-name {
-    font-weight: var(--font-semibold);
-    color: var(--color-gray-900);
-    margin: 0;
-}
-
-.menu-additional {
-    color: var(--color-gray-600);
-    font-size: var(--text-sm);
-    margin: 0;
-}
-
-.menu-countdown {
-    padding: var(--space-2);
-    background: var(--color-gray-50);
-    border-radius: var(--radius);
-    font-size: var(--text-sm);
-    color: var(--color-gray-700);
-    margin: var(--space-2) 0;
-}
-
-.btn-view-menu {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-1);
-    padding: var(--space-1) var(--space-3);
-    background: var(--color-primary-50);
-    color: var(--color-primary);
-    border-radius: var(--radius);
-    font-size: var(--text-xs);
-    font-weight: var(--font-medium);
-    transition: all var(--duration-200) var(--ease-in-out);
-}
-
-.btn-view-menu:hover {
-    background: var(--color-primary);
-    color: white;
-    transform: translateX(2px);
-}
-
-/* Estados específicos para menús */
-.breakfast-menu {
-    border-left: 4px solid var(--color-warning);
-}
-
-.lunch-menu {
-    border-left: 4px solid var(--color-success);
-}
-
-/* Mensajes de error y vacío */
-.error-message {
-    text-align: center;
-    padding: var(--space-12) var(--space-6);
-    color: var(--color-gray-600);
-}
-
-.error-message h2 {
-    color: var(--color-gray-800);
-    margin-bottom: var(--space-4);
+.recess-item .class-subject {
+  color: var(--color-primary);
 }
 
 .no-classes {
-    text-align: center;
-    padding: var(--space-8) var(--space-4);
-    color: var(--color-gray-500);
-    font-style: italic;
+  text-align: center;
+  padding: var(--space-8);
+  color: var(--color-gray-500);
+  font-style: italic;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .detail-header {
-        padding: var(--space-4);
-        text-align: center;
-    }
+/* ==============================================
+   Estilos para CountdownSystem integrado
+   ============================================== */
 
-    .detail-header h2 {
-        font-size: var(--text-2xl);
-    }
-
-    .schedule-tabs {
-        gap: var(--space-1);
-        padding-bottom: var(--space-1);
-    }
-
-    .tab-btn {
-        padding: var(--space-2) var(--space-3);
-        font-size: var(--text-sm);
-    }
-
-    .tab-pane {
-        padding: var(--space-4);
-    }
-
-    .class-item-detail {
-        padding: var(--space-3);
-    }
-
-    .class-subject {
-        font-size: var(--text-base);
-    }
-
-    .recess-menu {
-        padding: var(--space-3);
-    }
-
-    .menu-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: var(--space-2);
-    }
-
-    .menu-header h4 {
-        font-size: var(--text-sm);
-    }
+.countdown-container {
+  margin-top: var(--space-2);
+  padding: var(--space-2);
+  background: var(--bg-secondary);
+  border-radius: var(--radius);
 }
 
-@media (max-width: 480px) {
-    .schedule-tabs {
-        flex-wrap: nowrap;
-        justify-content: flex-start;
-    }
-
-    .class-content {
-        gap: var(--space-1);
-    }
-
-    .class-time,
-    .class-teacher {
-        font-size: var(--text-xs);
-    }
-
-    .countdown {
-        font-size: var(--text-xs);
-        padding: var(--space-0-5) var(--space-2);
-    }
+.countdown-compact {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
 }
 
-/* Animaciones específicas */
-@keyframes pulse-highlight {
-    0%, 100% {
-        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
-    }
-    70% {
-        box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
-    }
+.countdown-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 2.5rem;
 }
 
-.highlight-item {
-    animation: pulse-highlight 2s ease-in-out;
+.countdown-value {
+  font-size: var(--text-sm);
+  font-weight: var(--font-bold);
+  color: var(--color-primary);
+  line-height: 1;
 }
 
-/* Modo oscuro */
-@media (prefers-color-scheme: dark) {
-    .schedule-tab-content,
-    .class-item-detail,
-    .recess-menu {
-        background: var(--color-gray-800);
-        border-color: var(--color-gray-700);
-    }
-
-    .class-item-detail.status-in-progress {
-        background: linear-gradient(90deg, rgba(16, 185, 129, 0.2) 0%, transparent 20%);
-    }
-
-    .tab-btn:not(.active) {
-        background: var(--color-gray-700);
-        border-color: var(--color-gray-600);
-        color: var(--color-gray-300);
-    }
-
-    .tab-btn:not(.active):hover {
-        background: var(--color-gray-600);
-        border-color: var(--color-primary-400);
-    }
-
-    .class-time {
-        color: var(--color-gray-400);
-    }
-
-    .class-subject {
-        color: var(--color-gray-100);
-    }
-
-    .class-teacher {
-        color: var(--color-gray-400);
-    }
-
-    .countdown {
-        background: var(--color-gray-700);
-        color: var(--color-gray-300);
-    }
-
-    .menu-countdown {
-        background: var(--color-gray-700);
-        color: var(--color-gray-300);
-    }
+.countdown-label {
+  font-size: var(--text-xs);
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-/* Mejoras de accesibilidad */
-.tab-btn:focus-visible,
-.btn-view-menu:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
+.countdown-detailed {
+  width: 100%;
 }
 
-.class-teacher:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
-    border-radius: var(--radius);
+.countdown-grid {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+  gap: var(--space-1);
+  align-items: center;
+}
+
+.countdown-item {
+  text-align: center;
+}
+
+.countdown-number {
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+  color: var(--color-primary);
+  line-height: 1;
+}
+
+.countdown-text {
+  font-size: var(--text-xs);
+  color: var(--text-light);
+  text-transform: uppercase;
+}
+
+.countdown-separator {
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+  color: var(--color-primary);
+  padding-bottom: var(--space-2);
+}
+
+.countdown-minimal {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--color-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Skeleton loading */
+.countdown-skeleton {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.countdown-skeleton .countdown-unit {
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radius);
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Estado completado */
+.countdown-complete {
+  text-align: center;
+  padding: var(--space-1);
+}
+
+.complete-text {
+  font-weight: var(--font-semibold);
+  color: var(--color-success);
+  font-size: var(--text-sm);
+}
+
+/* Modal de detalles del profesor */
+.teacher-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: var(--z-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--duration-300) var(--ease-in-out);
+}
+
+.teacher-modal.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.teacher-modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.teacher-modal-content {
+  position: relative;
+  background: var(--bg-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  width: 90%;
+  max-width: 400px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-2xl);
+  transform: translateY(20px);
+  transition: transform var(--duration-300) var(--ease-in-out);
+}
+
+.teacher-modal.active .teacher-modal-content {
+  transform: translateY(0);
+}
+
+.teacher-modal-close {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  background: none;
+  border: none;
+  color: var(--color-gray-500);
+  cursor: pointer;
+  padding: var(--space-1);
+  border-radius: var(--radius);
+  transition: all var(--duration-200) var(--ease-in-out);
+}
+
+.teacher-modal-close:hover {
+  color: var(--color-gray-700);
+  background-color: var(--color-gray-100);
+}
+
+.teacher-details-header {
+  text-align: center;
+  margin-bottom: var(--space-4);
+}
+
+.teacher-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto var(--space-3);
+  border: 3px solid var(--color-primary);
+}
+
+.teacher-name {
+  margin: 0 0 var(--space-1);
+  color: var(--color-gray-900);
+}
+
+.teacher-subject {
+  color: var(--color-primary);
+  font-weight: var(--font-medium);
+  margin: 0;
+}
+
+.teacher-contact {
+  margin-top: var(--space-4);
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.contact-item:last-child {
+  border-bottom: none;
+}
+
+.contact-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--color-primary-100);
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.contact-info {
+  flex: 1;
+}
+
+.contact-label {
+  display: block;
+  font-size: var(--text-xs);
+  color: var(--color-gray-500);
+  margin-bottom: 2px;
+}
+
+.contact-value {
+  display: block;
+  color: var(--color-gray-800);
+  font-weight: var(--font-medium);
+  text-decoration: none;
+}
+
+.contact-value.phone {
+  color: var(--color-primary);
+}
+
+.contact-value:hover {
+  color: var(--color-primary-dark);
 }
 
 /* Estados de carga */
 .schedule-loading {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: var(--space-12);
-    color: var(--color-gray-500);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-12);
+  color: var(--color-gray-500);
 }
 
 .loading-spinner {
-    width: 2rem;
-    height: 2rem;
-    border: 2px solid var(--color-gray-300);
-    border-top: 2px solid var(--color-primary);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin-bottom: var(--space-4);
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--color-gray-200);
+  border-top: 3px solid var(--color-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: var(--space-4);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Mensajes de error */
+.error-message {
+  text-align: center;
+  padding: var(--space-8);
+  color: var(--color-gray-600);
+}
+
+.error-message h2 {
+  color: var(--color-gray-800);
+  margin-bottom: var(--space-4);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .detail-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+  
+  .schedule-tabs {
+    flex-direction: column;
+  }
+  
+  .tab-btn {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .teacher-modal-content {
+    padding: var(--space-4);
+    width: 95%;
+  }
+  
+  .class-content {
+    grid-template-columns: 1fr;
+  }
+  
+  .countdown {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Modo oscuro */
+@media (prefers-color-scheme: dark) {
+  .countdown-skeleton .countdown-unit {
+    background: linear-gradient(90deg, #2d3748 25%, #4a5568 50%, #2d3748 75%);
+  }
+  
+  .schedule-tab-content {
+    background: var(--color-gray-800);
+  }
+  
+  .tab-pane h3 {
+    color: var(--color-gray-200);
+    border-bottom-color: var(--color-gray-700);
+  }
 }

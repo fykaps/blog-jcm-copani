@@ -1,8 +1,307 @@
 /**
- * Sistema de Detalle de Horarios - Versión Ecommerce Profesional
- * Con mejoras de rendimiento, accesibilidad y experiencia de usuario
- * Sin dependencia de time-utils.js
+ * Sistema de Detalle de Horarios - Versión Mejorada
+ * Con el mismo diseño y funcionalidades que schedule.js
  */
+
+class CountdownSystem {
+    constructor(options = {}) {
+        // Configuración por defecto
+        this.defaultOptions = {
+            precision: 'seconds',
+            updateInterval: 1000,
+            autoStart: true,
+            onTick: null,
+            onComplete: null,
+            format: 'compact'
+        };
+
+        // Fusionar opciones
+        this.options = { ...this.defaultOptions, ...options };
+
+        // Estado interno
+        this.targetDate = null;
+        this.isRunning = false;
+        this.intervalId = null;
+        this.lastUpdate = null;
+
+        // Métodos bindeados
+        this.tick = this.tick.bind(this);
+    }
+
+    /**
+     * Inicializar cuenta regresiva
+     */
+    init(targetDate, container) {
+        this.targetDate = this.parseDate(targetDate);
+        this.container = container;
+
+        if (!this.targetDate || !this.container) {
+            console.error('CountdownSystem: Fecha objetivo o contenedor no válidos');
+            return this;
+        }
+
+        this.render();
+
+        if (this.options.autoStart) {
+            this.start();
+        }
+
+        return this;
+    }
+
+    /**
+     * Parsear diferentes formatos de fecha
+     */
+    parseDate(date) {
+        if (date instanceof Date) return date;
+        if (typeof date === 'string') return new Date(date);
+        if (typeof date === 'number') return new Date(date);
+
+        console.error('CountdownSystem: Formato de fecha no válido');
+        return null;
+    }
+
+    /**
+     * Iniciar cuenta regresiva
+     */
+    start() {
+        if (this.isRunning || !this.targetDate) return;
+
+        this.isRunning = true;
+        this.lastUpdate = Date.now();
+
+        // Ejecutar primer tick inmediatamente
+        this.tick();
+
+        // Configurar intervalo
+        this.intervalId = setInterval(this.tick, this.options.updateInterval);
+    }
+
+    /**
+     * Detener cuenta regresiva
+     */
+    stop() {
+        if (!this.isRunning) return;
+
+        this.isRunning = false;
+        clearInterval(this.intervalId);
+        this.intervalId = null;
+    }
+
+    /**
+     * Actualizar cuenta regresiva
+     */
+    tick() {
+        const now = Date.now();
+        const timeRemaining = this.targetDate.getTime() - now;
+
+        if (timeRemaining <= 0) {
+            this.complete();
+            return;
+        }
+
+        // Calcular unidades de tiempo
+        const timeUnits = this.calculateTimeUnits(timeRemaining);
+
+        // Renderizar en el contenedor
+        this.render(timeUnits);
+
+        // Llamar callback onTick si existe
+        if (typeof this.options.onTick === 'function') {
+            this.options.onTick(timeUnits, timeRemaining);
+        }
+
+        this.lastUpdate = now;
+    }
+
+    /**
+     * Calcular unidades de tiempo
+     */
+    calculateTimeUnits(timeRemaining) {
+        const totalSeconds = Math.floor(timeRemaining / 1000);
+        const seconds = totalSeconds % 60;
+        const totalMinutes = Math.floor(totalSeconds / 60);
+        const minutes = totalMinutes % 60;
+        const totalHours = Math.floor(totalMinutes / 60);
+        const hours = totalHours % 24;
+        const days = Math.floor(totalHours / 24);
+
+        return {
+            days: Math.max(0, days),
+            hours: Math.max(0, hours),
+            minutes: Math.max(0, minutes),
+            seconds: Math.max(0, seconds),
+            totalMs: timeRemaining,
+            totalSeconds: totalSeconds
+        };
+    }
+
+    /**
+     * Renderizar cuenta regresiva
+     */
+    render(timeUnits = null) {
+        if (!this.container) return;
+
+        if (!timeUnits) {
+            // Estado inicial
+            this.container.innerHTML = this.createSkeleton();
+            return;
+        }
+
+        this.container.innerHTML = this.createCountdownHTML(timeUnits);
+    }
+
+    /**
+     * Crear HTML del esqueleto
+     */
+    createSkeleton() {
+        return `
+            <div class="countdown-skeleton">
+                <span class="countdown-unit skeleton"></span>
+                <span class="countdown-unit skeleton"></span>
+                <span class="countdown-unit skeleton"></span>
+                <span class="countdown-unit skeleton"></span>
+            </div>
+        `;
+    }
+
+    /**
+     * Crear HTML de la cuenta regresiva
+     */
+    createCountdownHTML(timeUnits) {
+        const { days, hours, minutes, seconds } = timeUnits;
+
+        switch (this.options.format) {
+            case 'minimal':
+                return this.createMinimalHTML(timeUnits);
+            case 'detailed':
+                return this.createDetailedHTML(timeUnits);
+            case 'compact':
+            default:
+                return this.createCompactHTML(timeUnits);
+        }
+    }
+
+    createCompactHTML({ days, hours, minutes, seconds }) {
+        return `
+            <div class="countdown-compact" role="timer" aria-live="polite">
+                ${days > 0 ? `
+                    <div class="countdown-unit">
+                        <span class="countdown-value">${this.formatNumber(days)}</span>
+                        <span class="countdown-label">días</span>
+                    </div>
+                ` : ''}
+                <div class="countdown-unit">
+                    <span class="countdown-value">${this.formatNumber(hours)}</span>
+                    <span class="countdown-label">horas</span>
+                </div>
+                <div class="countdown-unit">
+                    <span class="countdown-value">${this.formatNumber(minutes)}</span>
+                    <span class="countdown-label">min</span>
+                </div>
+                <div class="countdown-unit">
+                    <span class="countdown-value">${this.formatNumber(seconds)}</span>
+                    <span class="countdown-label">seg</span>
+                </div>
+            </div>
+        `;
+    }
+
+    createDetailedHTML({ days, hours, minutes, seconds }) {
+        return `
+            <div class="countdown-detailed" role="timer" aria-live="polite">
+                <div class="countdown-grid">
+                    <div class="countdown-item">
+                        <div class="countdown-number">${this.formatNumber(days)}</div>
+                        <div class="countdown-text">Días</div>
+                    </div>
+                    <div class="countdown-separator">:</div>
+                    <div class="countdown-item">
+                        <div class="countdown-number">${this.formatNumber(hours)}</div>
+                        <div class="countdown-text">Horas</div>
+                    </div>
+                    <div class="countdown-separator">:</div>
+                    <div class="countdown-item">
+                        <div class="countdown-number">${this.formatNumber(minutes)}</div>
+                        <div class="countdown-text">Minutos</div>
+                    </div>
+                    <div class="countdown-separator">:</div>
+                    <div class="countdown-item">
+                        <div class="countdown-number">${this.formatNumber(seconds)}</div>
+                        <div class="countdown-text">Segundos</div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    createMinimalHTML({ days, hours, minutes, seconds }) {
+        const parts = [];
+
+        if (days > 0) parts.push(`${days}d`);
+        if (hours > 0 || days > 0) parts.push(`${hours}h`);
+        if (minutes > 0 || hours > 0 || days > 0) parts.push(`${minutes}m`);
+        parts.push(`${seconds}s`);
+
+        return `
+            <div class="countdown-minimal" role="timer" aria-live="polite">
+                ${parts.join(' : ')}
+            </div>
+        `;
+    }
+
+    /**
+     * Formatear números (añadir cero inicial)
+     */
+    formatNumber(num) {
+        return num.toString().padStart(2, '0');
+    }
+
+    /**
+     * Manejar finalización
+     */
+    complete() {
+        this.stop();
+
+        this.container.innerHTML = `
+            <div class="countdown-complete">
+                <span class="complete-text">¡Tiempo completado!</span>
+            </div>
+        `;
+
+        if (typeof this.options.onComplete === 'function') {
+            this.options.onComplete();
+        }
+    }
+
+    /**
+     * Actualizar fecha objetivo
+     */
+    updateTargetDate(newDate) {
+        const parsedDate = this.parseDate(newDate);
+        if (!parsedDate) return;
+
+        this.targetDate = parsedDate;
+
+        // Reiniciar si estaba corriendo
+        if (this.isRunning) {
+            this.stop();
+            this.start();
+        } else {
+            this.render();
+        }
+    }
+
+    /**
+     * Destruir instancia (cleanup)
+     */
+    destroy() {
+        this.stop();
+        this.container = null;
+        this.targetDate = null;
+    }
+}
+
 
 class ScheduleDetailSystem {
     constructor() {
@@ -10,8 +309,6 @@ class ScheduleDetailSystem {
             clock: `<svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/></svg>`,
             class: `<svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>`,
             teacher: `<svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>`,
-            food: `<svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M18 3v2h-2V3H8v2H6V3H4v2h2v2h2V5h8v2h2V5h2V3h-2zM4 9h16v2h2v4h-2v6H4v-6H2v-4h2V9zm2 2v4h12v-4H6z"/></svg>`,
-            recess: `<svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4-8.5h-3v5h-2v-5H8V9h8v2.5z"/></svg>`,
             arrowRight: `<svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>`,
             phone: `<svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56-.35-.12-.74-.03-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/></svg>`,
             email: `<svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>`,
@@ -20,6 +317,7 @@ class ScheduleDetailSystem {
 
         this.currentTab = null;
         this.intervals = [];
+        this.countdownInstances = [];
         this.init();
     }
 
@@ -92,13 +390,14 @@ class ScheduleDetailSystem {
                 <div class="detail-header">
                     <h2>Horario completo de ${grade}</h2>
                     <div class="current-time">${currentTime}</div>
-                    <a href="schedule.html" class="btn btn-back">← Volver al horario general</a>
+                    <a href="schedule.html" class="btn-back">← Volver al horario general</a>
                 </div>
                 ${tabsHtml}
                 ${contentHtml}`;
 
                 this.currentTab = day;
                 this.initializeTabInteractions();
+                this.initializeAllCountdowns();
 
             } catch (error) {
                 console.error('Error loading schedule:', error);
@@ -135,9 +434,14 @@ class ScheduleDetailSystem {
                  ${isActive ? '' : 'hidden'}>
                 <h3>Horario de ${grade} - ${dayName}</h3>
                 ${fullSchedule[dayName] && fullSchedule[dayName].length > 0 ?
-                    `<ul class="class-list-detail">
-                        ${fullSchedule[dayName].map(cls => this.renderClassDetailItem(cls, currentTime, dayName)).join('')}
-                    </ul>` :
+                    `<div class="grade-section">
+                        <div class="grade-header">
+                            <h3>${grade}</h3>
+                        </div>
+                        <ul class="class-list">
+                            ${fullSchedule[dayName].map(cls => this.renderClassItem(cls, currentTime, dayName)).join('')}
+                        </ul>
+                    </div>` :
                     `<p class="no-classes">No hay clases programadas para este día.</p>`
                 }
             </div>`;
@@ -149,7 +453,7 @@ class ScheduleDetailSystem {
         return { tabsHtml, contentHtml };
     }
 
-    renderClassDetailItem(cls, currentTime, dayName) {
+    renderClassItem(cls, currentTime, dayName) {
         const today = new Date();
         const currentDayName = this.getDayName(today);
         const isToday = dayName === currentDayName;
@@ -158,14 +462,13 @@ class ScheduleDetailSystem {
         let status;
 
         if (isToday) {
-            status = this.getClassStatus(cls, currentTime);
+            status = this.getClassStatus(cls);
         } else if (isPast) {
             status = {
                 status: 'completed',
                 text: 'Completada',
                 class: 'status-completed',
-                timeRemaining: 0,
-                daysRemaining: 0
+                timeRemaining: 0
             };
         } else {
             const daysDiff = this.calculateDaysDifference(dayName, currentDayName);
@@ -173,53 +476,82 @@ class ScheduleDetailSystem {
         }
 
         const isBreak = cls.isBreak || cls.subject === "Receso";
-        const typeLabel = (cls.type && cls.type.toLowerCase() !== "normal" && !isBreak) ?
-            `<span class="type-label ${cls.type.toLowerCase().replace(/\s+/g, '-')}">${cls.type}</span>` : '';
+        const teacherInfo = getTeacherInfo(cls.teacher);
 
-        let countdown = '';
+        // ID único para el contenedor del countdown
+        const countdownId = `countdown-${cls.start}-${cls.end}-${Math.random().toString(36).substr(2, 9)}`;
+
+        let countdownHTML = '';
         if (status.timeRemaining > 0) {
-            countdown = this.formatCountdown(status);
+            countdownHTML = `
+                <div class="countdown-container" id="${countdownId}">
+                    <div class="countdown-skeleton">
+                        <span class="countdown-unit skeleton"></span>
+                        <span class="countdown-unit skeleton"></span>
+                    </div>
+                </div>
+            `;
+        }
+
+        if (isBreak) {
+            return `
+            <li class="class-item ${status.class} recess-item" 
+                data-start="${cls.start}" 
+                data-end="${cls.end}"
+                data-countdown-id="${countdownId}">
+                <div class="class-content">
+                    <span class="class-time">${this.icons.clock} ${cls.start} - ${cls.end}</span>
+                    <span class="class-subject">${cls.subject}</span>
+                    <span class="class-status">${status.status === 'in-progress' ? 'En receso' : status.text}</span>
+                    ${countdownHTML}
+                </div>
+            </li>`;
         }
 
         return `
-        <li class="class-item-detail ${status.class}">
+        <li class="class-item ${status.class}" 
+            data-start="${cls.start}" 
+            data-end="${cls.end}"
+            data-countdown-id="${countdownId}">
             <div class="class-content">
                 <span class="class-time">${this.icons.clock} ${cls.start} - ${cls.end}</span>
                 <span class="class-subject">${this.icons.class} ${cls.subject}</span>
-                <span class="class-teacher" data-teacher="${cls.teacher}" onclick="scheduleDetailSystem.showTeacherModal('${cls.teacher}')">
+                <span class="class-teacher" data-teacher="${cls.teacher}">
                     ${this.icons.teacher} ${cls.teacher}
                 </span>
-                ${typeLabel}
                 <span class="class-status">${status.text}</span>
-                ${countdown}
+                ${countdownHTML}
             </div>
         </li>`;
     }
 
-    formatCountdown(status) {
-        if (status.daysRemaining > 0) {
-            const hours = Math.floor((status.timeRemaining % 1440) / 60);
-            const minutes = status.timeRemaining % 60;
-            return `<span class="countdown">Faltan ${status.daysRemaining}d ${hours}h ${minutes}m</span>`;
+    getClassStatus(cls) {
+        const start = this.timeToMinutes(cls.start);
+        const end = this.timeToMinutes(cls.end);
+        const now = this.timeToMinutes(this.getCurrentTime());
+
+        if (now < start) {
+            return {
+                status: 'pending',
+                text: 'Pendiente',
+                class: 'status-pending',
+                timeRemaining: start - now
+            };
+        } else if (now >= start && now < end) {
+            return {
+                status: 'in-progress',
+                text: 'En curso',
+                class: 'status-in-progress',
+                timeRemaining: end - now
+            };
         } else {
-            return `<span class="countdown">${this.icons.clock} ${status.text === 'Pendiente' ?
-                `Inicia en ${this.formatFullCountdown(status.timeRemaining)}` :
-                `Termina en ${this.formatFullCountdown(status.timeRemaining)}`
-                }</span>`;
+            return {
+                status: 'completed',
+                text: 'Completada',
+                class: 'status-completed',
+                timeRemaining: 0
+            };
         }
-    }
-
-    formatFullCountdown(minutes) {
-        const days = Math.floor(minutes / 1440);
-        const hours = Math.floor((minutes % 1440) / 60);
-        const mins = minutes % 60;
-
-        let parts = [];
-        if (days > 0) parts.push(`${days}d`);
-        if (hours > 0) parts.push(`${hours}h`);
-        if (mins > 0 || parts.length === 0) parts.push(`${mins}m`);
-
-        return parts.join(' ');
     }
 
     calculateDaysDifference(targetDay, currentDay) {
@@ -246,58 +578,69 @@ class ScheduleDetailSystem {
                 status: 'pending',
                 text: 'Pendiente',
                 class: 'status-pending',
-                timeRemaining: timeToStart,
-                daysRemaining: daysDiff
+                timeRemaining: timeToStart
             };
         } else if (timeToStart <= 0 && timeToEnd > 0) {
             return {
                 status: 'in-progress',
                 text: 'En curso',
                 class: 'status-in-progress',
-                timeRemaining: timeToEnd,
-                daysRemaining: 0
+                timeRemaining: timeToEnd
             };
         } else {
             return {
                 status: 'completed',
                 text: 'Completada',
                 class: 'status-completed',
-                timeRemaining: 0,
-                daysRemaining: 0
+                timeRemaining: 0
             };
         }
     }
 
-    getClassStatus(cls, currentTime) {
-        const start = this.timeToMinutes(cls.start);
-        const end = this.timeToMinutes(cls.end);
-        const now = this.timeToMinutes(currentTime);
+    initializeAllCountdowns() {
+        const classItems = document.querySelectorAll('.class-item, .recess-item');
 
-        if (now < start) {
-            return {
-                status: 'pending',
-                text: 'Pendiente',
-                class: 'status-pending',
-                timeRemaining: start - now,
-                daysRemaining: 0
-            };
-        } else if (now >= start && now < end) {
-            return {
-                status: 'in-progress',
-                text: 'En curso',
-                class: 'status-in-progress',
-                timeRemaining: end - now,
-                daysRemaining: 0
-            };
+        classItems.forEach(item => {
+            const start = item.dataset.start;
+            const end = item.dataset.end;
+            const countdownId = item.dataset.countdownId;
+            const status = this.getClassStatus({ start, end });
+
+            if (status.timeRemaining > 0 && countdownId) {
+                this.initializeCountdown(item, start, end, status, countdownId);
+            }
+        });
+    }
+
+    initializeCountdown(item, startTime, endTime, status, countdownId) {
+        const now = new Date();
+        const today = now.toISOString().split('T')[0];
+
+        let targetDate;
+        let message;
+
+        if (status.status === 'pending') {
+            targetDate = new Date(`${today}T${startTime}`);
+            message = 'Inicia en';
         } else {
-            return {
-                status: 'completed',
-                text: 'Completada',
-                class: 'status-completed',
-                timeRemaining: 0,
-                daysRemaining: 0
-            };
+            targetDate = new Date(`${today}T${endTime}`);
+            message = 'Termina en';
         }
+
+        const countdownElement = document.getElementById(countdownId);
+        if (!countdownElement) return;
+
+        // Crear nueva instancia de CountdownSystem
+        const instance = new CountdownSystem({
+            format: 'minimal',
+            precision: 'seconds',
+            onComplete: () => {
+                // Recargar cuando un countdown termine
+                this.updateAllStatuses();
+            }
+        }).init(targetDate, countdownElement);
+
+        this.countdownInstances.push({ instance, element: countdownElement });
     }
 
     loadTab(dayName) {
@@ -326,7 +669,7 @@ class ScheduleDetailSystem {
         this.currentTab = dayName;
 
         // Actualizar estados
-        this.updateClassDetailStatuses(grade, dayName);
+        this.updateClassStatuses(grade, dayName);
 
         // Scroll suave a la sección
         document.querySelector('.schedule-tab-content').scrollIntoView({
@@ -335,7 +678,7 @@ class ScheduleDetailSystem {
         });
     }
 
-    updateClassDetailStatuses(grade, day) {
+    updateClassStatuses(grade, day) {
         const currentTime = this.getCurrentTime();
         const schedule = getScheduleByDayAndGrade(day, grade);
         const today = new Date();
@@ -343,7 +686,7 @@ class ScheduleDetailSystem {
         const isToday = day === currentDayName;
         const isPast = this.getDayIndex(day) < this.getDayIndex(currentDayName);
 
-        const classItems = document.querySelectorAll(`#tab-${day} .class-item-detail, #tab-${day} .recess-item-detail`);
+        const classItems = document.querySelectorAll(`#tab-${day} .class-item, #tab-${day} .recess-item`);
 
         classItems.forEach((item, index) => {
             const cls = schedule[index];
@@ -351,14 +694,13 @@ class ScheduleDetailSystem {
 
             let status;
             if (isToday) {
-                status = this.getClassStatus(cls, currentTime);
+                status = this.getClassStatus(cls);
             } else if (isPast) {
                 status = {
                     status: 'completed',
                     text: 'Completada',
                     class: 'status-completed',
-                    timeRemaining: 0,
-                    daysRemaining: 0
+                    timeRemaining: 0
                 };
             } else {
                 const daysDiff = this.calculateDaysDifference(day, currentDayName);
@@ -366,29 +708,58 @@ class ScheduleDetailSystem {
             }
 
             const isBreak = cls.isBreak || cls.subject === "Receso";
-            item.className = `${isBreak ? 'recess-item-detail' : 'class-item-detail'} ${status.class}`;
+            item.className = `${isBreak ? 'recess-item' : 'class-item'} ${status.class}`;
 
             const statusElement = item.querySelector('.class-status');
-            const countdownElement = item.querySelector('.countdown');
-
             if (statusElement) {
                 statusElement.textContent = isBreak && status.status === 'in-progress' ? 'En receso' : status.text;
             }
 
-            if (countdownElement) {
-                if (status.timeRemaining > 0) {
-                    countdownElement.innerHTML = this.formatCountdown(status);
-                } else {
+            // Actualizar countdown si existe
+            const countdownId = item.dataset.countdownId;
+            if (status.timeRemaining > 0 && countdownId) {
+                this.updateCountdown(item, cls.start, cls.end, status, countdownId);
+            } else {
+                // Limpiar countdown si existe
+                const countdownElement = item.querySelector('.countdown-container');
+                if (countdownElement) {
                     countdownElement.remove();
                 }
             }
         });
     }
 
+    updateCountdown(item, startTime, endTime, status, countdownId) {
+        const now = new Date();
+        const today = now.toISOString().split('T')[0];
+
+        let targetDate;
+
+        if (status.status === 'pending') {
+            targetDate = new Date(`${today}T${startTime}`);
+        } else {
+            targetDate = new Date(`${today}T${endTime}`);
+        }
+
+        const countdownElement = document.getElementById(countdownId);
+        if (!countdownElement) return;
+
+        // Buscar instancia existente
+        const existingInstance = this.countdownInstances.find(inst => inst.element === countdownElement);
+
+        if (existingInstance) {
+            // Actualizar fecha objetivo
+            existingInstance.instance.updateTargetDate(targetDate);
+        } else {
+            // Crear nueva instancia si no existe
+            this.initializeCountdown(item, startTime, endTime, status, countdownId);
+        }
+    }
+
     startRealTimeUpdates() {
         // Actualizar cada minuto
         this.intervals.push(setInterval(() => {
-            this.updateAllClassStatuses();
+            this.updateAllStatuses();
         }, 60000));
 
         // Actualizar la hora cada segundo
@@ -406,13 +777,13 @@ class ScheduleDetailSystem {
         });
     }
 
-    updateAllClassStatuses() {
+    updateAllStatuses() {
         const urlParams = new URLSearchParams(window.location.search);
         const grade = urlParams.get('grade');
         const day = this.currentTab || urlParams.get('day') || this.getDayName();
 
         if (grade) {
-            this.updateClassDetailStatuses(grade, day);
+            this.updateClassStatuses(grade, day);
         }
     }
 
@@ -459,21 +830,12 @@ class ScheduleDetailSystem {
                         </div>
                     </div>
                 </div>
-
-                <div class="teacher-modal-actions">
-                    <button class="btn btn-primary" onclick="navigator.clipboard.writeText('${teacherInfo.phone}')">
-                        Copiar teléfono
-                    </button>
-                    <a href="mailto:${teacherInfo.email}" class="btn btn-secondary">
-                        Enviar email
-                    </a>
-                </div>
             </div>
         `;
 
         document.body.appendChild(modal);
 
-        // Activar modal
+        // Activar modal con animación
         setTimeout(() => {
             modal.classList.add('active');
         }, 10);
@@ -494,7 +856,7 @@ class ScheduleDetailSystem {
 
         document.addEventListener('keydown', escHandler);
 
-        // Limpiar event listener
+        // Limpiar event listener cuando se cierre el modal
         modal.addEventListener('transitionend', (e) => {
             if (e.propertyName === 'opacity' && !modal.classList.contains('active')) {
                 document.removeEventListener('keydown', escHandler);
@@ -526,7 +888,7 @@ class ScheduleDetailSystem {
             <div class="error-message">
                 <h2>Grado no especificado</h2>
                 <p>No se ha especificado un grado para mostrar el horario.</p>
-                <a href="schedule.html" class="btn btn-primary">Volver al horario general</a>
+                <a href="schedule.html" class="btn-back">Volver al horario general</a>
             </div>
         `;
     }
@@ -558,6 +920,17 @@ class ScheduleDetailSystem {
             this.displayGradeSchedule();
         });
 
+        // Delegación de eventos para los clics en profesores
+        document.addEventListener('click', (e) => {
+            const teacherElement = e.target.closest('.class-teacher');
+            if (teacherElement) {
+                const teacherName = teacherElement.dataset.teacher;
+                if (teacherName) {
+                    this.showTeacherModal(teacherName);
+                }
+            }
+        });
+
         // Mejorar accesibilidad de botones de profesor
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
@@ -573,10 +946,19 @@ class ScheduleDetailSystem {
         });
     }
 
+    cleanupCountdowns() {
+        // Destruir todas las instancias de countdown
+        this.countdownInstances.forEach(({ instance }) => instance.destroy());
+        this.countdownInstances = [];
+    }
+
     destroy() {
         // Limpiar intervalos
         this.intervals.forEach(interval => clearInterval(interval));
         this.intervals = [];
+
+        // Limpiar countdowns
+        this.cleanupCountdowns();
     }
 }
 
