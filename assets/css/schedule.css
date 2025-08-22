@@ -107,9 +107,10 @@
 }
 
 .class-item {
-  padding: var(--space-4);
+  padding: var(--space-5);
   border-bottom: 1px solid var(--border-color);
-  transition: background-color var(--duration-200) var(--ease-in-out);
+  transition: all var(--duration-200) var(--ease-in-out);
+  position: relative;
 }
 
 .class-item:last-child {
@@ -118,6 +119,9 @@
 
 .class-item:hover {
   background-color: var(--color-gray-50);
+  transform: translateX(4px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1;
 }
 
 .class-content {
@@ -156,6 +160,11 @@
   color: var(--color-gray-600);
   font-size: var(--text-sm);
   cursor: pointer;
+  transition: color var(--duration-200) var(--ease-in-out);
+}
+
+.class-teacher:hover {
+  color: var(--color-primary);
 }
 
 .class-status {
@@ -211,6 +220,10 @@
 
 .recess-item .class-subject {
   color: var(--color-primary);
+}
+
+.recess-item:hover {
+  background-color: var(--color-primary-100) !important;
 }
 
 .no-classes {

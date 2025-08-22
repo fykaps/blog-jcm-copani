@@ -1,66 +1,149 @@
 /* ==============================================
    Estilos para el sistema de detalle de horarios
-   Mismo diseño que schedule.css pero adaptado para vista detallada
+   Basado en schedule.css pero adaptado para vista detallada
    ============================================== */
 
 .schedule-detail-container {
-  padding: var(--space-6) 0;
+  padding: var(--space-8) 0;
   max-width: var(--max-width);
   margin: 0 auto;
 }
 
+/* Header de detalle */
 .detail-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--space-6);
-  padding-bottom: var(--space-4);
-  border-bottom: 2px solid var(--border-color);
+  margin-bottom: var(--space-8);
+  padding: var(--space-6);
+  background: linear-gradient(135deg, var(--color-primary-50), var(--color-primary-100));
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-md);
   flex-wrap: wrap;
   gap: var(--space-4);
 }
 
-.detail-header h2 {
-  margin: 0;
-  color: var(--color-gray-900);
-  font-size: var(--text-2xl);
+.detail-header-content {
+  flex: 1;
+  min-width: 300px;
+}
+
+.detail-header h1 {
+  margin: 0 0 var(--space-2);
+  color: var(--color-primary-900);
+  font-size: var(--text-3xl);
+  font-weight: var(--font-bold);
+}
+
+.grade-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-4);
+}
+
+.grade-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-primary);
+  color: white;
+  border-radius: var(--radius-full);
+  font-weight: var(--font-semibold);
+  font-size: var(--text-sm);
+}
+
+.schedule-date {
+  color: var(--color-gray-600);
+  font-weight: var(--font-medium);
 }
 
 .current-time {
   font-size: var(--text-lg);
   font-weight: var(--font-semibold);
   color: var(--color-primary);
-  background: var(--color-primary-50);
-  padding: var(--space-2) var(--space-4);
+  background: rgba(255, 255, 255, 0.9);
+  padding: var(--space-3) var(--space-5);
   border-radius: var(--radius-full);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Botones de acción */
+.detail-actions {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
 }
 
 .btn-back {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  padding: var(--space-2) var(--space-4);
+  padding: var(--space-3) var(--space-5);
   background-color: var(--color-primary);
   color: white;
   text-decoration: none;
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
   font-weight: var(--font-medium);
   transition: all var(--duration-200) var(--ease-in-out);
+  box-shadow: var(--shadow-md);
 }
 
 .btn-back:hover {
   background-color: var(--color-primary-dark);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-download {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  background-color: var(--color-success);
+  color: white;
+  text-decoration: none;
+  border-radius: var(--radius-lg);
+  font-weight: var(--font-medium);
+  transition: all var(--duration-200) var(--ease-in-out);
   box-shadow: var(--shadow-md);
 }
 
-/* Sistema de pestañas */
+.btn-download:hover {
+  background-color: var(--color-success-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Sistema de pestañas mejorado */
+.schedule-tabs-container {
+  margin-bottom: var(--space-8);
+  background: white;
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.schedule-tabs-header {
+  display: flex;
+  background: var(--color-gray-50);
+  padding: var(--space-4) var(--space-6);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.schedule-tabs-header h2 {
+  margin: 0;
+  color: var(--color-gray-800);
+  font-size: var(--text-xl);
+}
+
 .schedule-tabs {
   display: flex;
-  gap: var(--space-2);
-  margin-bottom: var(--space-6);
+  gap: var(--space-1);
+  padding: var(--space-4) var(--space-6);
+  border-bottom: 1px solid var(--border-color);
   overflow-x: auto;
-  padding-bottom: var(--space-2);
   scrollbar-width: thin;
 }
 
@@ -76,8 +159,8 @@
 .tab-btn {
   flex: none;
   padding: var(--space-3) var(--space-6);
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
+  background: transparent;
+  border: 1px solid transparent;
   border-radius: var(--radius-lg);
   font-weight: var(--font-medium);
   cursor: pointer;
@@ -99,57 +182,63 @@
 
 /* Contenido de pestañas */
 .schedule-tab-content {
-  background: white;
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-lg);
-  overflow: hidden;
+  padding: var(--space-6);
 }
 
 .tab-pane {
   display: none;
-  padding: var(--space-6);
+  animation: fadeIn var(--duration-300) var(--ease-in-out);
 }
 
 .tab-pane.active {
   display: block;
-  animation: fadeIn var(--duration-300) var(--ease-in-out);
 }
 
 .tab-pane h3 {
   font-size: var(--text-xl);
   color: var(--color-gray-800);
-  margin-bottom: var(--space-4);
-  padding-bottom: var(--space-2);
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-3);
   border-bottom: 2px solid var(--color-primary-100);
 }
 
-/* Lista de clases detallada - Mismo estilo que schedule.css */
-.grade-section {
-  margin-bottom: var(--space-8);
+/* Lista de clases detallada - Estilo consistente con schedule.css */
+.classes-container {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.class-day-section {
   background: var(--bg-primary);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
   overflow: hidden;
   transition: transform var(--duration-300) var(--ease-in-out);
 }
 
-.grade-section:hover {
+.class-day-section:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-lg);
 }
 
-.grade-header {
+.day-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--space-4);
+  padding: var(--space-5);
   background: var(--color-primary-50);
   border-bottom: 1px solid var(--border-color);
 }
 
-.grade-header h3 {
+.day-header h4 {
   margin: 0;
   color: var(--color-primary-800);
+  font-size: var(--text-lg);
+}
+
+.day-date {
+  color: var(--color-gray-600);
+  font-weight: var(--font-medium);
 }
 
 .class-list {
@@ -159,9 +248,10 @@
 }
 
 .class-item {
-  padding: var(--space-4);
+  padding: var(--space-5);
   border-bottom: 1px solid var(--border-color);
-  transition: background-color var(--duration-200) var(--ease-in-out);
+  transition: all var(--duration-200) var(--ease-in-out);
+  position: relative;
 }
 
 .class-item:last-child {
@@ -170,15 +260,23 @@
 
 .class-item:hover {
   background-color: var(--color-gray-50);
+  transform: translateX(4px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+
+.class-item.current {
+  background-color: var(--color-primary-50);
+  border-left: 4px solid var(--color-primary);
 }
 
 .class-content {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-2);
+  gap: var(--space-3);
 }
 
-@media (min-width: 640px) {
+@media (min-width: 768px) {
   .class-content {
     grid-template-columns: 1fr 2fr 1fr;
     align-items: center;
@@ -188,17 +286,31 @@
 .class-time {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--space-3);
   font-weight: var(--font-semibold);
   color: var(--color-gray-700);
+}
+
+.time-icon {
+  color: var(--color-primary);
 }
 
 .class-subject {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--space-3);
   font-weight: var(--font-medium);
   color: var(--color-gray-800);
+}
+
+.subject-icon {
+  color: var(--color-primary);
+}
+
+.class-details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
 }
 
 .class-teacher {
@@ -208,13 +320,33 @@
   color: var(--color-gray-600);
   font-size: var(--text-sm);
   cursor: pointer;
+  transition: color var(--duration-200) var(--ease-in-out);
+}
+
+.class-teacher:hover {
+  color: var(--color-primary);
+}
+
+.class-room {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-gray-500);
+  font-size: var(--text-sm);
+}
+
+.class-status-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-3);
 }
 
 .class-status {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-1) var(--space-3);
+  padding: var(--space-1) var(--space-4);
   border-radius: var(--radius-full);
   font-size: var(--text-xs);
   font-weight: var(--font-semibold);
@@ -237,16 +369,17 @@
   color: var(--status-completed);
 }
 
+/* Countdown System - Igual que schedule.css */
 .countdown {
   display: flex;
   align-items: center;
   gap: var(--space-2);
   font-size: var(--text-sm);
   color: var(--color-gray-600);
-  margin-top: var(--space-2);
+  margin-top: var(--space-3);
 }
 
-@media (min-width: 640px) {
+@media (min-width: 768px) {
   .countdown {
     margin-top: 0;
     grid-column: 1 / -1;
@@ -257,35 +390,17 @@
   flex-shrink: 0;
 }
 
-.recess-item {
-  background-color: var(--color-gray-50);
-}
-
-.recess-item .class-subject {
-  color: var(--color-primary);
-}
-
-.no-classes {
-  text-align: center;
-  padding: var(--space-8);
-  color: var(--color-gray-500);
-  font-style: italic;
-}
-
-/* ==============================================
-   Estilos para CountdownSystem integrado
-   ============================================== */
-
 .countdown-container {
-  margin-top: var(--space-2);
-  padding: var(--space-2);
+  margin-top: var(--space-3);
+  padding: var(--space-3);
   background: var(--bg-secondary);
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
+  border-left: 4px solid var(--color-primary);
 }
 
 .countdown-compact {
   display: flex;
-  gap: var(--space-2);
+  gap: var(--space-3);
   align-items: center;
 }
 
@@ -293,11 +408,15 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 2.5rem;
+  min-width: 3rem;
+  padding: var(--space-2);
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
 }
 
 .countdown-value {
-  font-size: var(--text-sm);
+  font-size: var(--text-lg);
   font-weight: var(--font-bold);
   color: var(--color-primary);
   line-height: 1;
@@ -310,223 +429,75 @@
   letter-spacing: 0.05em;
 }
 
-.countdown-detailed {
-  width: 100%;
+/* Elementos especiales */
+.recess-item {
+  background-color: var(--color-gray-50);
 }
 
-.countdown-grid {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
-  gap: var(--space-1);
-  align-items: center;
+.recess-item .class-subject {
+  color: var(--color-primary);
 }
 
-.countdown-item {
+.recess-item:hover {
+  background-color: var(--color-primary-100) !important;
+}
+
+.lunch-item {
+  background-color: var(--color-warning-50);
+}
+
+.lunch-item .class-subject {
+  color: var(--color-warning);
+}
+
+.lunch-item:hover {
+  background-color: var(--color-warning-100) !important;
+}
+
+.no-classes {
   text-align: center;
-}
-
-.countdown-number {
-  font-size: var(--text-lg);
-  font-weight: var(--font-bold);
-  color: var(--color-primary);
-  line-height: 1;
-}
-
-.countdown-text {
-  font-size: var(--text-xs);
-  color: var(--text-light);
-  text-transform: uppercase;
-}
-
-.countdown-separator {
-  font-size: var(--text-lg);
-  font-weight: var(--font-bold);
-  color: var(--color-primary);
-  padding-bottom: var(--space-2);
-}
-
-.countdown-minimal {
-  font-size: var(--text-sm);
-  font-weight: var(--font-medium);
-  color: var(--color-primary);
-  font-variant-numeric: tabular-nums;
-}
-
-/* Skeleton loading */
-.countdown-skeleton {
-  display: flex;
-  gap: var(--space-2);
-}
-
-.countdown-skeleton .countdown-unit {
-  width: 2rem;
-  height: 2rem;
-  border-radius: var(--radius);
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  animation: loading 1.5s infinite;
-}
-
-@keyframes loading {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-
-/* Estado completado */
-.countdown-complete {
-  text-align: center;
-  padding: var(--space-1);
-}
-
-.complete-text {
-  font-weight: var(--font-semibold);
-  color: var(--color-success);
-  font-size: var(--text-sm);
-}
-
-/* Modal de detalles del profesor */
-.teacher-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: var(--z-modal);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  visibility: hidden;
-  transition: all var(--duration-300) var(--ease-in-out);
-}
-
-.teacher-modal.active {
-  opacity: 1;
-  visibility: visible;
-}
-
-.teacher-modal-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-
-.teacher-modal-content {
-  position: relative;
-  background: var(--bg-primary);
-  border-radius: var(--radius-lg);
-  padding: var(--space-6);
-  width: 90%;
-  max-width: 400px;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: var(--shadow-2xl);
-  transform: translateY(20px);
-  transition: transform var(--duration-300) var(--ease-in-out);
-}
-
-.teacher-modal.active .teacher-modal-content {
-  transform: translateY(0);
-}
-
-.teacher-modal-close {
-  position: absolute;
-  top: var(--space-4);
-  right: var(--space-4);
-  background: none;
-  border: none;
+  padding: var(--space-10);
   color: var(--color-gray-500);
-  cursor: pointer;
-  padding: var(--space-1);
-  border-radius: var(--radius);
-  transition: all var(--duration-200) var(--ease-in-out);
+  font-style: italic;
 }
 
-.teacher-modal-close:hover {
-  color: var(--color-gray-700);
-  background-color: var(--color-gray-100);
-}
-
-.teacher-details-header {
-  text-align: center;
+.no-classes-icon {
+  font-size: var(--text-4xl);
   margin-bottom: var(--space-4);
+  color: var(--color-gray-300);
 }
 
-.teacher-avatar {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin: 0 auto var(--space-3);
-  border: 3px solid var(--color-primary);
+/* Resumen del día */
+.day-summary {
+  margin-top: var(--space-6);
+  padding: var(--space-5);
+  background: var(--color-gray-50);
+  border-radius: var(--radius-lg);
+  border-left: 4px solid var(--color-primary);
 }
 
-.teacher-name {
-  margin: 0 0 var(--space-1);
-  color: var(--color-gray-900);
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-4);
 }
 
-.teacher-subject {
+.summary-item {
+  text-align: center;
+}
+
+.summary-value {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-bold);
   color: var(--color-primary);
-  font-weight: var(--font-medium);
-  margin: 0;
+  margin-bottom: var(--space-1);
 }
 
-.teacher-contact {
-  margin-top: var(--space-4);
-}
-
-.contact-item {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-2) 0;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.contact-item:last-child {
-  border-bottom: none;
-}
-
-.contact-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background-color: var(--color-primary-100);
-  color: var(--color-primary);
-  flex-shrink: 0;
-}
-
-.contact-info {
-  flex: 1;
-}
-
-.contact-label {
-  display: block;
-  font-size: var(--text-xs);
-  color: var(--color-gray-500);
-  margin-bottom: 2px;
-}
-
-.contact-value {
-  display: block;
-  color: var(--color-gray-800);
-  font-weight: var(--font-medium);
-  text-decoration: none;
-}
-
-.contact-value.phone {
-  color: var(--color-primary);
-}
-
-.contact-value:hover {
-  color: var(--color-primary-dark);
+.summary-label {
+  font-size: var(--text-sm);
+  color: var(--color-gray-600);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 /* Estados de carga */
@@ -535,30 +506,32 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: var(--space-12);
+  padding: var(--space-16);
   color: var(--color-gray-500);
 }
 
 .loading-spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid var(--color-gray-200);
-  border-top: 3px solid var(--color-primary);
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--color-gray-200);
+  border-top: 4px solid var(--color-primary);
   border-radius: 50%;
   animation: spin 1s linear infinite;
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--space-6);
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+.loading-text {
+  font-size: var(--text-lg);
+  font-weight: var(--font-medium);
 }
 
 /* Mensajes de error */
 .error-message {
   text-align: center;
-  padding: var(--space-8);
+  padding: var(--space-12);
   color: var(--color-gray-600);
+  background: var(--color-gray-50);
+  border-radius: var(--radius-xl);
 }
 
 .error-message h2 {
@@ -566,12 +539,30 @@
   margin-bottom: var(--space-4);
 }
 
+.error-icon {
+  font-size: var(--text-5xl);
+  color: var(--color-danger);
+  margin-bottom: var(--space-4);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .detail-header {
     flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-3);
+    align-items: stretch;
+    text-align: center;
+  }
+  
+  .detail-header-content {
+    min-width: auto;
+  }
+  
+  .grade-info {
+    justify-content: center;
+  }
+  
+  .detail-actions {
+    justify-content: center;
   }
   
   .schedule-tabs {
@@ -583,17 +574,25 @@
     text-align: center;
   }
   
-  .teacher-modal-content {
-    padding: var(--space-4);
-    width: 95%;
-  }
-  
   .class-content {
     grid-template-columns: 1fr;
   }
   
   .countdown {
     grid-column: 1 / -1;
+  }
+  
+  .class-status-container {
+    justify-content: flex-start;
+    margin-top: var(--space-3);
+  }
+  
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .class-item:hover {
+    transform: translateX(2px);
   }
 }
 
@@ -602,13 +601,29 @@
   .countdown-skeleton .countdown-unit {
     background: linear-gradient(90deg, #2d3748 25%, #4a5568 50%, #2d3748 75%);
   }
-  
-  .schedule-tab-content {
-    background: var(--color-gray-800);
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
   }
-  
-  .tab-pane h3 {
-    color: var(--color-gray-200);
-    border-bottom-color: var(--color-gray-700);
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
+}
+
+@keyframes highlight {
+  0% {
+    background-color: var(--color-primary-100);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+.highlight {
+  animation: highlight 2s ease;
 }

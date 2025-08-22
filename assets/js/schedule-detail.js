@@ -432,12 +432,8 @@ class ScheduleDetailSystem {
                  role="tabpanel"
                  aria-labelledby="tab-btn-${dayName}"
                  ${isActive ? '' : 'hidden'}>
-                <h3>Horario de ${grade} - ${dayName}</h3>
                 ${fullSchedule[dayName] && fullSchedule[dayName].length > 0 ?
                     `<div class="grade-section">
-                        <div class="grade-header">
-                            <h3>${grade}</h3>
-                        </div>
                         <ul class="class-list">
                             ${fullSchedule[dayName].map(cls => this.renderClassItem(cls, currentTime, dayName)).join('')}
                         </ul>
