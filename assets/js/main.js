@@ -72,7 +72,7 @@ function setupHeaderScroll() {
             document.body.classList.add('scrolled');
 
             // Ocultar menús abiertos al hacer scroll
-            document.querySelectorAll('.sub-menu-wrapper, .mega-menu-wrapper').forEach(menu => {
+            document.querySelectorAll('.sub-menu-wrapper').forEach(menu => {
                 menu.style.opacity = '0';
                 menu.style.visibility = 'hidden';
             });
@@ -99,7 +99,7 @@ function setupHeaderScroll() {
 // Cerrar menús al hacer clic fuera de ellos
 function setupClickOutside() {
     document.addEventListener('click', (e) => {
-        const menus = document.querySelectorAll('.sub-menu-wrapper, .mega-menu-wrapper');
+        const menus = document.querySelectorAll('.sub-menu-wrapper');
         const menuItems = document.querySelectorAll('.menu-item.has-children');
 
         let clickedInsideMenu = false;
@@ -139,12 +139,3 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof loadNews === 'function') loadNews();
     if (typeof loadMenu === 'function') loadMenu();
 });
-
-// Utilidad para dividir arrays en chunks
-function chunkArray(array, size) {
-    const result = [];
-    for (let i = 0; i < array.length; i += size) {
-        result.push(array.slice(i, i + size));
-    }
-    return result;
-}
