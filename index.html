@@ -9,18 +9,12 @@
         content="Blog oficial de la institución educativa con noticias, eventos y logros de nuestra comunidad escolar">
     <meta name="keywords" content="blog escolar, colegio, educación, noticias escolares, eventos escolares">
     <meta name="author" content="KAG">
-    <!-- <meta property="og:type" content="website">
-    <meta property="og:title" content="Blog Escolar - Comunidad Educativa">
-    <meta property="og:description" content="Blog oficial de la institución educativa con noticias, eventos y logros">
-    <meta property="og:url" content="https://tudominio.com">
-    <meta property="og:image" content="https://tudominio.com/assets/img/og-image.jpg"> -->
 
-    <!-- Información del sitio -->
-    <title>Blog Escolar - Inicio</title>
+    <title>Blog Escolar José Carlos Mariátegui - Inicio</title>
     <link rel="icon" href="assets/img/favicon.ico" type="image/x-icon">
     <link rel="canonical" href="https://tudominio.com">
 
-    <!-- Preconexión y precarga para mejorar performance -->
+    <!-- Preconexión y precarga -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" href="assets/css/variables.css" as="style">
@@ -37,17 +31,18 @@
 
 <body>
     <div id="app">
-        <!-- Cabecera del sitio (se carga dinámicamente) -->
+        <!-- Cabecera con navegación mejorada -->
         <header id="main-header" class="header-fixed" aria-label="Cabecera principal">
             <!-- El contenido del header se inyecta via components.js -->
         </header>
 
         <!-- Contenido principal -->
         <main class="container" id="main-content">
-            <!-- Sección Hero con mejor semántica -->
+            <!-- Sección Hero -->
             <section class="hero animate-fade-in" aria-labelledby="hero-heading">
                 <div class="hero-content">
-                    <h1 id="hero-heading" class="animate-slide-up">Bienvenidos al Blog del Colegio</h1>
+                    <h1 id="hero-heading" class="animate-slide-up">Bienvenidos al Blog de la I.E.S. José carlos
+                        Mariátegui</h1>
                     <p class="hero-description animate-slide-up delay-1">
                         Un espacio para compartir noticias, eventos y logros de nuestra comunidad escolar.
                     </p>
@@ -55,7 +50,7 @@
                         <a href="#content-section" class="btn btn-primary" aria-label="Explorar contenido">
                             Explorar
                         </a>
-                        <a href="shop.html" class="btn btn-secondary" aria-label="Visitar tienda escolar">
+                        <a href="tienda.html" class="btn btn-secondary" aria-label="Visitar tienda escolar">
                             Tienda Escolar
                         </a>
                     </div>
@@ -69,27 +64,27 @@
             <div class="content-wrapper" id="content-section">
                 <!-- Columna principal -->
                 <div class="main-content">
-                    <!-- Sección de noticias destacadas con ARIA mejorada -->
+                    <!-- Sección de noticias destacadas -->
                     <section class="featured-news animate-fade-in delay-3" aria-labelledby="featured-news-heading">
                         <header class="section-header">
                             <h2 id="featured-news-heading">Noticias Destacadas</h2>
-                            <a href="news.html" class="btn btn-link">Ver todas</a>
+                            <a href="noticias.html" class="btn btn-link">Ver todas</a>
                         </header>
                         <div class="news-grid" id="featured-news-container" role="list" aria-live="polite">
                             <!-- Las noticias destacadas se cargarán aquí dinámicamente -->
                         </div>
                     </section>
 
-                    <!-- Sección de noticias recientes con paginación mejorada -->
+                    <!-- Sección de noticias recientes -->
                     <section class="recent-news animate-fade-in delay-4" aria-labelledby="recent-news-heading">
                         <header class="section-header">
                             <h2 id="recent-news-heading">Noticias Recientes</h2>
-                            <a href="news.html" class="btn btn-link">Ver todas</a>
+                            <a href="noticias.html" class="btn btn-link">Ver todas</a>
                         </header>
                         <div class="news-list" id="recent-news-container" role="list" aria-live="polite">
                             <!-- Las noticias recientes se cargarán aquí dinámicamente -->
                         </div>
-                        <!-- Paginación mejorada para accesibilidad -->
+                        <!-- Paginación -->
                         <nav class="pagination-wrapper" aria-label="Paginación de noticias">
                             <div class="pagination" id="news-pagination" role="navigation">
                                 <!-- Los controles de paginación se generarán aquí dinámicamente -->
@@ -100,7 +95,7 @@
 
                 <!-- Sidebar con widgets mejorados -->
                 <aside class="sidebar" aria-label="Barra lateral">
-                    <!-- Widget del Comedor con semántica mejorada -->
+                    <!-- Widget del Comedor -->
                     <section class="sidebar-widget animate-slide-left delay-5" aria-labelledby="comedor-widget-heading">
                         <h3 id="comedor-widget-heading">PNAEC - WASIMIKUNA</h3>
                         <div class="menu-container" id="menu-del-dia" aria-live="polite">
@@ -108,7 +103,7 @@
                         </div>
                     </section>
 
-                    <!-- Widget de Horarios con semántica mejorada -->
+                    <!-- Widget de Horarios -->
                     <section class="sidebar-widget animate-slide-left delay-6"
                         aria-labelledby="horarios-widget-heading">
                         <h3 id="horarios-widget-heading">Horario Escolar</h3>
@@ -117,38 +112,29 @@
                         </div>
                     </section>
 
-                    <!-- Nuevo widget de Tienda Escolar -->
+                    <!-- Widget de Tienda Escolar -->
                     <section class="sidebar-widget animate-slide-left delay-7" aria-labelledby="tienda-widget-heading">
                         <h3 id="tienda-widget-heading">Tienda Escolar</h3>
                         <div class="shop-widget">
                             <p>Visita nuestra tienda para adquirir los útiles y uniformes escolares.</p>
-                            <a href="shop.html" class="btn btn-primary btn-sm">Ver productos</a>
+                            <a href="tienda.html" class="btn btn-primary btn-sm">Ver productos</a>
                         </div>
                     </section>
                 </aside>
             </div>
         </main>
 
-        <!-- Pie de página (se carga dinámicamente) -->
+        <!-- Pie de página -->
         <footer id="main-footer" aria-label="Pie de página">
             <!-- El contenido del footer se inyecta via components.js -->
         </footer>
 
-        <!-- Botón para volver arriba mejorado -->
+        <!-- Botón para volver arriba -->
         <button id="scroll-top" class="scroll-top-btn" aria-label="Volver al inicio" aria-hidden="true">
             <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
                 <path fill="currentColor" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
             </svg>
         </button>
-
-        <!-- Chat de WhatsApp flotante -->
-        <!-- <a href="https://wa.me/1234567890" class="whatsapp-float" aria-label="Chatea con nosotros por WhatsApp"
-            target="_blank" rel="noopener noreferrer">
-            <svg viewBox="0 0 24 24" width="24" height="24">
-                <path fill="currentColor"
-                    d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-            </svg>
-        </a> -->
     </div>
 
     <!-- Scripts con carga optimizada -->
@@ -165,49 +151,6 @@
         // Detección de características modernas
         document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
     </script>
-
-    <!-- Estilos para screen readers (accesibilidad) -->
-    <!-- <style>
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border-width: 0;
-        }
-
-        /* WhatsApp flotante */
-        .whatsapp-float {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            width: 3.5rem;
-            height: 3.5rem;
-            background-color: #25D366;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            z-index: 999;
-            transition: transform 0.3s ease;
-        }
-
-        .whatsapp-float:hover {
-            transform: scale(1.1) translateY(-5px);
-        }
-
-        .whatsapp-float svg {
-            width: 24px;
-            height: 24px;
-        }
-    </style> -->
-
 </body>
 
 </html>
