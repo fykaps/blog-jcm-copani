@@ -1,0 +1,175 @@
+// Datos de reuniones - Separadas de eventos generales
+const meetingsData = [
+    {
+        id: 1,
+        date: "2025-08-05",
+        startTime: "12:00",
+        endTime: "18:00",
+        title: "Reunión de padres de primer grado",
+        description: "Reunión informativa para padres de primer grado sobre el año escolar, metodología de enseñanza y expectativas académicas.",
+        agenda: [
+            "Presentación del equipo docente",
+            "Metodología de enseñanza para primer grado",
+            "Expectativas académicas y conductuales",
+            "Calendario escolar y eventos importantes",
+            "Ronda de preguntas y respuestas"
+        ],
+        participants: ["Padres de familia", "Docentes de primer grado", "Consejo escolar"],
+        location: "Auditorio principal",
+        category: "Padres de familia",
+        organizer: "Dirección académica",
+        required: true,
+        minAttendance: 2, // Representantes por familia
+        status: "scheduled",
+        materials: ["Presentación PDF", "Guía de padres", "Formulario de contacto"],
+        recording: false,
+        followUpRequired: true
+    },
+    {
+        id: 2,
+        date: "2025-08-12",
+        startTime: "15:00",
+        endTime: "17:00",
+        title: "Consejo escolar mensual",
+        description: "Reunión ordinaria del consejo escolar para revisar el progreso académico, planeación estratégica y asignación de recursos.",
+        agenda: [
+            "Revisión de métricas académicas",
+            "Análisis de presupuesto y recursos",
+            "Planificación de actividades del próximo trimestre",
+            "Evaluación de programas especiales",
+            "Temas varios"
+        ],
+        participants: ["Consejo escolar", "Dirección", "Coordinadores académicos"],
+        location: "Sala de juntas",
+        category: "Consejo escolar",
+        organizer: "Presidencia del consejo",
+        required: true,
+        minAttendance: 1,
+        status: "scheduled",
+        materials: ["Reporte académico", "Estado financiero", "Agenda detallada"],
+        recording: true,
+        followUpRequired: true
+    },
+    {
+        id: 3,
+        date: "2025-08-19",
+        startTime: "14:00",
+        endTime: "15:00",
+        title: "Escuela de padres - Prevención y desarrollo",
+        description: "Sesión formativa para padres sobre prevención del cáncer de cuello uterino y desarrollo integral de los estudiantes.",
+        agenda: [
+            "Charla médica: Prevención del cáncer de cuello uterino",
+            "Desarrollo emocional en adolescentes",
+            "Estrategias de apoyo académico en casa",
+            "Entrega de boletas de notas",
+            "Espacio de reflexión"
+        ],
+        participants: ["Padres de familia", "Especialistas en salud", "Psicólogos escolares"],
+        location: "Sala de usos múltiples",
+        category: "Formativo",
+        organizer: "Departamento de bienestar estudiantil",
+        required: false,
+        minAttendance: 1,
+        status: "scheduled",
+        materials: ["Guía de prevención", "Material de apoyo psicológico", "Evaluación formativa"],
+        recording: false,
+        followUpRequired: true
+    },
+    {
+        id: 4,
+        date: "2025-08-26",
+        startTime: "16:00",
+        endTime: "18:00",
+        title: "Reunión de coordinación docente",
+        description: "Reunión de planificación y coordinación entre docentes para alinear metodologías, evaluaciones y proyectos interdisciplinarios.",
+        agenda: [
+            "Revisión de planificaciones curriculares",
+            "Alineación de metodologías de evaluación",
+            "Proyectos interdisciplinarios",
+            "Intercambio de buenas prácticas",
+            "Capacitación interna: Nuevas tecnologías educativas"
+        ],
+        participants: ["Docentes", "Coordinadores académicos", "Departamento de TI"],
+        location: "Aula magna",
+        category: "Docentes",
+        organizer: "Coordinación académica",
+        required: true,
+        minAttendance: 1,
+        status: "scheduled",
+        materials: ["Planificaciones curriculares", "Guía de evaluaciones", "Manual de tecnologías educativas"],
+        recording: true,
+        followUpRequired: true
+    },
+    {
+        id: 5,
+        date: "2023-08-15",
+        startTime: "10:00",
+        endTime: "12:00",
+        title: "Reunión de evaluación de proyectos",
+        description: "Revisión de los proyectos académicos implementados en el primer semestre.",
+        agenda: [
+            "Evaluación de resultados",
+            "Lecciones aprendidas",
+            "Propuestas de mejora",
+            "Planificación para el próximo semestre"
+        ],
+        participants: ["Consejo escolar", "Coordinadores", "Líderes de proyecto"],
+        location: "Sala de juntas",
+        category: "Consejo escolar",
+        organizer: "Dirección de proyectos",
+        required: true,
+        status: "completed",
+        materials: ["Reporte de evaluación", "Minuta de acuerdos"],
+        recording: false,
+        followUpRequired: true,
+        attendance: 85, // Porcentaje
+        minutes: "https://drive.google.com/file/example"
+    },
+    {
+        id: 6,
+        date: "2023-09-05",
+        startTime: "14:00",
+        endTime: "16:00",
+        title: "Reunión de emergencia - Infraestructura",
+        description: "Reunión convocada para abordar temas urgentes de infraestructura y mantenimiento.",
+        agenda: [
+            "Reporte de estado de instalaciones",
+            "Prioridades de mantenimiento",
+            "Asignación de recursos",
+            "Cronograma de trabajos"
+        ],
+        participants: ["Consejo escolar", "Mantenimiento", "Administración"],
+        location: "Oficina de administración",
+        category: "Consejo escolar",
+        organizer: "Departamento de infraestructura",
+        required: true,
+        status: "cancelled",
+        reason: "Falta de quórum",
+        followUpRequired: true
+    },
+    {
+        id: 7,
+        date: "2025-09-10",
+        startTime: "09:00",
+        endTime: "11:00",
+        title: "Asamblea general de padres",
+        description: "Reunión general con todos los padres de familia para presentación de resultados y planes futuros.",
+        agenda: [
+            "Balance del año académico",
+            "Presentación de resultados y logros",
+            "Proyecciones para el próximo año",
+            "Elección de representantes",
+            "Ronda de preguntas"
+        ],
+        participants: ["Todos los padres de familia", "Dirección", "Consejo escolar"],
+        location: "Auditorio principal",
+        category: "Padres de familia",
+        organizer: "Dirección general",
+        required: true,
+        minAttendance: 1,
+        status: "scheduled",
+        materials: ["Reporte anual", "Presentación ejecutiva", "Formularios de votación"],
+        recording: true,
+        followUpRequired: true
+    }
+];

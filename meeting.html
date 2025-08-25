@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es" class="no-js">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Escolar - Reuniones</title>
+    <meta name="description" content="Sistema de gestión de reuniones para la comunidad educativa">
+
+    <!-- Preconexión para mejorar performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Hojas de estilo -->
+    <link rel="stylesheet" href="assets/css/variables.css">
+    <link rel="stylesheet" href="assets/css/animations.css">
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/meeting.css">
+    <link rel="icon" href="assets/img/favicon.ico">
+</head>
+
+<body>
+    <div id="app">
+        <header id="main-header" class="header-fixed"></header>
+
+        <main class="container">
+            <section class="hero animate-fade-in">
+                <div class="hero-content">
+                    <h1 class="animate-slide-up">Sistema de Reuniones</h1>
+                    <p class="hero-description animate-slide-up delay-1">
+                        Gestión profesional de reuniones para la comunidad educativa.
+                        Programe, gestione y participe en reuniones de manera eficiente.
+                    </p>
+                    <div class="hero-actions animate-slide-up delay-2">
+                        <a href="#meetings-content" class="btn btn-primary" aria-label="Explorar reuniones">
+                            Explorar Reuniones
+                        </a>
+                    </div>
+                </div>
+                <div class="hero-image" aria-hidden="true">
+                    <img src="assets/img/meetings-hero.jpg" alt="" loading="lazy">
+                </div>
+            </section>
+
+            <div class="meetings-container" id="meetings-content">
+                <!-- Estadísticas -->
+                <div class="meetings-stats animate-fade-in delay-3" id="meetings-stats">
+                    <!-- Las estadísticas se cargarán dinámicamente -->
+                </div>
+
+                <!-- Filtros de estado -->
+                <div class="meetings-filters animate-fade-in delay-4" id="meetings-filters">
+                    <!-- Los filtros se cargarán dinámicamente -->
+                </div>
+
+                <!-- Filtros de categoría -->
+                <div class="meetings-categories animate-fade-in delay-5" id="meetings-categories">
+                    <!-- Las categorías se cargarán dinámicamente -->
+                </div>
+
+                <!-- Lista de reuniones -->
+                <div class="meetings-list animate-fade-in delay-6" id="meetings-list">
+                    <!-- Las reuniones se cargarán dinámicamente -->
+                </div>
+
+                <!-- Paginación -->
+                <div class="pagination-wrapper animate-fade-in delay-7" id="meetings-pagination-wrapper">
+                    <div class="pagination" id="meetings-pagination" role="navigation"
+                        aria-label="Paginación de reuniones"></div>
+                </div>
+            </div>
+        </main>
+
+        <footer id="main-footer"></footer>
+
+        <button id="scroll-top" class="scroll-top-btn" aria-label="Subir al inicio">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+                <path fill="currentColor" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/components.js" defer></script>
+    <script src="assets/js/main.js" defer></script>
+    <script src="assets/js/scroll-top.js" defer></script>
+    <script src="assets/js/meeting.js" defer></script>
+    <script src="assets/data/meetings.js" defer></script>
+
+    <!-- Modernizr para características modernas -->
+    <script>
+        document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+    </script>
+</body>
+
+</html>
