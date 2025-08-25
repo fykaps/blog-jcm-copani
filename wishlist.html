@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es" class="no-js">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Deseos - Tienda Escolar</title>
+    <meta name="description" content="Tus productos favoritos guardados en la lista de deseos de la tienda escolar">
+
+    <!-- Preconexión para mejorar performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="assets/css/wishlist.css" as="style">
+
+    <!-- Hojas de estilo -->
+    <link rel="stylesheet" href="assets/css/variables.css">
+    <link rel="stylesheet" href="assets/css/animations.css">
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/wishlist.css">
+    <link rel="icon" href="assets/img/favicon.ico">
+</head>
+
+<body>
+    <div id="app">
+        <header id="main-header" class="header-fixed"></header>
+
+        <main class="container">
+            <!-- Breadcrumb -->
+            <nav class="breadcrumb animate-fade-in" aria-label="Navegación migas de pan">
+                <ol>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="shop.html">Tienda</a></li>
+                    <li aria-current="page">Lista de Deseos</li>
+                </ol>
+            </nav>
+
+            <!-- Hero Section -->
+            <section class="wishlist-hero animate-fade-in delay-1">
+                <div class="hero-content">
+                    <h1>Lista de Deseos</h1>
+                    <p>Tus productos favoritos guardados en un solo lugar</p>
+                </div>
+            </section>
+
+            <div class="wishlist-content animate-fade-in delay-2">
+                <!-- Header de la lista de deseos -->
+                <div class="wishlist-header">
+                    <h2>Mis Favoritos (<span id="wishlist-items-count">0</span> productos)</h2>
+                    <div class="wishlist-actions">
+                        <button id="share-wishlist" class="btn-share" aria-label="Compartir lista de deseos">
+                            <svg width="16" height="16" viewBox="0 0 24 24">
+                                <path fill="currentColor"
+                                    d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z" />
+                            </svg>
+                            Compartir
+                        </button>
+                        <button id="clear-wishlist" class="btn-clear" aria-label="Vaciar lista de deseos">
+                            <svg width="16" height="16" viewBox="0 0 24 24">
+                                <path fill="currentColor"
+                                    d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                            </svg>
+                            Vaciar lista
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Lista de productos -->
+                <div class="wishlist-grid" id="wishlist-items-container">
+                    <!-- Los productos de la lista de deseos se cargarán aquí dinámicamente -->
+                </div>
+
+                <!-- Lista de deseos vacía -->
+                <div class="empty-wishlist" id="empty-wishlist" style="display: none;">
+                    <svg width="80" height="80" viewBox="0 0 24 24">
+                        <path fill="currentColor"
+                            d="M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3zm-4.4 15.55l-.1.1-.1-.1C7.14 14.24 4 11.39 4 8.5 4 6.5 5.5 5 7.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5c2 0 3.5 1.5 3.5 3.5 0 2.89-3.14 5.74-7.9 10.05z" />
+                    </svg>
+                    <h3>Tu lista de deseos está vacía</h3>
+                    <p>Agrega productos que te gusten para guardarlos aquí</p>
+                    <a href="shop.html" class="btn btn-primary">Explorar productos</a>
+                </div>
+
+                <!-- Productos recomendados -->
+                <section class="recommended-section">
+                    <h3>Productos que podrían interesarte</h3>
+                    <div class="recommended-grid" id="recommended-products">
+                        <!-- Productos recomendados se cargarán aquí -->
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <footer id="main-footer"></footer>
+
+        <!-- Botones flotantes -->
+        <a href="shop.html" class="floating-button continue-shopping" aria-label="Seguir comprando">
+            <svg width="20" height="20" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
+            </svg>
+            Seguir comprando
+        </a>
+
+        <button id="scroll-top" class="scroll-top-btn" aria-label="Volver al inicio">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+                <path fill="currentColor" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/components.js" defer></script>
+    <script src="assets/js/main.js" defer></script>
+    <script src="assets/js/scroll-top.js" defer></script>
+    <script src="assets/js/shopping.js" defer></script>
+    <script src="assets/js/wishlist.js" defer></script>
+    <script src="assets/data/products.js" defer></script>
+
+    <!-- Modernizr para características modernas -->
+    <script>
+        document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+    </script>
+</body>
+
+</html>
