@@ -25,14 +25,19 @@ const NAVIGATION_STRUCTURE = [
         description: "Página principal con últimas noticias y destacados"
     },
     {
+        title: "Institucional",
+        href: "about.html",
+        description: "Información sobre nuestra institución",
+    },
+    {
         title: "Noticias",
-        href: "noticias.html",
+        href: "news.html",
         description: "Comunicados oficiales y avisos importantes",
         badge: "Nuevo"
     },
     {
         title: "Eventos",
-        href: "eventos.html",
+        href: "event.html",
         description: "Actividades y celebraciones escolares"
     },
     {
@@ -42,33 +47,33 @@ const NAVIGATION_STRUCTURE = [
         submenu: [
             {
                 title: "Horario de clases",
-                href: "horario-clases.html"
+                href: "schedule.html"
             },
             {
                 title: "Menú escolar",
-                href: "menu-escolar.html",
+                href: "menu.html",
                 description: "Alimentación y nutrición"
             },
-            {
-                title: "Calendario académico",
-                href: "calendario.html"
-            }
+            // {
+            //     title: "Calendario académico",
+            //     href: "calendar.html"
+            // }
         ]
     },
     {
         title: "Tienda Escolar",
-        href: "tienda.html",
+        href: "shopping.html",
         description: "Uniformes y útiles escolares",
         featured: true
     },
     {
         title: "Galerías",
-        href: "galerias.html",
+        href: "gallery.html",
         description: "Fotos y videos institucionales"
     },
     {
         title: "Contacto",
-        href: "contacto.html",
+        href: "contact.html",
         description: "Formulario de contacto, dirección y teléfonos",
         cta: true
     }
