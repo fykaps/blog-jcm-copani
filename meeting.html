@@ -42,32 +42,46 @@
                 </div>
             </section>
 
-            <div class="meetings-container" id="meetings-content">
-                <!-- Estadísticas -->
-                <div class="meetings-stats animate-fade-in delay-3" id="meetings-stats">
-                    <!-- Las estadísticas se cargarán dinámicamente -->
+            <div class="content-wrapper" id="meetings-content">
+                <div class="main-content">
+                    <!-- Filtros de estado -->
+                    <div class="meetings-filters animate-fade-in delay-3" id="meetings-filters">
+                        <!-- Los filtros se cargarán dinámicamente -->
+                    </div>
+
+                    <!-- Filtros de categoría -->
+                    <div class="meetings-categories animate-fade-in delay-4" id="meetings-categories">
+                        <!-- Las categorías se cargarán dinámicamente -->
+                    </div>
+
+                    <!-- Lista de reuniones -->
+                    <div class="meetings-list animate-fade-in delay-5" id="meetings-list">
+                        <!-- Las reuniones se cargarán dinámicamente -->
+                    </div>
+
+                    <!-- Paginación -->
+                    <div class="pagination-wrapper animate-fade-in delay-6" id="meetings-pagination-wrapper">
+                        <div class="pagination" id="meetings-pagination" role="navigation"
+                            aria-label="Paginación de reuniones"></div>
+                    </div>
                 </div>
 
-                <!-- Filtros de estado -->
-                <div class="meetings-filters animate-fade-in delay-4" id="meetings-filters">
-                    <!-- Los filtros se cargarán dinámicamente -->
-                </div>
+                <aside class="sidebar">
+                    <!-- Estadísticas en el sidebar (lado derecho) -->
+                    <div class="sidebar-widget animate-slide-left delay-3">
+                        <h3>Estadísticas de Reuniones</h3>
+                        <div class="meetings-stats" id="meetings-stats">
+                            <!-- Las estadísticas se cargarán dinámicamente -->
+                        </div>
+                    </div>
 
-                <!-- Filtros de categoría -->
-                <div class="meetings-categories animate-fade-in delay-5" id="meetings-categories">
-                    <!-- Las categorías se cargarán dinámicamente -->
-                </div>
-
-                <!-- Lista de reuniones -->
-                <div class="meetings-list animate-fade-in delay-6" id="meetings-list">
-                    <!-- Las reuniones se cargarán dinámicamente -->
-                </div>
-
-                <!-- Paginación -->
-                <div class="pagination-wrapper animate-fade-in delay-7" id="meetings-pagination-wrapper">
-                    <div class="pagination" id="meetings-pagination" role="navigation"
-                        aria-label="Paginación de reuniones"></div>
-                </div>
+                    <!-- Widget adicional si es necesario -->
+                    <div class="sidebar-widget animate-slide-left delay-4">
+                        <h3>Información Importante</h3>
+                        <p>Todas las reuniones requieren confirmación de asistencia.
+                            Las reuniones marcadas como "Asistencia requerida" son obligatorias.</p>
+                    </div>
+                </aside>
             </div>
         </main>
 

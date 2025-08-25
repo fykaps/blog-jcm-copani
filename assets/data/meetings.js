@@ -2,9 +2,9 @@
 const meetingsData = [
     {
         id: 1,
-        date: "2025-08-05",
-        startTime: "12:00",
-        endTime: "18:00",
+        date: "2025-08-25",
+        startTime: "18:30",
+        endTime: "19:00",
         title: "Reunión de padres de primer grado",
         description: "Reunión informativa para padres de primer grado sobre el año escolar, metodología de enseñanza y expectativas académicas.",
         agenda: [
@@ -77,7 +77,7 @@ const meetingsData = [
     },
     {
         id: 4,
-        date: "2025-08-26",
+        date: "2025-08-27",
         startTime: "16:00",
         endTime: "18:00",
         title: "Reunión de coordinación docente",

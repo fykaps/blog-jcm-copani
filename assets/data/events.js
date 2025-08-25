@@ -2,9 +2,9 @@
 const eventsData = [
     {
         id: 1,
-        date: "2025-08-01",
-        startTime: "12:00",
-        endTime: "14:00",
+        date: "2025-08-25",
+        startTime: "18:30",
+        endTime: "19:00",
         title: "Olimpiadas matemáticas",
         description: "Competencia interna de matemáticas para estudiantes de secundaria.",
         topics: [],

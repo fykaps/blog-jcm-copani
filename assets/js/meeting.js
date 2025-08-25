@@ -1,6 +1,6 @@
 /**
- * Sistema de Gestión de Reuniones - Versión Profesional
- * Separado completamente del sistema de eventos generales
+ * Sistema de Gestión de Reuniones - Versión Profesional Mejorada
+ * Con contador regresivo como en eventos y corrección de etiquetas
  */
 
 class MeetingSystem {
@@ -15,6 +15,7 @@ class MeetingSystem {
         this.currentPage = 1;
         this.totalPages = 1;
         this.activeMeetings = [];
+        this.updateInterval = null;
 
         this.init();
     }
@@ -26,6 +27,7 @@ class MeetingSystem {
         this.setupMeetingModal();
         this.setupCategoryFilters();
         this.setupPagination();
+        this.startCounters();
     }
 
     // ======================
@@ -35,6 +37,11 @@ class MeetingSystem {
     renderMeetingsList() {
         const meetingsList = document.getElementById('meetings-list');
         if (!meetingsList) return;
+
+        // Limpiar intervalo anterior
+        if (this.updateInterval) {
+            clearInterval(this.updateInterval);
+        }
 
         // Filtrar reuniones
         let filteredMeetings = [...this.meetings];
@@ -85,12 +92,13 @@ class MeetingSystem {
 
         // Configurar event listeners para las tarjetas
         this.setupMeetingCardInteractions();
+
+        // Iniciar contadores
+        this.startCounters();
     }
 
     renderMeetingCard(meeting) {
-        const meetingDate = new Date(`${meeting.date}T${meeting.startTime}`);
-        const now = new Date();
-        const isPast = meetingDate < now;
+        const { state, timeRemaining } = this.calculateMeetingStatus(meeting);
 
         return `
             <article class="meeting-card" data-id="${meeting.id}" data-category="${meeting.category}" data-status="${meeting.status}">
@@ -99,8 +107,19 @@ class MeetingSystem {
                         <span class="meeting-day">${this.formatDay(meeting.date)}</span>
                         <span class="meeting-month">${this.formatMonth(meeting.date)}</span>
                     </div>
-                    <div class="meeting-status ${meeting.status}">
-                        ${this.getStatusLabel(meeting.status)}
+                    
+                    <div class="meeting-status-container">
+                        <div class="meeting-status ${meeting.status}">
+                            ${this.getStatusLabel(meeting.status)}
+                        </div>
+                        ${meeting.required ? `
+                            <div class="meeting-required-badge">
+                                <svg width="14" height="14" viewBox="0 0 24 24">
+                                    <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                </svg>
+                                Asistencia requerida
+                            </div>
+                        ` : ''}
                     </div>
                 </div>
                 
@@ -144,6 +163,13 @@ class MeetingSystem {
                         </div>
                     ` : ''}
                     
+                    <!-- Contador regresivo para reuniones programadas -->
+                    ${meeting.status === 'scheduled' ? `
+                        <div class="meeting-counter-container" data-id="${meeting.id}">
+                            ${this.renderCounterContent(timeRemaining, state)}
+                        </div>
+                    ` : ''}
+                    
                     <div class="meeting-actions">
                         <button class="btn btn-outline meeting-details-btn" data-meeting-id="${meeting.id}">
                             Ver detalles
@@ -156,58 +182,151 @@ class MeetingSystem {
                         ` : ''}
                     </div>
                 </div>
-                
-                ${meeting.required ? `
-                    <div class="meeting-required-badge">
-                        <svg width="16" height="16" viewBox="0 0 24 24">
-                            <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                        </svg>
-                        Asistencia requerida
-                    </div>
-                ` : ''}
             </article>
         `;
     }
 
-    renderNoMeetingsMessage() {
-        let message = '';
+    // ======================
+    //  CONTADOR REGRESIVO (Como en eventos)
+    // ======================
 
-        if (this.currentFilter !== 'all') {
-            message = `
-                <div class="no-meetings">
-                    <svg width="64" height="64" viewBox="0 0 24 24">
-                        <path fill="currentColor" d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
-                    </svg>
-                    <h3>No hay reuniones ${this.getStatusLabel(this.currentFilter, true).toLowerCase()}</h3>
-                    <p>No se encontraron reuniones con el estado seleccionado.</p>
-                    <button class="btn btn-primary reset-filters-btn">Mostrar todas las reuniones</button>
-                </div>
-            `;
-        } else if (this.currentCategory !== 'all') {
-            const categoryName = this.getCategoryName(this.currentCategory);
-            message = `
-                <div class="no-meetings">
-                    <svg width="64" height="64" viewBox="0 0 24 24">
-                        <path fill="currentColor" d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
-                    </svg>
-                    <h3>No hay reuniones de ${categoryName.toLowerCase()}</h3>
-                    <p>No se encontraron reuniones para la categoría seleccionada.</p>
-                    <button class="btn btn-primary reset-filters-btn">Mostrar todas las reuniones</button>
-                </div>
-            `;
+    startCounters() {
+        // Actualizar contadores cada segundo
+        this.updateInterval = setInterval(() => this.updateCounters(), 1000);
+    }
+
+    updateCounters() {
+        this.activeMeetings.forEach(meeting => {
+            if (meeting.status === 'scheduled') {
+                const { state, timeRemaining } = this.calculateMeetingStatus(meeting);
+                const counterElement = document.querySelector(`.meeting-counter-container[data-id="${meeting.id}"]`);
+
+                if (counterElement) {
+                    counterElement.innerHTML = this.renderCounterContent(timeRemaining, state);
+                }
+            }
+        });
+    }
+
+    calculateMeetingStatus(meeting) {
+        const now = new Date();
+        const meetingStart = new Date(`${meeting.date}T${meeting.startTime}`);
+        const meetingEnd = new Date(`${meeting.date}T${meeting.endTime}`);
+
+        const states = {
+            UPCOMING: 'upcoming',
+            IN_PROGRESS: 'in-progress',
+            FINISHED: 'finished'
+        };
+
+        let state;
+        let timeRemaining = {};
+
+        if (meeting.status === 'completed') {
+            state = states.FINISHED;
+        } else if (meeting.status === 'cancelled') {
+            state = states.FINISHED; // Tratar como finalizado para contador
+        } else if (now < meetingStart) {
+            state = states.UPCOMING;
+            const diff = meetingStart - now;
+
+            timeRemaining = {
+                days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+                hours: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+                minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
+                seconds: Math.floor((diff % (1000 * 60)) / 1000)
+            };
+        } else if (now >= meetingStart && now <= meetingEnd) {
+            state = states.IN_PROGRESS;
+            const diff = meetingEnd - now;
+
+            timeRemaining = {
+                hours: Math.floor(diff / (1000 * 60 * 60)),
+                minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
+                seconds: Math.floor((diff % (1000 * 60)) / 1000)
+            };
         } else {
-            message = `
-                <div class="no-meetings">
-                    <svg width="64" height="64" viewBox="0 0 24 24">
-                        <path fill="currentColor" d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
+            state = states.FINISHED;
+        }
+
+        return { state, timeRemaining };
+    }
+
+    renderCounterContent(timeObj, state) {
+        // Estado: Finalizado
+        if (state === 'finished') {
+            return `
+                <div class="meeting-status-badge finished">
+                    <svg width="16" height="16" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
                     </svg>
-                    <h3>No hay reuniones programadas</h3>
-                    <p>Actualmente no hay reuniones planificadas. Vuelve a revisar más tarde.</p>
+                    <span>Finalizada</span>
                 </div>
             `;
         }
 
-        return message;
+        // Estado: En progreso
+        if (state === 'in-progress') {
+            return `
+                <div class="meeting-status-badge in-progress">
+                    <svg width="16" height="16" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+                    </svg>
+                    <span>En curso</span>
+                    <div class="time-remaining">
+                        <span class="time-value">${this.padZero(timeObj.hours)}:${this.padZero(timeObj.minutes)}:${this.padZero(timeObj.seconds)}</span>
+                        <span class="time-label">para finalizar</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Estado "próximamente" con días
+        if (timeObj.days > 0) {
+            return `
+                <div class="counter-label">Comienza en</div>
+                <div class="digital-counter">
+                    <div class="time-block large">
+                        <span class="time-value">${timeObj.days}</span>
+                        <span class="time-label">DÍAS</span>
+                    </div>
+                    <div class="time-block">
+                        <span class="time-value">${this.padZero(timeObj.hours)}</span>
+                        <span class="time-label">HRS</span>
+                    </div>
+                    <span class="time-separator">:</span>
+                    <div class="time-block">
+                        <span class="time-value">${this.padZero(timeObj.minutes)}</span>
+                        <span class="time-label">MIN</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Estado "próximamente" (menos de 1 día)
+        return `
+            <div class="counter-label">Comienza en</div>
+            <div class="digital-counter">
+                <div class="time-block">
+                    <span class="time-value">${this.padZero(timeObj.hours)}</span>
+                    <span class="time-label">HRS</span>
+                </div>
+                <span class="time-separator">:</span>
+                <div class="time-block">
+                    <span class="time-value">${this.padZero(timeObj.minutes)}</span>
+                    <span class="time-label">MIN</span>
+                </div>
+                <span class="time-separator">:</span>
+                <div class="time-block">
+                    <span class="time-value">${this.padZero(timeObj.seconds)}</span>
+                    <span class="time-label">SEG</span>
+                </div>
+            </div>
+        `;
+    }
+
+    padZero(num) {
+        return num < 10 ? `0${num}` : num;
     }
 
     // ======================
@@ -398,6 +517,8 @@ class MeetingSystem {
             year: 'numeric'
         });
 
+        const { state, timeRemaining } = this.calculateMeetingStatus(meeting);
+
         return `
             <div class="meeting-modal-main">
                 <div class="meeting-modal-header-info">
@@ -407,6 +528,14 @@ class MeetingSystem {
                     <div class="meeting-modal-category ${meeting.category.toLowerCase().replace(/\s+/g, '-')}">
                         ${meeting.category}
                     </div>
+                    ${meeting.required ? `
+                        <div class="meeting-required-badge">
+                            <svg width="16" height="16" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                            Asistencia requerida
+                        </div>
+                    ` : ''}
                 </div>
 
                 <h1 class="meeting-modal-title">${meeting.title}</h1>
@@ -440,6 +569,13 @@ class MeetingSystem {
                         <span>Organizado por: ${meeting.organizer}</span>
                     </div>
                 </div>
+
+                <!-- Contador regresivo en modal para reuniones programadas -->
+                ${meeting.status === 'scheduled' ? `
+                    <div class="meeting-modal-counter">
+                        ${this.renderCounterContent(timeRemaining, state)}
+                    </div>
+                ` : ''}
 
                 <div class="meeting-modal-section">
                     <h3>Descripción</h3>
@@ -663,6 +799,47 @@ class MeetingSystem {
     //  FUNCIONES UTILITARIAS
     // ======================
 
+    renderNoMeetingsMessage() {
+        let message = '';
+
+        if (this.currentFilter !== 'all') {
+            message = `
+                <div class="no-meetings">
+                    <svg width="64" height="64" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
+                    </svg>
+                    <h3>No hay reuniones ${this.getStatusLabel(this.currentFilter, true).toLowerCase()}</h3>
+                    <p>No se encontraron reuniones con el estado seleccionado.</p>
+                    <button class="btn btn-primary reset-filters-btn">Mostrar todas las reuniones</button>
+                </div>
+            `;
+        } else if (this.currentCategory !== 'all') {
+            const categoryName = this.getCategoryName(this.currentCategory);
+            message = `
+                <div class="no-meetings">
+                    <svg width="64" height="64" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
+                    </svg>
+                    <h3>No hay reuniones de ${categoryName.toLowerCase()}</h3>
+                    <p>No se encontraron reuniones para la categoría seleccionada.</p>
+                    <button class="btn btn-primary reset-filters-btn">Mostrar todas las reuniones</button>
+                </div>
+            `;
+        } else {
+            message = `
+                <div class="no-meetings">
+                    <svg width="64" height="64" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
+                    </svg>
+                    <h3>No hay reuniones programadas</h3>
+                    <p>Actualmente no hay reuniones planificadas. Vuelve a revisar más tarde.</p>
+                </div>
+            `;
+        }
+
+        return message;
+    }
+
     resetFilters() {
         this.currentFilter = 'all';
         this.currentCategory = 'all';
@@ -715,6 +892,9 @@ class MeetingSystem {
     }
 
     destroy() {
+        if (this.updateInterval) {
+            clearInterval(this.updateInterval);
+        }
         if (this.modal) {
             document.body.removeChild(this.modal);
         }
@@ -731,11 +911,11 @@ document.addEventListener('DOMContentLoaded', () => {
             window.meetingSystem = meetingSystem;
         } else {
             console.error('Error: meetingsData no está definido');
-            this.showDataError();
+            showDataError();
         }
     } catch (error) {
         console.error('Error al inicializar MeetingSystem:', error);
-        this.showDataError();
+        showDataError();
     }
 });
 

@@ -1,5 +1,5 @@
 /* ==============================================
-   Estilos Específicos para Reuniones - Sistema Profesional
+   Estilos Específicos para Reuniones - Sistema Profesional Mejorado
    ============================================== */
 
 /* Estructura principal */
@@ -192,6 +192,7 @@
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: var(--space-3);
+    gap: var(--space-3);
 }
 
 .meeting-date-badge {
@@ -203,6 +204,7 @@
     height: 50px;
     background: var(--color-gray-100);
     border-radius: var(--radius);
+    flex-shrink: 0;
 }
 
 .meeting-day {
@@ -218,6 +220,14 @@
     text-transform: uppercase;
 }
 
+.meeting-status-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--space-1);
+    flex-shrink: 0;
+}
+
 .meeting-status {
     padding: var(--space-1) var(--space-2);
     border-radius: var(--radius-full);
@@ -225,6 +235,7 @@
     font-weight: var(--font-medium);
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    white-space: nowrap;
 }
 
 .meeting-status.scheduled {
@@ -240,6 +251,25 @@
 .meeting-status.cancelled {
     background-color: var(--color-danger-50);
     color: var(--color-danger-700);
+}
+
+.meeting-required-badge {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-1) var(--space-2);
+    background: var(--color-warning-50);
+    color: var(--color-warning-700);
+    border-radius: var(--radius-full);
+    font-size: var(--text-xs);
+    font-weight: var(--font-medium);
+    white-space: nowrap;
+}
+
+.meeting-required-badge svg {
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
 }
 
 .meeting-content {
@@ -340,30 +370,98 @@
     border-left: 3px solid var(--color-primary);
 }
 
-.meeting-actions {
-    display: flex;
-    gap: var(--space-2);
-    flex-wrap: wrap;
+/* Contador regresivo para reuniones */
+.meeting-counter-container {
+    margin-bottom: var(--space-3);
+    padding: var(--space-3);
+    background: var(--color-gray-50);
+    border-radius: var(--radius);
+    border-left: 3px solid var(--color-primary);
 }
 
-.meeting-required-badge {
-    position: absolute;
-    top: var(--space-3);
-    right: var(--space-3);
-    display: flex;
+.meeting-status-badge {
+    display: inline-flex;
     align-items: center;
-    gap: var(--space-1);
+    gap: var(--space-2);
     padding: var(--space-1) var(--space-2);
-    background: var(--color-warning-50);
-    color: var(--color-warning-700);
     border-radius: var(--radius-full);
     font-size: var(--text-xs);
     font-weight: var(--font-medium);
 }
 
-.meeting-required-badge svg {
-    width: 12px;
-    height: 12px;
+.meeting-status-badge svg {
+    width: 14px;
+    height: 14px;
+}
+
+.meeting-status-badge.upcoming {
+    background-color: var(--color-primary-50);
+    color: var(--color-primary-700);
+}
+
+.meeting-status-badge.in-progress {
+    background-color: var(--color-accent-50);
+    color: var(--color-accent-700);
+}
+
+.meeting-status-badge.finished {
+    background-color: var(--color-success-50);
+    color: var(--color-success-700);
+}
+
+.counter-label {
+    font-size: var(--text-xs);
+    color: var(--color-gray-500);
+    margin-bottom: var(--space-1);
+}
+
+.digital-counter {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+}
+
+.time-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 40px;
+}
+
+.time-block.large {
+    min-width: 50px;
+}
+
+.time-value {
+    font-size: var(--text-lg);
+    font-weight: var(--font-bold);
+    color: var(--color-gray-900);
+}
+
+.time-label {
+    font-size: var(--text-xs);
+    color: var(--color-gray-500);
+    text-transform: uppercase;
+}
+
+.time-separator {
+    font-size: var(--text-lg);
+    font-weight: var(--font-bold);
+    color: var(--color-gray-400);
+    margin: 0 var(--space-1);
+}
+
+.time-remaining {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-1);
+    margin-left: var(--space-2);
+}
+
+.meeting-actions {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
 }
 
 /* Modal de reuniones */
@@ -455,6 +553,57 @@
     gap: var(--space-2);
     margin-bottom: var(--space-3);
     flex-wrap: wrap;
+    align-items: center;
+}
+
+.meeting-modal-status {
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-full);
+    font-size: var(--text-xs);
+    font-weight: var(--font-medium);
+    text-transform: uppercase;
+}
+
+.meeting-modal-status.scheduled {
+    background-color: var(--color-primary-50);
+    color: var(--color-primary-700);
+}
+
+.meeting-modal-status.completed {
+    background-color: var(--color-success-50);
+    color: var(--color-success-700);
+}
+
+.meeting-modal-status.cancelled {
+    background-color: var(--color-danger-50);
+    color: var(--color-danger-700);
+}
+
+.meeting-modal-category {
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-full);
+    font-size: var(--text-xs);
+    font-weight: var(--font-medium);
+}
+
+.meeting-modal-category.padres-de-familia {
+    background-color: var(--color-primary-50);
+    color: var(--color-primary-700);
+}
+
+.meeting-modal-category.consejo-escolar {
+    background-color: var(--color-secondary-50);
+    color: var(--color-secondary-700);
+}
+
+.meeting-modal-category.docentes {
+    background-color: var(--color-accent-50);
+    color: var(--color-accent-700);
+}
+
+.meeting-modal-category.formativo {
+    background-color: var(--color-success-50);
+    color: var(--color-success-700);
 }
 
 .meeting-modal-title {
@@ -484,6 +633,14 @@
     height: 18px;
     color: var(--color-gray-500);
     flex-shrink: 0;
+}
+
+.meeting-modal-counter {
+    margin-bottom: var(--space-4);
+    padding: var(--space-3);
+    background: var(--color-gray-50);
+    border-radius: var(--radius);
+    border-left: 3px solid var(--color-primary);
 }
 
 .meeting-modal-section {
@@ -698,11 +855,12 @@
     .meeting-header {
         flex-direction: column;
         gap: var(--space-2);
+        align-items: flex-start;
     }
     
-    .meeting-required-badge {
-        position: static;
-        margin-bottom: var(--space-2);
+    .meeting-status-container {
+        flex-direction: row;
+        align-items: center;
     }
     
     .meeting-actions {
@@ -728,6 +886,10 @@
     .meeting-modal-actions .btn {
         width: 100%;
     }
+    
+    .digital-counter {
+        justify-content: center;
+    }
 }
 
 @media (max-width: 480px) {
@@ -740,6 +902,11 @@
     }
     
     .meeting-meta {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .meeting-status-container {
         flex-direction: column;
         align-items: flex-start;
     }
