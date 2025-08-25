@@ -2,20 +2,6 @@
 const eventsData = [
     {
         id: 1,
-        date: "2025-08-05",
-        startTime: "12:00",
-        endTime: "18:00",
-        title: "Reunión de padres",
-        description: "Reunión informativa para padres de primer grado sobre el año escolar.",
-        topics: [],
-        location: "Auditorio principal",
-        category: "Reunión",
-        image: "assets/img/events/banner2.png",
-        featured: false,
-        status: "active"
-    },
-    {
-        id: 2,
         date: "2025-08-01",
         startTime: "12:00",
         endTime: "14:00",
@@ -29,7 +15,7 @@ const eventsData = [
         status: "active"
     },
     {
-        id: 3,
+        id: 2,
         date: "2025-06-15",
         startTime: "11:00",
         endTime: "13:00",
@@ -43,7 +29,7 @@ const eventsData = [
         status: "active"
     },
     {
-        id: 4,
+        id: 3,
         date: "2025-06-20",
         startTime: "10:00",
         endTime: "11:00",
@@ -57,7 +43,7 @@ const eventsData = [
         status: "active"
     },
     {
-        id: 5,
+        id: 4,
         date: "2025-06-22",
         startTime: "08:00",
         endTime: "10:00",
@@ -71,7 +57,7 @@ const eventsData = [
         status: "active"
     },
     {
-        id: 6,
+        id: 5,
         date: "2025-06-25",
         startTime: "09:00",
         endTime: "18:00",
@@ -85,21 +71,7 @@ const eventsData = [
         status: "active"
     },
     {
-        id: 7,
-        date: "2023-06-05",
-        startTime: "16:00",
-        endTime: "18:00",
-        title: "Reunión de padres exitosa",
-        description: "Reunión informativa realizada con éxito.",
-        topics: [],
-        location: "Auditorio principal",
-        category: "Reunión",
-        image: "assets/img/events/banner2.png",
-        status: "finished",
-        featured: false
-    },
-    {
-        id: 8,
+        id: 6,
         date: "2023-06-12",
         startTime: "09:00",
         endTime: "14:00",
@@ -113,7 +85,7 @@ const eventsData = [
         featured: false
     },
     {
-        id: 9,
+        id: 7,
         date: "2023-06-15",
         startTime: "14:00",
         endTime: "16:00",
@@ -127,7 +99,7 @@ const eventsData = [
         featured: true
     },
     {
-        id: 10,
+        id: 8,
         date: "2023-06-20",
         startTime: "10:00",
         endTime: "15:00",
@@ -139,23 +111,5 @@ const eventsData = [
         image: "assets/img/events/banner2.png",
         status: "in-progress",
         featured: true
-    },
-    {
-        id: 11,
-        date: "2025-08-19",
-        startTime: "14:00",
-        endTime: "15:00",
-        title: "Escuela de padres",
-        description: "La dirección en coordinación con APAFA de la I.E.S. José Carlos Mariátegui de Copani, cita a los padres de familia para participar en la ESCUELA DE PADRES, programado para el día lunes 18 de agosto de 2025, en la Sala de usos múltiples a partir de las 09:00 A.M. Temas a desarrollar:",
-        topics: [
-            "Deberes y responsabilidades de los padres de familia.",
-            "Cáncer del cuello uterino: prevención y promoción.",
-            "Charla de reflexión sobre logros de aprendizaje y entrega de boletas de notas."
-        ],
-        location: "Sala de usos múltiples",
-        category: "Formativo",
-        image: "assets/img/events/banner2.png",
-        featured: true,
-        status: "active"
     },
 ];

@@ -44,20 +44,6 @@ const NAVIGATION_STRUCTURE = [
         title: "Reuniones",
         href: "meeting.html",
         description: "Encuentros de la comunidad educativa",
-        // submenu: [
-        //     {
-        //         title: "Padres de familia",
-        //         href: "reuniones-padres.html"
-        //     },
-        //     {
-        //         title: "Docentes",
-        //         href: "reuniones-docentes.html"
-        //     },
-        //     {
-        //         title: "Consejo escolar",
-        //         href: "consejo-escolar.html"
-        //     }
-        // ]
     },
     {
         title: "Vida Escolar",
