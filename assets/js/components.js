@@ -41,13 +41,33 @@ const NAVIGATION_STRUCTURE = [
         description: "Actividades y celebraciones escolares"
     },
     {
+        title: "Reuniones",
+        href: "meeting.html",
+        description: "Encuentros de la comunidad educativa",
+        // submenu: [
+        //     {
+        //         title: "Padres de familia",
+        //         href: "reuniones-padres.html"
+        //     },
+        //     {
+        //         title: "Docentes",
+        //         href: "reuniones-docentes.html"
+        //     },
+        //     {
+        //         title: "Consejo escolar",
+        //         href: "consejo-escolar.html"
+        //     }
+        // ]
+    },
+    {
         title: "Vida Escolar",
         href: "#",
         description: "Actividades y organización diaria",
         submenu: [
             {
                 title: "Horario de clases",
-                href: "schedule.html"
+                href: "schedule.html",
+                description: "Horario"
             },
             {
                 title: "Menú escolar",
@@ -62,7 +82,7 @@ const NAVIGATION_STRUCTURE = [
     },
     {
         title: "Tienda Escolar",
-        href: "shopping.html",
+        href: "shop.html",
         description: "Uniformes y útiles escolares",
         featured: true
     },
@@ -92,11 +112,12 @@ function loadHeader() {
 
     header.innerHTML = `
         <div class="container header-container">
-            <div class="logo">
-                <img src="assets/img/logo.png" alt="Logo del colegio" class="logo-img">
-                <h1 class="logo-title">Blog Escolar</h1>
-            </div>
-            
+            <a href="index.html" class="logo-link">
+                <div class="logo">
+                    <img src="assets/img/logo.png" alt="Logo del colegio" class="logo-img">
+                    <h1 class="logo-title">Blog Escolar</h1>
+                </div>
+            </a>
             <nav class="nav-menu" aria-label="Navegación principal">
                 ${generateNavigationHTML()}
             </nav>
@@ -385,12 +406,15 @@ function loadFooter() {
                     <h3 class="footer-title">Enlaces rápidos</h3>
                     <ul class="footer-links">
                         <li><a href="index.html" class="footer-link">Inicio</a></li>
-                        <li><a href="noticias.html" class="footer-link">Noticias</a></li>
-                        <li><a href="eventos.html" class="footer-link">Eventos</a></li>
+                        <li><a href="about.html" class="footer-link">Institucional</a></li>
+                        <li><a href="news.html" class="footer-link">Noticias</a></li>
+                        <li><a href="event.html" class="footer-link">Eventos</a></li>
+                        <li><a href="meeting.html" class="footer-link">Reuniones</a></li>
                         <li><a href="menu.html" class="footer-link">Menú</a></li>
-                        <li><a href="horario.html" class="footer-link">Horario</a></li>
-                        <li><a href="galerias.html" class="footer-link">Galerías</a></li>
-                        <li><a href="contacto.html" class="footer-link">Contacto</a></li>
+                        <li><a href="schedule.html" class="footer-link">Horario</a></li>
+                        <li><a href="shop.html" class="footer-link">Tienda escolar</a></li>
+                        <li><a href="gallery.html" class="footer-link">Galerías</a></li>
+                        <li><a href="contact.html" class="footer-link">Contacto</a></li>
                     </ul>
                 </div>
                 

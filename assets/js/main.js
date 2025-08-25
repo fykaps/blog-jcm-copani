@@ -19,7 +19,7 @@ function setActiveNav() {
             // Si es un enlace de submenú, también activar el item padre
             const parentMenuItem = link.closest('.menu-item');
             if (parentMenuItem) {
-                const parentLink = parentMenuItem.querySelector('> .nav-link');
+                const parentLink = parentMenuItem.querySelector('.nav-link');
                 if (parentLink) {
                     parentLink.classList.add('active');
                 }
@@ -36,20 +36,22 @@ function setActiveNav() {
     });
 
     // Para páginas que están dentro de secciones con submenús
-    NAVIGATION_STRUCTURE.forEach(section => {
-        if (section.submenu) {
-            const isInSection = section.submenu.some(item =>
-                window.location.pathname.includes(item.href.replace('.html', ''))
-            );
+    if (typeof NAVIGATION_STRUCTURE !== 'undefined') {
+        NAVIGATION_STRUCTURE.forEach(section => {
+            if (section.submenu) {
+                const isInSection = section.submenu.some(item =>
+                    window.location.pathname.includes(item.href.replace('.html', ''))
+                );
 
-            if (isInSection) {
-                const sectionLink = document.querySelector(`.nav-link[href="${section.href}"]`);
-                if (sectionLink) {
-                    sectionLink.classList.add('active');
+                if (isInSection) {
+                    const sectionLink = document.querySelector(`.nav-link[href="${section.href}"]`);
+                    if (sectionLink) {
+                        sectionLink.classList.add('active');
+                    }
                 }
             }
-        }
-    });
+        });
+    }
 }
 
 // Control del header al hacer scroll - Versión mejorada
