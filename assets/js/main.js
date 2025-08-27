@@ -54,50 +54,6 @@ function setActiveNav() {
     }
 }
 
-// Control del header al hacer scroll - Versión mejorada
-function setupHeaderScroll() {
-    const header = document.getElementById('main-header');
-    if (!header) return;
-
-    let lastScroll = 0;
-    const scrollThreshold = 100;
-    const headerHeight = header.offsetHeight;
-
-    // Añadir padding al body para compensar el header fijo
-    document.body.style.paddingTop = `${headerHeight}px`;
-
-    window.addEventListener('scroll', function () {
-        const currentScroll = window.pageYOffset;
-
-        // Añadir clase scrolled al body para estilos adicionales
-        if (currentScroll > 50) {
-            document.body.classList.add('scrolled');
-
-            // Ocultar menús abiertos al hacer scroll
-            document.querySelectorAll('.sub-menu-wrapper').forEach(menu => {
-                menu.style.opacity = '0';
-                menu.style.visibility = 'hidden';
-            });
-            document.querySelectorAll('.menu-item').forEach(item => {
-                item.classList.remove('active');
-            });
-        } else {
-            document.body.classList.remove('scrolled');
-        }
-
-        // Determinar dirección del scroll con umbral
-        if (currentScroll > lastScroll && currentScroll > scrollThreshold) {
-            // Scroll hacia abajo - ocultar header
-            header.style.transform = `translateY(-${headerHeight}px)`;
-        } else if (currentScroll < lastScroll || currentScroll <= scrollThreshold) {
-            // Scroll hacia arriba o en parte superior - mostrar header
-            header.style.transform = 'translateY(0)';
-        }
-
-        lastScroll = currentScroll;
-    });
-}
-
 // Cerrar menús al hacer clic fuera de ellos
 function setupClickOutside() {
     document.addEventListener('click', (e) => {
