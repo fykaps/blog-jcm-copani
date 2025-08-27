@@ -67,19 +67,45 @@
                 </div>
 
                 <aside class="sidebar">
-                    <!-- Estadísticas en el sidebar (lado derecho) -->
+                    <!-- Próximas reuniones en el sidebar (lado derecho) -->
                     <div class="sidebar-widget animate-slide-left delay-3">
-                        <h3>Estadísticas de Reuniones</h3>
-                        <div class="meetings-stats" id="meetings-stats">
-                            <!-- Las estadísticas se cargarán dinámicamente -->
+                        <h3>Próximas Reuniones</h3>
+                        <div class="upcoming-meetings" id="upcoming-meetings">
+                            <!-- Las próximas reuniones se cargarán dinámicamente -->
                         </div>
                     </div>
 
-                    <!-- Widget adicional si es necesario -->
+                    <!-- Widget de reuniones importantes -->
                     <div class="sidebar-widget animate-slide-left delay-4">
+                        <h3>Reuniones Importantes</h3>
+                        <div class="important-meetings" id="important-meetings">
+                            <!-- Las reuniones importantes se cargarán dinámicamente -->
+                        </div>
+                    </div>
+
+                    <!-- Widget de información -->
+                    <div class="sidebar-widget animate-slide-left delay-5">
                         <h3>Información Importante</h3>
-                        <p>Todas las reuniones requieren confirmación de asistencia.
-                            Las reuniones marcadas como "Asistencia requerida" son obligatorias.</p>
+                        <div class="meeting-info">
+                            <p>Todas las reuniones requieren confirmación de asistencia.
+                                Las reuniones marcadas como "Asistencia requerida" son obligatorias.</p>
+                            <div class="info-tips">
+                                <div class="info-tip">
+                                    <svg width="16" height="16" viewBox="0 0 24 24">
+                                        <path fill="currentColor"
+                                            d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+                                    </svg>
+                                    <span>Confirma tu asistencia con anticipación</span>
+                                </div>
+                                <div class="info-tip">
+                                    <svg width="16" height="16" viewBox="0 0 24 24">
+                                        <path fill="currentColor"
+                                            d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+                                    </svg>
+                                    <span>Revisa los materiales antes de cada reunión</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </aside>
             </div>

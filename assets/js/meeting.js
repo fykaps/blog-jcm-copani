@@ -23,7 +23,8 @@ class MeetingSystem {
     init() {
         this.renderMeetingsList();
         this.renderMeetingFilters();
-        this.renderMeetingStats();
+        this.renderUpcomingMeetings();
+        this.renderImportantMeetings();
         this.setupMeetingModal();
         this.setupCategoryFilters();
         this.setupPagination();
@@ -184,6 +185,125 @@ class MeetingSystem {
                 </div>
             </article>
         `;
+    }
+
+    // ======================
+    //  PRÓXIMAS REUNIONES (SIDEBAR)
+    // ======================
+
+    renderUpcomingMeetings() {
+        const upcomingContainer = document.getElementById('upcoming-meetings');
+        if (!upcomingContainer) return;
+
+        // Obtener reuniones programadas (próximas 2 semanas)
+        const now = new Date();
+        const twoWeeksFromNow = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
+
+        const upcomingMeetings = this.meetings
+            .filter(meeting => {
+                if (meeting.status !== 'scheduled') return false;
+                const meetingDate = new Date(`${meeting.date}T${meeting.startTime}`);
+                return meetingDate >= now && meetingDate <= twoWeeksFromNow;
+            })
+            .sort((a, b) => {
+                const dateA = new Date(`${a.date}T${a.startTime}`);
+                const dateB = new Date(`${b.date}T${b.startTime}`);
+                return dateA - dateB;
+            })
+            .slice(0, 5); // Mostrar máximo 5
+
+        if (upcomingMeetings.length === 0) {
+            upcomingContainer.innerHTML = `
+                <div class="no-upcoming-meetings">
+                    <svg width="32" height="32" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/>
+                    </svg>
+                    <p>No hay reuniones programadas para las próximas dos semanas.</p>
+                </div>
+            `;
+            return;
+        }
+
+        upcomingContainer.innerHTML = upcomingMeetings.map(meeting => `
+            <div class="upcoming-meeting-item" data-id="${meeting.id}">
+                <div class="upcoming-meeting-date">
+                    <span class="upcoming-day">${this.formatDay(meeting.date)}</span>
+                    <span class="upcoming-month">${this.formatMonth(meeting.date)}</span>
+                </div>
+                <div class="upcoming-meeting-info">
+                    <h4 class="upcoming-meeting-title">${meeting.title}</h4>
+                    <div class="upcoming-meeting-time">
+                        <svg width="12" height="12" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                        </svg>
+                        ${meeting.startTime}
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+        // Añadir event listeners
+        document.querySelectorAll('.upcoming-meeting-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const meetingId = item.getAttribute('data-id');
+                this.showMeetingModal(meetingId);
+            });
+        });
+    }
+
+    // ======================
+    //  REUNIONES IMPORTANTES (SIDEBAR)
+    // ======================
+
+    renderImportantMeetings() {
+        const importantContainer = document.getElementById('important-meetings');
+        if (!importantContainer) return;
+
+        // Obtener reuniones importantes (requeridas y programadas)
+        const importantMeetings = this.meetings
+            .filter(meeting => meeting.required && meeting.status === 'scheduled')
+            .sort((a, b) => {
+                const dateA = new Date(`${a.date}T${a.startTime}`);
+                const dateB = new Date(`${b.date}T${b.startTime}`);
+                return dateA - dateB;
+            })
+            .slice(0, 3); // Mostrar máximo 3
+
+        if (importantMeetings.length === 0) {
+            importantContainer.innerHTML = `
+                <div class="no-important-meetings">
+                    <svg width="32" height="32" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    </svg>
+                    <p>No hay reuniones obligatorias programadas.</p>
+                </div>
+            `;
+            return;
+        }
+
+        importantContainer.innerHTML = importantMeetings.map(meeting => `
+            <div class="important-meeting-item" data-id="${meeting.id}">
+                <div class="important-meeting-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    </svg>
+                </div>
+                <div class="important-meeting-info">
+                    <h4 class="important-meeting-title">${meeting.title}</h4>
+                    <div class="important-meeting-date">
+                        ${this.formatFullDate(meeting.date)} a las ${meeting.startTime}
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+        // Añadir event listeners
+        document.querySelectorAll('.important-meeting-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const meetingId = item.getAttribute('data-id');
+                this.showMeetingModal(meetingId);
+            });
+        });
     }
 
     // ======================
@@ -412,41 +532,6 @@ class MeetingSystem {
                 this.renderMeetingsList();
             });
         });
-    }
-
-    // ======================
-    //  ESTADÍSTICAS
-    // ======================
-
-    renderMeetingStats() {
-        const statsContainer = document.getElementById('meetings-stats');
-        if (!statsContainer) return;
-
-        const totalMeetings = this.meetings.length;
-        const scheduled = this.meetings.filter(m => m.status === 'scheduled').length;
-        const completed = this.meetings.filter(m => m.status === 'completed').length;
-        const cancelled = this.meetings.filter(m => m.status === 'cancelled').length;
-
-        statsContainer.innerHTML = `
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-value">${totalMeetings}</div>
-                    <div class="stat-label">Total reuniones</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">${scheduled}</div>
-                    <div class="stat-label">Programadas</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">${completed}</div>
-                    <div class="stat-label">Realizadas</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">${cancelled}</div>
-                    <div class="stat-label">Canceladas</div>
-                </div>
-            </div>
-        `;
     }
 
     // ======================
@@ -889,6 +974,15 @@ class MeetingSystem {
     formatMonth(dateStr) {
         const date = new Date(dateStr);
         return date.toLocaleDateString('es-ES', { month: 'short' }).toUpperCase();
+    }
+
+    formatFullDate(dateStr) {
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('es-ES', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        });
     }
 
     destroy() {
