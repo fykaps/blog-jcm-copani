@@ -35,63 +35,12 @@ function setActiveNav() {
         }
     });
 
-    // Para páginas que están dentro de secciones con submenús
-    if (typeof NAVIGATION_STRUCTURE !== 'undefined') {
-        NAVIGATION_STRUCTURE.forEach(section => {
-            if (section.submenu) {
-                const isInSection = section.submenu.some(item =>
-                    window.location.pathname.includes(item.href.replace('.html', ''))
-                );
 
-                if (isInSection) {
-                    const sectionLink = document.querySelector(`.nav-link[href="${section.href}"]`);
-                    if (sectionLink) {
-                        sectionLink.classList.add('active');
-                    }
-                }
-            }
-        });
-    }
-}
-
-// Cerrar menús al hacer clic fuera de ellos
-function setupClickOutside() {
-    document.addEventListener('click', (e) => {
-        const menus = document.querySelectorAll('.sub-menu-wrapper');
-        const menuItems = document.querySelectorAll('.menu-item.has-children');
-
-        let clickedInsideMenu = false;
-
-        menus.forEach(menu => {
-            if (menu.contains(e.target)) {
-                clickedInsideMenu = true;
-            }
-        });
-
-        menuItems.forEach(item => {
-            if (item.contains(e.target)) {
-                clickedInsideMenu = true;
-            }
-        });
-
-        if (!clickedInsideMenu) {
-            menus.forEach(menu => {
-                menu.style.opacity = '0';
-                menu.style.visibility = 'hidden';
-            });
-
-            menuItems.forEach(item => {
-                item.classList.remove('active');
-            });
-        }
-    });
 }
 
 // Inicializar funcionalidades mejoradas
 document.addEventListener('DOMContentLoaded', () => {
     setActiveNav();
-    setupHeaderScroll();
-    setupClickOutside();
 
     // Cargar funcionalidades adicionales si existen
     if (typeof loadNews === 'function') loadNews();
