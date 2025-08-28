@@ -101,8 +101,8 @@ const productsData = [
         sizes: ["XS", "S", "M", "L"],
         colors: ["Azul marino", "Bordeaux", "Gris claro"],
         images: [
-            "assets/img/products/chompa-dama-1.jpg",
-            "assets/img/products/chompa-dama-2.jpg"
+            "assets/img/products/woman/chompa-dama-1.jpg",
+            "assets/img/products/woman/chompa-dama-2.jpg"
         ],
         stock: 22,
         rating: 4.6,
@@ -128,8 +128,8 @@ const productsData = [
         sizes: ["XS", "S", "M", "L"],
         colors: ["Azul marino", "Gris oscuro"],
         images: [
-            "assets/img/products/falda-1.jpg",
-            "assets/img/products/falda-2.jpg"
+            "assets/img/products/woman/falda-1.jpg",
+            "assets/img/products/woman/falda-2.jpg"
         ],
         stock: 30,
         rating: 4.5,
