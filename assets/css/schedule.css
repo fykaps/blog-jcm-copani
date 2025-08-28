@@ -85,21 +85,6 @@
   color: var(--color-primary-800);
 }
 
-.btn-view-more {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-1);
-  font-size: var(--text-sm);
-  color: var(--color-primary);
-  text-decoration: none;
-  font-weight: var(--font-medium);
-  transition: color var(--duration-200) var(--ease-in-out);
-}
-
-.btn-view-more:hover {
-  color: var(--color-primary-dark);
-}
-
 .class-list {
   list-style: none;
   padding: 0;

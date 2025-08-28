@@ -213,30 +213,6 @@
     margin-top: auto;
 }
 
-.read-more {
-    color: var(--color-primary);
-    font-weight: var(--font-medium);
-    font-size: var(--text-sm);
-    transition: color var(--duration-200) var(--ease-in-out);
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-1);
-}
-
-.read-more:hover {
-    color: var(--color-primary-dark);
-    text-decoration: underline;
-}
-
-.read-more::after {
-    content: '→';
-    transition: transform var(--duration-200) var(--ease-in-out);
-}
-
-.read-more:hover::after {
-    transform: translateX(2px);
-}
-
 .like-button {
     display: flex;
     align-items: center;

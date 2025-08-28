@@ -597,6 +597,58 @@ img {
   font-size: var(--text-sm);
 }
 
+.btn-view-more {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-sm);
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: var(--font-medium);
+  transition: color var(--duration-200) var(--ease-in-out);
+}
+
+.btn-view-more:hover {
+  color: var(--color-primary-dark);
+}
+
+.btn-read-more {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-sm);
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: var(--font-medium);
+  transition: color var(--duration-200) var(--ease-in-out);
+}
+
+.btn-read-more:hover {
+    color: var(--color-primary-dark);
+}
+
+.btn-read-more::after {
+    content: '→';
+    transition: transform var(--duration-200) var(--ease-in-out);
+}
+
+.btn-read-more:hover::after {
+    transform: translateX(2px);
+}
+
+.btn-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--color-primary);
+  font-weight: var(--font-medium);
+}
+
+.btn-link:hover {
+  color: var(--color-primary-dark);
+  text-decoration: underline;
+}
+
 /* Cards */
 .card {
   background-color: var(--card-bg);
@@ -760,19 +812,6 @@ img {
   justify-content: space-between;
   align-items: center;
   margin-bottom: var(--space-5);
-}
-
-.btn-link {
-  color: var(--color-primary);
-  font-weight: var(--font-medium);
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-1);
-}
-
-.btn-link:hover {
-  color: var(--color-primary-dark);
-  text-decoration: underline;
 }
 
 /* Footer */
