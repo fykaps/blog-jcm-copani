@@ -1,0 +1,235 @@
+/* ==============================================
+   Estilos para el Buscador de Profesores
+   ============================================== */
+
+.teacher-search-container {
+  position: relative;
+  margin-bottom: var(--space-6);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+}
+
+.teacher-search-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-4);
+}
+
+.teacher-search-title {
+  margin: 0;
+  color: var(--color-gray-900);
+  font-size: var(--text-lg);
+}
+
+.teacher-search-form {
+  display: flex;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.teacher-search-input {
+  flex: 1;
+  padding: var(--space-3);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  font-size: var(--text-sm);
+  transition: all var(--duration-200) var(--ease-in-out);
+}
+
+.teacher-search-input:focus {
+  outline: none;
+  border-color: var(--input-border-focus);
+  box-shadow: var(--input-shadow-focus);
+}
+
+.teacher-search-button {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-lg);
+    font-weight: var(--font-medium);
+    cursor: pointer;
+    transition: all var(--duration-200) var(--ease-in-out);
+    box-shadow: var(--shadow-sm);
+}
+
+.teacher-search-button:hover {
+    background-color: var(--color-primary-dark);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.teacher-search-results {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.teacher-result-item {
+  padding: var(--space-4);
+  border-radius: var(--radius);
+  background: var(--bg-primary);
+  margin-bottom: var(--space-3);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--duration-200) var(--ease-in-out);
+}
+
+.teacher-result-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.teacher-result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-3);
+}
+
+.teacher-result-name {
+  margin: 0;
+  color: var(--color-primary);
+  font-size: var(--text-lg);
+}
+
+.teacher-result-subject {
+  color: var(--text-light);
+  font-size: var(--text-sm);
+}
+
+.teacher-schedule-info {
+  margin-top: var(--space-3);
+}
+
+.teacher-current-location {
+  background: var(--color-primary-50);
+  padding: var(--space-3);
+  border-radius: var(--radius);
+  margin-bottom: var(--space-3);
+  border-left: 3px solid var(--color-primary);
+}
+
+.teacher-location-title {
+  font-weight: var(--font-semibold);
+  color: var(--color-primary);
+  margin-bottom: var(--space-1);
+}
+
+.teacher-location-details {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-2) var(--space-3);
+  font-size: var(--text-sm);
+}
+
+.teacher-location-label {
+  color: var(--text-light);
+  font-weight: var(--font-medium);
+}
+
+.teacher-location-value {
+  color: var(--color-gray-800);
+  font-weight: var(--font-medium);
+}
+
+.teacher-schedule-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.teacher-schedule-item {
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--border-color);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.teacher-schedule-item:last-child {
+  border-bottom: none;
+}
+
+.teacher-schedule-time {
+  font-weight: var(--font-semibold);
+  color: var(--color-gray-700);
+  min-width: 80px;
+}
+
+.teacher-schedule-class {
+  color: var(--color-gray-800);
+}
+
+.teacher-schedule-status {
+  font-size: var(--text-xs);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-full);
+  font-weight: var(--font-semibold);
+}
+
+.status-current {
+  background-color: var(--status-in-progress-bg);
+  color: var(--status-in-progress);
+}
+
+.status-upcoming {
+  background-color: var(--status-pending-bg);
+  color: var(--status-pending);
+}
+
+.status-completed {
+  background-color: var(--status-completed-bg);
+  color: var(--status-completed);
+}
+
+.teacher-no-results {
+  text-align: center;
+  padding: var(--space-6);
+  color: var(--color-gray-500);
+}
+
+.teacher-search-loading {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-6);
+}
+
+.teacher-search-error {
+  background-color: var(--color-danger-light);
+  color: var(--color-danger);
+  padding: var(--space-3);
+  border-radius: var(--radius);
+  text-align: center;
+  margin-bottom: var(--space-3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .teacher-search-form {
+    flex-direction: column;
+  }
+  
+  .teacher-search-button {
+    justify-content: center;
+   }
+
+  .teacher-location-details {
+    grid-template-columns: 1fr;
+  }
+  
+  .teacher-schedule-item {
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+  }
+  
+  .teacher-schedule-time {
+    min-width: auto;
+  }
+}

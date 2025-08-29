@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="assets/css/animations.css">
     <link rel="stylesheet" href="assets/css/base.css">
     <link rel="stylesheet" href="assets/css/schedule.css">
+    <link rel="stylesheet" href="assets/css/teacher-search.css">
     <link rel="icon" href="assets/img/favicon.ico">
 </head>
 
@@ -31,6 +32,7 @@
             </section>
 
             <div class="content-wrapper">
+                <!-- Columna principal con horarios -->
                 <div class="main-content" id="main-content">
                     <div class="grade-selector">
                         <label for="grade-selector">Filtrar por grado:</label>
@@ -46,6 +48,49 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Sidebar con buscador de profesores -->
+                <aside class="sidebar">
+                    <div class="sidebar-widget">
+                        <div class="teacher-search-container">
+                            <div class="teacher-search-header">
+                                <h3 class="teacher-search-title">Buscar Profesor</h3>
+                            </div>
+
+                            <form id="teacher-search-form" class="teacher-search-form">
+                                <input type="text" id="teacher-search-input" class="teacher-search-input"
+                                    placeholder="Nombre del profesor..." aria-label="Buscar profesor">
+                                <button type="submit" class="teacher-search-button">
+                                    <svg width="16" height="16" viewBox="0 0 24 24">
+                                        <path fill="currentColor"
+                                            d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z" />
+                                    </svg>
+                                    Buscar
+                                </button>
+                            </form>
+
+                            <div id="teacher-search-results" class="teacher-search-results">
+                                <!-- Los resultados se mostrarán aquí -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Widget del Comedor -->
+                    <div class="sidebar-widget" aria-labelledby="comedor-widget-heading">
+                        <h3 id="comedor-widget-heading">PNAEC - WASIMIKUNA</h3>
+                        <div class="menu-container" id="menu-del-dia">
+                            <!-- Se llenará dinámicamente con JS -->
+                        </div>
+                    </div>
+
+                    <!-- Widget de Horarios -->
+                    <div class="sidebar-widget" aria-labelledby="horarios-widget-heading">
+                        <h3 id="horarios-widget-heading">Horario Escolar</h3>
+                        <div class="schedule-container" id="horario-actual">
+                            <!-- Se llenará dinámicamente con JS -->
+                        </div>
+                    </div>
+                </aside>
             </div>
         </main>
 
@@ -61,6 +106,7 @@
     <script src="assets/js/components.js"></script>
     <script src="assets/js/main.js"></script>
     <script src="assets/js/schedule.js"></script>
+    <script src="assets/js/teacher-search.js"></script>
     <script src="assets/js/scroll-top.js"></script>
     <script src="assets/data/schedules.js"></script>
 </body>

@@ -773,6 +773,16 @@ class ScheduleSystem {
 document.addEventListener('DOMContentLoaded', () => {
     try {
         window.scheduleSystem = new ScheduleSystem();
+
+        // Inicializar el sistema de búsqueda después de que el sistema de horarios esté listo
+        setTimeout(() => {
+            try {
+                window.teacherSearchSystem = new TeacherSearchSystem();
+            } catch (error) {
+                console.error('Error al inicializar TeacherSearchSystem:', error);
+            }
+        }, 1000);
+
     } catch (error) {
         console.error('Error al inicializar ScheduleSystem:', error);
 
