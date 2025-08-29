@@ -27,6 +27,14 @@ class TeacherSearchSystem {
         return days[new Date().getDay()];
     }
 
+    createCustomDropdown() {
+        // Crear dropdown personalizado
+        this.dropdown = document.createElement('div');
+        this.dropdown.className = 'teacher-search-dropdown';
+        this.dropdown.id = 'teacher-search-dropdown';
+        document.querySelector('.teacher-search-form').appendChild(this.dropdown);
+    }
+
     timeToMinutes(timeStr) {
         const [hours, minutes] = timeStr.split(':').map(Number);
         return hours * 60 + minutes;
@@ -69,22 +77,101 @@ class TeacherSearchSystem {
 
         if (!searchForm || !searchInput || !resultsContainer) return;
 
-        // Crear datalist para autocompletado
-        this.setupAutocomplete(searchInput);
+        // Evento para input
+        searchInput.addEventListener('input', (e) => {
+            this.handleInput(e.target.value);
+        });
 
+        // Evento para focus
+        searchInput.addEventListener('focus', () => {
+            if (searchInput.value.length > 1) {
+                this.showDropdown();
+            }
+        });
+
+        // Evento para submit del formulario
         searchForm.addEventListener('submit', (e) => {
             e.preventDefault();
             this.performSearch(searchInput.value.trim(), resultsContainer);
+            this.hideDropdown();
         });
 
-        // Búsqueda en tiempo real con debounce
-        let timeout;
-        searchInput.addEventListener('input', (e) => {
-            clearTimeout(timeout);
-            timeout = setTimeout(() => {
-                this.performSearch(e.target.value.trim(), resultsContainer);
-            }, 300);
+        // Evento para hacer clic fuera del dropdown
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.teacher-search-form')) {
+                this.hideDropdown();
+            }
         });
+
+        // Eventos de teclado
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                this.hideDropdown();
+            }
+        });
+    }
+
+    handleInput(query) {
+        const resultsContainer = document.getElementById('teacher-search-results');
+
+        if (query.length < 2) {
+            this.hideDropdown();
+            resultsContainer.innerHTML = this.createEmptyState();
+            return;
+        }
+
+        const results = this.searchTeachers(query);
+        this.updateDropdown(results);
+
+        if (results.length > 0) {
+            this.showDropdown();
+        } else {
+            this.hideDropdown();
+        }
+
+        // También actualizar resultados principales
+        this.performSearch(query, resultsContainer);
+    }
+
+
+    updateDropdown(teachers) {
+        if (!this.dropdown) return;
+
+        if (teachers.length === 0) {
+            this.dropdown.innerHTML = '';
+            return;
+        }
+
+        this.dropdown.innerHTML = teachers.map(teacher => `
+            <div class="teacher-search-option" data-teacher="${teacher.name}">
+                <svg viewBox="0 0 24 24" width="16" height="16">
+                    <path fill="currentColor" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+                ${teacher.name}
+            </div>
+        `).join('');
+
+        // Añadir event listeners a las opciones
+        this.dropdown.querySelectorAll('.teacher-search-option').forEach(option => {
+            option.addEventListener('click', () => {
+                const teacherName = option.dataset.teacher;
+                document.getElementById('teacher-search-input').value = teacherName;
+                this.performSearch(teacherName, document.getElementById('teacher-search-results'));
+                this.hideDropdown();
+            });
+        });
+    }
+
+    showDropdown() {
+        if (this.dropdown) {
+            this.dropdown.classList.add('show');
+        }
+    }
+
+    hideDropdown() {
+        if (this.dropdown) {
+            this.dropdown.classList.remove('show');
+        }
     }
 
     setupAutocomplete(input) {
