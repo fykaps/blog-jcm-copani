@@ -705,23 +705,23 @@ class ScheduleSystem {
                 </div>
                 
                 <div class="teacher-contact">
-                    <div class="contact-item">
-                        <div class="contact-icon">
+                    <div class="teacher-contact-item">
+                        <div class="teacher-contact-icon">
                             ${this.icons.phone}
                         </div>
-                        <div class="contact-info">
-                            <span class="contact-label">Teléfono</span>
-                            <a href="tel:${teacherInfo.phone}" class="contact-value phone">${teacherInfo.phone}</a>
+                        <div class="teacher-contact-info">
+                            <span class="teacher-contact-label">Teléfono</span>
+                            <a href="tel:${teacherInfo.phone}" class="teacher-contact-value phone">${teacherInfo.phone}</a>
                         </div>
                     </div>
                     
-                    <div class="contact-item">
-                        <div class="contact-icon">
+                    <div class="teacher-contact-item">
+                        <div class="teacher-contact-icon">
                             ${this.icons.email}
                         </div>
-                        <div class="contact-info">
-                            <span class="contact-label">Email</span>
-                            <a href="mailto:${teacherInfo.email}" class="contact-value">${teacherInfo.email}</a>
+                        <div class="teacher-contact-info">
+                            <span class="teacher-contact-label">Email</span>
+                            <a href="mailto:${teacherInfo.email}" class="teacher-contact-value">${teacherInfo.email}</a>
                         </div>
                     </div>
                 </div>

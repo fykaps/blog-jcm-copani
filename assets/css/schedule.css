@@ -425,7 +425,7 @@
   margin-top: var(--space-4);
 }
 
-.contact-item {
+.teacher-contact-item {
   display: flex;
   align-items: center;
   gap: var(--space-3);
@@ -433,11 +433,11 @@
   border-bottom: 1px solid var(--border-color);
 }
 
-.contact-item:last-child {
+.teacher-contact-item:last-child {
   border-bottom: none;
 }
 
-.contact-icon {
+.teacher-contact-icon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -449,29 +449,29 @@
   flex-shrink: 0;
 }
 
-.contact-info {
+.teacher-contact-info {
   flex: 1;
 }
 
-.contact-label {
+.teacher-contact-label {
   display: block;
   font-size: var(--text-xs);
   color: var(--color-gray-500);
   margin-bottom: 2px;
 }
 
-.contact-value {
+.teacher-contact-value {
   display: block;
   color: var(--color-gray-800);
   font-weight: var(--font-medium);
   text-decoration: none;
 }
 
-.contact-value.phone {
+.teacher-contact-value.phone {
   color: var(--color-primary);
 }
 
-.contact-value:hover {
+.teacher-contact-value:hover {
   color: var(--color-primary-dark);
 }
 

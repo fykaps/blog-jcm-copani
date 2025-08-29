@@ -5,7 +5,7 @@
 const weeklyMenu = [
     {
         day: "Lunes",
-        date: "2025-08-18",
+        date: "2025-08-25",
         cook: "Rosa Pérez",
         helpers: {
             names: ["Lucía Pérez", "Ana Tejada"],
@@ -48,7 +48,7 @@ const weeklyMenu = [
     },
     {
         day: "Martes",
-        date: "2025-08-19",
+        date: "2025-08-26",
         cook: "Rosa Pérez",
         helpers: {
             names: ["Olga Bernabé", "Lidia Herrera"],
@@ -92,7 +92,7 @@ const weeklyMenu = [
     },
     {
         day: "Miércoles",
-        date: "2025-08-20",
+        date: "2025-08-27",
         cook: "Rosa Pérez",
         helpers: {
             names: ["Sofía Martínez", "Elena Sánchez"],
@@ -135,7 +135,7 @@ const weeklyMenu = [
     },
     {
         day: "Jueves",
-        date: "2025-08-21",
+        date: "2025-08-28",
         cook: "Rosa Pérez",
         helpers: {
             names: ["Patricia Ramírez", "Laura González"],
@@ -178,7 +178,7 @@ const weeklyMenu = [
     },
     {
         day: "Viernes",
-        date: "2025-08-22",
+        date: "2025-08-29",
         cook: "Rosa Pérez",
         helpers: {
             names: ["Matías Oro", "Elsa Plata"],
