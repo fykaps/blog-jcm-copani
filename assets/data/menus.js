@@ -138,49 +138,6 @@ const weeklyMenu = [
         date: "2025-08-28",
         cook: "Rosa Pérez",
         helpers: {
-            names: ["Patricia Ramírez", "Laura González"],
-            grade: "4to B"
-        },
-        breakfast: {
-            start: "09:35",
-            end: "09:50",
-            name: "Leche con maca y pan con mermelada",
-            description: "Desayuno energético con propiedades nutritivas",
-            ingredients: [
-                "Leche fresca",
-                "Maca en polvo",
-                "Pan integral",
-                "Mermelada de frutas",
-                "Mantequilla"
-            ],
-            image: "assets/img/menus/desayuno/desayuno4.jpg",
-            additional: "Galleta"
-        },
-        lunch: {
-            start: "12:30",
-            end: "13:00",
-            name: "Pescado sudado con arroz y ensalada criolla",
-            description: "Plato rico en omega 3 y proteínas",
-            ingredients: [
-                "Pescado fresco",
-                "Arroz",
-                "Cebolla",
-                "Tomate",
-                "Limón",
-                "Cilantro",
-                "Aceite vegetal",
-                "Sal",
-                "Especias"
-            ],
-            image: "assets/img/menus/almuerzo/almuerzo4.jpg",
-            additional: "Piña"
-        }
-    },
-    {
-        day: "Viernes",
-        date: "2025-08-29",
-        cook: "Rosa Pérez",
-        helpers: {
             names: ["Matías Oro", "Elsa Plata"],
             grade: "3ro A"
         },
@@ -196,7 +153,7 @@ const weeklyMenu = [
                 "Mantequilla",
                 "Miel de abeja"
             ],
-            image: "assets/img/menus/desayuno/desayuno5.jpg",
+            image: "assets/img/menus/desayuno/desayuno4.jpg",
             additional: "Galleta"
         },
         lunch: {
@@ -216,8 +173,51 @@ const weeklyMenu = [
                 "Sal",
                 "Especias"
             ],
-            image: "assets/img/menus/almuerzo/almuerzo5.jpg",
+            image: "assets/img/menus/almuerzo/almuerzo4.jpg",
             additional: "Sandía"
         }
-    }
+    },
+    {
+        day: "Viernes",
+        date: "2025-08-29",
+        cook: "Rosa Pérez",
+        helpers: {
+            names: ["Patricia Ramírez", "Laura González"],
+            grade: "4to B"
+        },
+        breakfast: {
+            start: "09:35",
+            end: "09:50",
+            name: "Leche con maca y pan con mermelada",
+            description: "Desayuno energético con propiedades nutritivas",
+            ingredients: [
+                "Leche fresca",
+                "Maca en polvo",
+                "Pan integral",
+                "Mermelada de frutas",
+                "Mantequilla"
+            ],
+            image: "assets/img/menus/desayuno/desayuno5.png",
+            additional: "Galleta"
+        },
+        lunch: {
+            start: "12:30",
+            end: "13:00",
+            name: "Pescado sudado con arroz y ensalada criolla",
+            description: "Plato rico en omega 3 y proteínas",
+            ingredients: [
+                "Pescado fresco",
+                "Arroz",
+                "Cebolla",
+                "Tomate",
+                "Limón",
+                "Cilantro",
+                "Aceite vegetal",
+                "Sal",
+                "Especias"
+            ],
+            image: "assets/img/menus/almuerzo/almuerzo5.jpg",
+            additional: "Piña"
+        }
+    },
 ];
