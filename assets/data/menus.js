@@ -51,43 +51,42 @@ const weeklyMenu = [
         date: "2025-08-26",
         cook: "Rosa Pérez",
         helpers: {
-            names: ["Olga Bernabé", "Lidia Herrera"],
-            grade: "5to B"
+            names: ["Patricia Ramírez", "Laura González"],
+            grade: "4to B"
         },
         breakfast: {
             start: "09:35",
             end: "09:50",
-            name: "Quinua con leche y pan con palta",
-            description: "Desayuno alto en proteínas y grasas saludables",
+            name: "Leche con maca y pan con mermelada",
+            description: "Desayuno energético con propiedades nutritivas",
             ingredients: [
-                "Quinua",
-                "Leche",
+                "Leche fresca",
+                "Maca en polvo",
                 "Pan integral",
-                "Palta",
-                "Sal"
+                "Mermelada de frutas",
+                "Mantequilla"
             ],
-            image: "assets/img/menus/desayuno/desayuno2.jpg",
-            additional: "Pan"
+            image: "assets/img/menus/desayuno/desayuno2.png",
+            additional: "Galleta"
         },
         lunch: {
             start: "12:30",
             end: "13:00",
-            name: "Tallarines rojos con carne y ensalada de beterraga",
-            description: "Plato de pasta con salsa de tomate y carne molida",
+            name: "Pescado sudado con arroz y ensalada criolla",
+            description: "Plato rico en omega 3 y proteínas",
             ingredients: [
-                "Tallarines",
-                "Carne molida",
-                "Tomate",
+                "Pescado fresco",
+                "Arroz",
                 "Cebolla",
-                "Ajo",
-                "Beterraga",
+                "Tomate",
                 "Limón",
+                "Cilantro",
                 "Aceite vegetal",
                 "Sal",
                 "Especias"
             ],
             image: "assets/img/menus/almuerzo/almuerzo2.jpg",
-            additional: "Pera"
+            additional: "Piña"
         }
     },
     {
@@ -182,42 +181,43 @@ const weeklyMenu = [
         date: "2025-08-29",
         cook: "Rosa Pérez",
         helpers: {
-            names: ["Patricia Ramírez", "Laura González"],
-            grade: "4to B"
+            names: ["Olga Bernabé", "Lidia Herrera"],
+            grade: "5to B"
         },
         breakfast: {
             start: "09:35",
             end: "09:50",
-            name: "Leche con maca y pan con mermelada",
-            description: "Desayuno energético con propiedades nutritivas",
+            name: "Quinua con leche y pan con palta",
+            description: "Desayuno alto en proteínas y grasas saludables",
             ingredients: [
-                "Leche fresca",
-                "Maca en polvo",
+                "Quinua",
+                "Leche",
                 "Pan integral",
-                "Mermelada de frutas",
-                "Mantequilla"
+                "Palta",
+                "Sal"
             ],
             image: "assets/img/menus/desayuno/desayuno5.png",
-            additional: "Galleta"
+            additional: "Pan"
         },
         lunch: {
             start: "12:30",
             end: "13:00",
-            name: "Pescado sudado con arroz y ensalada criolla",
-            description: "Plato rico en omega 3 y proteínas",
+            name: "Tallarines rojos con carne y ensalada de beterraga",
+            description: "Plato de pasta con salsa de tomate y carne molida",
             ingredients: [
-                "Pescado fresco",
-                "Arroz",
-                "Cebolla",
+                "Tallarines",
+                "Carne molida",
                 "Tomate",
+                "Cebolla",
+                "Ajo",
+                "Beterraga",
                 "Limón",
-                "Cilantro",
                 "Aceite vegetal",
                 "Sal",
                 "Especias"
             ],
-            image: "assets/img/menus/almuerzo/almuerzo5.jpg",
-            additional: "Piña"
+            image: "assets/img/menus/almuerzo/almuerzo5.png",
+            additional: "Pera"
         }
     },
 ];
