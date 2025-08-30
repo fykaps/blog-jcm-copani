@@ -477,6 +477,12 @@ class ScheduleDetailSystem {
         // ID único para el contenedor del countdown
         const countdownId = `countdown-${cls.start}-${cls.end}-${Math.random().toString(36).substr(2, 9)}`;
 
+        // Crear elemento para el tipo de clase (si no es receso)
+        let typeHTML = '';
+        if (!isBreak && cls.type && cls.type !== "Normal") {
+            typeHTML = `<span class="class-type">${cls.type}</span>`;
+        }
+
         let countdownHTML = '';
         if (status.timeRemaining > 0) {
             countdownHTML = `
@@ -517,6 +523,7 @@ class ScheduleDetailSystem {
                 </span>
                 <span class="class-status">${status.text}</span>
                 ${countdownHTML}
+                ${typeHTML}
             </div>
         </li>`;
     }
