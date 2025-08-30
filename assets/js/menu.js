@@ -1,6 +1,6 @@
 /**
- * Sistema de Menú Qaliwarma - Versión E-commerce Premium
- * Con interfaz moderna, efectos visuales y modal mejorado
+ * Sistema de Menú Qaliwarma - Versión Mejorada
+ * Con interfaz de ancho completo y modales detallados
  */
 
 class CountdownSystem {
@@ -198,33 +198,18 @@ class MenuSystem {
 
       Array.from(upcomingCards.children).forEach((card, index) => {
         const menu = menus.upcoming[index];
-        const statusContainer = card.querySelector('.menu-card-status');
-        const mealsContainer = card.querySelector('.menu-card-meals');
+        const countdownContainers = card.querySelectorAll('.meal-countdown-container');
 
-        if (menu.breakfast) {
-          const container = document.createElement('div');
-          mealsContainer.appendChild(container);
-          const countdown = new CountdownSystem(menu.breakfast, 'breakfast', menu.date).init(container);
+        // Configurar countdown para desayuno si existe
+        if (menu.breakfast && countdownContainers[0]) {
+          const countdown = new CountdownSystem(menu.breakfast, 'breakfast', menu.date).init(countdownContainers[0]);
           this.countdowns.push(countdown);
-
-          // Actualizar estado en la imagen
-          if (countdown.currentState) {
-            statusContainer.className = `menu-card-status ${countdown.currentState}`;
-            statusContainer.textContent = countdown.getStatusText(countdown.currentState);
-          }
         }
 
-        if (menu.lunch) {
-          const container = document.createElement('div');
-          mealsContainer.appendChild(container);
-          const countdown = new CountdownSystem(menu.lunch, 'lunch', menu.date).init(container);
+        // Configurar countdown para almuerzo si existe
+        if (menu.lunch && countdownContainers[1]) {
+          const countdown = new CountdownSystem(menu.lunch, 'lunch', menu.date).init(countdownContainers[1]);
           this.countdowns.push(countdown);
-
-          // Usar el estado del almuerzo si no hay desayuno o si está completado
-          if (!menu.breakfast || countdown.currentState === 'in-progress') {
-            statusContainer.className = `menu-card-status ${countdown.currentState}`;
-            statusContainer.textContent = countdown.getStatusText(countdown.currentState);
-          }
         }
       });
 
@@ -258,25 +243,24 @@ class MenuSystem {
     `;
 
     if (menu.breakfast) {
-      content += this.createMealCard(menu.breakfast, 'Desayuno', true);
+      content += this.createMealCardFull(menu.breakfast, 'Desayuno', menu.date, true);
     }
 
     if (menu.lunch) {
-      content += this.createMealCard(menu.lunch, 'Almuerzo', true);
+      content += this.createMealCardFull(menu.lunch, 'Almuerzo', menu.date, true);
     }
 
     this.todayMenuSection.innerHTML = content;
 
     if (menu.breakfast) {
       const container = document.createElement('div');
-      this.todayMenuSection.querySelector('.meal-card').appendChild(container);
+      this.todayMenuSection.querySelector('.meal-card-full:first-child .meal-card-content').appendChild(container);
       this.countdowns.push(new CountdownSystem(menu.breakfast, 'breakfast', menu.date).init(container));
     }
 
     if (menu.lunch) {
-      const cards = this.todayMenuSection.querySelectorAll('.meal-card');
       const container = document.createElement('div');
-      cards[cards.length - 1].appendChild(container);
+      this.todayMenuSection.querySelector('.meal-card-full:last-child .meal-card-content').appendChild(container);
       this.countdowns.push(new CountdownSystem(menu.lunch, 'lunch', menu.date).init(container));
     }
   }
@@ -313,77 +297,87 @@ class MenuSystem {
   createMenuCardContent(menu) {
     if (!menu) return '<div class="error-card">Error: Menú no válido</div>';
 
-    let mealsHtml = '';
     const menuDate = menu.date || '';
-
-    if (menu.breakfast) {
-      mealsHtml += this.createMealCard(menu.breakfast, 'Desayuno', false, menuDate);
-    }
-
-    if (menu.lunch) {
-      mealsHtml += this.createMealCard(menu.lunch, 'Almuerzo', false, menuDate);
-    }
+    const hasBreakfast = menu.breakfast && Object.keys(menu.breakfast).length > 0;
+    const hasLunch = menu.lunch && Object.keys(menu.lunch).length > 0;
 
     return `
-      <div class="menu-card-image">
-        <img src="${menu.breakfast?.image || menu.lunch?.image || 'assets/img/default-food.jpg'}" alt="Menú del día">
-        <div class="menu-card-status pending">Pendiente</div>
+    <div class="menu-card-header">
+      <div class="menu-card-date">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+        </svg>
+        ${menu.day || 'Día no especificado'}, ${this.formatDisplayDate(menuDate)}
       </div>
-      <div class="menu-card-content">
-        <div class="menu-card-header">
-          <div class="menu-card-date">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-            </svg>
-            ${menu.day || 'Día no especificado'}, ${this.formatDisplayDate(menuDate)}
-          </div>
-          <h3 class="menu-card-title">Menú del Día</h3>
-          <div class="menu-card-meta">
-            <span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-              </svg>
-              ${menu.cook || 'Cocinera no especificada'}
-            </span>
-            <span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
-              </svg>
-              ${menu.helpers?.names?.join(' y ') ? `${menu.helpers.names.join(' y ')} (${menu.helpers.grade})` : 'Ayudantes no especificados'}
-            </span>
-          </div>
+      <h3 class="menu-card-title">Menú del Día</h3>
+      <div class="menu-card-meta">
+        <span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+          </svg>
+          ${menu.cook || 'Cocinera no especificada'}
+        </span>
+        <span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+          </svg>
+          ${menu.helpers?.names?.join(' y ') ? `${menu.helpers.names.join(' y ')} (${menu.helpers.grade})` : 'Ayudantes no especificados'}
+        </span>
+      </div>
+    </div>
+    <div class="menu-card-meals-grid">
+      ${hasBreakfast ? this.createMealCardFull(menu.breakfast, 'Desayuno', menuDate) : this.createEmptyMealCard('Desayuno')}
+      ${hasLunch ? this.createMealCardFull(menu.lunch, 'Almuerzo', menuDate) : this.createEmptyMealCard('Almuerzo')}
+    </div>
+  `;
+  }
+
+  createMealCardFull(meal, title, menuDate = '', isToday = false) {
+    const mealType = title.toLowerCase();
+    return `
+    <div class="meal-card-full ${mealType}">
+      <div class="meal-card-image">
+        <img src="${meal?.image || 'assets/img/default-food.jpg'}" alt="${meal?.name || title}" class="meal-image">
+        <div class="meal-card-overlay">
+          <h5 class="meal-title">${title}</h5>
+          <span class="meal-time">${meal?.start || '--:--'} - ${meal?.end || '--:--'}</span>
         </div>
-        <div class="menu-card-meals">
-          ${mealsHtml || '<p class="no-meals">No hay servicios programados</p>'}
-        </div>
-        <button class="btn-details" data-meal="desayuno" data-date="${menuDate || ''}">
-          Ver detalles del menú
+      </div>
+      <div class="meal-card-content">
+        <h4 class="meal-name">${meal?.name || 'Menú no especificado'}</h4>
+        <p class="meal-description">${meal?.description || 'Descripción no disponible'}</p>
+        ${isToday ? '<div class="meal-countdown-container"></div>' : ''}
+        <button class="meal-details-btn" data-meal="${mealType}" data-date="${menuDate}">
+          Ver detalles
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
           </svg>
         </button>
       </div>
-    `;
+    </div>
+  `;
   }
 
-  createMealCard(meal, title, isCompact = false, menuDate = '') {
-    const compactClass = isCompact ? 'compact' : '';
-    const dateDisplay = menuDate ? this.formatDisplayDate(menuDate) : 'Fecha no definida';
-
+  createEmptyMealCard(title) {
     return `
-      <div class="meal-card ${compactClass}">
-        <div class="meal-header">
+    <div class="meal-card-full empty">
+      <div class="meal-card-image">
+        <div class="empty-meal-image">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+          </svg>
+        </div>
+        <div class="meal-card-overlay">
           <h5 class="meal-title">${title}</h5>
-          <span class="meal-time">${meal?.start || '--:--'} - ${meal?.end || '--:--'}</span>
+          <span class="meal-time">No programado</span>
         </div>
-        <div class="meal-content">
-          <p class="meal-name">${meal?.name || 'Menú no especificado'}</p>
-        </div>
-        ${!isCompact ? `
-        <div class="meal-countdown-container"></div>
-        ` : ''}
       </div>
-    `;
+      <div class="meal-card-content">
+        <h4 class="meal-name">No hay servicio</h4>
+        <p class="meal-description">No se ha programado ${title.toLowerCase()} para este día.</p>
+      </div>
+    </div>
+  `;
   }
 
   createEmptyState() {
@@ -403,20 +397,31 @@ class MenuSystem {
 
   setupEventListeners() {
     document.addEventListener('click', (e) => {
-      if (e.target.classList.contains('btn-details') || e.target.closest('.btn-details')) {
-        const btn = e.target.classList.contains('btn-details') ? e.target : e.target.closest('.btn-details');
+      if (e.target.classList.contains('meal-details-btn') || e.target.closest('.meal-details-btn')) {
+        const btn = e.target.classList.contains('meal-details-btn') ? e.target : e.target.closest('.meal-details-btn');
         const mealType = btn.getAttribute('data-meal');
         const date = btn.getAttribute('data-date');
-        const menuCard = btn.closest('.menu-card');
 
-        const menuDate = menuCard.querySelector('.menu-card-date').textContent.split(',')[1].trim();
-        const menu = this.menuData.find(m =>
-          `${m.day}, ${this.formatDisplayDate(m.date)}` === `${menuCard.querySelector('.menu-card-date').textContent}`
-        );
+        // Encontrar el menú correspondiente
+        const menuCard = btn.closest('.menu-card');
+        let menu;
+
+        if (menuCard) {
+          const menuDateText = menuCard.querySelector('.menu-card-date').textContent;
+          const day = menuDateText.split(',')[0].trim();
+          menu = this.menuData.find(m =>
+            m.day === day && this.formatDisplayDate(m.date) === menuDateText.split(',')[1].trim()
+          );
+        } else {
+          // Si es el menú de hoy
+          menu = this.menuData.find(m => this.formatDate(new Date()) === m.date);
+        }
 
         if (menu) {
           const meal = mealType === 'desayuno' ? menu.breakfast : menu.lunch;
-          this.showMealDetails(meal, mealType, date, menu);
+          if (meal) {
+            this.showMealDetails(meal, mealType, date, menu);
+          }
         }
       }
     });
@@ -425,80 +430,56 @@ class MenuSystem {
   showMealDetails(meal, mealType, date, menu) {
     if (!meal) return;
 
-    const now = new Date();
-    const startTime = new Date(`${menu.date}T${meal.start}`);
-    const endTime = new Date(`${menu.date}T${meal.end}`);
-    let countdownText = '';
-    let status = '';
-
-    if (now < startTime) {
-      const timeLeft = startTime - now;
-      const { days, hours, minutes, seconds } = this.calculateTimeUnits(timeLeft);
-      countdownText = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-      status = 'pending';
-    } else if (now >= startTime && now <= endTime) {
-      const timeLeft = endTime - now;
-      const { days, hours, minutes, seconds } = this.calculateTimeUnits(timeLeft);
-      countdownText = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-      status = 'in-progress';
-    } else {
-      countdownText = 'Servicio completado';
-      status = 'completed';
-    }
-
     const modal = document.createElement('div');
     modal.className = 'modal';
     modal.innerHTML = `
-      <div class="modal-overlay"></div>
-      <div class="modal-content">
-        <button class="modal-close" aria-label="Cerrar modal">
-          <svg viewBox="0 0 24 24" width="24" height="24">
-            <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-          </svg>
-        </button>
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <button class="modal-close" aria-label="Cerrar modal">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+        </svg>
+      </button>
+      
+      <div class="meal-detail-modal">
+        <div class="meal-detail-header">
+          <span class="meal-detail-type ${mealType}">${mealType === 'desayuno' ? 'Desayuno' : 'Almuerzo'}</span>
+          <h3>${menu.day}, ${this.formatDisplayDate(date)}</h3>
+          <p class="meal-detail-time">${meal.start} - ${meal.end}</p>
+        </div>
         
-        <div class="meal-details">
-          <div class="meal-details-header">
-            <h3>${mealType === 'desayuno' ? 'Desayuno' : 'Almuerzo'} - ${date}</h3>
-            <div class="meal-time-status">
-              <span class="meal-time">${meal.start} - ${meal.end}</span>
-              <span class="meal-status ${status}">${this.getStatusText(status)}</span>
-            </div>
-            <div class="meal-countdown">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
-              ${countdownText}
-            </div>
-          </div>
+        <div class="meal-detail-image">
+          <img src="${meal.image || 'assets/img/default-food.jpg'}" alt="${meal.name}">
+        </div>
+        
+        <div class="meal-detail-content">
+          <h4>${meal.name}</h4>
+          <p class="meal-detail-description">${meal.description || 'Descripción no disponible'}</p>
           
-          <div class="meal-details-content">
-            <div class="meal-image-container">
-              <img src="${meal.image || 'assets/img/default-food.jpg'}" alt="${meal.name}" class="meal-image">
-            </div>
-            
-            <div class="meal-info">
-              <h4>${meal.name}</h4>
-              <p class="meal-description">${meal.description || 'Descripción no disponible'}</p>
-              
-              <div class="meal-ingredients">
-                <h5>Ingredientes:</h5>
-                <ul>
-                  ${meal.ingredients.map(ing => `<li>${ing}</li>`).join('') || '<li>No se especificaron ingredientes</li>'}
-                </ul>
-              </div>
-              
-              ${meal.additional ? `
-              <div class="meal-additional">
-                <span class="label">Información adicional:</span>
-                <span class="value">${meal.additional}</span>
-              </div>
-              ` : ''}
-            </div>
+          ${meal.ingredients && meal.ingredients.length > 0 ? `
+          <div class="meal-detail-ingredients">
+            <h5>Ingredientes:</h5>
+            <ul>
+              ${meal.ingredients.map(ing => `<li>${ing}</li>`).join('')}
+            </ul>
+          </div>
+          ` : ''}
+          
+          ${meal.additional ? `
+          <div class="meal-detail-additional">
+            <span class="label">Adicional:</span>
+            <span class="value">${meal.additional}</span>
+          </div>
+          ` : ''}
+          
+          <div class="meal-detail-status">
+            <p class="text-center mb-0">Cocinera: ${menu.cook}</p>
+            <p class="text-center">Ayudantes: ${menu.helpers.names.join(' y ')} (${menu.helpers.grade})</p>
           </div>
         </div>
       </div>
-    `;
+    </div>
+  `;
 
     document.body.appendChild(modal);
 
@@ -511,7 +492,7 @@ class MenuSystem {
       modal.classList.remove('active');
       setTimeout(() => {
         document.body.removeChild(modal);
-      }, 500);
+      }, 300);
     };
 
     modal.querySelector('.modal-overlay').addEventListener('click', closeModal);
@@ -529,18 +510,6 @@ class MenuSystem {
         document.removeEventListener('keydown', escHandler);
       }
     });
-  }
-
-  calculateTimeUnits(timeInMs) {
-    const totalSeconds = Math.floor(timeInMs / 1000);
-    const seconds = totalSeconds % 60;
-    const totalMinutes = Math.floor(totalSeconds / 60);
-    const minutes = totalMinutes % 60;
-    const totalHours = Math.floor(totalMinutes / 60);
-    const hours = totalHours % 24;
-    const days = Math.floor(totalHours / 24);
-
-    return { days, hours, minutes, seconds };
   }
 
   formatDate(date) {
@@ -566,15 +535,6 @@ class MenuSystem {
       console.error('Error al formatear fecha:', error);
       return dateString;
     }
-  }
-
-  getStatusText(status) {
-    const statusTexts = {
-      'pending': 'Pendiente',
-      'in-progress': 'En Progreso',
-      'completed': 'Completado'
-    };
-    return statusTexts[status] || '';
   }
 
   destroy() {
