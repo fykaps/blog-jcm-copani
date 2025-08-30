@@ -220,4 +220,92 @@ const weeklyMenu = [
             additional: "Pera"
         }
     },
+    {
+        day: "Sábado",
+        date: "2025-08-30",
+        cook: "Rosa Pérez",
+        helpers: {
+            names: ["Olga Bernabé", "Lidia Herrera"],
+            grade: "5to B"
+        },
+        breakfast: {
+            start: "09:35",
+            end: "09:50",
+            name: "Quinua con leche y pan con palta",
+            description: "Desayuno alto en proteínas y grasas saludables",
+            ingredients: [
+                "Quinua",
+                "Leche",
+                "Pan integral",
+                "Palta",
+                "Sal"
+            ],
+            image: "assets/img/menus/desayuno/desayuno5.png",
+            additional: "Pan"
+        },
+        lunch: {
+            start: "12:30",
+            end: "13:00",
+            name: "Tallarines rojos con carne y ensalada de beterraga",
+            description: "Plato de pasta con salsa de tomate y carne molida",
+            ingredients: [
+                "Tallarines",
+                "Carne molida",
+                "Tomate",
+                "Cebolla",
+                "Ajo",
+                "Beterraga",
+                "Limón",
+                "Aceite vegetal",
+                "Sal",
+                "Especias"
+            ],
+            image: "assets/img/menus/almuerzo/almuerzo5.png",
+            additional: "Pera"
+        }
+    },
+    {
+        day: "Domingo",
+        date: "2025-08-31",
+        cook: "Rosa Pérez",
+        helpers: {
+            names: ["Olga Bernabé", "Lidia Herrera"],
+            grade: "5to B"
+        },
+        breakfast: {
+            start: "09:35",
+            end: "09:50",
+            name: "Quinua con leche y pan con palta",
+            description: "Desayuno alto en proteínas y grasas saludables",
+            ingredients: [
+                "Quinua",
+                "Leche",
+                "Pan integral",
+                "Palta",
+                "Sal"
+            ],
+            image: "assets/img/menus/desayuno/desayuno5.png",
+            additional: "Pan"
+        },
+        lunch: {
+            start: "12:30",
+            end: "13:00",
+            name: "Tallarines rojos con carne y ensalada de beterraga",
+            description: "Plato de pasta con salsa de tomate y carne molida",
+            ingredients: [
+                "Tallarines",
+                "Carne molida",
+                "Tomate",
+                "Cebolla",
+                "Ajo",
+                "Beterraga",
+                "Limón",
+                "Aceite vegetal",
+                "Sal",
+                "Especias"
+            ],
+            image: "assets/img/menus/almuerzo/almuerzo5.png",
+            additional: "Pera"
+        }
+    },
 ];
