@@ -276,6 +276,20 @@ const classSchedules = {
         { grade: "1ro A", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
         { grade: "1ro A", subject: "Inglés", teacher: "Madelaine Gonzalo Segura", start: "13:00", end: "14:20", type: "Normal" },
         { grade: "1ro A", subject: "Educación para el Trabajo", teacher: "Geber Yole Chambilla Condori", start: "14:20", end: "15:00", type: "Centro de Computo" },
+        // 2do A
+        { grade: "2do A", subject: "Ciencias Sociales", teacher: "Luis Torres", start: "07:30", end: "09:00", type: "Exámen" },
+        { grade: "2do A", subject: "Receso", start: "09:00", end: "09:15", type: "receso", isBreak: true },
+        { grade: "2do A", subject: "Desarrollo Personal", teacher: "Julio Amilcar Rivera Aguilar", start: "09:15", end: "10:45", type: "Práctica" },
+
+        // 3ro B
+        { grade: "3ro B", subject: "Educación Religiosa", teacher: "Vidal Quiñonez Quispe", start: "08:30", end: "10:00", type: "Normal" },
+        { grade: "3ro B", subject: "Receso", start: "10:00", end: "10:15", type: "receso", isBreak: true },
+        { grade: "3ro B", subject: "Tutoría", teacher: "Fidel Severiano Cruz Tiquilloca", start: "10:15", end: "11:45", type: "Laboratorio" },
+
+        // 5to C
+        { grade: "5to C", subject: "Matemáticas", teacher: "David Mengoa Mamani", start: "08:00", end: "09:30", type: "Exámen" },
+        { grade: "5to C", subject: "Receso", start: "09:30", end: "09:45", type: "receso", isBreak: true },
+        { grade: "5to C", subject: "Ciencia y Tecnología", teacher: "Lucía Ramírez", start: "23:20", end: "23:30", type: "Práctica" }
     ],
     "Domingo": []
 };
