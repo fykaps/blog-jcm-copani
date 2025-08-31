@@ -1,157 +1,34 @@
 /**
- * Sistema de Menú Qaliwarma - Versión Profesional Mejorada
- * Con modal de detalles, estados individuales y cronograma de madres
+ * Sistema de Menú Qaliwarma - Versión Corregida
+ * Con contador regresivo en tiempo real para cada comida
  */
 
-class CountdownSystem {
-  constructor(meal, mealType, dateString) {
-    this.meal = meal;
-    this.mealType = mealType;
-    this.dateString = dateString;
-    this.interval = null;
-    this.currentState = null;
-  }
-
-  init(container) {
-    this.container = container;
-    this.renderCountdown();
-    this.startCountdown();
-    return this;
-  }
-
-  renderCountdown() {
-    this.container.innerHTML = `
-            <div class="countdown-container">
-                <div class="countdown"></div>
-                <div class="meal-status"></div>
-            </div>
-        `;
-    this.countdownElement = this.container.querySelector('.countdown');
-    this.statusElement = this.container.querySelector('.meal-status');
-  }
-
-  startCountdown() {
-    this.updateCountdown();
-    this.interval = setInterval(() => this.updateCountdown(), 1000);
-  }
-
-  updateCountdown() {
-    const now = new Date();
-    const mealDate = new Date(this.dateString);
-    const startDateTime = new Date(`${this.dateString}T${this.meal.start}`);
-    const endDateTime = new Date(`${this.dateString}T${this.meal.end}`);
-
-    if (this.isSameDate(now, mealDate)) {
-      if (now < startDateTime) {
-        const timeLeft = startDateTime - now;
-        this.displayCountdown(timeLeft, `Falta para ${this.mealType === 'breakfast' ? 'desayuno' : 'almuerzo'}:`, 'pending');
-      } else if (now >= startDateTime && now <= endDateTime) {
-        const timeLeft = endDateTime - now;
-        this.displayCountdown(timeLeft, `Termina en:`, 'in-progress');
-      } else {
-        this.displayCompleted();
-        this.stopCountdown();
-      }
-    } else {
-      const timeLeft = startDateTime - now;
-      this.displayCountdown(timeLeft, `Falta para ${this.mealType === 'breakfast' ? 'desayuno' : 'almuerzo'}:`, 'pending');
-    }
-  }
-
-  displayCountdown(timeLeft, prefix, status) {
-    const { days, hours, minutes, seconds } = this.calculateTimeUnits(timeLeft);
-
-    this.countdownElement.innerHTML = `
-            <span class="countdown-prefix">${prefix}</span>
-            ${days > 0 ? `<span class="countdown-unit"><strong>${days}</strong>d</span>` : ''}
-            <span class="countdown-unit"><strong>${hours}</strong>h</span>
-            <span class="countdown-unit"><strong>${minutes}</strong>m</span>
-            <span class="countdown-unit"><strong>${seconds}</strong>s</span>
-        `;
-
-    this.statusElement.className = 'meal-status ' + status;
-    this.statusElement.textContent = this.getStatusText(status);
-    this.currentState = status;
-  }
-
-  displayCompleted() {
-    this.countdownElement.innerHTML = '';
-    this.statusElement.className = 'meal-status completed';
-    this.statusElement.textContent = 'Completado';
-    this.currentState = 'completed';
-  }
-
-  calculateTimeUnits(timeInMs) {
-    const totalSeconds = Math.floor(timeInMs / 1000);
-    const seconds = totalSeconds % 60;
-    const totalMinutes = Math.floor(totalSeconds / 60);
-    const minutes = totalMinutes % 60;
-    const totalHours = Math.floor(totalMinutes / 60);
-    const hours = totalHours % 24;
-    const days = Math.floor(totalHours / 24);
-
-    return {
-      days: Math.max(0, days),
-      hours: Math.max(0, hours),
-      minutes: Math.max(0, minutes),
-      seconds: Math.max(0, seconds)
-    };
-  }
-
-  isSameDate(date1, date2) {
-    return date1.getFullYear() === date2.getFullYear() &&
-      date1.getMonth() === date2.getMonth() &&
-      date1.getDate() === date2.getDate();
-  }
-
-  getStatusText(status) {
-    const statusTexts = {
-      'pending': 'Pendiente',
-      'in-progress': 'En Progreso',
-      'completed': 'Completado'
-    };
-    return statusTexts[status] || '';
-  }
-
-  stopCountdown() {
-    if (this.interval) {
-      clearInterval(this.interval);
-      this.interval = null;
-    }
-  }
-
-  destroy() {
-    this.stopCountdown();
-  }
-}
-
-class MenuSystem {
+class MenuCountdownSystem {
   constructor(menuData) {
     this.menuData = menuData;
     this.currentDate = new Date();
-    this.organizedSections = document.getElementById('organized-sections');
-    this.todayMenuSection = document.getElementById('menu-del-dia');
-    this.upcomingMenusSection = document.getElementById('upcoming-menus');
-    this.supportScheduleSection = document.getElementById('support-schedule');
-    this.countdowns = [];
+    this.countdowns = new Map();
+    this.updateInterval = null;
 
     this.init();
-    this.startDateCheck();
   }
 
   init() {
     this.renderAllSections();
+    this.startCountdowns();
     this.setupEventListeners();
   }
 
-  startDateCheck() {
-    setInterval(() => {
-      const newDate = new Date();
-      if (newDate.getDate() !== this.currentDate.getDate()) {
-        this.currentDate = newDate;
-        this.renderAllSections();
-      }
-    }, 60000);
+  startCountdowns() {
+    // Limpiar intervalo anterior si existe
+    if (this.updateInterval) {
+      clearInterval(this.updateInterval);
+    }
+
+    // Actualizar contadores cada segundo
+    this.updateInterval = setInterval(() => {
+      this.updateAllCountdowns();
+    }, 1000);
   }
 
   classifyMenus() {
@@ -176,68 +53,365 @@ class MenuSystem {
   }
 
   renderAllSections() {
-    this.countdowns.forEach(c => c.destroy());
-    this.countdowns = [];
-
     const classified = this.classifyMenus();
 
+    // Renderizar secciones organizadas
     this.renderOrganizedSections(classified);
+
+    // Renderizar otras secciones
     this.renderTodayMenu(classified.today[0]);
     this.renderUpcomingMenus(classified.upcoming.slice(0, 3));
     this.renderSupportSchedule();
+
+    // Registrar contadores después de renderizar
+    this.registerAllCountdowns(classified);
   }
 
   renderOrganizedSections(menus) {
-    if (!this.organizedSections) return;
-    this.organizedSections.innerHTML = '';
+    const organizedSections = document.getElementById('organized-sections');
+    if (!organizedSections) return;
 
+    organizedSections.innerHTML = '';
+
+    // Sección de Hoy
     if (menus.today.length > 0) {
-      const todaySection = this.createSectionElement('Menú de Hoy', 'today');
+      const todaySection = this.createSection('Menú de Hoy', 'today');
       todaySection.appendChild(this.createMenuCards(menus.today));
-      this.organizedSections.appendChild(todaySection);
+      organizedSections.appendChild(todaySection);
     }
 
+    // Sección de Próximos
     if (menus.upcoming.length > 0) {
-      const upcomingSection = this.createSectionElement('Próximos Menús', 'upcoming');
-      const upcomingCards = this.createMenuCards(menus.upcoming);
-
-      Array.from(upcomingCards.children).forEach((card, index) => {
-        const menu = menus.upcoming[index];
-        const countdownContainers = card.querySelectorAll('.meal-countdown-container');
-
-        // Configurar countdown para desayuno si existe
-        if (menu.breakfast && countdownContainers[0]) {
-          const countdown = new CountdownSystem(menu.breakfast, 'breakfast', menu.date).init(countdownContainers[0]);
-          this.countdowns.push(countdown);
-        }
-
-        // Configurar countdown para almuerzo si existe
-        if (menu.lunch && countdownContainers[1]) {
-          const countdown = new CountdownSystem(menu.lunch, 'lunch', menu.date).init(countdownContainers[1]);
-          this.countdowns.push(countdown);
-        }
-      });
-
-      upcomingSection.appendChild(upcomingCards);
-      this.organizedSections.appendChild(upcomingSection);
+      const upcomingSection = this.createSection('Próximos Menús', 'upcoming');
+      upcomingSection.appendChild(this.createMenuCards(menus.upcoming));
+      organizedSections.appendChild(upcomingSection);
     }
 
+    // Sección de Atendidos
     if (menus.attended.length > 0) {
-      const attendedSection = this.createSectionElement('Menús Atendidos', 'attended');
+      const attendedSection = this.createSection('Menús Atendidos', 'attended');
       attendedSection.appendChild(this.createMenuCards(menus.attended));
-      this.organizedSections.appendChild(attendedSection);
+      organizedSections.appendChild(attendedSection);
     }
 
     if (menus.today.length === 0 && menus.upcoming.length === 0 && menus.attended.length === 0) {
-      this.organizedSections.appendChild(this.createEmptyState());
+      organizedSections.innerHTML = `
+                <div class="empty-section">
+                    <p>No hay menús programados</p>
+                </div>
+            `;
+    }
+  }
+
+  createSection(title, id) {
+    const section = document.createElement('section');
+    section.className = 'menu-section';
+    section.id = id;
+    section.innerHTML = `
+            <div class="section-header">
+                <h3>${title}</h3>
+            </div>
+        `;
+    return section;
+  }
+
+  createMenuCards(menus) {
+    const container = document.createElement('div');
+    container.className = 'menu-cards-container';
+
+    menus.forEach(menu => {
+      const card = document.createElement('div');
+      card.className = 'menu-card';
+      card.innerHTML = this.createMenuCardContent(menu);
+      container.appendChild(card);
+    });
+
+    return container;
+  }
+
+  createMenuCardContent(menu) {
+    return `
+            <div class="menu-card-header">
+                <div class="menu-card-date">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                    ${menu.day}, ${this.formatDisplayDate(menu.date)}
+                </div>
+                <h3 class="menu-card-title">Menú del Día</h3>
+                <div class="menu-card-meta">
+                    <span>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                        </svg>
+                        ${menu.cook}
+                    </span>
+                    <span>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                        </svg>
+                        ${menu.helpers.names.join(' y ')} (${menu.helpers.grade})
+                    </span>
+                </div>
+            </div>
+            <div class="menu-card-meals-grid">
+                ${menu.breakfast ? this.createMealCard(menu.breakfast, 'Desayuno', menu.date) : this.createEmptyMealCard('Desayuno')}
+                ${menu.lunch ? this.createMealCard(menu.lunch, 'Almuerzo', menu.date) : this.createEmptyMealCard('Almuerzo')}
+            </div>
+        `;
+  }
+
+  createMealCard(meal, title, menuDate) {
+    const mealType = title.toLowerCase();
+    const countdownId = `${mealType}-countdown-${menuDate.replace(/-/g, '')}`;
+
+    return `
+            <div class="meal-card ${mealType}">
+                <div class="meal-card-image">
+                    <img src="${meal.image || 'assets/img/default-food.jpg'}" alt="${meal.name}" class="meal-image">
+                    <div class="meal-card-overlay">
+                        <h5 class="meal-title">${title}</h5>
+                        <span class="meal-time">${meal.start} - ${meal.end}</span>
+                    </div>
+                </div>
+                <div class="meal-card-content">
+                    <h4 class="meal-name">${meal.name}</h4>
+                    <p class="meal-description">${meal.description}</p>
+                    <div id="${countdownId}" class="meal-countdown-container"></div>
+                    <button class="meal-details-btn" data-meal='${JSON.stringify(meal)}' data-meal-type="${mealType}" data-date="${menuDate}">
+                        Ver detalles
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        `;
+  }
+
+  createEmptyMealCard(title) {
+    return `
+            <div class="meal-card empty">
+                <div class="meal-card-image">
+                    <div class="empty-meal-image">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                        </svg>
+                    </div>
+                    <div class="meal-card-overlay">
+                        <h5 class="meal-title">${title}</h5>
+                        <span class="meal-time">No programado</span>
+                    </div>
+                </div>
+                <div class="meal-card-content">
+                    <h4 class="meal-name">No hay servicio</h4>
+                    <p class="meal-description">No se ha programado ${title.toLowerCase()} para este día.</p>
+                </div>
+            </div>
+        `;
+  }
+
+  registerAllCountdowns(classified) {
+    // Registrar contadores para menús de hoy
+    if (classified.today.length > 0) {
+      classified.today.forEach(menu => {
+        if (menu.breakfast) {
+          const breakfastId = `breakfast-countdown-${menu.date.replace(/-/g, '')}`;
+          this.registerCountdown(breakfastId, menu.breakfast, 'breakfast', menu.date);
+        }
+        if (menu.lunch) {
+          const lunchId = `lunch-countdown-${menu.date.replace(/-/g, '')}`;
+          this.registerCountdown(lunchId, menu.lunch, 'lunch', menu.date);
+        }
+      });
+    }
+
+    // Registrar contadores para menús próximos
+    if (classified.upcoming.length > 0) {
+      classified.upcoming.forEach(menu => {
+        if (menu.breakfast) {
+          const breakfastId = `breakfast-countdown-${menu.date.replace(/-/g, '')}`;
+          this.registerCountdown(breakfastId, menu.breakfast, 'breakfast', menu.date);
+        }
+        if (menu.lunch) {
+          const lunchId = `lunch-countdown-${menu.date.replace(/-/g, '')}`;
+          this.registerCountdown(lunchId, menu.lunch, 'lunch', menu.date);
+        }
+      });
+    }
+  }
+
+  calculateMealStatus(meal, menuDate) {
+    const now = new Date();
+    const mealDateObj = new Date(menuDate);
+    const startDateTime = new Date(`${menuDate}T${meal.start}`);
+    const endDateTime = new Date(`${menuDate}T${meal.end}`);
+
+    const states = {
+      UPCOMING: 'upcoming',
+      IN_PROGRESS: 'in-progress',
+      FINISHED: 'finished'
+    };
+
+    let state;
+    let timeRemaining = {};
+
+    // Verificar si es el mismo día
+    const isSameDate = now.getFullYear() === mealDateObj.getFullYear() &&
+      now.getMonth() === mealDateObj.getMonth() &&
+      now.getDate() === mealDateObj.getDate();
+
+    if (!isSameDate) {
+      if (now < startDateTime) {
+        state = states.UPCOMING;
+        const diff = startDateTime - now;
+        timeRemaining = this.calculateTimeUnits(diff);
+      } else {
+        state = states.FINISHED;
+      }
+    } else {
+      if (now < startDateTime) {
+        state = states.UPCOMING;
+        const diff = startDateTime - now;
+        timeRemaining = this.calculateTimeUnits(diff);
+      } else if (now >= startDateTime && now <= endDateTime) {
+        state = states.IN_PROGRESS;
+        const diff = endDateTime - now;
+        timeRemaining = this.calculateTimeUnits(diff);
+      } else {
+        state = states.FINISHED;
+      }
+    }
+
+    return { state, timeRemaining };
+  }
+
+  calculateTimeUnits(timeInMs) {
+    const totalSeconds = Math.floor(timeInMs / 1000);
+    const seconds = totalSeconds % 60;
+    const totalMinutes = Math.floor(totalSeconds / 60);
+    const minutes = totalMinutes % 60;
+    const totalHours = Math.floor(totalMinutes / 60);
+    const hours = totalHours % 24;
+    const days = Math.floor(totalHours / 24);
+
+    return {
+      days: Math.max(0, days),
+      hours: Math.max(0, hours),
+      minutes: Math.max(0, minutes),
+      seconds: Math.max(0, seconds)
+    };
+  }
+
+  renderCountdownContent(timeObj, state, mealType) {
+    const mealName = mealType === 'breakfast' ? 'desayuno' : 'almuerzo';
+
+    // Estado: Finalizado
+    if (state === 'finished') {
+      return `
+                <div class="meal-status-badge finished">
+                    <svg width="16" height="16" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                    </svg>
+                    <span>Completado</span>
+                </div>
+            `;
+    }
+
+    // Estado: En progreso
+    if (state === 'in-progress') {
+      return `
+                <div class="meal-status-badge in-progress">
+                    <svg width="16" height="16" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+                    </svg>
+                    <span>En curso</span>
+                    <div class="time-remaining">
+                        <span class="time-value">${this.padZero(timeObj.hours)}:${this.padZero(timeObj.minutes)}:${this.padZero(timeObj.seconds)}</span>
+                        <span class="time-label">para finalizar</span>
+                    </div>
+                </div>
+            `;
+    }
+
+    // Estado "próximamente" con días
+    if (timeObj.days > 0) {
+      return `
+                <div class="counter-label">Comienza en</div>
+                <div class="digital-counter">
+                    <div class="time-block large">
+                        <span class="time-value">${timeObj.days}</span>
+                        <span class="time-label">DÍAS</span>
+                    </div>
+                    <div class="time-block">
+                        <span class="time-value">${this.padZero(timeObj.hours)}</span>
+                        <span class="time-label">HRS</span>
+                    </div>
+                    <span class="time-separator">:</span>
+                    <div class="time-block">
+                        <span class="time-value">${this.padZero(timeObj.minutes)}</span>
+                        <span class="time-label">MIN</span>
+                    </div>
+                </div>
+            `;
+    }
+
+    // Estado "próximamente" (menos de 1 día)
+    return `
+            <div class="counter-label">Falta para ${mealName}</div>
+            <div class="digital-counter">
+                <div class="time-block">
+                    <span class="time-value">${this.padZero(timeObj.hours)}</span>
+                    <span class="time-label">HRS</span>
+                </div>
+                <span class="time-separator">:</span>
+                <div class="time-block">
+                    <span class="time-value">${this.padZero(timeObj.minutes)}</span>
+                    <span class="time-label">MIN</span>
+                </div>
+                <span class="time-separator">:</span>
+                <div class="time-block">
+                    <span class="time-value">${this.padZero(timeObj.seconds)}</span>
+                    <span class="time-label">SEG</span>
+                </div>
+            </div>
+        `;
+  }
+
+  padZero(num) {
+    return num < 10 ? `0${num}` : num;
+  }
+
+  updateAllCountdowns() {
+    // Actualizar todos los contadores registrados
+    this.countdowns.forEach((config, containerId) => {
+      const { meal, mealType, menuDate } = config;
+      const container = document.getElementById(containerId);
+
+      if (container) {
+        const { state, timeRemaining } = this.calculateMealStatus(meal, menuDate);
+        container.innerHTML = this.renderCountdownContent(timeRemaining, state, mealType);
+      }
+    });
+  }
+
+  registerCountdown(containerId, meal, mealType, menuDate) {
+    this.countdowns.set(containerId, { meal, mealType, menuDate });
+
+    // Actualizar inmediatamente
+    const { state, timeRemaining } = this.calculateMealStatus(meal, menuDate);
+    const container = document.getElementById(containerId);
+    if (container) {
+      container.innerHTML = this.renderCountdownContent(timeRemaining, state, mealType);
     }
   }
 
   renderTodayMenu(menu) {
-    if (!this.todayMenuSection) return;
+    const todayMenuSection = document.getElementById('menu-del-dia');
+    if (!todayMenuSection) return;
 
     if (!menu) {
-      this.todayMenuSection.innerHTML = '<div class="empty-menu"><p>No hay menú programado para hoy</p></div>';
+      todayMenuSection.innerHTML = '<div class="empty-menu"><p>No hay menú programado para hoy</p></div>';
       return;
     }
 
@@ -250,40 +424,61 @@ class MenuSystem {
         `;
 
     if (menu.breakfast) {
-      content += this.createMealCardFull(menu.breakfast, 'Desayuno', menu.date, true);
+      const breakfastId = `breakfast-countdown-${menu.date.replace(/-/g, '')}`;
+      content += this.createMealCardFull(menu.breakfast, 'Desayuno', menu.date, breakfastId);
     }
 
     if (menu.lunch) {
-      content += this.createMealCardFull(menu.lunch, 'Almuerzo', menu.date, true);
+      const lunchId = `lunch-countdown-${menu.date.replace(/-/g, '')}`;
+      content += this.createMealCardFull(menu.lunch, 'Almuerzo', menu.date, lunchId);
     }
 
-    this.todayMenuSection.innerHTML = content;
+    todayMenuSection.innerHTML = content;
 
-    // Configurar countdowns solo si existen los elementos
+    // Registrar contadores
     if (menu.breakfast) {
-      const breakfastContainer = this.todayMenuSection.querySelector('.meal-card-full:first-child .meal-card-content');
-      if (breakfastContainer) {
-        const container = document.createElement('div');
-        breakfastContainer.appendChild(container);
-        this.countdowns.push(new CountdownSystem(menu.breakfast, 'breakfast', menu.date).init(container));
-      }
+      const breakfastId = `breakfast-countdown-${menu.date.replace(/-/g, '')}`;
+      this.registerCountdown(breakfastId, menu.breakfast, 'breakfast', menu.date);
     }
 
     if (menu.lunch) {
-      const lunchContainer = this.todayMenuSection.querySelector('.meal-card-full:last-child .meal-card-content');
-      if (lunchContainer) {
-        const container = document.createElement('div');
-        lunchContainer.appendChild(container);
-        this.countdowns.push(new CountdownSystem(menu.lunch, 'lunch', menu.date).init(container));
-      }
+      const lunchId = `lunch-countdown-${menu.date.replace(/-/g, '')}`;
+      this.registerCountdown(lunchId, menu.lunch, 'lunch', menu.date);
     }
   }
 
+  createMealCardFull(meal, title, menuDate = '', countdownId = '') {
+    const mealType = title.toLowerCase();
+    return `
+            <div class="meal-card-full ${mealType}">
+                <div class="meal-card-image">
+                    <img src="${meal?.image || 'assets/img/default-food.jpg'}" alt="${meal?.name || title}" class="meal-image">
+                    <div class="meal-card-overlay">
+                        <h5 class="meal-title">${title}</h5>
+                        <span class="meal-time">${meal?.start || '--:--'} - ${meal?.end || '--:--'}</span>
+                    </div>
+                </div>
+                <div class="meal-card-content">
+                    <h4 class="meal-name">${meal?.name || 'Menú no especificado'}</h4>
+                    <p class="meal-description">${meal?.description || 'Descripción no disponible'}</p>
+                    <div id="${countdownId}" class="meal-countdown-container"></div>
+                    <button class="meal-details-btn" data-meal='${JSON.stringify(meal)}' data-meal-type="${mealType}" data-date="${menuDate}">
+                        Ver detalles
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        `;
+  }
+
   renderUpcomingMenus(menus) {
-    if (!this.upcomingMenusSection) return;
+    const upcomingMenusSection = document.getElementById('upcoming-menus');
+    if (!upcomingMenusSection) return;
 
     if (!menus || menus.length === 0) {
-      this.upcomingMenusSection.innerHTML = '<div class="empty-menu"><p>No hay próximos menús</p></div>';
+      upcomingMenusSection.innerHTML = '<div class="empty-menu"><p>No hay próximos menús</p></div>';
       return;
     }
 
@@ -305,11 +500,12 @@ class MenuSystem {
             `;
     });
 
-    this.upcomingMenusSection.innerHTML = content;
+    upcomingMenusSection.innerHTML = content;
   }
 
   renderSupportSchedule() {
-    if (!this.supportScheduleSection) return;
+    const supportScheduleSection = document.getElementById('support-schedule');
+    if (!supportScheduleSection) return;
 
     const today = this.currentDate;
     const todayFormatted = this.formatDate(today);
@@ -348,137 +544,7 @@ class MenuSystem {
 
     scheduleHTML += '</div>';
 
-    this.supportScheduleSection.innerHTML = scheduleHTML;
-  }
-
-  createSectionElement(title, id) {
-    const section = document.createElement('section');
-    section.className = 'menu-section';
-    section.id = id;
-
-    section.innerHTML = `
-            <div class="section-header">
-                <h3>${title}</h3>
-            </div>
-            <div class="menu-cards-container"></div>
-        `;
-
-    return section;
-  }
-
-  createMenuCards(menus) {
-    const container = document.createElement('div');
-    container.className = 'menu-cards-container';
-
-    menus.forEach(menu => {
-      const card = document.createElement('div');
-      card.className = 'menu-card';
-      card.innerHTML = this.createMenuCardContent(menu);
-      container.appendChild(card);
-    });
-
-    return container;
-  }
-
-  createMenuCardContent(menu) {
-    if (!menu) return '<div class="error-card">Error: Menú no válido</div>';
-
-    const menuDate = menu.date || '';
-    const hasBreakfast = menu.breakfast && Object.keys(menu.breakfast).length > 0;
-    const hasLunch = menu.lunch && Object.keys(menu.lunch).length > 0;
-
-    return `
-            <div class="menu-card-header">
-                <div class="menu-card-date">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                    </svg>
-                    ${menu.day || 'Día no especificado'}, ${this.formatDisplayDate(menuDate)}
-                </div>
-                <h3 class="menu-card-title">Menú del Día</h3>
-                <div class="menu-card-meta">
-                    <span>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                        </svg>
-                        ${menu.cook || 'Cocinera no especificada'}
-                    </span>
-                    <span>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
-                        </svg>
-                        ${menu.helpers?.names?.join(' y ') ? `${menu.helpers.names.join(' y ')} (${menu.helpers.grade})` : 'Ayudantes no especificados'}
-                    </span>
-                </div>
-            </div>
-            <div class="menu-card-meals-grid">
-                ${hasBreakfast ? this.createMealCardFull(menu.breakfast, 'Desayuno', menuDate) : this.createEmptyMealCard('Desayuno')}
-                ${hasLunch ? this.createMealCardFull(menu.lunch, 'Almuerzo', menuDate) : this.createEmptyMealCard('Almuerzo')}
-            </div>
-        `;
-  }
-
-  createMealCardFull(meal, title, menuDate = '', isToday = false) {
-    const mealType = title.toLowerCase();
-    return `
-            <div class="meal-card-full ${mealType}">
-                <div class="meal-card-image">
-                    <img src="${meal?.image || 'assets/img/default-food.jpg'}" alt="${meal?.name || title}" class="meal-image">
-                    <div class="meal-card-overlay">
-                        <h5 class="meal-title">${title}</h5>
-                        <span class="meal-time">${meal?.start || '--:--'} - ${meal?.end || '--:--'}</span>
-                    </div>
-                </div>
-                <div class="meal-card-content">
-                    <h4 class="meal-name">${meal?.name || 'Menú no especificado'}</h4>
-                    <p class="meal-description">${meal?.description || 'Descripción no disponible'}</p>
-                    ${isToday ? '<div class="meal-countdown-container"></div>' : ''}
-                    <button class="meal-details-btn" data-meal='${JSON.stringify(meal)}' data-meal-type="${mealType}" data-date="${menuDate}">
-                        Ver detalles
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        `;
-  }
-
-  createEmptyMealCard(title) {
-    return `
-            <div class="meal-card-full empty">
-                <div class="meal-card-image">
-                    <div class="empty-meal-image">
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-                        </svg>
-                    </div>
-                    <div class="meal-card-overlay">
-                        <h5 class="meal-title">${title}</h5>
-                        <span class="meal-time">No programado</span>
-                    </div>
-                </div>
-                <div class="meal-card-content">
-                    <h4 class="meal-name">No hay servicio</h4>
-                    <p class="meal-description">No se ha programado ${title.toLowerCase()} para este día.</p>
-                </div>
-            </div>
-        `;
-  }
-
-  createEmptyState() {
-    const emptyState = document.createElement('div');
-    emptyState.className = 'empty-section';
-    emptyState.innerHTML = `
-            <div class="empty-state">
-                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-                </svg>
-                <h3>No hay menús programados</h3>
-                <p>Actualmente no hay menús en ninguna categoría.</p>
-            </div>
-        `;
-    return emptyState;
+    supportScheduleSection.innerHTML = scheduleHTML;
   }
 
   setupEventListeners() {
@@ -627,8 +693,10 @@ class MenuSystem {
   }
 
   destroy() {
-    this.countdowns.forEach(c => c.destroy());
-    this.countdowns = [];
+    if (this.updateInterval) {
+      clearInterval(this.updateInterval);
+    }
+    this.countdowns.clear();
   }
 }
 
@@ -636,7 +704,7 @@ class MenuSystem {
 document.addEventListener('DOMContentLoaded', () => {
   try {
     if (typeof weeklyMenu !== 'undefined') {
-      new MenuSystem(weeklyMenu);
+      window.menuSystem = new MenuCountdownSystem(weeklyMenu);
     } else {
       console.error('Error: weeklyMenu no está definido');
       const errorDiv = document.createElement('div');
