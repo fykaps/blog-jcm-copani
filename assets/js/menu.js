@@ -1,6 +1,6 @@
 /**
- * Sistema de Menú Qaliwarma - Versión Corregida
- * Con contador regresivo en tiempo real para cada comida
+ * Sistema de Menú Qaliwarma - Versión Mejorada
+ * Con contador regresivo en tiempo real y estados visibles
  */
 
 class MenuCountdownSystem {
@@ -161,7 +161,7 @@ class MenuCountdownSystem {
         `;
   }
 
-  // Función createMealCard corregida
+  // Función createMealCard corregida con estados visibles
   createMealCard(meal, title, menuDate = '', countdownId = '') {
     const mealType = title.toLowerCase();
     const finalCountdownId = countdownId || this.generateCountdownId(mealType, menuDate);
@@ -171,6 +171,10 @@ class MenuCountdownSystem {
       this.registerCountdown(finalCountdownId, meal, mealType, menuDate);
     }
 
+    // Calcular estado inicial para mostrar inmediatamente
+    const { state } = this.calculateMealStatus(meal, menuDate);
+    const statusClass = this.getStatusClass(state);
+
     return `
             <div class="meal-card ${mealType}">
                 <div class="meal-card-image">
@@ -178,6 +182,9 @@ class MenuCountdownSystem {
                     <div class="meal-card-overlay">
                         <h5 class="meal-title">${title}</h5>
                         <span class="meal-time">${meal?.start || '--:--'} - ${meal?.end || '--:--'}</span>
+                    </div>
+                    <div class="meal-status-indicator ${statusClass}">
+                        ${this.getStatusText(state)}
                     </div>
                 </div>
                 <div class="meal-card-content">
@@ -215,6 +222,9 @@ class MenuCountdownSystem {
                         <h5 class="meal-title">${title}</h5>
                         <span class="meal-time">No programado</span>
                     </div>
+                    <div class="meal-status-indicator finished">
+                        No programado
+                    </div>
                 </div>
                 <div class="meal-card-content">
                     <h4 class="meal-name">No hay servicio</h4>
@@ -243,47 +253,47 @@ class MenuCountdownSystem {
 
   calculateMealStatus(meal, menuDate) {
     const now = new Date();
-    const mealDateObj = new Date(menuDate);
-    const startDateTime = new Date(`${menuDate}T${meal.start}`);
-    const endDateTime = new Date(`${menuDate}T${meal.end}`);
+    const today = this.formatDate(now);
 
-    const states = {
-      UPCOMING: 'upcoming',
-      IN_PROGRESS: 'in-progress',
-      FINISHED: 'finished'
-    };
-
-    let state;
-    let timeRemaining = {};
-
-    // Verificar si es el mismo día
-    const isSameDate = now.getFullYear() === mealDateObj.getFullYear() &&
-      now.getMonth() === mealDateObj.getMonth() &&
-      now.getDate() === mealDateObj.getDate();
-
-    if (!isSameDate) {
-      if (now < startDateTime) {
-        state = states.UPCOMING;
-        const diff = startDateTime - now;
-        timeRemaining = this.calculateTimeUnits(diff);
+    // Verificar si el menú es para hoy
+    if (menuDate !== today) {
+      const menuDateObj = new Date(menuDate);
+      if (menuDateObj > now) {
+        // Menú futuro - calcular tiempo hasta el inicio
+        const startTime = new Date(`${menuDate}T${meal.start}`);
+        const timeRemaining = startTime - now;
+        return {
+          status: 'pending',
+          timeRemaining: this.calculateTimeUnits(timeRemaining)
+        };
       } else {
-        state = states.FINISHED;
-      }
-    } else {
-      if (now < startDateTime) {
-        state = states.UPCOMING;
-        const diff = startDateTime - now;
-        timeRemaining = this.calculateTimeUnits(diff);
-      } else if (now >= startDateTime && now <= endDateTime) {
-        state = states.IN_PROGRESS;
-        const diff = endDateTime - now;
-        timeRemaining = this.calculateTimeUnits(diff);
-      } else {
-        state = states.FINISHED;
+        // Menú pasado - completado
+        return { status: 'completed', timeRemaining: null };
       }
     }
 
-    return { state, timeRemaining };
+    // Para menús de hoy, calcular tiempos exactos
+    const startTime = new Date(`${today}T${meal.start}`);
+    const endTime = new Date(`${today}T${meal.end}`);
+
+    if (now < startTime) {
+      // Evento pendiente - contar hacia startTime
+      const timeRemaining = startTime - now;
+      return {
+        status: 'pending',
+        timeRemaining: this.calculateTimeUnits(timeRemaining)
+      };
+    } else if (now >= startTime && now <= endTime) {
+      // Evento en proceso - contar hacia endTime
+      const timeRemaining = endTime - now;
+      return {
+        status: 'in-progress',
+        timeRemaining: this.calculateTimeUnits(timeRemaining)
+      };
+    } else {
+      // Evento completado
+      return { status: 'completed', timeRemaining: null };
+    }
   }
 
   calculateTimeUnits(timeInMs) {
@@ -299,83 +309,126 @@ class MenuCountdownSystem {
       days: Math.max(0, days),
       hours: Math.max(0, hours),
       minutes: Math.max(0, minutes),
-      seconds: Math.max(0, seconds)
+      seconds: Math.max(0, seconds),
+      totalMs: timeInMs
     };
   }
 
-  renderCountdownContent(timeObj, state, mealType) {
+  getStatusClass(status) {
+    switch (status) {
+      case 'pending': return 'status-pending';
+      case 'in-progress': return 'status-in-progress';
+      case 'completed': return 'status-completed';
+      default: return 'status-unknown';
+    }
+  }
+
+  getStatusText(status) {
+    switch (status) {
+      case 'pending': return 'Pendiente';
+      case 'in-progress': return 'En proceso';
+      case 'completed': return 'Completado';
+      default: return 'Estado desconocido';
+    }
+  }
+
+  renderCountdownContent(status, timeRemaining, mealType) {
     const mealName = mealType === 'breakfast' ? 'desayuno' : 'almuerzo';
 
-    // Estado: Finalizado
-    if (state === 'finished') {
+    // Si timeRemaining es null (estado completado)
+    if (timeRemaining === null) {
       return `
-                <div class="meal-status-badge finished">
+            <div class="meal-status-badge completed">
+                <svg width="16" height="16" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                </svg>
+                <span>Completado</span>
+            </div>
+        `;
+    }
+
+    switch (status) {
+      case 'pending':
+        if (timeRemaining.days > 0) {
+          return `
+                    <div class="countdown-label">Comienza en</div>
+                    <div class="digital-counter">
+                        <div class="time-block">
+                            <span class="time-value">${this.padZero(timeRemaining.days)}</span>
+                            <span class="time-label">DÍAS</span>
+                        </div>
+                        <span class="time-separator">:</span>
+                        <div class="time-block">
+                            <span class="time-value">${this.padZero(timeRemaining.hours)}</span>
+                            <span class="time-label">HRS</span>
+                        </div>
+                        <span class="time-separator">:</span>
+                        <div class="time-block">
+                            <span class="time-value">${this.padZero(timeRemaining.minutes)}</span>
+                            <span class="time-label">MIN</span>
+                        </div>
+                    </div>
+                `;
+        } else {
+          return `
+                    <div class="countdown-label">Falta para el ${mealName}</div>
+                    <div class="digital-counter">
+                        <div class="time-block">
+                            <span class="time-value">${this.padZero(timeRemaining.hours)}</span>
+                            <span class="time-label">HRS</span>
+                        </div>
+                        <span class="time-separator">:</span>
+                        <div class="time-block">
+                            <span class="time-value">${this.padZero(timeRemaining.minutes)}</span>
+                            <span class="time-label">MIN</span>
+                        </div>
+                        <span class="time-separator">:</span>
+                        <div class="time-block">
+                            <span class="time-value">${this.padZero(timeRemaining.seconds)}</span>
+                            <span class="time-label">SEG</span>
+                        </div>
+                    </div>
+                `;
+        }
+
+      case 'in-progress':
+        return `
+                <div class="countdown-label">Tiempo restante</div>
+                <div class="digital-counter">
+                    <div class="time-block">
+                        <span class="time-value">${this.padZero(timeRemaining.hours)}</span>
+                        <span class="time-label">HRS</span>
+                    </div>
+                    <span class="time-separator">:</span>
+                    <div class="time-block">
+                        <span class="time-value">${this.padZero(timeRemaining.minutes)}</span>
+                        <span class="time-label">MIN</span>
+                    </div>
+                    <span class="time-separator">:</span>
+                    <div class="time-block">
+                        <span class="time-value">${this.padZero(timeRemaining.seconds)}</span>
+                        <span class="time-label">SEG</span>
+                    </div>
+                </div>
+            `;
+
+      case 'completed':
+        return `
+                <div class="meal-status-badge completed">
                     <svg width="16" height="16" viewBox="0 0 24 24">
                         <path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
                     </svg>
                     <span>Completado</span>
                 </div>
             `;
-    }
 
-    // Estado: En progreso
-    if (state === 'in-progress') {
-      return `
-                <div class="meal-status-badge in-progress">
-                    <svg width="16" height="16" viewBox="0 0 24 24">
-                        <path fill="currentColor" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
-                    </svg>
-                    <span>En curso</span>
-                    <div class="time-remaining">
-                        <span class="time-value">${this.padZero(timeObj.hours)}:${this.padZero(timeObj.minutes)}:${this.padZero(timeObj.seconds)}</span>
-                        <span class="time-label">para finalizar</span>
-                    </div>
+      default:
+        return `
+                <div class="meal-status-badge unknown">
+                    <span>Estado desconocido</span>
                 </div>
             `;
     }
-
-    // Estado "próximamente" con días
-    if (timeObj.days > 0) {
-      return `
-                <div class="counter-label">Comienza en</div>
-                <div class="digital-counter">
-                    <div class="time-block large">
-                        <span class="time-value">${timeObj.days}</span>
-                        <span class="time-label">DÍAS</span>
-                    </div>
-                    <div class="time-block">
-                        <span class="time-value">${this.padZero(timeObj.hours)}</span>
-                        <span class="time-label">HRS</span>
-                    </div>
-                    <span class="time-separator">:</span>
-                    <div class="time-block">
-                        <span class="time-value">${this.padZero(timeObj.minutes)}</span>
-                        <span class="time-label">MIN</span>
-                    </div>
-                </div>
-            `;
-    }
-
-    // Estado "próximamente" (menos de 1 día)
-    return `
-            <div class="counter-label">Falta para ${mealName}</div>
-            <div class="digital-counter">
-                <div class="time-block">
-                    <span class="time-value">${this.padZero(timeObj.hours)}</span>
-                    <span class="time-label">HRS</span>
-                </div>
-                <span class="time-separator">:</span>
-                <div class="time-block">
-                    <span class="time-value">${this.padZero(timeObj.minutes)}</span>
-                    <span class="time-label">MIN</span>
-                </div>
-                <span class="time-separator">:</span>
-                <div class="time-block">
-                    <span class="time-value">${this.padZero(timeObj.seconds)}</span>
-                    <span class="time-label">SEG</span>
-                </div>
-            </div>
-        `;
   }
 
   padZero(num) {
@@ -389,8 +442,22 @@ class MenuCountdownSystem {
       const container = document.getElementById(containerId);
 
       if (container) {
-        const { state, timeRemaining } = this.calculateMealStatus(meal, menuDate);
-        container.innerHTML = this.renderCountdownContent(timeRemaining, state, mealType);
+        const { status, timeRemaining } = this.calculateMealStatus(meal, menuDate);
+
+        // Asegurarse de que timeRemaining no sea undefined
+        const safeTimeRemaining = timeRemaining || null;
+
+        container.innerHTML = this.renderCountdownContent(status, safeTimeRemaining, mealType);
+
+        // Actualizar también el indicador de estado en la imagen
+        const mealCard = container.closest('.meal-card');
+        if (mealCard) {
+          const statusIndicator = mealCard.querySelector('.meal-status-indicator');
+          if (statusIndicator) {
+            statusIndicator.className = 'meal-status-indicator ' + this.getStatusClass(status);
+            statusIndicator.textContent = this.getStatusText(status);
+          }
+        }
       }
     });
   }
@@ -399,10 +466,10 @@ class MenuCountdownSystem {
     this.countdowns.set(containerId, { meal, mealType, menuDate });
 
     // Actualizar inmediatamente
-    const { state, timeRemaining } = this.calculateMealStatus(meal, menuDate);
+    const { status, timeRemaining } = this.calculateMealStatus(meal, menuDate);
     const container = document.getElementById(containerId);
     if (container) {
-      container.innerHTML = this.renderCountdownContent(timeRemaining, state, mealType);
+      container.innerHTML = this.renderCountdownContent(status, timeRemaining, mealType);
     }
   }
 
@@ -456,6 +523,10 @@ class MenuCountdownSystem {
       this.registerCountdown(finalCountdownId, meal, mealType, menuDate);
     }
 
+    // Calcular estado inicial para mostrar inmediatamente
+    const { state } = this.calculateMealStatus(meal, menuDate);
+    const statusClass = this.getStatusClass(state);
+
     return `
             <div class="meal-card-full ${mealType}">
                 <div class="meal-card-image">
@@ -463,6 +534,9 @@ class MenuCountdownSystem {
                     <div class="meal-card-overlay">
                         <h5 class="meal-title">${title}</h5>
                         <span class="meal-time">${meal?.start || '--:--'} - ${meal?.end || '--:--'}</span>
+                    </div>
+                    <div class="meal-status-indicator ${statusClass}">
+                        ${this.getStatusText(state)}
                     </div>
                 </div>
                 <div class="meal-card-content">
@@ -558,8 +632,8 @@ class MenuCountdownSystem {
 
   setupEventListeners() {
     document.addEventListener('click', (e) => {
-      if (e.target.classList.contains('meal-details-btn') || e.target.closest('.meal-details-btn')) {
-        const btn = e.target.classList.contains('meal-details-btn') ? e.target : e.target.closest('.meal-details-btn');
+      if (e.target.classList.contains('.meal-details-btn') || e.target.closest('.meal-details-btn')) {
+        const btn = e.target.classList.contains('.meal-details-btn') ? e.target : e.target.closest('.meal-details-btn');
         const mealData = JSON.parse(btn.getAttribute('data-meal'));
         const mealType = btn.getAttribute('data-meal-type');
         const date = btn.getAttribute('data-date');

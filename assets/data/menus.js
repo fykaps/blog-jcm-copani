@@ -8,42 +8,43 @@ const weeklyMenu = [
         date: "2025-09-01",
         cook: "Rosa Pérez",
         helpers: {
-            names: ["Lucía Pérez", "Ana Tejada"],
-            grade: "5to A"
+            names: ["Olga Bernabé", "Lidia Herrera"],
+            grade: "5to B"
         },
         breakfast: {
             start: "09:35",
             end: "09:50",
-            name: "Leche con avena y pan con huevo",
-            description: "Nutritivo desayuno para empezar el día con energía",
+            name: "Quinua con leche y pan con palta",
+            description: "Desayuno alto en proteínas y grasas saludables",
             ingredients: [
-                "Leche fresca",
-                "Avena en hojuelas",
+                "Quinua",
+                "Leche",
                 "Pan integral",
-                "Huevos",
-                "Aceite vegetal",
+                "Palta",
                 "Sal"
             ],
-            image: "assets/img/menus/desayuno/desayuno1.jpg",
-            additional: "Galleta"
+            image: "assets/img/menus/desayuno/desayuno5.png",
+            additional: "Pan"
         },
         lunch: {
-            start: "12:30",
-            end: "13:00",
-            name: "Arroz con pollo y ensalada fresca",
-            description: "Plato balanceado con proteínas y carbohidratos",
+            start: "14:30",
+            end: "15:30",
+            name: "Tallarines rojos con carne y ensalada de beterraga",
+            description: "Plato de pasta con salsa de tomate y carne molida",
             ingredients: [
-                "Arroz",
-                "Pollo",
-                "Zanahoria",
-                "Arvejas",
+                "Tallarines",
+                "Carne molida",
+                "Tomate",
                 "Cebolla",
+                "Ajo",
+                "Beterraga",
+                "Limón",
                 "Aceite vegetal",
                 "Sal",
                 "Especias"
             ],
-            image: "assets/img/menus/almuerzo/almuerzo1.jpg",
-            additional: "Gelatina"
+            image: "assets/img/menus/almuerzo/almuerzo5.png",
+            additional: "Pera"
         }
     },
     {
@@ -221,91 +222,46 @@ const weeklyMenu = [
         }
     },
     {
-        day: "Sábado",
-        date: "2025-08-30",
-        cook: "Rosa Pérez",
-        helpers: {
-            names: ["Olga Bernabé", "Lidia Herrera"],
-            grade: "5to B"
-        },
-        breakfast: {
-            start: "09:35",
-            end: "09:50",
-            name: "Quinua con leche y pan con palta",
-            description: "Desayuno alto en proteínas y grasas saludables",
-            ingredients: [
-                "Quinua",
-                "Leche",
-                "Pan integral",
-                "Palta",
-                "Sal"
-            ],
-            image: "assets/img/menus/desayuno/desayuno5.png",
-            additional: "Pan"
-        },
-        lunch: {
-            start: "12:30",
-            end: "13:00",
-            name: "Tallarines rojos con carne y ensalada de beterraga",
-            description: "Plato de pasta con salsa de tomate y carne molida",
-            ingredients: [
-                "Tallarines",
-                "Carne molida",
-                "Tomate",
-                "Cebolla",
-                "Ajo",
-                "Beterraga",
-                "Limón",
-                "Aceite vegetal",
-                "Sal",
-                "Especias"
-            ],
-            image: "assets/img/menus/almuerzo/almuerzo5.png",
-            additional: "Pera"
-        }
-    },
-    {
         day: "Domingo",
         date: "2025-08-31",
         cook: "Rosa Pérez",
         helpers: {
-            names: ["Olga Bernabé", "Lidia Herrera"],
-            grade: "5to B"
+            names: ["Lucía Pérez", "Ana Tejada"],
+            grade: "5to A"
         },
         breakfast: {
-            start: "19:30",
-            end: "19:40",
-            name: "Quinua con leche y pan con palta",
-            description: "Desayuno alto en proteínas y grasas saludables",
+            start: "09:35",
+            end: "09:50",
+            name: "Leche con avena y pan con huevo",
+            description: "Nutritivo desayuno para empezar el día con energía",
             ingredients: [
-                "Quinua",
-                "Leche",
+                "Leche fresca",
+                "Avena en hojuelas",
                 "Pan integral",
-                "Palta",
+                "Huevos",
+                "Aceite vegetal",
                 "Sal"
             ],
-            image: "assets/img/menus/desayuno/desayuno5.png",
-            additional: "Pan"
+            image: "assets/img/menus/desayuno/desayuno1.jpg",
+            additional: "Galleta"
         },
         lunch: {
-            start: "20:00",
-            end: "20:10",
-            name: "Tallarines rojos con carne y ensalada de beterraga",
-            description: "Plato de pasta con salsa de tomate y carne molida",
+            start: "14:00",
+            end: "14:30",
+            name: "Arroz con pollo y ensalada fresca",
+            description: "Plato balanceado con proteínas y carbohidratos",
             ingredients: [
-                "Tallarines",
-                "Carne molida",
-                "Tomate",
+                "Arroz",
+                "Pollo",
+                "Zanahoria",
+                "Arvejas",
                 "Cebolla",
-                "Ajo",
-                "Beterraga",
-                "Limón",
                 "Aceite vegetal",
                 "Sal",
                 "Especias"
             ],
-            image: "assets/img/menus/almuerzo/almuerzo5.png",
-            additional: "Pera"
+            image: "assets/img/menus/almuerzo/almuerzo1.jpg",
+            additional: "Gelatina"
         }
     },
 ];

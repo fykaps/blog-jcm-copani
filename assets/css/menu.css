@@ -162,6 +162,38 @@
     display: inline-block;
 }
 
+/* Indicador de estado en la imagen */
+.meal-status-indicator {
+    position: absolute;
+    top: var(--space-2);
+    right: var(--space-2);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-full);
+    font-size: var(--text-xs);
+    font-weight: var(--font-semibold);
+    color: var(--color-white);
+    z-index: 2;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.meal-status-indicator.status-pending {
+    background-color: rgba(var(--color-warning-rgb), 0.8);
+}
+
+.meal-status-indicator.status-in-progress {
+    background-color: rgba(var(--color-success-rgb), 0.8);
+    animation: pulse 2s infinite;
+}
+
+.meal-status-indicator.status-completed {
+    background-color: rgba(var(--color-info-rgb), 0.8);
+}
+
+.meal-status-indicator.finished {
+    background-color: rgba(var(--color-gray-600-rgb), 0.8);
+}
+
 .meal-card-content {
     padding: var(--space-4);
     flex: 1;
@@ -272,9 +304,14 @@
     animation: pulse 2s infinite;
 }
 
-.meal-status-badge.finished {
+.meal-status-badge.completed {
     background-color: var(--color-success-50);
     color: var(--color-success-700);
+}
+
+.meal-status-badge.unknown {
+    background-color: var(--color-gray-100);
+    color: var(--color-gray-700);
 }
 
 .time-remaining {
@@ -754,4 +791,12 @@
     color: var(--color-danger);
     background: var(--color-danger-light);
     border-radius: var(--radius);
+}
+
+/* Variables CSS para colores de estado */
+:root {
+    --color-warning-rgb: 255, 193, 7;
+    --color-success-rgb: 40, 167, 69;
+    --color-info-rgb: 23, 162, 184;
+    --color-gray-600-rgb: 108, 117, 125;
 }
