@@ -273,8 +273,8 @@ const weeklyMenu = [
             grade: "5to B"
         },
         breakfast: {
-            start: "09:35",
-            end: "09:50",
+            start: "19:30",
+            end: "19:40",
             name: "Quinua con leche y pan con palta",
             description: "Desayuno alto en proteínas y grasas saludables",
             ingredients: [
@@ -288,8 +288,8 @@ const weeklyMenu = [
             additional: "Pan"
         },
         lunch: {
-            start: "12:30",
-            end: "13:00",
+            start: "20:00",
+            end: "20:10",
             name: "Tallarines rojos con carne y ensalada de beterraga",
             description: "Plato de pasta con salsa de tomate y carne molida",
             ingredients: [

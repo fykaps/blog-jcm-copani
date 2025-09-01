@@ -161,32 +161,45 @@ class MenuCountdownSystem {
         `;
   }
 
-  createMealCard(meal, title, menuDate) {
+  // Función createMealCard corregida
+  createMealCard(meal, title, menuDate = '', countdownId = '') {
     const mealType = title.toLowerCase();
-    const countdownId = `${mealType}-countdown-${menuDate.replace(/-/g, '')}`;
+    const finalCountdownId = countdownId || this.generateCountdownId(mealType, menuDate);
+
+    // Registrar el contador si existe la comida
+    if (meal) {
+      this.registerCountdown(finalCountdownId, meal, mealType, menuDate);
+    }
 
     return `
             <div class="meal-card ${mealType}">
                 <div class="meal-card-image">
-                    <img src="${meal.image || 'assets/img/default-food.jpg'}" alt="${meal.name}" class="meal-image">
+                    <img src="${meal?.image || 'assets/img/default-food.jpg'}" alt="${meal?.name || title}" class="meal-image">
                     <div class="meal-card-overlay">
                         <h5 class="meal-title">${title}</h5>
-                        <span class="meal-time">${meal.start} - ${meal.end}</span>
+                        <span class="meal-time">${meal?.start || '--:--'} - ${meal?.end || '--:--'}</span>
                     </div>
                 </div>
                 <div class="meal-card-content">
-                    <h4 class="meal-name">${meal.name}</h4>
-                    <p class="meal-description">${meal.description}</p>
-                    <div id="${countdownId}" class="meal-countdown-container"></div>
+                    <h4 class="meal-name">${meal?.name || 'Menú no especificado'}</h4>
+                    <p class="meal-description">${meal?.description || 'Descripción no disponible'}</p>
+                    <div id="${finalCountdownId}" class="meal-countdown-container"></div>
+                    ${meal ? `
                     <button class="meal-details-btn" data-meal='${JSON.stringify(meal)}' data-meal-type="${mealType}" data-date="${menuDate}">
                         Ver detalles
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
                         </svg>
                     </button>
+                    ` : ''}
                 </div>
             </div>
         `;
+  }
+
+  // Generar IDs más únicos para evitar conflictos
+  generateCountdownId(mealType, menuDate, suffix = '') {
+    return `countdown-${mealType}-${menuDate.replace(/-/g, '')}${suffix ? '-' + suffix : ''}`;
   }
 
   createEmptyMealCard(title) {
@@ -211,34 +224,21 @@ class MenuCountdownSystem {
         `;
   }
 
+  // Y en el método registerAllCountdowns, agregar el registro para createMealCard
   registerAllCountdowns(classified) {
-    // Registrar contadores para menús de hoy
-    if (classified.today.length > 0) {
-      classified.today.forEach(menu => {
-        if (menu.breakfast) {
-          const breakfastId = `breakfast-countdown-${menu.date.replace(/-/g, '')}`;
-          this.registerCountdown(breakfastId, menu.breakfast, 'breakfast', menu.date);
-        }
-        if (menu.lunch) {
-          const lunchId = `lunch-countdown-${menu.date.replace(/-/g, '')}`;
-          this.registerCountdown(lunchId, menu.lunch, 'lunch', menu.date);
-        }
-      });
-    }
+    // Registrar todos los contadores para todas las secciones
+    const allMenus = [...classified.today, ...classified.upcoming, ...classified.attended];
 
-    // Registrar contadores para menús próximos
-    if (classified.upcoming.length > 0) {
-      classified.upcoming.forEach(menu => {
-        if (menu.breakfast) {
-          const breakfastId = `breakfast-countdown-${menu.date.replace(/-/g, '')}`;
-          this.registerCountdown(breakfastId, menu.breakfast, 'breakfast', menu.date);
-        }
-        if (menu.lunch) {
-          const lunchId = `lunch-countdown-${menu.date.replace(/-/g, '')}`;
-          this.registerCountdown(lunchId, menu.lunch, 'lunch', menu.date);
-        }
-      });
-    }
+    allMenus.forEach(menu => {
+      if (menu.breakfast) {
+        const breakfastId = this.generateCountdownId('breakfast', menu.date);
+        this.registerCountdown(breakfastId, menu.breakfast, 'breakfast', menu.date);
+      }
+      if (menu.lunch) {
+        const lunchId = this.generateCountdownId('lunch', menu.date);
+        this.registerCountdown(lunchId, menu.lunch, 'lunch', menu.date);
+      }
+    });
   }
 
   calculateMealStatus(meal, menuDate) {
@@ -449,6 +449,13 @@ class MenuCountdownSystem {
 
   createMealCardFull(meal, title, menuDate = '', countdownId = '') {
     const mealType = title.toLowerCase();
+    const finalCountdownId = countdownId || this.generateCountdownId(mealType, menuDate, 'full');
+
+    // Registrar el contador si existe la comida
+    if (meal) {
+      this.registerCountdown(finalCountdownId, meal, mealType, menuDate);
+    }
+
     return `
             <div class="meal-card-full ${mealType}">
                 <div class="meal-card-image">
@@ -461,13 +468,15 @@ class MenuCountdownSystem {
                 <div class="meal-card-content">
                     <h4 class="meal-name">${meal?.name || 'Menú no especificado'}</h4>
                     <p class="meal-description">${meal?.description || 'Descripción no disponible'}</p>
-                    <div id="${countdownId}" class="meal-countdown-container"></div>
+                    <div id="${finalCountdownId}" class="meal-countdown-container"></div>
+                    ${meal ? `
                     <button class="meal-details-btn" data-meal='${JSON.stringify(meal)}' data-meal-type="${mealType}" data-date="${menuDate}">
                         Ver detalles
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
                         </svg>
                     </button>
+                    ` : ''}
                 </div>
             </div>
         `;
