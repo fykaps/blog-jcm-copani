@@ -60,6 +60,11 @@ const teachers = {
         email: "juan.colorado@colegio.edu"
     },
     "Vidal Quiñonez Quispe": {
+        subject: "Tutoría",
+        phone: "+51 987 654 327",
+        email: "vidal.quinonez@colegio.edu"
+    },
+    "Vidal Quiñonez Quispe": {
         subject: "Educación Religiosa",
         phone: "+51 987 654 327",
         email: "vidal.quinonez@colegio.edu"
@@ -185,6 +190,15 @@ const classSchedules = {
         { grade: "2do B", subject: "Inglés", teacher: "Madelaine Gonzalo Segura", start: "13:00", end: "13:40", type: "Normal" },
         { grade: "2do B", subject: "Matemáticas", teacher: "Heydi Maria Estrada Sucasayiri", start: "13:40", end: "15:00", type: "Normal" },
 
+        // 2do C
+        { grade: "2do C", subject: "Tutoría", teacher: "Vidal Quiñonez Quispe", start: "08:15", end: "09:35", type: "Normal" },
+        { grade: "2do C", subject: "Receso", start: "09:35", end: "09:50", type: "receso", isBreak: true },
+        { grade: "2do C", subject: "Inglés", teacher: "Madelaine Gonzalo Segura", start: "09:50", end: "11:10", type: "Normal" },
+        { grade: "2do C", subject: "Matemáticas", teacher: "Heydi Maria Estrada Sucasayiri", start: "11:10", end: "12:30", type: "Normal" },
+        { grade: "2do C", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
+        { grade: "2do C", subject: "Educación Física", teacher: "Nestor Rene Cruz Paye", start: "13:00", end: "13:40", type: "Normal" },
+        { grade: "2do C", subject: "Aimara", teacher: "Julio Flores Quispe", start: "13:40", end: "15:00", type: "Normal" },
+
         // 3ro B
         { grade: "3ro B", subject: "Ciencia y Tecnología", teacher: "Alfonso Aruquipa Ccuno", start: "08:30", end: "10:00", type: "Práctica" },
         { grade: "3ro B", subject: "Receso", start: "10:00", end: "10:15", type: "receso", isBreak: true },
@@ -224,7 +238,7 @@ const classSchedules = {
         { grade: "2do A", subject: "Receso", start: "09:35", end: "09:50", type: "receso", isBreak: true },
         { grade: "2do A", subject: "Desarrollo Personal", teacher: "Mario Estrada Pacohuanca", start: "09:50", end: "11:10", type: "Normal" },
         { grade: "2do A", subject: "Inglés", teacher: "Madelaine Gonzalo Segura", start: "11:10", end: "11:50", type: "Normal" },
-        { grade: "2ro A", subject: "Ciencia y Tecnología", teacher: "Alfonso Aruquipa Ccuno", start: "11:50", end: "12:30", type: "Normal" },
+        { grade: "2do A", subject: "Ciencia y Tecnología", teacher: "Alfonso Aruquipa Ccuno", start: "11:50", end: "12:30", type: "Normal" },
         { grade: "2do A", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
         { grade: "2do A", subject: "Matemáticas", teacher: "Heydi Maria Estrada Sucasayiri", start: "13:00", end: "14:20", type: "Normal" },
         { grade: "2do A", subject: "Educación para el Trabajo", teacher: "Geber Yole Chambilla Condori", start: "14:20", end: "15:00", type: "Normal" },
@@ -232,12 +246,21 @@ const classSchedules = {
         // 2do B
         { grade: "2do B", subject: "Matemáticas", teacher: "Heydi Maria Estrada Sucasayiri", start: "08:15", end: "09:35", type: "Normal" },
         { grade: "2do B", subject: "Receso", start: "09:35", end: "09:50", type: "receso", isBreak: true },
-        { grade: "2ro B", subject: "Ciencias Sociales", teacher: "Edgar Henry Quispe Vargas", start: "09:50", end: "11:10", type: "Normal" },
+        { grade: "2do B", subject: "Ciencias Sociales", teacher: "Edgar Henry Quispe Vargas", start: "09:50", end: "11:10", type: "Normal" },
         { grade: "2do B", subject: "Aimara", teacher: "Julio Flores Quispe", start: "11:10", end: "11:50", type: "Normal" },
-        { grade: "2ro B", subject: "Arte y Cultura", teacher: "Nestor Palomino Manzano", start: "11:50", end: "12:30", type: "Normal" },
+        { grade: "2do B", subject: "Arte y Cultura", teacher: "Nestor Palomino Manzano", start: "11:50", end: "12:30", type: "Normal" },
         { grade: "2do B", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
         { grade: "2do B", subject: "Ciencia y Tecnología", teacher: "Alfonso Aruquipa Ccuno", start: "13:00", end: "13:40", type: "Normal" },
         { grade: "2do B", subject: "Inglés", teacher: "Madelaine Gonzalo Segura", start: "13:40", end: "15:00", type: "Normal" },
+
+        // 2do C
+        { grade: "2do C", subject: "Desarrollo Personal", teacher: "Mario Estrada Pacohuanca", start: "08:15", end: "09:35", type: "Normal" },
+        { grade: "2do C", subject: "Receso", start: "09:35", end: "09:50", type: "receso", isBreak: true },
+        { grade: "2do C", subject: "Ciencia y Tecnología", teacher: "Alfonso Aruquipa Ccuno", start: "09:50", end: "11:10", type: "Normal" },
+        { grade: "2do C", subject: "Ciencias Sociales", teacher: "Edgar Henry Quispe Vargas", start: "11:10", end: "12:30", type: "Normal" },
+        { grade: "2do C", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
+        { grade: "2do C", subject: "Inglés", teacher: "Madelaine Gonzalo Segura", start: "13:00", end: "13:40", type: "Normal" },
+        { grade: "2do C", subject: "Educación Religiosa", teacher: "Fidel Severiano Cruz Tiquilloca", start: "13:40", end: "15:00", type: "Normal" },
 
         // 3ro A
         { grade: "3ro A", subject: "Tutoría", teacher: "Fidel Severiano Cruz Tiquilloca", start: "08:30", end: "10:00", type: "Laboratorio" },
@@ -274,17 +297,27 @@ const classSchedules = {
         { grade: "2do A", subject: "Educación para el Trabajo", teacher: "Geber Yole Chambilla Condori", start: "09:50", end: "11:10", type: "Normal" },
         { grade: "2do A", subject: "Aimara", teacher: "Julio Flores Quispe", start: "11:10", end: "12:30", type: "Normal" },
         { grade: "2do A", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
-        { grade: "2ro A", subject: "Ciencia y Tecnología", teacher: "Alfonso Aruquipa Ccuno", start: "13:00", end: "14:20", type: "Normal" },
+        { grade: "2do A", subject: "Ciencia y Tecnología", teacher: "Alfonso Aruquipa Ccuno", start: "13:00", end: "14:20", type: "Normal" },
         { grade: "2do A", subject: "Comunicación", teacher: "Joel Calisaya Enriquez", start: "14:20", end: "15:00", type: "Normal" },
 
         // 2do B
         { grade: "2do B", subject: "Educación para el Trabajo", teacher: "Geber Yole Chambilla Condori", start: "08:15", end: "09:35", type: "Normal" },
         { grade: "2do B", subject: "Receso", start: "09:35", end: "09:50", type: "receso", isBreak: true },
-        { grade: "2ro B", subject: "Arte y Cultura", teacher: "Nestor Palomino Manzano", start: "09:50", end: "11:10", type: "Normal" },
+        { grade: "2do B", subject: "Arte y Cultura", teacher: "Nestor Palomino Manzano", start: "09:50", end: "11:10", type: "Normal" },
         { grade: "2do B", subject: "Desarrollo Personal", teacher: "Mario Estrada Pacohuanca", start: "11:10", end: "12:30", type: "Normal" },
         { grade: "2do B", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
         { grade: "2do B", subject: "Comunicación", teacher: "Joel Calisaya Enriquez", start: "13:00", end: "13:40", type: "Normal" },
         { grade: "2do B", subject: "Matemáticas", teacher: "Heydi Maria Estrada Sucasayiri", start: "13:40", end: "15:00", type: "Normal" },
+
+        // 2do C
+        { grade: "2do C", subject: "Comunicación", teacher: "Joel Calisaya Enriquez", start: "08:15", end: "09:35", type: "Normal" },
+        { grade: "2do C", subject: "Receso", start: "09:35", end: "09:50", type: "receso", isBreak: true },
+        { grade: "2do C", subject: "Matemáticas", teacher: "Heydi Maria Estrada Sucasayiri", start: "09:50", end: "11:10", type: "Normal" },
+        { grade: "2do C", subject: "Educación para el Trabajo", teacher: "Geber Yole Chambilla Condori", start: "11:10", end: "11:50", type: "Normal" },
+        { grade: "2do C", subject: "Arte y Cultura", teacher: "Nestor Palomino Manzano", start: "11:50", end: "12:30", type: "Normal" },
+        { grade: "2do C", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
+        { grade: "2do C", subject: "Aimara", teacher: "Julio Flores Quispe", start: "13:00", end: "13:40", type: "Normal" },
+        { grade: "2do C", subject: "Desarrollo Personal", teacher: "Mario Estrada Pacohuanca", start: "13:40", end: "15:00", type: "Normal" },
 
         // 4to A
         { grade: "4to A", subject: "Arte y Cultura", teacher: "Fernando Silva", start: "08:30", end: "10:00", type: "Práctica" },
@@ -328,11 +361,20 @@ const classSchedules = {
         // 2do B
         { grade: "2do B", subject: "Inglés", teacher: "Madelaine Gonzalo Segura", start: "08:15", end: "09:35", type: "Normal" },
         { grade: "2do B", subject: "Receso", start: "09:35", end: "09:50", type: "receso", isBreak: true },
-        { grade: "2ro B", subject: "Tutoría", teacher: "Juan Zacarias Colorado Mamani", start: "09:50", end: "11:10", type: "Normal" },
+        { grade: "2do B", subject: "Tutoría", teacher: "Juan Zacarias Colorado Mamani", start: "09:50", end: "11:10", type: "Normal" },
         { grade: "2do B", subject: "Comunicación", teacher: "Joel Calisaya Enriquez", start: "11:10", end: "12:30", type: "Normal" },
         { grade: "2do B", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
         { grade: "2do B", subject: "Educación para el Trabajo", teacher: "Geber Yole Chambilla Condori", start: "13:00", end: "13:40", type: "Normal" },
         { grade: "2do B", subject: "Ciencia y Tecnología", teacher: "Alfonso Aruquipa Ccuno", start: "13:40", end: "15:00", type: "Normal" },
+
+        // 2do C
+        { grade: "2do C", subject: "Educación para el Trabajo", teacher: "Geber Yole Chambilla Condori", start: "08:15", end: "09:35", type: "Normal" },
+        { grade: "2do C", subject: "Receso", start: "09:35", end: "09:50", type: "receso", isBreak: true },
+        { grade: "2do C", subject: "Matemáticas", teacher: "Heydi Maria Estrada Sucasayiri", start: "09:50", end: "11:10", type: "Normal" },
+        { grade: "2do C", subject: "Ciencia y Tecnología", teacher: "Alfonso Aruquipa Ccuno", start: "11:10", end: "12:30", type: "Normal" },
+        { grade: "2do C", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
+        { grade: "2do C", subject: "Comunicación", teacher: "Joel Calisaya Enriquez", start: "13:00", end: "13:40", type: "Normal" },
+        { grade: "2do C", subject: "Educación Física", teacher: "Nestor Rene Cruz Paye", start: "13:40", end: "15:00", type: "Normal" },
 
         // 3ro C
         { grade: "3ro C", subject: "Matemáticas", teacher: "Carlos López", start: "07:30", end: "09:00", type: "Normal" },
@@ -386,6 +428,15 @@ const classSchedules = {
         { grade: "2do B", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
         { grade: "2do B", subject: "Comunicación", teacher: "Joel Calisaya Enriquez", start: "13:00", end: "14:20", type: "Normal" },
         { grade: "2do B", subject: "Educación Física", teacher: "Nestor Rene Cruz Paye", start: "14:20", end: "15:00", type: "Normal" },
+
+        // 2do C
+        { grade: "2do C", subject: "Comunicación", teacher: "Joel Calisaya Enriquez", start: "08:15", end: "09:35", type: "Normal" },
+        { grade: "2do C", subject: "Receso", start: "09:35", end: "09:50", type: "receso", isBreak: true },
+        { grade: "2do C", subject: "Inglés", teacher: "Madelaine Gonzalo Segura", start: "09:50", end: "11:10", type: "Normal" },
+        { grade: "2do C", subject: "Ciencias Sociales", teacher: "Edgar Henry Quispe Vargas", start: "11:10", end: "12:30", type: "Normal" },
+        { grade: "2do C", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
+        { grade: "2do C", subject: "Ciencia y Tecnología", teacher: "Alfonso Aruquipa Ccuno", start: "13:00", end: "13:40", type: "Normal" },
+        { grade: "2do C", subject: "Arte y Cultura", teacher: "Nestor Palomino Manzano", start: "13:40", end: "15:00", type: "Normal" },
 
         // 3ro B
         { grade: "3ro B", subject: "Educación Religiosa", teacher: "Vidal Quiñonez Quispe", start: "08:30", end: "10:00", type: "Normal" },
