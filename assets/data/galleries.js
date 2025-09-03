@@ -15,6 +15,7 @@ const galleryData = [
     //     date: "2023-06-15",
     //     description: "Ceremonia de graduación de nuestra promoción 2023. Un día lleno de emociones y logros celebrados."
     // },
+
     {
         id: 1,
         title: "Día de la madre",
@@ -30,6 +31,22 @@ const galleryData = [
     },
     {
         id: 2,
+        title: "Aniversario del colegio",
+        coverImage: "assets/img/galleries/aniversario-del-colegio/cover.jpg",
+        media: [
+            { type: "image", url: "assets/img/galleries/aniversario-del-colegio/img1.jpg", caption: "Una estudiante recita con emoción una poesía en honor al XLI aniversario de la institución, mientras el director la felicita por su destacada participación." },
+            { type: "image", url: "assets/img/galleries/aniversario-del-colegio/img2.jpg", caption: "Estudiantes de los grados inferiores demuestran su talento en la pista con un alegre baile, celebrando con entusiasmo el XLI aniversario de la institución." },
+            { type: "image", url: "assets/img/galleries/aniversario-del-colegio/img3.jpg", caption: "Las estudiantes de los grados inferiores brillan en la pista, demostrando su talento y alegría con una hermosa presentación de baile por el aniversario del colegio." },
+            { type: "image", url: "assets/img/galleries/aniversario-del-colegio/img4.jpg", caption: "La sección inferior ganadora posa orgullosa junto a todos los participantes de la danza, celebrando su esfuerzo y dedicación en el aniversario del colegio." },
+            { type: "image", url: "assets/img/galleries/aniversario-del-colegio/img5.jpg", caption: "La sección superior ganadora posa junto al profesor que los acompañó, celebrando su destacada participación y triunfo en la danza del aniversario del colegio." },
+            { type: "video", url: "assets/video/galleries/aniversario-del-colegio/video1.mp4", caption: "La APAFA pone el ritmo y la alegría con una presentación musical en vivo, vestidos de mariachis, llenando de color y tradición la celebración del aniversario.", poster: "assets/img/galleries/aniversario-del-colegio/video-poster.jpg" },
+        ],
+        category: "Celebraciones",
+        date: "2025-05-23",
+        description: "Celebramos 41 años de historia, esfuerzo y compromiso con la educación. Un aniversario que refleja el crecimiento de nuestra institución y el orgullo de toda la comunidad educativa. ¡Feliz aniversario!"
+    },
+    {
+        id: 3,
         title: "Año nuevo andino",
         coverImage: "assets/img/galleries/year-nuevo-andino/cover.jpg",
         media: [
@@ -43,7 +60,7 @@ const galleryData = [
         description: "Celebramos el renacer del sol y el inicio de un nuevo ciclo agrícola. El Año Nuevo Andino es una fecha sagrada para nuestras culturas originarias, llena de gratitud, rituales y conexión con la Pachamama."
     },
     {
-        id: 3,
+        id: 4,
         title: "Día del campesino",
         coverImage: "assets/img/galleries/dia-del-campesino/cover.jpg",
         media: [
