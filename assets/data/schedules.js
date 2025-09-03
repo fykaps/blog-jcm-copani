@@ -154,6 +154,11 @@ const teachers = {
         phone: "+51 987 654 339",
         email: "alex.ramires@colegio.edu"
     },
+    "David Mengoa Mamani": {
+        subject: "Ciencia y Tecnología",
+        phone: "+51 987 654 321",
+        email: "david.mengoa@colegio.edu"
+    },
     "Joel Calisaya Enriquez": {
         subject: "Comunicación",
         phone: "+51 987 654 340",
@@ -258,6 +263,15 @@ const classSchedules = {
         { grade: "3ro B", subject: "Tutoría", teacher: "Francisco Chambilla Sandia", start: "13:00", end: "14:20", type: "Normal" },
         { grade: "3ro B", subject: "Educación Física", teacher: "Vidal Quiñonez Quispe", start: "14:20", end: "15:00", type: "Normal" },
 
+        // 3ro C
+        { grade: "3ro C", subject: "Comunicación", teacher: "Eliseo Rene Calisaya Huanchi", start: "08:15", end: "09:35", type: "Normal" },
+        { grade: "3ro C", subject: "Receso", start: "09:35", end: "09:50", type: "receso", isBreak: true },
+        { grade: "3ro C", subject: "Educación Física", teacher: "Vidal Quiñonez Quispe", start: "09:50", end: "11:10", type: "Normal" },
+        { grade: "3ro C", subject: "Tutoría", teacher: "Nestor Rene Cruz Paye", start: "11:10", end: "12:30", type: "Normal" },
+        { grade: "3ro C", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
+        { grade: "3ro C", subject: "Ciencia y Tecnología", teacher: "David Mengoa Mamani", start: "13:00", end: "13:40", type: "Normal" },
+        { grade: "3ro C", subject: "Ciencias Sociales", teacher: "Rogelio Quispe Ortiz", start: "13:40", end: "15:00", type: "Normal" },
+
         // 4to C
         { grade: "4to C", subject: "Tutoría", teacher: "Sofía Castro", start: "07:45", end: "09:15", type: "Laboratorio" },
         { grade: "4to C", subject: "Receso", start: "09:15", end: "09:30", type: "receso", isBreak: true },
@@ -335,6 +349,15 @@ const classSchedules = {
         { grade: "3ro B", subject: "Educación para el Trabajo", teacher: "Geber Yole Chambilla Condori", start: "13:00", end: "13:40", type: "Normal" },
         { grade: "3ro B", subject: "Ciencias Sociales", teacher: "Rogelio Quispe Ortiz", start: "13:40", end: "15:00", type: "Normal" },
 
+        // 3ro C
+        { grade: "3ro C", subject: "Inglés", teacher: "Lourdes Sonia Laura Mamani", start: "08:15", end: "09:35", type: "Normal" },
+        { grade: "3ro C", subject: "Receso", start: "09:35", end: "09:50", type: "receso", isBreak: true },
+        { grade: "3ro C", subject: "Matemáticas", teacher: "Oriel Jose Calizaya Gomez", start: "09:50", end: "11:10", type: "Normal" },
+        { grade: "3ro C", subject: "Educación Religiosa", teacher: "Fidel Severiano Cruz Tiquilloca", start: "11:10", end: "12:30", type: "Normal" },
+        { grade: "3ro C", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
+        { grade: "3ro C", subject: "Comunicación", teacher: "Eliseo Rene Calisaya Huanchi", start: "13:00", end: "13:40", type: "Normal" },
+        { grade: "3ro C", subject: "Desarrollo Personal", teacher: "Mario Estrada Pacohuanca", start: "13:40", end: "15:00", type: "Normal" },
+
         // 5to C
         { grade: "5to C", subject: "Ciencia y Tecnología", teacher: "Lucía Ramírez", start: "08:00", end: "09:30", type: "Práctica" },
         { grade: "5to C", subject: "Receso", start: "09:30", end: "09:45", type: "receso", isBreak: true },
@@ -404,6 +427,16 @@ const classSchedules = {
         { grade: "3ro B", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
         { grade: "3ro B", subject: "Inglés", teacher: "Lourdes Sonia Laura Mamani", start: "13:00", end: "14:20", type: "Normal" },
         { grade: "3ro B", subject: "Arte y Cultura", teacher: "Constantino Eulogio Apaza Lopez", start: "14:20", end: "15:00", type: "Normal" },
+
+        // 3ro C
+        { grade: "3ro C", subject: "Arte y Cultura", teacher: "Constantino Eulogio Apaza Lopez", start: "08:15", end: "09:35", type: "Normal" },
+        { grade: "3ro C", subject: "Receso", start: "09:35", end: "09:50", type: "receso", isBreak: true },
+        { grade: "3ro C", subject: "Ciencia y Tecnología", teacher: "David Mengoa Mamani", start: "09:50", end: "11:10", type: "Normal" },
+        { grade: "3ro C", subject: "Inglés", teacher: "Lourdes Sonia Laura Mamani", start: "11:10", end: "12:30", type: "Normal" },
+        { grade: "3ro C", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
+        { grade: "3ro C", subject: "Educación para el Trabajo", teacher: "Geber Yole Chambilla Condori", start: "13:00", end: "13:40", type: "Normal" },
+        { grade: "3ro C", subject: "Educación Física", teacher: "Vidal Quiñonez Quispe", start: "13:40", end: "14:20", type: "Normal" },
+        { grade: "3ro C", subject: "Aimara", teacher: "Juan Zacarias Colorado Mamani", start: "14:20", end: "15:00", type: "Normal" },
 
         // 4to A
         { grade: "4to A", subject: "Arte y Cultura", teacher: "Fernando Silva", start: "08:30", end: "10:00", type: "Práctica" },
@@ -481,9 +514,13 @@ const classSchedules = {
         { grade: "3ro B", subject: "Desarrollo Personal", teacher: "Mario Estrada Pacohuanca", start: "13:40", end: "15:00", type: "Normal" },
 
         // 3ro C
-        { grade: "3ro C", subject: "Matemáticas", teacher: "Carlos López", start: "07:30", end: "09:00", type: "Normal" },
-        { grade: "3ro C", subject: "Receso", start: "09:00", end: "09:15", type: "receso", isBreak: true },
-        { grade: "3ro C", subject: "Ciencia y Tecnología", teacher: "Alfonso Aruquipa Ccuno", start: "09:15", end: "10:45", type: "Práctica" },
+        { grade: "3ro C", subject: "Ciencias Sociales", teacher: "Rogelio Quispe Ortiz", start: "08:15", end: "09:35", type: "Normal" },
+        { grade: "3ro C", subject: "Receso", start: "09:35", end: "09:50", type: "receso", isBreak: true },
+        { grade: "3ro C", subject: "Ciencia y Tecnología", teacher: "David Mengoa Mamani", start: "09:50", end: "11:10", type: "Laboratorio" },
+        { grade: "3ro C", subject: "Desarrollo Personal", teacher: "Mario Estrada Pacohuanca", start: "11:10", end: "12:30", type: "Normal" },
+        { grade: "3ro C", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
+        { grade: "3ro C", subject: "Matemáticas", teacher: "Oriel Jose Calizaya Gomez", start: "13:00", end: "14:20", type: "Normal" },
+        { grade: "3ro C", subject: "Inglés", teacher: "Lourdes Sonia Laura Mamani", start: "14:20", end: "15:00", type: "Normal" },
 
         // 4to B
         { grade: "4to B", subject: "Inglés", teacher: "David Jiménez", start: "08:30", end: "10:00", type: "Normal" },
@@ -559,6 +596,15 @@ const classSchedules = {
         { grade: "3ro B", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
         { grade: "3ro B", subject: "Educación Religiosa", teacher: "Fidel Severiano Cruz Tiquilloca", start: "13:00", end: "14:20", type: "Normal" },
         { grade: "3ro B", subject: "Aimara", teacher: "Juan Zacarias Colorado Mamani", start: "14:20", end: "15:00", type: "Normal" },
+
+        // 3ro C
+        { grade: "3ro C", subject: "Matemáticas", teacher: "Oriel Jose Calizaya Gomez", start: "08:15", end: "09:35", type: "Normal" },
+        { grade: "3ro C", subject: "Receso", start: "09:35", end: "09:50", type: "receso", isBreak: true },
+        { grade: "3ro C", subject: "Educación para el Trabajo", teacher: "Geber Yole Chambilla Condori", start: "09:50", end: "11:10", type: "Laboratorio" },
+        { grade: "3ro C", subject: "Comunicación", teacher: "Eliseo Rene Calisaya Huanchi", start: "11:10", end: "12:30", type: "Normal" },
+        { grade: "3ro C", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
+        { grade: "3ro C", subject: "Aimara", teacher: "Juan Zacarias Colorado Mamani", start: "13:00", end: "14:20", type: "Normal" },
+        { grade: "3ro C", subject: "Arte y Cultura", teacher: "Constantino Eulogio Apaza Lopez", start: "14:20", end: "15:00", type: "Normal" },
 
         // 5to C
         { grade: "5to C", subject: "Matemáticas", teacher: "David Mengoa Mamani", start: "08:00", end: "09:30", type: "Exámen" },
