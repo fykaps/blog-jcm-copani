@@ -16,233 +16,233 @@ const grades = [
 const teachers = {
     "David Mengoa Mamani": {
         subject: "Matemáticas",
-        phone: "+51 987 654 321",
-        email: "david.mengoa@colegio.edu"
+        phone: "+51 935 121 719",
+        email: "david.mengoa@gmail.com"
     },
     "Heydi Maria Estrada Sucasayiri": {
         subject: "Matemáticas",
-        phone: "+51 987 674 322",
-        email: "maria.estrada@colegio.edu"
+        phone: "+51 986 601 021",
+        email: "maria.estrada@gmail.com"
     },
     "Oriel Jose Calizaya Gomez": {
         subject: "Matemáticas",
-        phone: "+51 955 678 123",
-        email: "oriel.calizaya@colegio.edu"
+        phone: "+51 971 932 821",
+        email: "oriel.calizaya@gmail.com"
     },
     "Dawizz William Antonio Flores": {
         subject: "Matemáticas",
-        phone: "+51 999 648 193",
-        email: "dawizz.antonio@colegio.edu"
+        phone: "+51 951 846 160",
+        email: "dawizz.antonio@gmail.com"
     },
     "Fidel Severiano Cruz Tiquilloca": {
         subject: "Ciencias Sociales",
-        phone: "+51 987 654 324",
-        email: "fidel.cruz@colegio.edu"
+        phone: "+51 951 994 539",
+        email: "fidel.cruz@gmail.com"
     },
     "Violeta Miriam Alberssi Tisnado": {
         subject: "Ciencias Sociales",
-        phone: "+51 987 654 335",
-        email: "violeta.alberssi@colegio.edu"
+        phone: "+51 943 171 553",
+        email: "violeta.alberssi@gmail.com"
     },
     "Edgar Henry Quispe Vargas": {
         subject: "Ciencias Sociales",
-        phone: "+51 987 654 325",
-        email: "edgar.quispe@colegio.edu"
+        phone: "+51 952 359 258",
+        email: "edgar.quispe@gmail.com"
     },
     "Rogelio Quispe Ortiz": {
         subject: "Ciencias Sociales",
-        phone: "+51 933 611 364",
-        email: "edgar.quispe@colegio.edu"
+        phone: "+51 929 168 979",
+        email: "edgar.quispe@gmail.com"
     },
     "Fidel Severiano Cruz Tiquilloca": {
         subject: "Tutoría",
-        phone: "+51 987 654 324",
-        email: "fidel.cruz@colegio.edu"
+        phone: "+51 951 994 539",
+        email: "fidel.cruz@gmail.com"
     },
     "David Mengoa Mamani": {
         subject: "Tutoría",
-        phone: "+51 987 654 321",
-        email: "david.mengoa@colegio.edu"
+        phone: "+51 935 121 719",
+        email: "david.mengoa@gmail.com"
     },
     "Violeta Miriam Alberssi Tisnado": {
         subject: "Tutoría",
-        phone: "+51 987 654 335",
-        email: "violeta.alberssi@colegio.edu"
+        phone: "+51 943 171 553",
+        email: "violeta.alberssi@gmail.com"
     },
     "Juan Zacarias Colorado Mamani": {
         subject: "Tutoría",
-        phone: "+51 987 333 555",
-        email: "juan.colorado@colegio.edu"
+        phone: "+51 951 780 721",
+        email: "juan.colorado@gmail.com"
     },
     "Vidal Quiñonez Quispe": {
         subject: "Tutoría",
-        phone: "+51 987 654 327",
-        email: "vidal.quinonez@colegio.edu"
+        phone: "+51 957 768 338",
+        email: "vidal.quinonez@gmail.com"
     },
     "Nestor Rene Cruz Paye": {
         subject: "Tutoría",
-        phone: "+51 987 654 332",
-        email: "nestor.cruz@colegio.edu"
+        phone: "+51 950 079 868",
+        email: "nestor.cruz@gmail.com"
     },
     "Francisco Chambilla Sandia": {
         subject: "Tutoría",
-        phone: "+51 957 222 111",
-        email: "francisco.chambilla@colegio.edu"
+        phone: "+51 900 934 878",
+        email: "francisco.chambilla@gmail.com"
     },
     "Constantino Eulogio Apaza Lopez": {
         subject: "Tutoría",
-        phone: "+51 987 654 335",
-        email: "fernando.silva@colegio.edu"
+        phone: "+51 900 001 049",
+        email: "fernando.silva@gmail.com"
     },
     "Ronal David Aguilar Mamani": {
         subject: "Tutoría",
-        phone: "+51 911 114 315",
-        email: "ronal.aguilar@colegio.edu"
+        phone: "+51 946 981 527",
+        email: "ronal.aguilar@gmail.com"
     },
     "Esteban Jaime Asqui Flores": {
         subject: "Tutoría",
-        phone: "+51 987 354 222",
-        email: "esteban.asqui@colegio.edu"
+        phone: "+51 943 560 269",
+        email: "esteban.asqui@gmail.com"
     },
     "Vidal Quiñonez Quispe": {
         subject: "Educación Religiosa",
-        phone: "+51 987 654 327",
-        email: "vidal.quinonez@colegio.edu"
+        phone: "+51 957 768 338",
+        email: "vidal.quinonez@gmail.com"
     },
     "Fidel Severiano Cruz Tiquilloca": {
         subject: "Educación Religiosa",
-        phone: "+51 987 654 324",
-        email: "fidel.cruz@colegio.edu"
+        phone: "+51 951 994 539",
+        email: "fidel.cruz@gmail.com"
     },
     "Esteban Jaime Asqui Flores": {
         subject: "Educación Religiosa",
-        phone: "+51 987 354 222",
-        email: "esteban.asqui@colegio.edu"
+        phone: "+51 943 560 269",
+        email: "esteban.asqui@gmail.com"
     },
     "Constantino Eulogio Apaza Lopez": {
         subject: "Educación Religiosa",
-        phone: "+51 987 654 335",
-        email: "constantino.apaza@colegio.edu"
+        phone: "+51 900 001 049",
+        email: "constantino.apaza@gmail.com"
     },
     "Madelaine Gonzalo Segura": {
         subject: "Inglés",
-        phone: "+51 987 654 329",
-        email: "madelaine.gonzalo@colegio.edu"
+        phone: "+51 918 876 532",
+        email: "madelaine.gonzalo@gmail.com"
     },
     "Violeta Miriam Alberssi Tisnado": {
         subject: "Inglés",
-        phone: "+51 987 654 335",
-        email: "violeta.alberssi@colegio.edu"
+        phone: "+51 943 171 553",
+        email: "violeta.alberssi@gmail.com"
     },
     "Lourdes Sonia Laura Mamani": {
         subject: "Inglés",
-        phone: "+51 966 666 366",
-        email: "lourder.laura@colegio.edu"
+        phone: "+51 966 891 100",
+        email: "lourder.laura@gmail.com"
     },
     "Ronal David Aguilar Mamani": {
         subject: "Inglés",
-        phone: "+51 911 114 315",
-        email: "ronal.aguilar@colegio.edu"
+        phone: "+51 946 981 527",
+        email: "ronal.aguilar@gmail.com"
     },
     "Nestor Rene Cruz Paye": {
         subject: "Educación Física",
-        phone: "+51 987 654 332",
-        email: "nestor.cruz@colegio.edu"
+        phone: "+51 950 079 868",
+        email: "nestor.cruz@gmail.com"
     },
     "Vidal Quiñonez Quispe": {
         subject: "Educación Física",
-        phone: "+51 987 654 327",
-        email: "vidal.quinonez@colegio.edu"
+        phone: "+51 957 768 338",
+        email: "vidal.quinonez@gmail.com"
     },
     "Nestor Palomino Manzano": {
         subject: "Arte y Cultura",
-        phone: "+51 987 654 334",
-        email: "nestor.palomino@colegio.edu"
+        phone: "+51 985 130 307",
+        email: "nestor.palomino@gmail.com"
     },
     "Constantino Eulogio Apaza Lopez": {
         subject: "Arte y Cultura",
-        phone: "+51 987 654 335",
-        email: "constantino.apaza@colegio.edu"
+        phone: "+51 900 001 049",
+        email: "constantino.apaza@gmail.com"
     },
     "Julio Amilcar Rivera Aguilar": {
         subject: "Desarrollo Personal",
-        phone: "+51 987 654 336",
-        email: "julio.rivera@colegio.edu"
+        phone: "+51 970 922 052",
+        email: "julio.rivera@gmail.com"
     },
     "Mario Estrada Pacohuanca": {
         subject: "Desarrollo Personal",
-        phone: "+51 987 654 337",
-        email: "mario.estrada@colegio.edu"
+        phone: "+51 973 144 250",
+        email: "mario.estrada@gmail.com"
     },
     "Violeta Miriam Alberssi Tisnado": {
         subject: "Desarrollo Personal",
-        phone: "+51 987 654 335",
-        email: "violeta.alberssi@colegio.edu"
+        phone: "+51 943 171 553",
+        email: "violeta.alberssi@gmail.com"
     },
     "Alfonso Aruquipa Ccuno": {
         subject: "Ciencia y Tecnología",
-        phone: "+51 987 654 338",
-        email: "alfonso.aruquipa@colegio.edu"
+        phone: "+51 951 069 206",
+        email: "alfonso.aruquipa@gmail.com"
     },
     "Alex Ramires Arenas": {
         subject: "Ciencia y Tecnología",
-        phone: "+51 987 654 339",
-        email: "alex.ramires@colegio.edu"
+        phone: "+51 917 430 859",
+        email: "alex.ramires@gmail.com"
     },
     "David Mengoa Mamani": {
         subject: "Ciencia y Tecnología",
-        phone: "+51 987 654 321",
-        email: "david.mengoa@colegio.edu"
+        phone: "+51 935 121 719",
+        email: "david.mengoa@gmail.com"
     },
     "Francisco Chambilla Sandia": {
         subject: "Ciencia y Tecnología",
-        phone: "+51 957 222 111",
-        email: "francisco.chambilla@colegio.edu"
+        phone: "+51 900 934 878",
+        email: "francisco.chambilla@gmail.com"
     },
     "Joel Calisaya Enriquez": {
         subject: "Comunicación",
-        phone: "+51 987 654 340",
-        email: "joel.calisaya@colegio.edu"
+        phone: "+51 932 360 049",
+        email: "joel.calisaya@gmail.com"
     },
     "Eliseo Rene Calisaya Huanchi": {
         subject: "Comunicación",
-        phone: "+51 920 124 440",
-        email: "eliseo.calisaya@colegio.edu"
+        phone: "+51 910 061 040",
+        email: "eliseo.calisaya@gmail.com"
     },
     "Julio Flores Quispe": {
         subject: "Comunicación",
-        phone: "+51 987 354 000",
-        email: "julio.quispe@colegio.edu"
+        phone: "+51 902 588 761",
+        email: "julio.quispe@gmail.com"
     },
     "Constantino Eulogio Apaza Lopez": {
         subject: "Aimara",
-        phone: "+51 987 654 341",
-        email: "constantino.apaza@colegio.edu"
+        phone: "+51 900 001 049",
+        email: "constantino.apaza@gmail.com"
     },
     "Esteban Jaime Asqui Flores": {
         subject: "Aimara",
-        phone: "+51 987 354 222",
-        email: "esteban.asqui@colegio.edu"
+        phone: "+51 943 560 269",
+        email: "esteban.asqui@gmail.com"
     },
     "Julio Flores Quispe": {
         subject: "Aimara",
-        phone: "+51 987 354 000",
-        email: "julio.quispe@colegio.edu"
+        phone: "+51 902 588 761",
+        email: "julio.quispe@gmail.com"
     },
     "Juan Zacarias Colorado Mamani": {
         subject: "Aimara",
-        phone: "+51 987 333 555",
-        email: "juan.colorado@colegio.edu"
+        phone: "+51 951 780 721",
+        email: "juan.colorado@gmail.com"
     },
     "Geber Yole Chambilla Condori": {
         subject: "Educación para el Trabajo",
-        phone: "+51 987 654 342",
-        email: "geber.chambilla@colegio.edu"
+        phone: "+51 931 417 823",
+        email: "geber.chambilla@gmail.com"
     },
     "Esteban Jaime Asqui Flores": {
         subject: "Educación para el Trabajo",
-        phone: "+51 987 354 222",
-        email: "esteban.asqui@colegio.edu"
+        phone: "+51 943 560 269",
+        email: "esteban.asqui@gmail.com"
     },
 };
 
