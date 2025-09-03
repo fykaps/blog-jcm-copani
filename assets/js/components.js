@@ -101,7 +101,7 @@ function loadHeader() {
             <a href="index.html" class="logo-link">
                 <div class="logo">
                     <img src="assets/img/logo.png" alt="Logo del colegio" class="logo-img">
-                    <h1 class="logo-title">Blog Escolar</h1>
+                    <h1 class="logo-title">I.E.S. "JCM"</h1>
                 </div>
             </a>
             <nav class="nav-menu" aria-label="Navegación principal">
