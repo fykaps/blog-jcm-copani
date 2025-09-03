@@ -24,6 +24,11 @@ const teachers = {
         phone: "+51 987 674 322",
         email: "maria.estrada@colegio.edu"
     },
+    "Oriel Jose Calizaya Gomez": {
+        subject: "Matemáticas",
+        phone: "+51 955 678 123",
+        email: "oriel.calizaya@colegio.edu"
+    },
     "Fidel Severiano Cruz Tiquilloca": {
         subject: "Ciencias Sociales",
         phone: "+51 987 654 324",
@@ -37,6 +42,11 @@ const teachers = {
     "Edgar Henry Quispe Vargas": {
         subject: "Ciencias Sociales",
         phone: "+51 987 654 325",
+        email: "edgar.quispe@colegio.edu"
+    },
+    "Rogelio Quispe Ortiz": {
+        subject: "Ciencias Sociales",
+        phone: "+51 933 611 364",
         email: "edgar.quispe@colegio.edu"
     },
     "Fidel Severiano Cruz Tiquilloca": {
@@ -64,6 +74,11 @@ const teachers = {
         phone: "+51 987 654 327",
         email: "vidal.quinonez@colegio.edu"
     },
+    "Nestor Rene Cruz Paye": {
+        subject: "Tutoría",
+        phone: "+51 987 654 332",
+        email: "nestor.cruz@colegio.edu"
+    },
     "Vidal Quiñonez Quispe": {
         subject: "Educación Religiosa",
         phone: "+51 987 654 327",
@@ -73,6 +88,11 @@ const teachers = {
         subject: "Educación Religiosa",
         phone: "+51 987 654 324",
         email: "fidel.cruz@colegio.edu"
+    },
+    "Esteban Jaime Asqui Flores": {
+        subject: "Educación Religiosa",
+        phone: "+51 987 354 222",
+        email: "esteban.asqui@colegio.edu"
     },
     "Madelaine Gonzalo Segura": {
         subject: "Inglés",
@@ -84,15 +104,20 @@ const teachers = {
         phone: "+51 987 654 335",
         email: "violeta.alberssi@colegio.edu"
     },
+    "Lourdes Sonia Laura Mamani": {
+        subject: "Inglés",
+        phone: "+51 966 666 366",
+        email: "lourder.laura@colegio.edu"
+    },
     "Nestor Rene Cruz Paye": {
         subject: "Educación Física",
         phone: "+51 987 654 332",
         email: "nestor.cruz@colegio.edu"
     },
-    "Elena Flores": {
+    "Vidal Quiñonez Quispe": {
         subject: "Educación Física",
-        phone: "+51 987 654 333",
-        email: "elena.flores@colegio.edu"
+        phone: "+51 987 654 327",
+        email: "vidal.quinonez@colegio.edu"
     },
     "Nestor Palomino Manzano": {
         subject: "Arte y Cultura",
@@ -119,15 +144,20 @@ const teachers = {
         phone: "+51 987 654 338",
         email: "alfonso.aruquipa@colegio.edu"
     },
-    "Lucía Ramírez": {
+    "Alex Ramires Arenas": {
         subject: "Ciencia y Tecnología",
         phone: "+51 987 654 339",
-        email: "lucia.ramirez@colegio.edu"
+        email: "alex.ramires@colegio.edu"
     },
     "Joel Calisaya Enriquez": {
         subject: "Comunicación",
         phone: "+51 987 654 340",
         email: "joel.calisaya@colegio.edu"
+    },
+    "Eliseo Rene Calisaya Huanchi": {
+        subject: "Comunicación",
+        phone: "+51 920 124 440",
+        email: "eliseo.calisaya@colegio.edu"
     },
     "Constantino Eulogio Apaza Lopez": {
         subject: "Aimara",
@@ -143,6 +173,11 @@ const teachers = {
         subject: "Aimara",
         phone: "+51 987 354 000",
         email: "julio.quispe@colegio.edu"
+    },
+    "Juan Zacarias Colorado Mamani": {
+        subject: "Aimara",
+        phone: "+51 987 333 555",
+        email: "juan.colorado@colegio.edu"
     },
     "Geber Yole Chambilla Condori": {
         subject: "Educación para el Trabajo",
@@ -198,6 +233,16 @@ const classSchedules = {
         { grade: "2do C", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
         { grade: "2do C", subject: "Educación Física", teacher: "Nestor Rene Cruz Paye", start: "13:00", end: "13:40", type: "Normal" },
         { grade: "2do C", subject: "Aimara", teacher: "Julio Flores Quispe", start: "13:40", end: "15:00", type: "Normal" },
+
+        // 3ro A
+        { grade: "3ro A", subject: "Matemáticas", teacher: "Oriel Jose Calizaya Gomez", start: "08:15", end: "09:35", type: "Normal" },
+        { grade: "3ro A", subject: "Receso", start: "09:35", end: "09:50", type: "receso", isBreak: true },
+        { grade: "3ro A", subject: "Ciencias Sociales", teacher: "Rogelio Quispe Ortiz", start: "09:50", end: "11:10", type: "Normal" },
+        { grade: "3ro A", subject: "Comunicación", teacher: "Eliseo Rene Calisaya Huanchi", start: "11:10", end: "11:50", type: "Normal" },
+        { grade: "3ro A", subject: "Educación Física", teacher: "Vidal Quiñonez Quispe", start: "11:50", end: "12:30", type: "Normal" },
+        { grade: "3ro A", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
+        { grade: "3ro A", subject: "Inglés", teacher: "Lourdes Sonia Laura Mamani", start: "13:00", end: "13:40", type: "Normal" },
+        { grade: "3ro A", subject: "Desarrollo Personal", teacher: "Mario Estrada Pacohuanca", start: "13:40", end: "15:00", type: "Normal" },
 
         // 3ro B
         { grade: "3ro B", subject: "Ciencia y Tecnología", teacher: "Alfonso Aruquipa Ccuno", start: "08:30", end: "10:00", type: "Práctica" },
@@ -263,9 +308,13 @@ const classSchedules = {
         { grade: "2do C", subject: "Educación Religiosa", teacher: "Fidel Severiano Cruz Tiquilloca", start: "13:40", end: "15:00", type: "Normal" },
 
         // 3ro A
-        { grade: "3ro A", subject: "Tutoría", teacher: "Fidel Severiano Cruz Tiquilloca", start: "08:30", end: "10:00", type: "Laboratorio" },
-        { grade: "3ro A", subject: "Receso", start: "10:00", end: "10:15", type: "receso", isBreak: true },
-        { grade: "3ro A", subject: "Educación Física", teacher: "Elena Flores", start: "10:15", end: "11:45", type: "Práctica" },
+        { grade: "3ro A", subject: "Educación para el Trabajo", teacher: "Geber Yole Chambilla Condori", start: "08:15", end: "09:35", type: "Normal" },
+        { grade: "3ro A", subject: "Receso", start: "09:35", end: "09:50", type: "receso", isBreak: true },
+        { grade: "3ro A", subject: "Ciencia y Tecnología", teacher: "Alex Ramires Arenas", start: "09:50", end: "11:10", type: "Normal" },
+        { grade: "3ro A", subject: "Comunicación", teacher: "Eliseo Rene Calisaya Huanchi", start: "11:10", end: "12:30", type: "Normal" },
+        { grade: "3ro A", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
+        { grade: "3ro A", subject: "Inglés", teacher: "Lourdes Sonia Laura Mamani", start: "13:00", end: "14:20", type: "Normal" },
+        { grade: "3ro A", subject: "Aimara", teacher: "Juan Zacarias Colorado Mamani", start: "14:20", end: "15:00", type: "Normal" },
 
         // 5to C
         { grade: "5to C", subject: "Ciencia y Tecnología", teacher: "Lucía Ramírez", start: "08:00", end: "09:30", type: "Práctica" },
@@ -319,6 +368,15 @@ const classSchedules = {
         { grade: "2do C", subject: "Aimara", teacher: "Julio Flores Quispe", start: "13:00", end: "13:40", type: "Normal" },
         { grade: "2do C", subject: "Desarrollo Personal", teacher: "Mario Estrada Pacohuanca", start: "13:40", end: "15:00", type: "Normal" },
 
+        // 3ro A
+        { grade: "3ro A", subject: "Arte y Cultura", teacher: "Nestor Palomino Manzano", start: "08:15", end: "09:35", type: "Normal" },
+        { grade: "3ro A", subject: "Receso", start: "09:35", end: "09:50", type: "receso", isBreak: true },
+        { grade: "3ro A", subject: "Inglés", teacher: "Lourdes Sonia Laura Mamani", start: "09:50", end: "11:10", type: "Normal" },
+        { grade: "3ro A", subject: "Matemáticas", teacher: "Oriel Jose Calizaya Gomez", start: "11:10", end: "12:30", type: "Normal" },
+        { grade: "3ro A", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
+        { grade: "3ro A", subject: "Ciencias Sociales", teacher: "Rogelio Quispe Ortiz", start: "13:00", end: "14:20", type: "Normal" },
+        { grade: "3ro A", subject: "Ciencia y Tecnología", teacher: "Alex Ramires Arenas", start: "14:20", end: "15:00", type: "Normal" },
+
         // 4to A
         { grade: "4to A", subject: "Arte y Cultura", teacher: "Fernando Silva", start: "08:30", end: "10:00", type: "Práctica" },
         { grade: "4to A", subject: "Receso", start: "10:00", end: "10:15", type: "receso", isBreak: true },
@@ -343,7 +401,7 @@ const classSchedules = {
         { grade: "1ro B", subject: "Arte y Cultura", teacher: "Nestor Palomino Manzano", start: "08:15", end: "09:35", type: "Normal" },
         { grade: "1ro B", subject: "Receso", start: "09:35", end: "09:50", type: "receso", isBreak: true },
         { grade: "1ro B", subject: "Educación para el Trabajo", teacher: "Geber Yole Chambilla Condori", start: "09:50", end: "10:30", type: "Normal" },
-        { grade: "1ro B", subject: "Desarrollo Personal", teacher: "Julio Amilcar Rivera Aguilar", start: "10:30", end: "11:10", type: "Normal" },
+        { grade: "1ro B", subject: "Ciencia y Tecnología", teacher: "Alfonso Aruquipa Ccuno", start: "10:30", end: "11:10", type: "Normal" },
         { grade: "1ro B", subject: "Matemáticas", teacher: "David Mengoa Mamani", start: "11:10", end: "12:30", type: "Normal" },
         { grade: "1ro B", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
         { grade: "1ro B", subject: "Educación Física", teacher: "Nestor Rene Cruz Paye", start: "13:00", end: "13:40", type: "Normal" },
@@ -375,6 +433,15 @@ const classSchedules = {
         { grade: "2do C", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
         { grade: "2do C", subject: "Comunicación", teacher: "Joel Calisaya Enriquez", start: "13:00", end: "13:40", type: "Normal" },
         { grade: "2do C", subject: "Educación Física", teacher: "Nestor Rene Cruz Paye", start: "13:40", end: "15:00", type: "Normal" },
+
+        // 3ro A
+        { grade: "3ro A", subject: "Desarrollo Personal", teacher: "Mario Estrada Pacohuanca", start: "08:15", end: "09:35", type: "Normal" },
+        { grade: "3ro A", subject: "Receso", start: "09:35", end: "09:50", type: "receso", isBreak: true },
+        { grade: "3ro A", subject: "Educación Religiosa", teacher: "Esteban Jaime Asqui Flores", start: "09:50", end: "11:10", type: "Normal" },
+        { grade: "3ro A", subject: "Educación Física", teacher: "Vidal Quiñonez Quispe", start: "11:10", end: "12:30", type: "Normal" },
+        { grade: "3ro A", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
+        { grade: "3ro A", subject: "Ciencia y Tecnología", teacher: "Alex Ramires Arenas", start: "13:00", end: "14:20", type: "Normal" },
+        { grade: "3ro A", subject: "Educación para el Trabajo", teacher: "Geber Yole Chambilla Condori", start: "14:20", end: "15:00", type: "Normal" },
 
         // 3ro C
         { grade: "3ro C", subject: "Matemáticas", teacher: "Carlos López", start: "07:30", end: "09:00", type: "Normal" },
@@ -437,6 +504,15 @@ const classSchedules = {
         { grade: "2do C", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
         { grade: "2do C", subject: "Ciencia y Tecnología", teacher: "Alfonso Aruquipa Ccuno", start: "13:00", end: "13:40", type: "Normal" },
         { grade: "2do C", subject: "Arte y Cultura", teacher: "Nestor Palomino Manzano", start: "13:40", end: "15:00", type: "Normal" },
+
+        // 3ro A
+        { grade: "3ro A", subject: "Tutoría", teacher: "Nestor Rene Cruz Paye", start: "08:15", end: "09:35", type: "Normal" },
+        { grade: "3ro A", subject: "Receso", start: "09:35", end: "09:50", type: "receso", isBreak: true },
+        { grade: "3ro A", subject: "Aimara", teacher: "Juan Zacarias Colorado Mamani", start: "09:50", end: "11:10", type: "Normal" },
+        { grade: "3ro A", subject: "Matemáticas", teacher: "Oriel Jose Calizaya Gomez", start: "11:10", end: "12:30", type: "Normal" },
+        { grade: "3ro A", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
+        { grade: "3ro A", subject: "Arte y Cultura", teacher: "Nestor Palomino Manzano", start: "13:00", end: "13:40", type: "Normal" },
+        { grade: "3ro A", subject: "Comunicación", teacher: "Eliseo Rene Calisaya Huanchi", start: "13:40", end: "15:00", type: "Normal" },
 
         // 3ro B
         { grade: "3ro B", subject: "Educación Religiosa", teacher: "Vidal Quiñonez Quispe", start: "08:30", end: "10:00", type: "Normal" },
