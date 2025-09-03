@@ -99,6 +99,11 @@ const teachers = {
         phone: "+51 911 114 315",
         email: "ronal.aguilar@colegio.edu"
     },
+    "Esteban Jaime Asqui Flores": {
+        subject: "Tutoría",
+        phone: "+51 987 354 222",
+        email: "esteban.asqui@colegio.edu"
+    },
     "Vidal Quiñonez Quispe": {
         subject: "Educación Religiosa",
         phone: "+51 987 654 327",
@@ -114,6 +119,11 @@ const teachers = {
         phone: "+51 987 354 222",
         email: "esteban.asqui@colegio.edu"
     },
+    "Constantino Eulogio Apaza Lopez": {
+        subject: "Educación Religiosa",
+        phone: "+51 987 654 335",
+        email: "constantino.apaza@colegio.edu"
+    },
     "Madelaine Gonzalo Segura": {
         subject: "Inglés",
         phone: "+51 987 654 329",
@@ -128,6 +138,11 @@ const teachers = {
         subject: "Inglés",
         phone: "+51 966 666 366",
         email: "lourder.laura@colegio.edu"
+    },
+    "Ronal David Aguilar Mamani": {
+        subject: "Inglés",
+        phone: "+51 911 114 315",
+        email: "ronal.aguilar@colegio.edu"
     },
     "Nestor Rene Cruz Paye": {
         subject: "Educación Física",
@@ -147,7 +162,7 @@ const teachers = {
     "Constantino Eulogio Apaza Lopez": {
         subject: "Arte y Cultura",
         phone: "+51 987 654 335",
-        email: "fernando.silva@colegio.edu"
+        email: "constantino.apaza@colegio.edu"
     },
     "Julio Amilcar Rivera Aguilar": {
         subject: "Desarrollo Personal",
@@ -178,6 +193,11 @@ const teachers = {
         subject: "Ciencia y Tecnología",
         phone: "+51 987 654 321",
         email: "david.mengoa@colegio.edu"
+    },
+    "Francisco Chambilla Sandia": {
+        subject: "Ciencia y Tecnología",
+        phone: "+51 957 222 111",
+        email: "francisco.chambilla@colegio.edu"
     },
     "Joel Calisaya Enriquez": {
         subject: "Comunicación",
@@ -331,9 +351,22 @@ const classSchedules = {
         { grade: "4to C", subject: "Educación para el Trabajo", teacher: "Esteban Jaime Asqui Flores", start: "14:20", end: "15:00", type: "Normal" },
 
         // 5to A
-        { grade: "5to A", subject: "Matemáticas", teacher: "David Mengoa Mamani", start: "08:15", end: "09:45", type: "Normal" },
-        { grade: "5to A", subject: "Receso", start: "09:45", end: "10:00", type: "receso", isBreak: true },
-        { grade: "5to A", subject: "Inglés", teacher: "David Jiménez", start: "10:00", end: "11:30", type: "Normal" }
+        { grade: "5to A", subject: "Educación para el Trabajo", teacher: "Esteban Jaime Asqui Flores", start: "08:15", end: "09:35", type: "Normal" },
+        { grade: "5to A", subject: "Receso", start: "09:35", end: "09:50", type: "receso", isBreak: true },
+        { grade: "5to A", subject: "Ciencia y Tecnología", teacher: "Francisco Chambilla Sandia", start: "09:50", end: "11:10", type: "Normal" },
+        { grade: "5to A", subject: "Matemáticas", teacher: "Oriel Jose Calizaya Gomez", start: "11:10", end: "12:30", type: "Normal" },
+        { grade: "5to A", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
+        { grade: "5to A", subject: "Ciencias Sociales", teacher: "Violeta Miriam Alberssi Tisnado", start: "13:00", end: "14:20", type: "Normal" },
+        { grade: "5to A", subject: "Comunicación", teacher: "Eliseo Rene Calisaya Huanchi", start: "14:20", end: "15:00", type: "Normal" },
+
+        // 5to B
+        { grade: "5to B", subject: "Ciencias Sociales", teacher: "Violeta Miriam Alberssi Tisnado", start: "08:15", end: "09:35", type: "Normal" },
+        { grade: "5to B", subject: "Receso", start: "09:35", end: "09:50", type: "receso", isBreak: true },
+        { grade: "5to B", subject: "Matemáticas", teacher: "Oriel Jose Calizaya Gomez", start: "09:50", end: "11:10", type: "Normal" },
+        { grade: "5to B", subject: "Educación para el Trabajo", teacher: "Esteban Jaime Asqui Flores", start: "11:10", end: "12:30", type: "Normal" },
+        { grade: "5to B", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
+        { grade: "5to B", subject: "Comunicación", teacher: "Eliseo Rene Calisaya Huanchi", start: "13:00", end: "14:20", type: "Normal" },
+        { grade: "5to B", subject: "Ciencia y Tecnología", teacher: "Francisco Chambilla Sandia", start: "14:20", end: "15:00", type: "Normal" },
     ],
     "Martes": [
         // 1ro A
@@ -439,6 +472,25 @@ const classSchedules = {
         { grade: "4to C", subject: "Arte y Cultura", teacher: "Nestor Palomino Manzano", start: "13:00", end: "13:40", type: "Normal" },
         { grade: "4to C", subject: "Educación para el Trabajo", teacher: "Esteban Jaime Asqui Flores", start: "13:40", end: "15:00", type: "Normal" },
 
+        // 5to A
+        { grade: "5to A", subject: "Matemáticas", teacher: "Oriel Jose Calizaya Gomez", start: "08:15", end: "09:35", type: "Normal" },
+        { grade: "5to A", subject: "Receso", start: "09:35", end: "09:50", type: "receso", isBreak: true },
+        { grade: "5to A", subject: "Desarrollo Personal", teacher: "Julio Amilcar Rivera Aguilar", start: "09:50", end: "11:10", type: "Normal" },
+        { grade: "5to A", subject: "Inglés", teacher: "Ronal David Aguilar Mamani", start: "11:10", end: "12:30", type: "Normal" },
+        { grade: "5to A", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
+        { grade: "5to A", subject: "Educación Física", teacher: "Nestor Rene Cruz Paye", start: "13:00", end: "13:40", type: "Normal" },
+        { grade: "5to A", subject: "Aimara", teacher: "Juan Zacarias Colorado Mamani", start: "13:40", end: "14:20", type: "Normal" },
+        { grade: "5to A", subject: "Arte y Cultura", teacher: "Constantino Eulogio Apaza Lopez", start: "14:20", end: "15:00", type: "Normal" },
+
+        // 5to B
+        { grade: "5to B", subject: "Desarrollo Personal", teacher: "Julio Amilcar Rivera Aguilar", start: "08:15", end: "09:35", type: "Normal" },
+        { grade: "5to B", subject: "Receso", start: "09:35", end: "09:50", type: "receso", isBreak: true },
+        { grade: "5to B", subject: "Educación para el Trabajo", teacher: "Esteban Jaime Asqui Flores", start: "09:50", end: "10:30", type: "Normal" },
+        { grade: "5to B", subject: "Tutoría", teacher: "Esteban Jaime Asqui Flores", start: "10:30", end: "11:50", type: "Normal" },
+        { grade: "5to A", subject: "Educación Física", teacher: "Nestor Rene Cruz Paye", start: "11:50", end: "12:30", type: "Normal" },
+        { grade: "5to B", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
+        { grade: "5to B", subject: "Inglés", teacher: "Ronal David Aguilar Mamani", start: "13:00", end: "13:40", type: "Normal" },
+        { grade: "5to B", subject: "Comunicación", teacher: "Eliseo Rene Calisaya Huanchi", start: "13:40", end: "15:00", type: "Normal" },
     ],
     "Miércoles": [
         // 1ro A
@@ -543,10 +595,23 @@ const classSchedules = {
         { grade: "4to C", subject: "Aimara", teacher: "Juan Zacarias Colorado Mamani", start: "13:40", end: "14:20", type: "Normal" },
         { grade: "4to C", subject: "Educación Física", teacher: "Vidal Quiñonez Quispe", start: "14:20", end: "15:00", type: "Normal" },
 
+        // 5to A
+        { grade: "5to A", subject: "Matemáticas", teacher: "Oriel Jose Calizaya Gomez", start: "08:15", end: "09:35", type: "Normal" },
+        { grade: "5to A", subject: "Receso", start: "09:35", end: "09:50", type: "receso", isBreak: true },
+        { grade: "5to A", subject: "Educación Religiosa", teacher: "Constantino Eulogio Apaza Lopez", start: "09:50", end: "11:10", type: "Normal" },
+        { grade: "5to A", subject: "Tutoría", teacher: "Constantino Eulogio Apaza Lopez", start: "11:10", end: "12:30", type: "Normal" },
+        { grade: "5to A", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
+        { grade: "5to A", subject: "Inglés", teacher: "Ronal David Aguilar Mamani", start: "13:00", end: "13:40", type: "Normal" },
+        { grade: "5to A", subject: "Ciencia y Tecnología", teacher: "Francisco Chambilla Sandia", start: "13:40", end: "15:00", type: "Normal" },
+
         // 5to B
-        { grade: "5to B", subject: "Matemáticas", teacher: "David Mengoa Mamani", start: "08:15", end: "09:45", type: "Normal" },
-        { grade: "5to B", subject: "Receso", start: "09:45", end: "10:00", type: "receso", isBreak: true },
-        { grade: "5to B", subject: "Educación Religiosa", teacher: "Jorge Ruiz", start: "10:00", end: "11:30", type: "Normal" }
+        { grade: "5to B", subject: "Desarrollo Personal", teacher: "Julio Amilcar Rivera Aguilar", start: "08:15", end: "09:35", type: "Normal" },
+        { grade: "5to B", subject: "Receso", start: "09:35", end: "09:50", type: "receso", isBreak: true },
+        { grade: "5to B", subject: "Aimara", teacher: "Juan Zacarias Colorado Mamani", start: "09:50", end: "11:10", type: "Normal" },
+        { grade: "5to B", subject: "Ciencia y Tecnología", teacher: "Francisco Chambilla Sandia", start: "11:10", end: "12:30", type: "Normal" },
+        { grade: "5to B", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
+        { grade: "5to B", subject: "Arte y Cultura", teacher: "Nestor Palomino Manzano", start: "13:00", end: "13:40", type: "Normal" },
+        { grade: "5to B", subject: "Inglés", teacher: "Ronal David Aguilar Mamani", start: "13:40", end: "15:00", type: "Normal" },
     ],
     "Jueves": [
         // 1ro A
@@ -650,9 +715,22 @@ const classSchedules = {
         { grade: "4to C", subject: "Educación Física", teacher: "Vidal Quiñonez Quispe", start: "13:40", end: "15:00", type: "Normal" },
 
         // 5to A
-        { grade: "5to A", subject: "Tutoría", teacher: "Sofía Castro", start: "08:15", end: "09:45", type: "Laboratorio" },
-        { grade: "5to A", subject: "Receso", start: "09:45", end: "10:00", type: "receso", isBreak: true },
-        { grade: "5to A", subject: "Arte y Cultura", teacher: "Nestor Palomino Manzano", start: "10:00", end: "11:30", type: "Práctica" }
+        { grade: "5to A", subject: "Comunicación", teacher: "Eliseo Rene Calisaya Huanchi", start: "08:15", end: "09:35", type: "Normal" },
+        { grade: "5to A", subject: "Receso", start: "09:35", end: "09:50", type: "receso", isBreak: true },
+        { grade: "5to A", subject: "Arte y Cultura", teacher: "Constantino Eulogio Apaza Lopez", start: "09:50", end: "11:10", type: "Normal" },
+        { grade: "5to A", subject: "Educación Física", teacher: "Nestor Rene Cruz Paye", start: "11:10", end: "12:30", type: "Normal" },
+        { grade: "5to A", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
+        { grade: "5to A", subject: "Ciencia y Tecnología", teacher: "Francisco Chambilla Sandia", start: "13:00", end: "13:40", type: "Normal" },
+        { grade: "5to A", subject: "Ciencias Sociales", teacher: "Violeta Miriam Alberssi Tisnado", start: "13:40", end: "15:00", type: "Normal" },
+
+        // 5to B
+        { grade: "5to B", subject: "Ciencia y Tecnología", teacher: "Francisco Chambilla Sandia", start: "08:15", end: "09:35", type: "Normal" },
+        { grade: "5to B", subject: "Receso", start: "09:35", end: "09:50", type: "receso", isBreak: true },
+        { grade: "5to B", subject: "Arte y Cultura", teacher: "Nestor Palomino Manzano", start: "09:50", end: "11:10", type: "Normal" },
+        { grade: "5to B", subject: "Matemáticas", teacher: "Oriel Jose Calizaya Gomez", start: "11:10", end: "12:30", type: "Normal" },
+        { grade: "5to B", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
+        { grade: "5to B", subject: "Aimara", teacher: "Juan Zacarias Colorado Mamani", start: "13:00", end: "13:40", type: "Normal" },
+        { grade: "5to B", subject: "Educación Religiosa", teacher: "Fidel Severiano Cruz Tiquilloca", start: "13:40", end: "15:00", type: "Normal" },
     ],
     "Viernes": [
         // 1ro A
@@ -755,10 +833,23 @@ const classSchedules = {
         { grade: "4to C", subject: "Desarrollo Personal", teacher: "Julio Amilcar Rivera Aguilar", start: "13:00", end: "14:20", type: "Normal" },
         { grade: "4to C", subject: "Inglés", teacher: "Madelaine Gonzalo Segura", start: "14:20", end: "15:00", type: "Normal" },
 
-        // 5to C
-        { grade: "5to C", subject: "Matemáticas", teacher: "David Mengoa Mamani", start: "08:00", end: "09:30", type: "Exámen" },
-        { grade: "5to C", subject: "Receso", start: "09:30", end: "09:45", type: "receso", isBreak: true },
-        { grade: "5to C", subject: "Ciencia y Tecnología", teacher: "Lucía Ramírez", start: "23:20", end: "23:30", type: "Práctica" }
+        // 5to A
+        { grade: "5to A", subject: "Comunicación", teacher: "Eliseo Rene Calisaya Huanchi", start: "08:15", end: "09:35", type: "Normal" },
+        { grade: "5to A", subject: "Receso", start: "09:35", end: "09:50", type: "receso", isBreak: true },
+        { grade: "5to A", subject: "Desarrollo Personal", teacher: "Julio Amilcar Rivera Aguilar", start: "09:50", end: "11:10", type: "Normal" },
+        { grade: "5to A", subject: "Aimara", teacher: "Juan Zacarias Colorado Mamani", start: "11:10", end: "12:30", type: "Normal" },
+        { grade: "5to A", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
+        { grade: "5to A", subject: "Educación para el Trabajo", teacher: "Esteban Jaime Asqui Flores", start: "13:00", end: "13:40", type: "Normal" },
+        { grade: "5to A", subject: "Inglés", teacher: "Ronal David Aguilar Mamani", start: "13:40", end: "15:00", type: "Normal" },
+
+        // 5to B
+        { grade: "5to B", subject: "Inglés", teacher: "Ronal David Aguilar Mamani", start: "08:15", end: "09:35", type: "Normal" },
+        { grade: "5to B", subject: "Receso", start: "09:35", end: "09:50", type: "receso", isBreak: true },
+        { grade: "5to B", subject: "Matemáticas", teacher: "Oriel Jose Calizaya Gomez", start: "09:50", end: "11:10", type: "Normal" },
+        { grade: "5to B", subject: "Educación Física", teacher: "Nestor Rene Cruz Paye", start: "11:10", end: "12:30", type: "Normal" },
+        { grade: "5to B", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
+        { grade: "5to B", subject: "Comunicación", teacher: "Eliseo Rene Calisaya Huanchi", start: "13:00", end: "13:40", type: "Normal" },
+        { grade: "5to B", subject: "Ciencias Sociales", teacher: "Violeta Miriam Alberssi Tisnado", start: "13:40", end: "15:00", type: "Normal" },
     ],
     "Sábado": [],
     "Domingo": []
