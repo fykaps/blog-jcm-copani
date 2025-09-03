@@ -30,16 +30,31 @@ const galleryData = [
     },
     {
         id: 2,
+        title: "Año nuevo andino",
+        coverImage: "assets/img/galleries/year-nuevo-andino/cover.jpg",
+        media: [
+            { type: "image", url: "assets/img/galleries/year-nuevo-andino/img1.jpg", caption: "Estudiantes sirviendo con cariño el fiambre en un awayo tradicional, preparando todo para compartir y disfrutar juntos." },
+            { type: "image", url: "assets/img/galleries/year-nuevo-andino/img2.jpg", caption: "Estudiantes, junto a algunas mamás, preparan con entusiasmo el fiambre para el almuerzo, compartiendo tradición, trabajo en equipo y alegría." },
+            { type: "image", url: "assets/img/galleries/year-nuevo-andino/img3.jpg", caption: "Estudiantes damas organizan con esmero los fiambres, dejando todo listo para compartir un almuerzo en conjunto." },
+            { type: "image", url: "assets/img/galleries/year-nuevo-andino/img4.jpg", caption: "Casi al finalizar el almuerzo, un docente posa sonriente en medio del grupo, compartiendo un momento de alegría y camaradería." },
+        ],
+        category: "Celebraciones",
+        date: "2025-06-22",
+        description: "Celebramos el renacer del sol y el inicio de un nuevo ciclo agrícola. El Año Nuevo Andino es una fecha sagrada para nuestras culturas originarias, llena de gratitud, rituales y conexión con la Pachamama."
+    },
+    {
+        id: 3,
         title: "Día del campesino",
         coverImage: "assets/img/galleries/dia-del-campesino/cover.jpg",
         media: [
-            { type: "image", url: "assets/img/galleries/dia-del-campesino/img1.jpg", caption: "Estudiantes sirviendo con cariño el fiambre en un awayo tradicional, preparando todo para compartir y disfrutar juntos." },
-            { type: "image", url: "assets/img/galleries/dia-del-campesino/img2.jpg", caption: "Estudiantes, junto a algunas mamás, preparan con entusiasmo el fiambre para el almuerzo, compartiendo tradición, trabajo en equipo y alegría." },
-            { type: "image", url: "assets/img/galleries/dia-del-campesino/img3.jpg", caption: "Estudiantes damas organizan con esmero los fiambres, dejando todo listo para compartir un almuerzo en conjunto." },
-            { type: "image", url: "assets/img/galleries/dia-del-campesino/img4.jpg", caption: "Casi al finalizar el almuerzo, un docente posa sonriente en medio del grupo, compartiendo un momento de alegría y camaradería." },
+            { type: "image", url: "assets/img/galleries/dia-del-campesino/img1.jpg", caption: "Durante la celebración del Día del Campesino, un grupo de docentes se prepara para disfrutar la merienda, invitados con generosidad por una autoridad local, como muestra de hospitalidad y gratitud." },
+            { type: "image", url: "assets/img/galleries/dia-del-campesino/img2.jpg", caption: "Las señoras de APAFA, uniformadas con orgullo, presentan la merienda con cariño y dedicación, mostrando su compromiso con la comunidad educativa." },
+            { type: "image", url: "assets/img/galleries/dia-del-campesino/img3.jpg", caption: "Docentes se despiden del lugar agradeciendo cordialmente a la autoridad local por la cálida recepción y el generoso agasajo compartido." },
+            { type: "image", url: "assets/img/galleries/dia-del-campesino/img4.jpg", caption: "El turno de nuestra institución se hace presente en la pista de danza, deleitando al público con su participación llena de ritmo y tradición." },
+            { type: "image", url: "assets/img/galleries/dia-del-campesino/img5.jpg", caption: "El profesor y el presidente de APAFA reciben con orgullo el premio por haber obtenido el segundo lugar en el concurso, en representación de toda la institución." },
         ],
         category: "Celebraciones",
-        date: "2025-06-24",
+        date: "2025-06-25",
         description: "Hoy rendimos homenaje a quienes con esfuerzo, dedicación y amor por la tierra, cultivan el alimento que llega a nuestras mesas. ¡Feliz Día del Campesino! Su labor es la raíz que sostiene a nuestra sociedad."
     },
 ];
