@@ -338,11 +338,11 @@ class GalleryManager {
 
     getCategoryDisplayName(category) {
         const categories = {
-            'academic': 'Académico',
-            'sports': 'Deportes',
-            'cultural': 'Cultural',
-            'social': 'Social',
-            'other': 'Otros'
+            'celebration': 'Celebración',
+            // 'sports': 'Deportes',
+            // 'cultural': 'Cultural',
+            // 'social': 'Social',
+            // 'other': 'Otros'
         };
 
         return categories[category] || category;

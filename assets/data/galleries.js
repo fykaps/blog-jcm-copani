@@ -25,7 +25,7 @@ const galleryData = [
             { type: "image", url: "assets/img/galleries/dia-de-la-madre/img2.jpg", caption: "¡Mamá en la cancha! Diversión y energía en el partido de vóley" },
             { type: "image", url: "assets/img/galleries/dia-de-la-madre/img3.jpg", caption: "Danza con amor: Un homenaje artístico para mamá" },
         ],
-        category: "Celebraciones",
+        category: "Celebración",
         date: "2025-05-12",
         description: "Un espacio lleno de amor, gratitud e inspiración para honrar a todas las madres en su día."
     },
@@ -41,7 +41,7 @@ const galleryData = [
             { type: "image", url: "assets/img/galleries/aniversario-del-colegio/img5.jpg", caption: "La sección superior ganadora posa junto al profesor que los acompañó, celebrando su destacada participación y triunfo en la danza del aniversario del colegio." },
             { type: "video", url: "assets/video/galleries/aniversario-del-colegio/video1.mp4", caption: "La APAFA pone el ritmo y la alegría con una presentación musical en vivo, vestidos de mariachis, llenando de color y tradición la celebración del aniversario.", poster: "assets/img/galleries/aniversario-del-colegio/video-poster.jpg" },
         ],
-        category: "Celebraciones",
+        category: "Celebración",
         date: "2025-05-23",
         description: "Celebramos 41 años de historia, esfuerzo y compromiso con la educación. Un aniversario que refleja el crecimiento de nuestra institución y el orgullo de toda la comunidad educativa. ¡Feliz aniversario!"
     },
@@ -55,7 +55,7 @@ const galleryData = [
             { type: "image", url: "assets/img/galleries/year-nuevo-andino/img3.jpg", caption: "Estudiantes damas organizan con esmero los fiambres, dejando todo listo para compartir un almuerzo en conjunto." },
             { type: "image", url: "assets/img/galleries/year-nuevo-andino/img4.jpg", caption: "Casi al finalizar el almuerzo, un docente posa sonriente en medio del grupo, compartiendo un momento de alegría y camaradería." },
         ],
-        category: "Celebraciones",
+        category: "Celebración",
         date: "2025-06-22",
         description: "Celebramos el renacer del sol y el inicio de un nuevo ciclo agrícola. El Año Nuevo Andino es una fecha sagrada para nuestras culturas originarias, llena de gratitud, rituales y conexión con la Pachamama."
     },
@@ -70,7 +70,7 @@ const galleryData = [
             { type: "image", url: "assets/img/galleries/dia-del-campesino/img4.jpg", caption: "El turno de nuestra institución se hace presente en la pista de danza, deleitando al público con su participación llena de ritmo y tradición." },
             { type: "image", url: "assets/img/galleries/dia-del-campesino/img5.jpg", caption: "El profesor y el presidente de APAFA reciben con orgullo el premio por haber obtenido el segundo lugar en el concurso, en representación de toda la institución." },
         ],
-        category: "Celebraciones",
+        category: "Celebración",
         date: "2025-06-25",
         description: "Hoy rendimos homenaje a quienes con esfuerzo, dedicación y amor por la tierra, cultivan el alimento que llega a nuestras mesas. ¡Feliz Día del Campesino! Su labor es la raíz que sostiene a nuestra sociedad."
     },
