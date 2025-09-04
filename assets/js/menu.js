@@ -1,5 +1,5 @@
 /**
- * Sistema de Menú Qaliwarma - Versión Mejorada
+ * Sistema de Menú Estudiantil - Versión Mejorada
  * Con contador regresivo en tiempo real y estados visibles
  */
 

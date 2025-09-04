@@ -380,7 +380,7 @@ function loadFooter() {
             <div class="footer-container">
                 <div class="footer-column">
                     <h3 class="footer-title">Sobre nosotros</h3>
-                    <p class="footer-description">El blog oficial de la institución educativa, donde compartimos noticias, eventos y logros de nuestra comunidad.</p>
+                    <p class="footer-description">El blog oficial de la I.E.S JCM, donde compartimos noticias, eventos, reuniones, vida escolar y galerías.</p>
                     
                     <div class="qr-container">
                         <img src="assets/img/qr-code.png" alt="Código QR del sitio" class="qr-code">

@@ -1,5 +1,5 @@
 /**
- * Datos del menú del comedor estudiantil Qaliwarma
+ * Datos del menú del comedor estudiantil
  */
 
 const weeklyMenu = [
