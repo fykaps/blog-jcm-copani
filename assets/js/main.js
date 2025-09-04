@@ -45,6 +45,9 @@ function initHeroParticles() {
     const particlesContainer = document.getElementById('hero-particles');
     if (!particlesContainer) return;
 
+    // Limpiar partículas existentes
+    particlesContainer.innerHTML = '';
+
     const particleCount = 30;
 
     for (let i = 0; i < particleCount; i++) {
@@ -75,10 +78,18 @@ function initHeroParticles() {
 function animateStats() {
     const statElements = document.querySelectorAll('.stat-number');
 
+    // Reiniciar contadores a 0
+    statElements.forEach(stat => {
+        stat.textContent = '0';
+        stat.classList.remove('animated');
+    });
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) {
+            if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
                 const statElement = entry.target;
+                statElement.classList.add('animated');
+
                 const target = parseInt(statElement.getAttribute('data-count'));
                 const duration = 2000; // 2 segundos
                 const increment = target / (duration / 16); // 60fps
@@ -93,8 +104,6 @@ function animateStats() {
                     }
                     statElement.textContent = Math.floor(current);
                 }, 16);
-
-                observer.unobserve(statElement);
             }
         });
     }, { threshold: 0.5 });
@@ -107,6 +116,9 @@ function initParallaxEffect() {
     const heroImage = document.querySelector('.hero-image');
     if (!heroImage) return;
 
+    // Reiniciar transformación
+    heroImage.style.transform = 'translate3d(0px, 0px, 0px)';
+
     window.addEventListener('scroll', () => {
         const scrolled = window.pageYOffset;
         const rate = scrolled * -0.5;
@@ -114,11 +126,34 @@ function initParallaxEffect() {
     });
 }
 
-// Inicializar todas las funcionalidades del hero
-function initHero() {
+// Observar la sección hero para reiniciar animaciones
+function setupHeroObserver() {
+    const heroSection = document.querySelector('.hero');
+    if (!heroSection) return;
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Cuando el hero es visible, reiniciar animaciones
+                initHeroAnimations();
+            }
+        });
+    }, { threshold: 0.5 });
+
+    observer.observe(heroSection);
+}
+
+// Inicializar todas las animaciones del hero
+function initHeroAnimations() {
     initHeroParticles();
     animateStats();
     initParallaxEffect();
+}
+
+// Inicializar todas las funcionalidades del hero
+function initHero() {
+    initHeroAnimations();
+    setupHeroObserver();
 }
 
 // Inicializar funcionalidades mejoradas
