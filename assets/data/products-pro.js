@@ -1,10 +1,13 @@
-// Datos de productos de la tienda escolar - Versión Mejorada
+// Datos de productos de la tienda escolar
 const productsData = [
     {
         id: 1,
         name: "Uniforme Escolar Varones",
         category: "uniforme",
         subcategory: "varon",
+        price: 120.00,
+        originalPrice: 150.00,
+        discount: 20,
         description: "Uniforme escolar completo para varones, incluye camisa, pantalón y corbata. Tela de alta calidad, resistente y cómoda.",
         features: [
             "Tela poliéster-algodón",
@@ -19,14 +22,20 @@ const productsData = [
             "assets/img/products/uniforme-varon-2.jpg",
             "assets/img/products/uniforme-varon-3.jpg"
         ],
-        tags: ["uniforme", "varon", "escolar", "combo"],
-        status: "available"
+        stock: 45,
+        rating: 3,
+        reviews: 124,
+        featured: true,
+        tags: ["uniforme", "varon", "escolar", "combo"]
     },
     {
         id: 2,
         name: "Uniforme Escolar Damas",
         category: "uniforme",
         subcategory: "dama",
+        price: 135.00,
+        originalPrice: 160.00,
+        discount: 15,
         description: "Elegante uniforme escolar para damas, incluye blusa, falda y corbata. Diseño moderno y cómodo.",
         features: [
             "Tela fresca y transpirable",
@@ -41,14 +50,20 @@ const productsData = [
             "assets/img/products/uniforme-dama-2.jpg",
             "assets/img/products/uniforme-dama-3.jpg"
         ],
-        tags: ["uniforme", "dama", "escolar", "combo"],
-        status: "available"
+        stock: 38,
+        rating: 4.9,
+        reviews: 98,
+        featured: true,
+        tags: ["uniforme", "dama", "escolar", "combo"]
     },
     {
         id: 3,
         name: "Chompa Escolar Varones",
         category: "chompa",
         subcategory: "varon",
+        price: 85.00,
+        originalPrice: 100.00,
+        discount: 15,
         description: "Chompa escolar abrigada para varones, con el escudo institucional bordado. Ideal para temporada de invierno.",
         features: [
             "Material: 80% algodón, 20% poliéster",
@@ -56,20 +71,26 @@ const productsData = [
             "Bolsillos frontales",
             "Disponible en tallas: S, M, L, XL"
         ],
-        sizes: ["S", "M", "L, XL"],
+        sizes: ["S", "M", "L", "XL"],
         colors: ["Azul marino", "Negro", "Gris"],
         images: [
             "assets/img/products/chompa-varon-1.jpg",
             "assets/img/products/chompa-varon-2.jpg"
         ],
-        tags: ["chompa", "varon", "invierno", "abrigado"],
-        status: "available"
+        stock: 25,
+        rating: 4.7,
+        reviews: 67,
+        featured: false,
+        tags: ["chompa", "varon", "invierno", "abrigado"]
     },
     {
         id: 4,
         name: "Chompa Escolar Damas",
         category: "chompa",
         subcategory: "dama",
+        price: 90.00,
+        originalPrice: 110.00,
+        discount: 18,
         description: "Chompa escolar elegante para damas, con diseño ajustado y escudo institucional bordado.",
         features: [
             "Material: 70% acrílico, 30% lana",
@@ -83,14 +104,20 @@ const productsData = [
             "assets/img/products/woman/chompa-dama-1.jpg",
             "assets/img/products/woman/chompa-dama-2.jpg"
         ],
-        tags: ["chompa", "dama", "invierno", "elegante"],
-        status: "available"
+        stock: 22,
+        rating: 4.6,
+        reviews: 54,
+        featured: false,
+        tags: ["chompa", "dama", "invierno", "elegante"]
     },
     {
         id: 5,
         name: "Falda Escolar",
         category: "falda",
         subcategory: "dama",
+        price: 65.00,
+        originalPrice: 80.00,
+        discount: 19,
         description: "Falda escolar de pliegues, confeccionada en tela de alta calidad. Diseño clásico y elegante.",
         features: [
             "Tela poliéster resistente",
@@ -104,14 +131,20 @@ const productsData = [
             "assets/img/products/woman/falda-1.jpg",
             "assets/img/products/woman/falda-2.jpg"
         ],
-        tags: ["falda", "dama", "escolar", "pliegues"],
-        status: "available"
+        stock: 30,
+        rating: 4.5,
+        reviews: 43,
+        featured: false,
+        tags: ["falda", "dama", "escolar", "pliegues"]
     },
     {
         id: 6,
         name: "Sombrero Escolar",
         category: "sombrero",
         subcategory: "unisex",
+        price: 35.00,
+        originalPrice: 45.00,
+        discount: 22,
         description: "Sombrero escolar para protección solar, con el logo institucional bordado. Unisex.",
         features: [
             "Material: 100% poliéster",
@@ -125,18 +158,25 @@ const productsData = [
             "assets/img/products/sombrero-1.jpg",
             "assets/img/products/sombrero-2.jpg"
         ],
-        tags: ["sombrero", "unisex", "protección solar", "verano"],
-        status: "available"
+        stock: 50,
+        rating: 4.4,
+        reviews: 38,
+        featured: false,
+        tags: ["sombrero", "unisex", "protección solar", "verano"]
     },
     {
         id: 7,
         name: "Combo Uniforme Completo Varón",
         category: "combo",
         subcategory: "varon",
-        description: "Combo completo que incluye uniforme, chompa y sombrero para varones. Contactar para más información.",
+        price: 210.00,
+        originalPrice: 280.00,
+        discount: 25,
+        description: "Combo completo que incluye uniforme, chompa y sombrero para varones. Ahorra comprando el pack completo.",
         features: [
             "Incluye: uniforme, chompa y sombrero",
-            "Calidad garantizada en todos los productos",
+            "Precio especial por combo",
+            "Garantía de calidad en todos los productos",
             "Disponible en tallas coordinadas"
         ],
         sizes: ["S", "M", "L", "XL"],
@@ -145,17 +185,24 @@ const productsData = [
             "assets/img/products/combo-varon-1.jpg",
             "assets/img/products/combo-varon-2.jpg"
         ],
-        tags: ["combo", "varon", "completo"],
-        status: "available"
+        stock: 15,
+        rating: 4.9,
+        reviews: 32,
+        featured: true,
+        tags: ["combo", "varon", "completo", "ahorro"]
     },
     {
         id: 8,
         name: "Combo Uniforme Completo Dama",
         category: "combo",
         subcategory: "dama",
-        description: "Combo completo que incluye uniforme, chompa, falda y sombrero para damas. Contactar para más información.",
+        price: 230.00,
+        originalPrice: 295.00,
+        discount: 22,
+        description: "Combo completo que incluye uniforme, chompa, falda y sombrero para damas. Look escolar completo con descuento especial.",
         features: [
             "Incluye: uniforme, chompa, falda y sombrero",
+            "Ahorro significativo vs compra individual",
             "Calidad premium garantizada",
             "Disponible en tallas coordinadas"
         ],
@@ -165,7 +212,10 @@ const productsData = [
             "assets/img/products/combo-dama-1.jpg",
             "assets/img/products/combo-dama-2.jpg"
         ],
-        tags: ["combo", "dama", "completo"],
-        status: "available"
+        stock: 12,
+        rating: 4.8,
+        reviews: 28,
+        featured: true,
+        tags: ["combo", "dama", "completo", "ahorro"]
     }
 ];
