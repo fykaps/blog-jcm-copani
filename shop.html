@@ -74,6 +74,18 @@
                             <option value="name-asc">Nombre: A-Z</option>
                             <option value="name-desc">Nombre: Z-A</option>
                         </select>
+
+                        <!-- Selector de productos por página -->
+                        <div class="items-per-page-selector">
+                            <label for="items-per-page">Productos por página:</label>
+                            <select id="items-per-page" class="items-per-page-select">
+                                <option value="4">4</option>
+                                <option value="8" selected>8</option>
+                                <option value="12">16</option>
+                                <option value="16">32</option>
+                                <option value="20">64</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -81,6 +93,11 @@
             <!-- Contenido principal -->
             <div class="content-wrapper" id="products-section">
                 <div class="main-content">
+                    <!-- Información de resultados -->
+                    <div class="results-info animate-fade-in delay-4" id="results-info">
+                        <!-- La información de resultados se cargará aquí dinámicamente -->
+                    </div>
+
                     <!-- Grid de productos -->
                     <div class="products-grid animate-fade-in delay-4" id="products-grid" role="list"
                         aria-label="Lista de productos">

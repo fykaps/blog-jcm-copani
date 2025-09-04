@@ -6,7 +6,8 @@ const weeklyMenu = [
     {
         day: "Lunes",
         date: "2025-09-01",
-        cook: "Rosa Pérez",
+        cook: "Felicita Yujra Jimenez",
+        phone: "931893693",
         helpers: {
             names: ["Olga Bernabé", "Lidia Herrera"],
             grade: "5to B"
@@ -50,7 +51,8 @@ const weeklyMenu = [
     {
         day: "Martes",
         date: "2025-09-02",
-        cook: "Rosa Pérez",
+        cook: "Felicita Yujra Jimenez",
+        phone: "931893693",
         helpers: {
             names: ["Patricia Ramírez", "Laura González"],
             grade: "4to B"
@@ -93,7 +95,8 @@ const weeklyMenu = [
     {
         day: "Miércoles",
         date: "2025-09-03",
-        cook: "Rosa Pérez",
+        cook: "Felicita Yujra Jimenez",
+        phone: "931893693",
         helpers: {
             names: ["Sofía Martínez", "Elena Sánchez"],
             grade: "4to A"
@@ -136,7 +139,8 @@ const weeklyMenu = [
     {
         day: "Jueves",
         date: "2025-09-04",
-        cook: "Rosa Pérez",
+        cook: "Felicita Yujra Jimenez",
+        phone: "931893693",
         helpers: {
             names: ["Matías Oro", "Elsa Plata"],
             grade: "3ro A"
@@ -180,7 +184,8 @@ const weeklyMenu = [
     {
         day: "Viernes",
         date: "2025-09-05",
-        cook: "Rosa Pérez",
+        cook: "Felicita Yujra Jimenez",
+        phone: "931893693",
         helpers: {
             names: ["Olga Bernabé", "Lidia Herrera"],
             grade: "5to B"
@@ -224,7 +229,8 @@ const weeklyMenu = [
     {
         day: "Domingo",
         date: "2025-08-31",
-        cook: "Rosa Pérez",
+        cook: "Felicita Yujra Jimenez",
+        phone: "931893693",
         helpers: {
             names: ["Lucía Pérez", "Ana Tejada"],
             grade: "5to A"

@@ -1,5 +1,5 @@
 /**
- * Sistema de Tienda Escolar - Versión Profesional
+ * Sistema de Tienda Escolar - Versión Profesional con Paginación Mejorada
  * Con modal de productos, filtros, búsqueda y diseño responsive
  */
 
@@ -8,6 +8,7 @@ class ShopSystem {
         this.products = productsData;
         this.options = {
             productsPerPage: 8,
+            maxPaginationButtons: 5,
             ...options
         };
         this.currentFilter = 'all';
@@ -26,6 +27,7 @@ class ShopSystem {
         this.setupFilters();
         this.setupSorting();
         this.setupSearch();
+        this.setupItemsPerPageSelector();
         this.setupProductModal();
         this.setupPagination();
     }
@@ -34,28 +36,29 @@ class ShopSystem {
     //  RENDERIZADO PRINCIPAL
     // ======================
 
-    renderProductsGrid(filter = 'all', sort = 'default', search = '') {
+    renderProductsGrid() {
         const productsGrid = document.getElementById('products-grid');
-        if (!productsGrid) return;
+        const resultsInfo = document.getElementById('results-info');
+        if (!productsGrid || !resultsInfo) return;
 
         // Filtrar productos
         let filtered = [...this.products];
 
-        if (filter !== 'all') {
-            filtered = filtered.filter(product => product.category === filter);
+        if (this.currentFilter !== 'all') {
+            filtered = filtered.filter(product => product.category === this.currentFilter);
         }
 
-        if (search) {
-            const searchTerm = search.toLowerCase();
+        if (this.currentSearch) {
+            const searchTerm = this.currentSearch.toLowerCase();
             filtered = filtered.filter(product =>
                 product.name.toLowerCase().includes(searchTerm) ||
                 product.description.toLowerCase().includes(searchTerm) ||
-                product.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+                (product.tags && product.tags.some(tag => tag.toLowerCase().includes(searchTerm)))
             );
         }
 
         // Ordenar productos
-        switch (sort) {
+        switch (this.currentSort) {
             case 'name-asc':
                 filtered.sort((a, b) => a.name.localeCompare(b.name));
                 break;
@@ -74,6 +77,9 @@ class ShopSystem {
         if (this.currentPage > this.totalPages) {
             this.currentPage = this.totalPages > 0 ? this.totalPages : 1;
         }
+
+        // Actualizar información de resultados
+        this.updateResultsInfo(filtered.length);
 
         // Mostrar mensaje si no hay productos
         if (filtered.length === 0) {
@@ -96,8 +102,13 @@ class ShopSystem {
             return;
         }
 
-        // Mostrar paginación
-        document.getElementById('products-pagination-wrapper').style.display = 'flex';
+        // Mostrar u ocultar paginación según sea necesario
+        const paginationWrapper = document.getElementById('products-pagination-wrapper');
+        if (this.totalPages > 1) {
+            paginationWrapper.style.display = 'flex';
+        } else {
+            paginationWrapper.style.display = 'none';
+        }
 
         // Obtener productos para la página actual
         const startIndex = (this.currentPage - 1) * this.options.productsPerPage;
@@ -129,7 +140,7 @@ class ShopSystem {
                         <h3 class="product-title">${product.name}</h3>
                         <span class="product-category">${this.getCategoryName(product.category)}</span>
                         
-                        ${product.colors.length > 0 ? `
+                        ${product.colors && product.colors.length > 0 ? `
                         <div class="product-colors">
                             ${product.colors.map(color => `
                                 <div class="color-swatch" data-color="${color}">
@@ -159,19 +170,24 @@ class ShopSystem {
         this.renderPagination();
     }
 
-    getCategoryName(category) {
-        const categories = {
-            'uniforme': 'Uniforme',
-            'chompa': 'Chompa',
-            'falda': 'Falda',
-            'sombrero': 'Sombrero',
-            'combo': 'Combo'
-        };
-        return categories[category] || category;
+    updateResultsInfo(totalProducts) {
+        const resultsInfo = document.getElementById('results-info');
+        if (!resultsInfo) return;
+
+        const startIndex = (this.currentPage - 1) * this.options.productsPerPage + 1;
+        const endIndex = Math.min(startIndex + this.options.productsPerPage - 1, totalProducts);
+
+        if (totalProducts === 0) {
+            resultsInfo.innerHTML = '<p>No se encontraron productos</p>';
+        } else if (totalProducts <= this.options.productsPerPage) {
+            resultsInfo.innerHTML = `<p>Mostrando ${totalProducts} producto${totalProducts !== 1 ? 's' : ''}</p>`;
+        } else {
+            resultsInfo.innerHTML = `<p>Mostrando ${startIndex}-${endIndex} de ${totalProducts} producto${totalProducts !== 1 ? 's' : ''}</p>`;
+        }
     }
 
     // ======================
-    //  PAGINACIÓN
+    //  PAGINACIÓN MEJORADA
     // ======================
 
     setupPagination() {
@@ -185,48 +201,53 @@ class ShopSystem {
             return;
         }
 
-        let html = `
+        let html = '';
+
+        // Botón Anterior
+        html += `
             <button class="pagination-button ${this.currentPage === 1 ? 'disabled' : ''}" 
                     onclick="shopSystem.changePage(${this.currentPage - 1})" ${this.currentPage === 1 ? 'disabled' : ''}>
-                &lt;
+                &lt; Anterior
             </button>
         `;
 
-        // Mostrar siempre la primera página
-        html += `
-            <button class="pagination-button ${this.currentPage === 1 ? 'active' : ''}" 
-                    onclick="shopSystem.changePage(1)">
-                1
-            </button>
-        `;
+        // Calcular rango de páginas a mostrar
+        let startPage = Math.max(1, this.currentPage - Math.floor(this.options.maxPaginationButtons / 2));
+        let endPage = Math.min(this.totalPages, startPage + this.options.maxPaginationButtons - 1);
 
-        // Mostrar puntos suspensivos si hay muchas páginas
-        if (this.totalPages > 5 && this.currentPage > 3) {
-            html += `<span class="pagination-ellipsis">...</span>`;
+        // Ajustar si estamos cerca del final
+        if (endPage - startPage + 1 < this.options.maxPaginationButtons) {
+            startPage = Math.max(1, endPage - this.options.maxPaginationButtons + 1);
         }
 
-        // Mostrar páginas alrededor de la actual
-        const startPage = Math.max(2, this.currentPage - 1);
-        const endPage = Math.min(this.totalPages - 1, this.currentPage + 1);
-
-        for (let i = startPage; i <= endPage; i++) {
-            if (i > 1 && i < this.totalPages) {
-                html += `
-                    <button class="pagination-button ${this.currentPage === i ? 'active' : ''}" 
-                            onclick="shopSystem.changePage(${i})">
-                        ${i}
-                    </button>
-                `;
+        // Primera página y elipsis si es necesario
+        if (startPage > 1) {
+            html += `
+                <button class="pagination-button ${this.currentPage === 1 ? 'active' : ''}" 
+                        onclick="shopSystem.changePage(1)">
+                    1
+                </button>
+            `;
+            if (startPage > 2) {
+                html += `<span class="pagination-ellipsis">...</span>`;
             }
         }
 
-        // Mostrar puntos suspensivos si hay muchas páginas
-        if (this.totalPages > 5 && this.currentPage < this.totalPages - 2) {
-            html += `<span class="pagination-ellipsis">...</span>`;
+        // Páginas numeradas
+        for (let i = startPage; i <= endPage; i++) {
+            html += `
+                <button class="pagination-button ${this.currentPage === i ? 'active' : ''}" 
+                        onclick="shopSystem.changePage(${i})">
+                    ${i}
+                </button>
+            `;
         }
 
-        // Mostrar siempre la última página
-        if (this.totalPages > 1) {
+        // Última página y elipsis si es necesario
+        if (endPage < this.totalPages) {
+            if (endPage < this.totalPages - 1) {
+                html += `<span class="pagination-ellipsis">...</span>`;
+            }
             html += `
                 <button class="pagination-button ${this.currentPage === this.totalPages ? 'active' : ''}" 
                         onclick="shopSystem.changePage(${this.totalPages})">
@@ -235,10 +256,11 @@ class ShopSystem {
             `;
         }
 
+        // Botón Siguiente
         html += `
             <button class="pagination-button ${this.currentPage === this.totalPages ? 'disabled' : ''}" 
                     onclick="shopSystem.changePage(${this.currentPage + 1})" ${this.currentPage === this.totalPages ? 'disabled' : ''}>
-                &gt;
+                Siguiente &gt;
             </button>
         `;
 
@@ -248,7 +270,7 @@ class ShopSystem {
     changePage(page) {
         if (page < 1 || page > this.totalPages) return;
         this.currentPage = page;
-        this.renderProductsGrid(this.currentFilter, this.currentSort, this.currentSearch);
+        this.renderProductsGrid();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -267,7 +289,7 @@ class ShopSystem {
 
                 this.currentFilter = button.getAttribute('data-filter');
                 this.currentPage = 1;
-                this.renderProductsGrid(this.currentFilter, this.currentSort, this.currentSearch);
+                this.renderProductsGrid();
             });
         });
 
@@ -287,7 +309,7 @@ class ShopSystem {
                 document.querySelector(`.filter-button[data-filter="${filter}"]`)?.classList.add('active');
                 button.classList.add('active');
 
-                this.renderProductsGrid(this.currentFilter, this.currentSort, this.currentSearch);
+                this.renderProductsGrid();
             });
         });
     }
@@ -296,17 +318,10 @@ class ShopSystem {
         const sortSelect = document.getElementById('sort-products');
         if (!sortSelect) return;
 
-        // Eliminar opciones de precio
-        sortSelect.innerHTML = `
-            <option value="default">Por defecto</option>
-            <option value="name-asc">Nombre: A-Z</option>
-            <option value="name-desc">Nombre: Z-A</option>
-        `;
-
         sortSelect.addEventListener('change', (e) => {
             this.currentSort = e.target.value;
             this.currentPage = 1;
-            this.renderProductsGrid(this.currentFilter, this.currentSort, this.currentSearch);
+            this.renderProductsGrid();
         });
     }
 
@@ -318,7 +333,7 @@ class ShopSystem {
             const performSearch = () => {
                 this.currentSearch = searchInput.value.trim();
                 this.currentPage = 1;
-                this.renderProductsGrid(this.currentFilter, this.currentSort, this.currentSearch);
+                this.renderProductsGrid();
             };
 
             searchButton.addEventListener('click', performSearch);
@@ -328,6 +343,19 @@ class ShopSystem {
                 }
             });
         }
+    }
+
+    setupItemsPerPageSelector() {
+        const itemsPerPageSelect = document.getElementById('items-per-page');
+        if (!itemsPerPageSelect) return;
+
+        itemsPerPageSelect.value = this.options.productsPerPage;
+
+        itemsPerPageSelect.addEventListener('change', (e) => {
+            this.options.productsPerPage = parseInt(e.target.value);
+            this.currentPage = 1;
+            this.renderProductsGrid();
+        });
     }
 
     resetFilters() {
@@ -347,7 +375,7 @@ class ShopSystem {
         const searchInput = document.getElementById('search-products');
         if (searchInput) searchInput.value = '';
 
-        this.renderProductsGrid('all', 'default', '');
+        this.renderProductsGrid();
     }
 
     // ======================
@@ -414,14 +442,16 @@ class ShopSystem {
                     <p>${product.description}</p>
                 </div>
 
+                ${product.features && product.features.length > 0 ? `
                 <div class="product-features">
                     <h3>Características</h3>
                     <ul>
                         ${product.features.map(feature => `<li>${feature}</li>`).join('')}
                     </ul>
                 </div>
+                ` : ''}
 
-                ${product.sizes.length > 0 ? `
+                ${product.sizes && product.sizes.length > 0 ? `
                 <div class="product-options">
                     <div class="option-group">
                         <label>Tallas disponibles:</label>
@@ -434,7 +464,7 @@ class ShopSystem {
                 </div>
                 ` : ''}
 
-                ${product.colors.length > 0 ? `
+                ${product.colors && product.colors.length > 0 ? `
                 <div class="product-options">
                     <div class="option-group">
                         <label>Colores disponibles:</label>
@@ -554,6 +584,17 @@ class ShopSystem {
         });
     }
 
+    getCategoryName(category) {
+        const categories = {
+            'uniforme': 'Uniforme',
+            'chompa': 'Chompa',
+            'falda': 'Falda',
+            'sombrero': 'Sombrero',
+            'combo': 'Combo'
+        };
+        return categories[category] || category;
+    }
+
     destroy() {
         if (this.modal && this.modal.parentNode) {
             this.modal.parentNode.removeChild(this.modal);
@@ -568,16 +609,17 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
         if (typeof productsData !== 'undefined') {
             shopSystem = new ShopSystem(productsData, {
-                productsPerPage: 8
+                productsPerPage: 8,
+                maxPaginationButtons: 5
             });
             window.shopSystem = shopSystem;
         } else {
             console.error('Error: productsData no está definido');
-            this.showErrorMessage('Error al cargar los productos');
+            showErrorMessage('Error al cargar los productos');
         }
     } catch (error) {
         console.error('Error al inicializar ShopSystem:', error);
-        this.showErrorMessage('Error al cargar la tienda');
+        showErrorMessage('Error al cargar la tienda');
     }
 });
 
