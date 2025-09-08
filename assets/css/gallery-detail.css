@@ -82,6 +82,7 @@
     justify-content: center;
     flex-wrap: wrap;
     gap: var(--space-3);
+    margin-top: var(--space-6);
     margin-bottom: var(--space-6);
 }
 
@@ -497,13 +498,6 @@
 .video-play-button svg {
     width: 35px;
     height: 35px;
-}
-
-/* Acciones del evento */
-.event-actions {
-    display: flex;
-    justify-content: center;
-    margin-top: var(--space-8);
 }
 
 .back-btn {

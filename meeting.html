@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="assets/css/variables.css">
     <link rel="stylesheet" href="assets/css/animations.css">
     <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/heroes.css">
     <link rel="stylesheet" href="assets/css/meeting.css">
     <link rel="icon" href="assets/img/favicon.ico">
 </head>
@@ -24,21 +25,68 @@
         <header id="main-header" class="header-fixed"></header>
 
         <main class="container">
-            <section class="hero animate-fade-in">
-                <div class="hero-content">
+            <!-- Hero para Reuniones -->
+            <section class="section-hero hero-meetings animate-fade-in">
+                <div class="section-hero-decoration section-hero-decoration-square"></div>
+                <div class="section-hero-decoration section-hero-decoration-square"></div>
+
+                <div class="section-hero-image" aria-hidden="true">
+                    <img src="assets/img/heros/meeting-hero.jpg" alt="" loading="eager" decoding="async">
+                </div>
+
+                <div class="section-hero-content">
+                    <nav class="breadcrumb-nav animate-fade-in" aria-label="Miga de pan">
+                        <ol class="breadcrumb-list">
+                            <li class="breadcrumb-item">
+                                <a href="index.html" class="breadcrumb-link">Inicio</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <span class="breadcrumb-current">Reuniones</span>
+                            </li>
+                        </ol>
+                    </nav>
+
                     <h1 class="animate-slide-up">Sistema de Reuniones</h1>
-                    <p class="hero-description animate-slide-up delay-1">
+
+                    <p class="section-hero-description animate-slide-up delay-1">
                         Gestión profesional de reuniones para la comunidad educativa.
                         Programe, gestione y participe en reuniones de manera eficiente.
                     </p>
-                    <div class="hero-actions animate-slide-up delay-2">
-                        <a href="#meetings-content" class="btn btn-primary" aria-label="Ver reuniones">
-                            Ver Reuniones
+
+                    <div class="section-hero-actions animate-slide-up delay-2">
+                        <a href="#meetings-content" class="btn btn-primary btn-lg">
+                            <span>Ver Reuniones</span>
+                            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                                <path fill="currentColor" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z" />
+                            </svg>
+                        </a>
+                        <a href="#create-meeting" class="btn btn-secondary btn-lg">
+                            <span>Crear Reunión</span>
+                            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                                <path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                            </svg>
                         </a>
                     </div>
-                </div>
-                <div class="hero-image" aria-hidden="true">
-                    <img src="assets/img/heros/meeting-hero.jpg" alt="" loading="lazy">
+
+                    <!-- Estadísticas de reuniones -->
+                    <div class="meeting-stats animate-fade-in delay-3">
+                        <div class="meeting-stat-item">
+                            <span class="meeting-stat-number" data-count="12">0</span>
+                            <span class="meeting-stat-label">Este Mes</span>
+                        </div>
+                        <div class="meeting-stat-item">
+                            <span class="meeting-stat-number" data-count="8">0</span>
+                            <span class="meeting-stat-label">Próximas</span>
+                        </div>
+                        <div class="meeting-stat-item">
+                            <span class="meeting-stat-number" data-count="3">0</span>
+                            <span class="meeting-stat-label">Hoy</span>
+                        </div>
+                        <div class="meeting-stat-item">
+                            <span class="meeting-stat-number" data-count="95">0</span>
+                            <span class="meeting-stat-label">% Asistencia</span>
+                        </div>
+                    </div>
                 </div>
             </section>
 

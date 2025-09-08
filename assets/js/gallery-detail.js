@@ -59,33 +59,68 @@ class EventDetailManager {
 
         return `
             <article class="event-detail animate-fade-in">
-                <header class="event-detail-header">
-                    <div class="event-breadcrumb">
-                        <a href="gallery.html">Galerías</a> / <span>${event.category}</span>
-                    </div>
-                    <h1 class="event-detail-title">${event.title}</h1>
-                    <div class="event-detail-meta">
-                        <div class="meta-item">
-                            <svg viewBox="0 0 24 24" width="16" height="16">
-                                <path fill="currentColor" d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
-                            </svg>
-                            <span class="event-date">${this.formatDate(event.date)}</span>
-                        </div>
-                        <div class="meta-item">
-                            <svg viewBox="0 0 24 24" width="16" height="16">
-                                <path fill="currentColor" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-                            </svg>
-                            <span class="event-category">${event.category}</span>
-                        </div>
-                    </div>
-                </header>
-                
-                <div class="event-description">
-                    <p>${event.description}</p>
+                    <!-- Hero para Detalle de Galería -->
+        <section class="detail-hero detail-hero-gallery animate-fade-in">
+            <div class="detail-hero-decoration detail-hero-decoration-line"></div>
+            <div class="detail-hero-decoration detail-hero-decoration-line"></div>
+
+            <div class="detail-hero-image" aria-hidden="true">
+                <img src=${event.coverImage} alt="" loading="eager" decoding="async">
+            </div>
+
+            <div class="detail-hero-content">
+                <nav class="detail-breadcrumb animate-fade-in" aria-label="Miga de pan">
+                    <ol class="detail-breadcrumb-list">
+                        <li class="detail-breadcrumb-item">
+                            <a href="index.html" class="detail-breadcrumb-link">Inicio</a>
+                        </li>
+                        <li class="detail-breadcrumb-item">
+                            <a href="gallery.html" class="detail-breadcrumb-link">Galerías</a>
+                        </li>
+                        <li class="detail-breadcrumb-item">
+                            <span class="detail-breadcrumb-current">Detalle</span>
+                        </li>
+                    </ol>
+                </nav>
+
+                <div class="detail-hero-badges animate-fade-in">
+                    <span class="detail-hero-badge">Galería Multimedia</span>
+                    <!-- <span class="detail-hero-badge">Evento Escolar</span> -->
                 </div>
+
+                <h1 class="animate-slide-up" id="gallery-title">${event.title}</h1>
+
+                <p class="detail-hero-description animate-slide-up delay-1" id="gallery-description">
+                    ${event.description}
+                </p>
+
+                <div class="detail-hero-meta animate-fade-in delay-2">
+                    <div class="detail-meta-item">
+                        <svg class="detail-meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path fill="currentColor"
+                                d="M20 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z" />
+                        </svg>
+                        <span id="gallery-date">${this.formatDate(event.date)}</span>
+                    </div>
+                   <!-- <div class="detail-meta-item">
+                        <svg class="detail-meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path fill="currentColor"
+                                d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
+                        </svg>
+                        <span id="gallery-count">Cargando...</span>
+                    </div> -->
+                    <div class="detail-meta-item">
+                        <svg class="detail-meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path fill="currentColor"
+                                d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                        </svg>
+                        <span id="gallery-category">${event.category}</span>
+                    </div>
+                </div>
+            </div>
+        </section>
                 
                 <section class="event-gallery">
-                    <h2>Galería Multimedia</h2>
                     <div class="media-filters">
                         <button class="media-filter active" data-filter="all">Todos</button>
                         <button class="media-filter" data-filter="image">Imágenes (${this.countMediaByType('image')})</button>
@@ -102,14 +137,6 @@ class EventDetailManager {
                     </div>
                 </section>
                 
-                <div class="event-actions">
-                    <a href="gallery.html" class="back-btn">
-                        <svg viewBox="0 0 24 24" width="16" height="16">
-                            <path fill="currentColor" d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
-                        </svg>
-                        Volver a galerías
-                    </a>
-                </div>
             </article>
         `;
     }

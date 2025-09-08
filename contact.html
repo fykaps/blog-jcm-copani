@@ -52,17 +52,60 @@
 
         <!-- Contenido Principal -->
         <main id="main-content">
-            <!-- Hero Section -->
-            <section class="hero animate-fade-in" aria-labelledby="contact-heading">
-                <div class="hero-content">
-                    <h1 id="contact-heading" class="animate-slide-up">Contáctanos</h1>
-                    <p class="hero-description animate-slide-up delay-1">¿Tienes preguntas o comentarios? Escríbenos y
-                        te responderemos
-                        pronto.</p>
-                    <div class="hero-actions animate-slide-up delay-2">
-                        <a href="#contact-info" class="btn btn-primary" aria-label="Ver contacto">
-                            Ver Contacto
+            <!-- Hero para Contacto -->
+            <section class="section-hero hero-contact animate-fade-in">
+                <div class="section-hero-decoration section-hero-decoration-square"></div>
+                <div class="section-hero-decoration section-hero-decoration-square"></div>
+
+                <div class="section-hero-image" aria-hidden="true">
+                    <img src="assets/img/heros/contact-hero.jpg" alt="" loading="eager" decoding="async">
+                </div>
+
+                <div class="section-hero-content">
+                    <nav class="breadcrumb-nav animate-fade-in" aria-label="Miga de pan">
+                        <ol class="breadcrumb-list">
+                            <li class="breadcrumb-item">
+                                <a href="index.html" class="breadcrumb-link">Inicio</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <span class="breadcrumb-current">Contacto</span>
+                            </li>
+                        </ol>
+                    </nav>
+
+                    <h1 class="animate-slide-up">Contáctanos</h1>
+
+                    <p class="section-hero-description animate-slide-up delay-1">
+                        Estamos aquí para responder tus preguntas, escuchar tus sugerencias
+                        y ayudarte en todo lo que necesites para nuestra comunidad educativa.
+                    </p>
+
+                    <div class="section-hero-actions animate-slide-up delay-2">
+                        <a href="#contact-form" class="btn btn-primary btn-lg">
+                            <span>Envíar Mensaje</span>
+                            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                                <path fill="currentColor"
+                                    d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+                            </svg>
                         </a>
+                        <a href="#contact-info" class="btn btn-secondary btn-lg">
+                            <span>Ver Información</span>
+                            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                                <path fill="currentColor"
+                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
+                            </svg>
+                        </a>
+                    </div>
+
+                    <div class="section-stats animate-fade-in delay-3">
+                        <div class="section-stat-item">
+                            <span class="section-stat-number" data-count="24">0</span>
+                            <span class="section-stat-label">Horas de Respuesta</span>
+                        </div>
+                        <div class="section-stat-item">
+                            <span class="section-stat-number" data-count="98">0</span>
+                            <span class="section-stat-label">% Satisfacción</span>
+                        </div>
                     </div>
                 </div>
             </section>

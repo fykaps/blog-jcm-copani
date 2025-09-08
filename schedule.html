@@ -18,15 +18,64 @@
         <header id="main-header" class="header-fixed"></header>
 
         <main class="container">
-            <section class="hero animate-fade-in">
-                <div class="hero-content">
-                    <h1 class="animate-slide-up">Horario de Clases</h1>
-                    <p class="hero-description animate-slide-up delay-1">Consulta los horarios de todos los grados y
-                        contacta a los profesores</p>
-                    <div class="hero-actions animate-slide-up delay-2">
-                        <a href="#main-content" class="btn btn-primary" aria-label="Ver horarios">
-                            Ver Horarios
+            <!-- Hero para Horarios -->
+            <section class="section-hero hero-schedule animate-fade-in">
+                <div class="section-hero-decoration section-hero-decoration-square"></div>
+                <div class="section-hero-decoration section-hero-decoration-square"></div>
+
+                <div class="section-hero-image" aria-hidden="true">
+                    <img src="assets/img/heros/schedule-hero.jpg" alt="" loading="eager" decoding="async">
+                </div>
+
+                <div class="section-hero-content">
+                    <nav class="breadcrumb-nav animate-fade-in" aria-label="Miga de pan">
+                        <ol class="breadcrumb-list">
+                            <li class="breadcrumb-item">
+                                <a href="index.html" class="breadcrumb-link">Inicio</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <span class="breadcrumb-current">Horarios</span>
+                            </li>
+                        </ol>
+                    </nav>
+
+                    <h1 class="animate-slide-up">Horarios de Clases</h1>
+
+                    <p class="section-hero-description animate-slide-up delay-1">
+                        Consulta los horarios organizados por grados, encuentra profesores
+                        y mantente informado sobre el calendario académico institucional.
+                    </p>
+
+                    <div class="section-hero-actions animate-slide-up delay-2">
+                        <a href="#schedule-container" class="btn btn-primary btn-lg">
+                            <span>Ver Horarios</span>
+                            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                                <path fill="currentColor"
+                                    d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z" />
+                            </svg>
                         </a>
+                        <a href="#teacher-search" class="btn btn-secondary btn-lg">
+                            <span>Buscar Profesor</span>
+                            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                                <path fill="currentColor"
+                                    d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+                            </svg>
+                        </a>
+                    </div>
+
+                    <div class="section-stats animate-fade-in delay-3">
+                        <div class="section-stat-item">
+                            <span class="section-stat-number" data-count="5">0</span>
+                            <span class="section-stat-label">Grados</span>
+                        </div>
+                        <div class="section-stat-item">
+                            <span class="section-stat-number" data-count="85">0</span>
+                            <span class="section-stat-label">Profesores</span>
+                        </div>
+                        <div class="section-stat-item">
+                            <span class="section-stat-number" data-count="40">0</span>
+                            <span class="section-stat-label">Horas Semanales</span>
+                        </div>
                     </div>
                 </div>
             </section>

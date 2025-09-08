@@ -387,11 +387,65 @@ class ScheduleDetailSystem {
                 const { tabsHtml, contentHtml } = this.createScheduleTabs(grade, day, fullSchedule, currentTime);
 
                 container.innerHTML = `
-                <div class="detail-header">
-                    <h2>Horario completo de ${grade}</h2>
-                    <div class="current-time">${currentTime}</div>
-                    <a href="schedule.html" class="btn-back">← Volver al horario general</a>
+                        <!-- Hero para Detalle de Horario -->
+        <section class="detail-hero detail-hero-schedule animate-fade-in">
+            <div class="detail-hero-decoration detail-hero-decoration-line"></div>
+            <div class="detail-hero-decoration detail-hero-decoration-line"></div>
+            
+            <div class="detail-hero-image" aria-hidden="true">
+                <img src="assets/img/heros/schedule-detail-hero.jpg" alt="" loading="eager" decoding="async">
+            </div>
+            
+            <div class="detail-hero-content">
+                <nav class="detail-breadcrumb animate-fade-in" aria-label="Miga de pan">
+                    <ol class="detail-breadcrumb-list">
+                        <li class="detail-breadcrumb-item">
+                            <a href="index.html" class="detail-breadcrumb-link">Inicio</a>
+                        </li>
+                        <li class="detail-breadcrumb-item">
+                            <a href="schedule.html" class="detail-breadcrumb-link">Horarios</a>
+                        </li>
+                        <li class="detail-breadcrumb-item">
+                            <span class="detail-breadcrumb-current">Detalle</span>
+                        </li>
+                    </ol>
+                </nav>
+                
+                <div class="detail-hero-badges animate-fade-in">
+                    <span class="detail-hero-badge" id="schedule-grade">${grade}</span>
+                    <span class="detail-hero-badge">Horario Semanal</span>
                 </div>
+                
+                <h1 class="animate-slide-up">Horario de Clases</h1>
+                
+                <p class="detail-hero-description animate-slide-up delay-1">
+                    Consulta el horario detallado con información completa de clases,
+                    profesores y actividades programadas para esta semana.
+                </p>
+                
+                <div class="detail-hero-meta animate-fade-in delay-2">
+                    <div class="detail-meta-item">
+                        <svg class="detail-meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path fill="currentColor" d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                        </svg>
+                        <span id="current-time">${currentTime}</span>
+                    </div>
+                   <!-- <div class="detail-meta-item">
+                        <svg class="detail-meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path fill="currentColor" d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/>
+                        </svg>
+                        <span id="current-date">${currentTime}</span>
+                    </div>
+                    <div class="detail-meta-item">
+                        <svg class="detail-meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                        </svg>
+                        <span id="current-class">Cargando clase actual...</span>
+                    </div> -->
+                </div>
+            </div>
+        </section>
+
                 ${tabsHtml}
                 ${contentHtml}`;
 

@@ -60,34 +60,61 @@ class NewsDetailManager {
     createNewsDetailHTML() {
         return `
             <article class="news-detail">
-                <header class="news-detail-header">
-                    <div class="news-breadcrumb">
-                        <a href="news.html">Noticias</a> / <span>${this.news.category}</span>
+                        <!-- Hero para Detalle de Noticia -->
+        <section class="detail-hero detail-hero-news animate-fade-in">
+            <div class="detail-hero-decoration detail-hero-decoration-line"></div>
+            <div class="detail-hero-decoration detail-hero-decoration-line"></div>
+
+            <div class="detail-hero-image" aria-hidden="true">
+                <img src=${this.news.image} alt="" loading="eager" decoding="async">
+            </div>
+
+            <div class="detail-hero-content">
+                <nav class="detail-breadcrumb animate-fade-in" aria-label="Miga de pan">
+                    <ol class="detail-breadcrumb-list">
+                        <li class="detail-breadcrumb-item">
+                            <a href="index.html" class="detail-breadcrumb-link">Inicio</a>
+                        </li>
+                        <li class="detail-breadcrumb-item">
+                            <a href="news.html" class="detail-breadcrumb-link">Noticias</a>
+                        </li>
+                        <li class="detail-breadcrumb-item">
+                            <span class="detail-breadcrumb-current">Detalle</span>
+                        </li>
+                    </ol>
+                </nav>
+
+                <div class="detail-hero-badges animate-fade-in">
+                    <span class="detail-hero-badge" id="news-category">${this.news.category}</span>
+                </div>
+
+                <h1 class="animate-slide-up" id="news-title">${this.news.title}</h1>
+
+                <div class="detail-hero-meta animate-fade-in delay-2">
+                    <div class="detail-meta-item">
+                        <svg class="detail-meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path fill="currentColor"
+                                d="M20 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z" />
+                        </svg>
+                        <span id="news-date">${this.formatDate(this.news.date)}</span>
                     </div>
-                    <h1 class="news-detail-title">${this.news.title}</h1>
-                    <div class="news-detail-meta">
-                        <div class="meta-item">
-                            <svg viewBox="0 0 24 24" width="16" height="16">
-                                <path fill="currentColor" d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/>
-                            </svg>
-                            <span>${this.formatDate(this.news.date)}</span>
-                        </div>
-                        <div class="meta-item">
-                            <svg viewBox="0 0 24 24" width="16" height="16">
-                                <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.43 2.1-1.43 1.38 0 1.9.66 1.94 1.64h1.71c-.05-1.34-.87-2.57-2.49-2.97V5H10.9v1.69c-1.51.32-2.72 1.3-2.72 2.81 0 1.79 1.49 2.69 3.66 3.21 1.95.46 2.34 1.15 2.34 1.87 0 .53-.39 1.39-2.1 1.39-1.6 0-2.23-.72-2.32-1.64H8.04c.1 1.7 1.36 2.66 2.86 2.97V19h2.34v-1.67c1.52-.29 2.72-1.16 2.73-2.77-.01-2.2-1.9-2.96-3.66-3.42z"/>
-                            </svg>
-                            <span>${this.getViews(this.newsId)} vistas</span>
-                        </div>
-                        <div class="meta-item">
-                            <svg viewBox="0 0 24 24" width="16" height="16">
-                                <path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                            </svg>
-                            <span class="like-count">${this.getLikes(this.newsId)}</span>
-                        </div>
+                    <div class="detail-meta-item">
+                        <svg class="detail-meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path fill="currentColor"
+                                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                        </svg>
+                        <span id="news-likes">${this.getViews(this.newsId)}</span> likes
                     </div>
-                    <div class="news-category">${this.news.category}</div>
-                </header>
-                
+                    <div class="detail-meta-item">
+                        <svg class="detail-meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path fill="currentColor"
+                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.43 2.1-1.43 1.38 0 1.9.66 1.94 1.64h1.71c-.05-1.34-.87-2.57-2.49-2.97V5H10.9v1.69c-1.51.32-2.72 1.3-2.72 2.81 0 1.79 1.49 2.69 3.66 3.21 1.95.46 2.34 1.15 2.34 1.87 0 .53-.39 1.39-2.1 1.39-1.6 0-2.23-.72-2.32-1.64H8.04c.1 1.7 1.36 2.66 2.86 2.97V19h2.34v-1.67c1.52-.29 2.72-1.16 2.73-2.77-.01-2.2-1.9-2.96-3.66-3.42z" />
+                        </svg>
+                        <span id="news-views">${this.getLikes(this.newsId)}</span> vistas
+                    </div>
+                </div>
+            </div>
+        </section>
                 <div class="news-detail-image">
                     <img src="${this.news.image}" alt="${this.news.title}" loading="lazy">
                 </div>
@@ -127,7 +154,7 @@ class NewsDetailManager {
                 <div class="news-tags">
                     ${this.news.tags.map(tag => `<a href="news.html?tag=${tag}" class="tag">${tag}</a>`).join('')}
                 </div>
-            </article>
+
             
             <section class="comments-section">
                 <div class="section-header">
@@ -158,6 +185,7 @@ class NewsDetailManager {
                     <!-- Comentarios se cargarán aquí -->
                 </div>
             </section>
+        </article>
         `;
     }
 
