@@ -17,6 +17,104 @@ class MenuCountdownSystem {
     this.renderAllSections();
     this.startCountdowns();
     this.setupEventListeners();
+
+    this.updateMenuStats();
+  }
+
+  // ======================
+  //  ESTADÍSTICAS DEL MENÚ
+  // ======================
+
+  calculateMenuStats() {
+    if (!this.menuData || this.menuData.length === 0) {
+      return {
+        totalDays: 0,
+        totalMeals: 0,
+        uniqueHelpers: 0,
+        breakfastCount: 0,
+        lunchCount: 0
+      };
+    }
+
+    // Calcular días únicos (semana laboral)
+    const totalDays = this.menuData.length;
+
+    // Calcular total de comidas
+    let breakfastCount = 0;
+    let lunchCount = 0;
+    let uniqueHelpers = new Set();
+
+    this.menuData.forEach(menu => {
+      if (menu.breakfast) breakfastCount++;
+      if (menu.lunch) lunchCount++;
+
+      // Contar ayudantes únicos
+      if (menu.helpers && menu.helpers.names) {
+        menu.helpers.names.forEach(helper => {
+          uniqueHelpers.add(helper.toLowerCase().trim());
+        });
+      }
+    });
+
+    const totalMeals = breakfastCount + lunchCount;
+
+    return {
+      totalDays,
+      totalMeals,
+      uniqueHelpers: uniqueHelpers.size,
+      breakfastCount,
+      lunchCount
+    };
+  }
+
+  updateMenuStats() {
+    const stats = this.calculateMenuStats();
+
+    // Actualizar elementos del DOM
+    this.updateStatElement('days-stat', stats.totalDays);
+    this.updateStatElement('meals-stat', stats.totalMeals);
+    this.updateStatElement('helpers-stat', stats.uniqueHelpers);
+
+    // Iniciar animación de contadores
+    this.animateMenuStats();
+  }
+
+  updateStatElement(statId, value) {
+    const element = document.querySelector(`[data-stat="${statId}"]`);
+    if (element) {
+      element.setAttribute('data-count', value);
+      element.textContent = '0'; // Reset para animación
+    }
+  }
+
+  animateMenuStats() {
+    const statElements = document.querySelectorAll('.section-stat-number[data-stat]');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const statElement = entry.target;
+          const target = parseInt(statElement.getAttribute('data-count'));
+          const duration = 1500;
+          const increment = target / (duration / 16);
+
+          let current = 0;
+
+          const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+              clearInterval(timer);
+              current = target;
+            }
+            statElement.textContent = Math.floor(current);
+          }, 16);
+
+          observer.unobserve(statElement);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    statElements.forEach(stat => observer.observe(stat));
   }
 
   startCountdowns() {

@@ -32,12 +32,178 @@ class GalleryManager {
 
         this.showLoadingState();
         this.displayGallery();
+        this.displayRecentGalleries();
         this.setupGalleryFilters();
         this.setupIntersectionObserver();
+
+        this.updateGalleryStats();
 
         this.initialized = true;
     }
 
+
+    // ======================
+    //  GALERÍAS RECIENTES
+    // ======================
+
+    displayRecentGalleries() {
+        const container = document.getElementById('recent-galleries-container');
+        if (!container) return;
+
+        // Obtener galerías más recientes (ordenadas por fecha)
+        const recentGalleries = [...this.galleryData]
+            .sort((a, b) => new Date(b.date) - new Date(a.date))
+            .slice(0, this.options.recentGalleriesCount);
+
+        if (recentGalleries.length === 0) {
+            container.innerHTML = '<p class="no-galleries">No hay galerías recientes</p>';
+            return;
+        }
+
+        container.innerHTML = recentGalleries.map(gallery => `
+            <article class="recent-gallery-card animate-fade-in">
+                <div class="recent-gallery-image" style="background-image: url('${gallery.coverImage}')">
+                    <span class="gallery-category-badge">${gallery.category}</span>
+                </div>
+                <div class="recent-gallery-content">
+                    <h3 class="recent-gallery-title">${gallery.title}</h3>
+                    <p class="recent-gallery-date">${this.formatDate(gallery.date)}</p>
+                    <p class="recent-gallery-description">${this.truncateDescription(gallery.description, 80)}</p>
+                    <a href="gallery-detail.html?id=${gallery.id}" class="recent-gallery-link">
+                        Ver galería
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+            </article>
+        `).join('');
+
+        // Configurar carga de imágenes para galerías recientes
+        this.setupRecentGalleryImages();
+    }
+
+    setupRecentGalleryImages() {
+        const galleryImages = document.querySelectorAll('.recent-gallery-image');
+        galleryImages.forEach(container => {
+            const backgroundImage = container.style.backgroundImage;
+            const imageUrl = backgroundImage.replace('url("', '').replace('")', '');
+
+            // Precargar imagen
+            const img = new Image();
+            img.src = imageUrl;
+            img.onload = () => {
+                container.style.backgroundImage = `url('${imageUrl}')`;
+                container.classList.add('loaded');
+            };
+        });
+    }
+
+    // ======================
+    //  ESTADÍSTICAS DE GALERÍA
+    // ======================
+
+    calculateGalleryStats() {
+        if (!this.galleryData || this.galleryData.length === 0) {
+            return {
+                totalGalleries: 0,
+                totalPhotos: 0,
+                totalVideos: 0,
+                totalAudios: 0,
+                totalCategories: 0
+            };
+        }
+
+        let totalPhotos = 0;
+        let totalVideos = 0;
+        let totalAudios = 0;
+        const uniqueCategories = new Set();
+
+        this.galleryData.forEach(gallery => {
+            // Contar tipos de medios
+            gallery.media.forEach(media => {
+                switch (media.type) {
+                    case 'image':
+                        totalPhotos++;
+                        break;
+                    case 'video':
+                        totalVideos++;
+                        break;
+                    case 'audio':
+                        totalAudios++;
+                        break;
+                }
+            });
+
+            // Contar categorías únicas
+            if (gallery.category) {
+                uniqueCategories.add(gallery.category);
+            }
+        });
+
+        return {
+            totalGalleries: this.galleryData.length,
+            totalPhotos,
+            totalVideos,
+            totalAudios,
+            totalCategories: uniqueCategories.size
+        };
+    }
+
+    updateGalleryStats() {
+        const stats = this.calculateGalleryStats();
+
+        // Actualizar elementos del DOM
+        this.updateStatElement('total-galleries', stats.totalGalleries);
+        this.updateStatElement('total-photos', stats.totalPhotos);
+        this.updateStatElement('total-videos', stats.totalVideos);
+        this.updateStatElement('total-audios', stats.totalAudios);
+
+        // Iniciar animación de contadores
+        this.animateGalleryStats();
+    }
+
+    updateStatElement(statId, value) {
+        const element = document.querySelector(`[data-stat="${statId}"]`);
+        if (element) {
+            element.setAttribute('data-count', value);
+            element.textContent = '0'; // Reset para animación
+        }
+    }
+
+    animateGalleryStats() {
+        const statElements = document.querySelectorAll('.gallery-stat-number[data-stat]');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const statElement = entry.target;
+                    const target = parseInt(statElement.getAttribute('data-count'));
+                    const duration = 1500;
+                    const increment = target / (duration / 16);
+
+                    let current = 0;
+
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= target) {
+                            clearInterval(timer);
+                            current = target;
+                        }
+                        statElement.textContent = Math.floor(current);
+                    }, 16);
+
+                    observer.unobserve(statElement);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        statElements.forEach(stat => observer.observe(stat));
+    }
+
+    // ======================
+    //  RENDERIZADO PRINCIPAL
+    // ======================
     showLoadingState() {
         const container = document.getElementById('galleries-container');
         if (!container) return;
