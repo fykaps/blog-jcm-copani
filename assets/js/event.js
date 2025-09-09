@@ -32,6 +32,97 @@ class EventSystem {
     this.setupEventModal();
     this.setupEventCardInteractions();
     this.setupPagination();
+
+    // Actualizar estadísticas después de la inicialización
+    this.updateEventStats();
+  }
+
+  // ======================
+  //  ESTADÍSTICAS PARA HERO
+  // ======================
+
+  updateEventStats() {
+    const now = new Date();
+
+    // Contar eventos próximos (futuros)
+    const upcomingEvents = this.events.filter(event => {
+      if (event.status !== 'active') return false;
+      const eventDate = new Date(`${event.date}T${event.startTime}`);
+      return eventDate > now;
+    });
+
+    // Contar eventos pasados (finalizados)
+    const pastEvents = this.events.filter(event => {
+      if (event.status !== 'active') return false;
+      const eventDate = new Date(`${event.date}T${event.endTime}`);
+      return eventDate < now;
+    });
+
+    // Contar eventos en curso
+    const inProgressEvents = this.events.filter(event => {
+      if (event.status !== 'active') return false;
+      const eventStart = new Date(`${event.date}T${event.startTime}`);
+      const eventEnd = new Date(`${event.date}T${event.endTime}`);
+      return now >= eventStart && now <= eventEnd;
+    });
+
+    // Contar eventos cancelados o postergados
+    const inactiveEvents = this.events.filter(event =>
+      event.status === 'cancelled' || event.status === 'postponed'
+    );
+
+    // Calcular el total de eventos activos (próximos + pasados + en curso)
+    const totalActiveEvents = upcomingEvents.length + pastEvents.length + inProgressEvents.length;
+
+    // Calcular el total general (activos + inactivos)
+    const totalAllEvents = this.events.length;
+
+    // Actualizar los elementos del DOM
+    this.updateStatElement('upcoming-stat', upcomingEvents.length);
+    this.updateStatElement('past-stat', pastEvents.length);
+    this.updateStatElement('total-stat', totalActiveEvents); // o totalAllEvents según lo que quieras mostrar
+    this.updateStatElement('inprogress-stat', inProgressEvents.length);
+
+    // Iniciar animación de los contadores
+    this.animateStats();
+  }
+
+  updateStatElement(statId, value) {
+    const element = document.querySelector(`[data-stat="${statId}"]`);
+    if (element) {
+      element.setAttribute('data-count', value);
+      element.textContent = '0'; // Reset para la animación
+    }
+  }
+
+  animateStats() {
+    const statElements = document.querySelectorAll('.section-stat-number');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const statElement = entry.target;
+          const target = parseInt(statElement.getAttribute('data-count'));
+          const duration = 1500;
+          const increment = target / (duration / 16);
+
+          let current = 0;
+
+          const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+              clearInterval(timer);
+              current = target;
+            }
+            statElement.textContent = Math.floor(current);
+          }, 16);
+
+          observer.unobserve(statElement);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    statElements.forEach(stat => observer.observe(stat));
   }
 
   // ======================

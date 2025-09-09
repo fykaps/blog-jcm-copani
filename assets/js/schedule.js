@@ -326,6 +326,106 @@ class ScheduleSystem {
         this.loadGradeSelector();
         this.startRealTimeUpdates();
         this.setupEventListeners();
+
+        this.calculateAndDisplayStats();
+    }
+
+    // ======================
+    //  ESTADÍSTICAS DINÁMICAS
+    // ======================
+
+    calculateAndDisplayStats() {
+        // Calcular estadísticas basadas en los datos de schedules.js
+        const stats = this.calculateScheduleStats();
+
+        // Actualizar los elementos del DOM
+        this.updateStatsElements(stats);
+
+        // Iniciar animación de los contadores
+        this.animateStats();
+    }
+
+    calculateScheduleStats() {
+        // Calcular grados únicos
+        const uniqueGrades = new Set(grades);
+
+        // Calcular profesores únicos
+        const uniqueTeachers = new Set(Object.keys(teachers));
+
+        // Calcular cursos únicos (materias)
+        const uniqueCourses = new Set();
+        Object.values(classSchedules).forEach(daySchedule => {
+            daySchedule.forEach(cls => {
+                if (cls.subject && cls.subject !== "Receso") {
+                    uniqueCourses.add(cls.subject);
+                }
+            });
+        });
+
+        // Calcular horas semanales totales
+        let totalWeeklyHours = 0;
+        Object.values(classSchedules).forEach(daySchedule => {
+            daySchedule.forEach(cls => {
+                if (!cls.isBreak && cls.subject !== "Receso") {
+                    const start = this.timeToMinutes(cls.start);
+                    const end = this.timeToMinutes(cls.end);
+                    const duration = (end - start) / 60; // Convertir a horas
+                    totalWeeklyHours += duration;
+                }
+            });
+        });
+
+        return {
+            totalGrades: uniqueGrades.size,
+            totalTeachers: uniqueTeachers.size,
+            totalCourses: uniqueCourses.size,
+            weeklyHours: Math.round(totalWeeklyHours)
+        };
+    }
+
+    updateStatsElements(stats) {
+        this.updateStatElement('total-grades', stats.totalGrades);
+        this.updateStatElement('total-teachers', stats.totalTeachers);
+        this.updateStatElement('total-courses', stats.totalCourses);
+        this.updateStatElement('weekly-hours', stats.weeklyHours);
+    }
+
+    updateStatElement(statId, value) {
+        const element = document.querySelector(`[data-stat="${statId}"]`);
+        if (element) {
+            element.setAttribute('data-count', value);
+            element.textContent = '0'; // Reset para la animación
+        }
+    }
+
+    animateStats() {
+        const statElements = document.querySelectorAll('.schedule-stat-number');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const statElement = entry.target;
+                    const target = parseInt(statElement.getAttribute('data-count'));
+                    const duration = 2000; // 2 segundos
+                    const increment = target / (duration / 16); // 60fps
+
+                    let current = 0;
+
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= target) {
+                            clearInterval(timer);
+                            current = target;
+                        }
+                        statElement.textContent = Math.floor(current);
+                    }, 16);
+
+                    observer.unobserve(statElement);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        statElements.forEach(stat => observer.observe(stat));
     }
 
     getCurrentTime() {

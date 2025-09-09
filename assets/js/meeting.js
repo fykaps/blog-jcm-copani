@@ -29,6 +29,110 @@ class MeetingSystem {
         this.setupCategoryFilters();
         this.setupPagination();
         this.startCounters();
+
+        this.updateMeetingStats(); // ← Añadir esta línea
+    }
+
+    // ======================
+    //  ESTADÍSTICAS PARA HERO
+    // ======================
+
+    calculateMeetingStats() {
+        const now = new Date();
+        const currentMonth = now.getMonth();
+        const currentYear = now.getFullYear();
+
+        // Reuniones de este mes
+        const thisMonthMeetings = this.meetings.filter(meeting => {
+            const meetingDate = new Date(meeting.date);
+            return meetingDate.getMonth() === currentMonth &&
+                meetingDate.getFullYear() === currentYear;
+        });
+
+        // Reuniones programadas (próximas)
+        const upcomingMeetings = this.meetings.filter(meeting => {
+            const meetingDate = new Date(`${meeting.date}T${meeting.startTime}`);
+            return meeting.status === 'scheduled' && meetingDate >= now;
+        });
+
+        // Reuniones de hoy
+        const todayMeetings = this.meetings.filter(meeting => {
+            const meetingDate = new Date(meeting.date);
+            const today = new Date();
+            return meetingDate.toDateString() === today.toDateString() &&
+                meeting.status === 'scheduled';
+        });
+
+        // Calcular porcentaje de asistencia (promedio de todas las reuniones completadas)
+        const completedMeetings = this.meetings.filter(meeting =>
+            meeting.status === 'completed' && meeting.attendance
+        );
+
+        let averageAttendance = 95; // Valor por defecto
+        if (completedMeetings.length > 0) {
+            const totalAttendance = completedMeetings.reduce((sum, meeting) =>
+                sum + meeting.attendance, 0
+            );
+            averageAttendance = Math.round(totalAttendance / completedMeetings.length);
+        }
+
+        return {
+            thisMonth: thisMonthMeetings.length,
+            upcoming: upcomingMeetings.length,
+            today: todayMeetings.length,
+            attendance: averageAttendance
+        };
+    }
+
+    updateMeetingStats() {
+        const stats = this.calculateMeetingStats();
+
+        // Actualizar elementos del DOM
+        this.updateStatElement('meetings-this-month', stats.thisMonth);
+        this.updateStatElement('meetings-upcoming', stats.upcoming);
+        this.updateStatElement('meetings-today', stats.today);
+        this.updateStatElement('meetings-attendance', stats.attendance);
+
+        // Iniciar animación
+        this.animateMeetingStats();
+    }
+
+    updateStatElement(statId, value) {
+        const element = document.querySelector(`[data-stat="${statId}"]`);
+        if (element) {
+            element.setAttribute('data-count', value);
+            element.textContent = '0'; // Reset para animación
+        }
+    }
+
+    animateMeetingStats() {
+        const statElements = document.querySelectorAll('.meeting-stat-number');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const statElement = entry.target;
+                    const target = parseInt(statElement.getAttribute('data-count'));
+                    const duration = 1500;
+                    const increment = target / (duration / 16);
+
+                    let current = 0;
+
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= target) {
+                            clearInterval(timer);
+                            current = target;
+                        }
+                        statElement.textContent = Math.floor(current);
+                    }, 16);
+
+                    observer.unobserve(statElement);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        statElements.forEach(stat => observer.observe(stat));
     }
 
     // ======================
