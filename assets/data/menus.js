@@ -5,7 +5,7 @@
 const weeklyMenu = [
     {
         day: "Lunes",
-        date: "2025-09-01",
+        date: "2025-09-08",
         cook: "Felicita Yujra Jimenez",
         phone: "931893693",
         helpers: {
@@ -15,17 +15,19 @@ const weeklyMenu = [
         breakfast: {
             start: "09:35",
             end: "09:50",
-            name: "Quinua con leche y pan con palta",
-            description: "Desayuno alto en proteínas y grasas saludables",
+            name: "Jugo de quinua",
+            description: "Bebida andina nutritiva y refrescante, rica en proteínas y minerales",
             ingredients: [
                 "Quinua",
-                "Leche",
-                "Pan integral",
-                "Palta",
-                "Sal"
+                "Agua",
+                "Canela",
+                "Clavo de olor",
+                "Cáscara de piña",
+                "Jugo de limón",
+                "Azúcar o miel"
             ],
-            image: "assets/img/menus/desayuno/desayuno5.png",
-            additional: "Pan"
+            image: "assets/img/menus/desayuno/desayuno1.png",
+            additional: ""
         },
         lunch: {
             start: "14:30",
@@ -50,7 +52,7 @@ const weeklyMenu = [
     },
     {
         day: "Martes",
-        date: "2025-09-02",
+        date: "2025-09-09",
         cook: "Felicita Yujra Jimenez",
         phone: "931893693",
         helpers: {
@@ -60,17 +62,19 @@ const weeklyMenu = [
         breakfast: {
             start: "09:35",
             end: "09:50",
-            name: "Leche con maca y pan con mermelada",
-            description: "Desayuno energético con propiedades nutritivas",
+            name: "Jugo de quinua",
+            description: "Bebida andina nutritiva y refrescante, rica en proteínas y minerales",
             ingredients: [
-                "Leche fresca",
-                "Maca en polvo",
-                "Pan integral",
-                "Mermelada de frutas",
-                "Mantequilla"
+                "Quinua",
+                "Agua",
+                "Canela",
+                "Clavo de olor",
+                "Cáscara de piña",
+                "Jugo de limón",
+                "Azúcar o miel"
             ],
             image: "assets/img/menus/desayuno/desayuno2.png",
-            additional: "Galleta"
+            additional: ""
         },
         lunch: {
             start: "12:30",
@@ -94,7 +98,7 @@ const weeklyMenu = [
     },
     {
         day: "Miércoles",
-        date: "2025-09-03",
+        date: "2025-09-10",
         cook: "Felicita Yujra Jimenez",
         phone: "931893693",
         helpers: {
@@ -104,17 +108,19 @@ const weeklyMenu = [
         breakfast: {
             start: "09:35",
             end: "09:50",
-            name: "Leche con kiwicha y pan con queso",
-            description: "Desayuno rico en calcio y fibra",
+            name: "Jugo de quinua",
+            description: "Bebida andina nutritiva y refrescante, rica en proteínas y minerales",
             ingredients: [
-                "Leche fresca",
-                "Kiwicha",
-                "Pan integral",
-                "Queso fresco",
-                "Mantequilla"
+                "Quinua",
+                "Agua",
+                "Canela",
+                "Clavo de olor",
+                "Cáscara de piña",
+                "Jugo de limón",
+                "Azúcar o miel"
             ],
-            image: "assets/img/menus/desayuno/desayuno3.jpg",
-            additional: "Galleta"
+            image: "assets/img/menus/desayuno/desayuno3.png",
+            additional: ""
         },
         lunch: {
             start: "12:30",
@@ -138,7 +144,7 @@ const weeklyMenu = [
     },
     {
         day: "Jueves",
-        date: "2025-09-04",
+        date: "2025-09-11",
         cook: "Felicita Yujra Jimenez",
         phone: "931893693",
         helpers: {
@@ -148,17 +154,19 @@ const weeklyMenu = [
         breakfast: {
             start: "09:35",
             end: "09:50",
-            name: "Leche con cacao y pan con mantequilla y miel",
-            description: "Desayuno clásico y nutritivo",
+            name: "Jugo de quinua",
+            description: "Bebida andina nutritiva y refrescante, rica en proteínas y minerales",
             ingredients: [
-                "Leche fresca",
-                "Cacao en polvo",
-                "Pan integral",
-                "Mantequilla",
-                "Miel de abeja"
+                "Quinua",
+                "Agua",
+                "Canela",
+                "Clavo de olor",
+                "Cáscara de piña",
+                "Jugo de limón",
+                "Azúcar o miel"
             ],
-            image: "assets/img/menus/desayuno/desayuno4.jpg",
-            additional: "Galleta"
+            image: "assets/img/menus/desayuno/desayuno4.png",
+            additional: ""
         },
         lunch: {
             start: "12:30",
@@ -183,7 +191,7 @@ const weeklyMenu = [
     },
     {
         day: "Viernes",
-        date: "2025-09-05",
+        date: "2025-09-12",
         cook: "Felicita Yujra Jimenez",
         phone: "931893693",
         helpers: {
@@ -193,17 +201,19 @@ const weeklyMenu = [
         breakfast: {
             start: "09:35",
             end: "09:50",
-            name: "Quinua con leche y pan con palta",
-            description: "Desayuno alto en proteínas y grasas saludables",
+            name: "Jugo de quinua",
+            description: "Bebida andina nutritiva y refrescante, rica en proteínas y minerales",
             ingredients: [
                 "Quinua",
-                "Leche",
-                "Pan integral",
-                "Palta",
-                "Sal"
+                "Agua",
+                "Canela",
+                "Clavo de olor",
+                "Cáscara de piña",
+                "Jugo de limón",
+                "Azúcar o miel"
             ],
             image: "assets/img/menus/desayuno/desayuno5.png",
-            additional: "Pan"
+            additional: ""
         },
         lunch: {
             start: "12:30",
@@ -225,49 +235,5 @@ const weeklyMenu = [
             image: "assets/img/menus/almuerzo/almuerzo5.png",
             additional: "Pera"
         }
-    },
-    {
-        day: "Domingo",
-        date: "2025-08-31",
-        cook: "Felicita Yujra Jimenez",
-        phone: "931893693",
-        helpers: {
-            names: ["Lucía Pérez", "Ana Tejada"],
-            grade: "5to A"
-        },
-        breakfast: {
-            start: "09:35",
-            end: "09:50",
-            name: "Leche con avena y pan con huevo",
-            description: "Nutritivo desayuno para empezar el día con energía",
-            ingredients: [
-                "Leche fresca",
-                "Avena en hojuelas",
-                "Pan integral",
-                "Huevos",
-                "Aceite vegetal",
-                "Sal"
-            ],
-            image: "assets/img/menus/desayuno/desayuno1.jpg",
-            additional: "Galleta"
-        },
-        lunch: {
-            start: "14:00",
-            end: "14:30",
-            name: "Arroz con pollo y ensalada fresca",
-            description: "Plato balanceado con proteínas y carbohidratos",
-            ingredients: [
-                "Arroz",
-                "Pollo",
-                "Zanahoria",
-                "Arvejas",
-                "Cebolla",
-                "Aceite vegetal",
-                "Sal",
-                "Especias"
-            ],
-            image: "assets/img/menus/almuerzo/almuerzo1.jpg",
-            additional: "Gelatina"
-        }
-    },
+    }
 ];
