@@ -301,7 +301,9 @@ class MenuCountdownSystem {
 
   // Generar IDs más únicos para evitar conflictos
   generateCountdownId(mealType, menuDate, suffix = '') {
-    return `countdown-${mealType}-${menuDate.replace(/-/g, '')}${suffix ? '-' + suffix : ''}`;
+    // Limpiar la fecha para usarla en ID (remover caracteres especiales)
+    const cleanDate = menuDate.replace(/-/g, '');
+    return `countdown-${mealType}-${cleanDate}${suffix ? '-' + suffix : ''}`;
   }
 
   createEmptyMealCard(title) {
@@ -531,26 +533,38 @@ class MenuCountdownSystem {
   }
 
   updateAllCountdowns() {
-    // Actualizar todos los contadores registrados
     this.countdowns.forEach((config, containerId) => {
       const { meal, mealType, menuDate } = config;
       const container = document.getElementById(containerId);
 
       if (container) {
         const { status, timeRemaining } = this.calculateMealStatus(meal, menuDate);
-
-        // Asegurarse de que timeRemaining no sea undefined
         const safeTimeRemaining = timeRemaining || null;
 
-        container.innerHTML = this.renderCountdownContent(status, safeTimeRemaining, mealType);
+        // Determinar qué estilo de contador usar basado en el ID
+        if (containerId.includes('sidebar')) {
+          container.innerHTML = this.renderSidebarCountdownContent(status, safeTimeRemaining, mealType);
 
-        // Actualizar también el indicador de estado en la imagen
-        const mealCard = container.closest('.meal-card');
-        if (mealCard) {
-          const statusIndicator = mealCard.querySelector('.meal-status-indicator');
-          if (statusIndicator) {
-            statusIndicator.className = 'meal-status-indicator ' + this.getStatusClass(status);
-            statusIndicator.textContent = this.getStatusText(status);
+          // Actualizar también el estado en la tarjeta del sidebar
+          const mealCard = container.closest('.sidebar-meal-card');
+          if (mealCard) {
+            const statusElement = mealCard.querySelector('.sidebar-meal-status');
+            if (statusElement) {
+              statusElement.className = 'sidebar-meal-status ' + this.getStatusClass(status);
+              statusElement.textContent = this.getStatusText(status);
+            }
+          }
+        } else {
+          container.innerHTML = this.renderCountdownContent(status, safeTimeRemaining, mealType);
+
+          // Actualizar también el indicador de estado en la imagen
+          const mealCard = container.closest('.meal-card');
+          if (mealCard) {
+            const statusIndicator = mealCard.querySelector('.meal-status-indicator');
+            if (statusIndicator) {
+              statusIndicator.className = 'meal-status-indicator ' + this.getStatusClass(status);
+              statusIndicator.textContent = this.getStatusText(status);
+            }
           }
         }
       }
@@ -560,11 +574,16 @@ class MenuCountdownSystem {
   registerCountdown(containerId, meal, mealType, menuDate) {
     this.countdowns.set(containerId, { meal, mealType, menuDate });
 
-    // Actualizar inmediatamente
     const { status, timeRemaining } = this.calculateMealStatus(meal, menuDate);
     const container = document.getElementById(containerId);
+
     if (container) {
-      container.innerHTML = this.renderCountdownContent(status, timeRemaining, mealType);
+      // Determinar qué estilo de contador usar basado en el ID
+      if (containerId.includes('sidebar')) {
+        container.innerHTML = this.renderSidebarCountdownContent(status, timeRemaining, mealType);
+      } else {
+        container.innerHTML = this.renderCountdownContent(status, timeRemaining, mealType);
+      }
     }
   }
 
@@ -572,46 +591,56 @@ class MenuCountdownSystem {
     const todayMenuSection = document.getElementById('menu-del-dia');
     if (!todayMenuSection) return;
 
+
     if (!menu) {
-      todayMenuSection.innerHTML = '<div class="empty-menu"><p>No hay menú programado para hoy</p></div>';
+      todayMenuSection.innerHTML = `
+            <div class="sidebar-empty-meal">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                </svg>
+                <p>No hay menú programado para hoy</p>
+            </div>
+        `;
       return;
     }
 
-    let content = `
-            <div class="today-menu-header">
-                <h4>${menu.day}, ${this.formatDisplayDate(menu.date)}</h4>
-                <p>Cocinera: ${menu.cook}</p>
-                <p>Madres ayudantes: ${menu.helpers.names.join(' y ')} (${menu.helpers.grade})</p>
-            </div>
-        `;
+    let content = '';
 
     if (menu.breakfast) {
-      const breakfastId = `breakfast-countdown-${menu.date.replace(/-/g, '')}`;
+      const breakfastId = `sidebar-breakfast-countdown-${menu.date.replace(/-/g, '')}`;
       content += this.createMealCardFull(menu.breakfast, 'Desayuno', menu.date, breakfastId);
+    } else {
+      content += this.createMealCardFull(null, 'Desayuno', menu.date);
+    }
+
+    if (menu.breakfast && menu.lunch) {
+      content += '<div class="sidebar-meal-divider"></div>';
     }
 
     if (menu.lunch) {
-      const lunchId = `lunch-countdown-${menu.date.replace(/-/g, '')}`;
+      const lunchId = `sidebar-lunch-countdown-${menu.date.replace(/-/g, '')}`;
       content += this.createMealCardFull(menu.lunch, 'Almuerzo', menu.date, lunchId);
+    } else {
+      content += this.createMealCardFull(null, 'Almuerzo', menu.date);
     }
 
     todayMenuSection.innerHTML = content;
 
     // Registrar contadores
     if (menu.breakfast) {
-      const breakfastId = `breakfast-countdown-${menu.date.replace(/-/g, '')}`;
+      const breakfastId = `sidebar-breakfast-countdown-${menu.date.replace(/-/g, '')}`;
       this.registerCountdown(breakfastId, menu.breakfast, 'breakfast', menu.date);
     }
 
     if (menu.lunch) {
-      const lunchId = `lunch-countdown-${menu.date.replace(/-/g, '')}`;
+      const lunchId = `sidebar-lunch-countdown-${menu.date.replace(/-/g, '')}`;
       this.registerCountdown(lunchId, menu.lunch, 'lunch', menu.date);
     }
   }
 
   createMealCardFull(meal, title, menuDate = '', countdownId = '') {
     const mealType = title.toLowerCase();
-    const finalCountdownId = countdownId || this.generateCountdownId(mealType, menuDate, 'full');
+    const finalCountdownId = countdownId || this.generateCountdownId(mealType, menuDate, 'sidebar');
 
     // Registrar el contador si existe la comida
     if (meal) {
@@ -622,30 +651,123 @@ class MenuCountdownSystem {
     const { state } = this.calculateMealStatus(meal, menuDate);
     const statusClass = this.getStatusClass(state);
 
-    return `
-            <div class="meal-card-full ${mealType}">
-                <div class="meal-card-image">
-                    <img src="${meal?.image || 'assets/img/default-food.jpg'}" alt="${meal?.name || title}" class="meal-image">
-                    <div class="meal-card-overlay">
-                        <h5 class="meal-title">${title}</h5>
-                        <span class="meal-time">${meal?.start || '--:--'} - ${meal?.end || '--:--'}</span>
-                    </div>
-                    <div class="meal-status-indicator ${statusClass}">
-                        ${this.getStatusText(state)}
-                    </div>
-                </div>
-                <div class="meal-card-content">
-                    <h4 class="meal-name">${meal?.name || 'Menú no especificado'}</h4>
-                    <p class="meal-description">${meal?.description || 'Descripción no disponible'}</p>
-                    <div id="${finalCountdownId}" class="meal-countdown-container"></div>
-                    ${meal ? `
-                    <button class=" btn meal-details-btn" data-meal='${JSON.stringify(meal)}' data-meal-type="${mealType}" data-date="${menuDate}">
-                        Ver detalles
-                    </button>
-                    ` : ''}
+    // Si no hay comida, mostrar estado vacío
+    if (!meal) {
+      return `
+            <div class="sidebar-meal-card" data-meal="null" data-meal-type="${mealType}" data-date="${menuDate}">
+                <div class="sidebar-empty-meal">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                    </svg>
+                    <p>No hay ${title.toLowerCase()} programado</p>
                 </div>
             </div>
         `;
+    }
+
+    return `
+        <div class="sidebar-meal-card" data-meal='${JSON.stringify(meal)}' 
+             data-meal-type="${mealType}" data-date="${menuDate}">
+            <div class="sidebar-meal-header">
+                <div class="sidebar-meal-time">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span>${meal.start} - ${meal.end}</span>
+                </div>
+                <span class="sidebar-meal-type ${mealType}">
+                    ${mealType === 'desayuno' ? 'Desayuno' : 'Almuerzo'}
+                </span>
+            </div>
+            
+            <div class="sidebar-meal-content">
+                <div class="sidebar-meal-image">
+                    <img src="${meal.image || 'assets/img/default-food.jpg'}" alt="${meal.name}">
+                </div>
+                <div class="sidebar-meal-info">
+                    <h4 class="sidebar-meal-name">${meal.name}</h4>
+                    <p class="sidebar-meal-description">${meal.description || 'Descripción no disponible'}</p>
+                </div>
+            </div>
+            
+            <div class="sidebar-meal-footer">
+                <div class="sidebar-meal-status ${statusClass}">
+                    ${this.getStatusText(state)}
+                </div>
+                <div id="${finalCountdownId}" class="sidebar-countdown"></div>
+            </div>
+        </div>
+    `;
+  }
+
+  // Función para renderizar el contador en formato sidebar
+  renderSidebarCountdownContent(status, timeRemaining, mealType) {
+    if (timeRemaining === null) {
+      return `<span>Completado</span>`;
+    }
+
+    switch (status) {
+      case 'pending':
+        if (timeRemaining.days > 0) {
+          return `
+                    <div class="sidebar-compact-counter">
+                        <div class="sidebar-time-block">
+                            <span class="sidebar-time-value">${this.padZero(timeRemaining.days)}</span>
+                            <span class="sidebar-time-label">d</span>
+                        </div>
+                        <span class="sidebar-time-separator">:</span>
+                        <div class="sidebar-time-block">
+                            <span class="sidebar-time-value">${this.padZero(timeRemaining.hours)}</span>
+                            <span class="sidebar-time-label">h</span>
+                        </div>
+                    </div>
+                `;
+        } else {
+          return `
+                    <div class="sidebar-compact-counter">
+                        <div class="sidebar-time-block">
+                            <span class="sidebar-time-value">${this.padZero(timeRemaining.hours)}</span>
+                            <span class="sidebar-time-label">h</span>
+                        </div>
+                        <span class="sidebar-time-separator">:</span>
+                        <div class="sidebar-time-block">
+                            <span class="sidebar-time-value">${this.padZero(timeRemaining.minutes)}</span>
+                            <span class="sidebar-time-label">m</span>
+                        </div>
+                        <div class="sidebar-time-block">
+                            <span class="sidebar-time-value">${this.padZero(timeRemaining.seconds)}</span>
+                            <span class="sidebar-time-label">m</span>
+                        </div>
+                    </div>
+                `;
+        }
+
+      case 'in-progress':
+        return `
+                <div class="sidebar-compact-counter">
+                    <div class="sidebar-time-block">
+                        <span class="sidebar-time-value">${this.padZero(timeRemaining.hours)}</span>
+                        <span class="sidebar-time-label">h</span>
+                    </div>
+                    <span class="sidebar-time-separator">:</span>
+                    <div class="sidebar-time-block">
+                        <span class="sidebar-time-value">${this.padZero(timeRemaining.minutes)}</span>
+                        <span class="sidebar-time-label">m</span>
+                    </div>
+                    <span class="sidebar-time-separator">:</span>
+                    <div class="sidebar-time-block">
+                        <span class="sidebar-time-value">${this.padZero(timeRemaining.seconds)}</span>
+                        <span class="sidebar-time-label">s</span>
+                    </div>
+                </div>
+            `;
+
+      case 'completed':
+        return `<span>Completado</span>`;
+
+      default:
+        return `<span>--:--</span>`;
+    }
   }
 
   renderUpcomingMenus(menus) {
@@ -724,15 +846,101 @@ class MenuCountdownSystem {
 
   setupEventListeners() {
     document.addEventListener('click', (e) => {
-      if (e.target.classList.contains('.meal-details-btn') || e.target.closest('.meal-details-btn')) {
-        const btn = e.target.classList.contains('.meal-details-btn') ? e.target : e.target.closest('.meal-details-btn');
-        const mealData = JSON.parse(btn.getAttribute('data-meal'));
-        const mealType = btn.getAttribute('data-meal-type');
-        const date = btn.getAttribute('data-date');
+      // 1. Manejar clic en botones de detalles (si aún existen)
+      const detailsBtn = e.target.closest('.meal-details-btn');
+      if (detailsBtn) {
+        e.preventDefault();
+        this.handleMealDetailsClick(detailsBtn);
+        return; // Salir después de manejar este evento
+      }
 
-        // Encontrar el menú completo para obtener información de cocinera y ayudantes
-        const menuCard = btn.closest('.menu-card');
+      // 2. Manejar clic en tarjetas del sidebar
+      const sidebarCard = e.target.closest('.sidebar-meal-card');
+      if (sidebarCard) {
+        e.preventDefault();
+        this.handleSidebarCardClick(sidebarCard);
+        return; // Salir después de manejar este evento
+      }
+
+      // 3. Manejar clic en elementos de lista (si los tienes)
+      const listItem = e.target.closest('.meal-list-item');
+      if (listItem) {
+        e.preventDefault();
+        this.handleListItemClick(listItem);
+        return; // Salir después de manejar este evento
+      }
+    });
+  }
+
+
+  handleMealDetailsClick(btn) {
+    const mealData = JSON.parse(btn.getAttribute('data-meal'));
+    const mealType = btn.getAttribute('data-meal-type');
+    const date = btn.getAttribute('data-date');
+
+    // Encontrar el menú completo para obtener información de cocinera y ayudantes
+    const menuCard = btn.closest('.menu-card');
+    let menuInfo = {};
+
+    if (menuCard) {
+      const menuDateText = menuCard.querySelector('.menu-card-date').textContent;
+      const day = menuDateText.split(',')[0].trim();
+      const datePart = menuDateText.split(',')[1].trim();
+
+      menuInfo = this.menuData.find(m =>
+        m.day === day && this.formatDisplayDate(m.date) === datePart
+      );
+    }
+
+    if (mealData) {
+      this.showMealDetails(mealData, mealType, date, menuInfo);
+    }
+  }
+
+  handleSidebarCardClick(card) {
+    const mealDataStr = card.getAttribute('data-meal');
+
+    // Verificar si la tarjeta tiene datos de comida (no es una tarjeta vacía)
+    if (mealDataStr && mealDataStr !== '' && mealDataStr !== 'null') {
+      try {
+        const mealData = JSON.parse(mealDataStr);
+        const mealType = card.getAttribute('data-meal-type');
+        const date = card.getAttribute('data-date');
+
+        // Encontrar el menú completo
         let menuInfo = {};
+        const menuSection = card.closest('.sidebar-widget');
+
+        if (menuSection) {
+          // Buscar información adicional si está disponible
+          const menuTitle = menuSection.querySelector('h3')?.textContent;
+          if (menuTitle && menuTitle.includes('Hoy')) {
+            const today = this.formatDate(new Date());
+            menuInfo = this.menuData.find(m => m.date === today);
+          }
+        }
+
+        if (mealData) {
+          this.showMealDetails(mealData, mealType, date, menuInfo);
+        }
+      } catch (error) {
+        console.error('Error parsing meal data:', error);
+      }
+    }
+  }
+
+  handleListItemClick(item) {
+    const mealDataStr = item.getAttribute('data-meal');
+
+    if (mealDataStr && mealDataStr !== '') {
+      try {
+        const mealData = JSON.parse(mealDataStr);
+        const mealType = item.getAttribute('data-meal-type');
+        const date = item.getAttribute('data-date');
+
+        // Encontrar el menú completo
+        let menuInfo = {};
+        const menuCard = item.closest('.menu-card');
 
         if (menuCard) {
           const menuDateText = menuCard.querySelector('.menu-card-date').textContent;
@@ -747,8 +955,10 @@ class MenuCountdownSystem {
         if (mealData) {
           this.showMealDetails(mealData, mealType, date, menuInfo);
         }
+      } catch (error) {
+        console.error('Error parsing meal data:', error);
       }
-    });
+    }
   }
 
   showMealDetails(meal, mealType, date, menuInfo) {
