@@ -78,7 +78,7 @@ const productsData = [
             "Disponible en tallas: XS, S, M, L"
         ],
         sizes: ["XS", "S", "M", "L"],
-        colors: ["Azul marino", "Gris oscuro"],
+        colors: ["Bordeaux",],
         images: [
             "assets/img/products/woman/falda-1.png",
             "assets/img/products/woman/falda-2.png"
