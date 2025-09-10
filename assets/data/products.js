@@ -59,8 +59,8 @@ const productsData = [
         sizes: ["S", "M", "L, XL"],
         colors: ["Azul marino", "Negro", "Gris"],
         images: [
-            "assets/img/products/chompa-varon-1.jpg",
-            "assets/img/products/chompa-varon-2.jpg"
+            "assets/img/products/man/chompa-varon-1.png",
+            "assets/img/products/man/chompa-varon-2.png"
         ],
         tags: ["chompa", "varon", "invierno", "abrigado"],
         status: "available"
@@ -80,8 +80,8 @@ const productsData = [
         sizes: ["XS", "S", "M", "L"],
         colors: ["Azul marino", "Bordeaux", "Gris claro"],
         images: [
-            "assets/img/products/woman/chompa-dama-1.jpg",
-            "assets/img/products/woman/chompa-dama-2.jpg"
+            "assets/img/products/woman/chompa-dama-1.png",
+            "assets/img/products/woman/chompa-dama-2.png"
         ],
         tags: ["chompa", "dama", "invierno", "elegante"],
         status: "available"
@@ -101,8 +101,8 @@ const productsData = [
         sizes: ["XS", "S", "M", "L"],
         colors: ["Azul marino", "Gris oscuro"],
         images: [
-            "assets/img/products/woman/falda-1.jpg",
-            "assets/img/products/woman/falda-2.jpg"
+            "assets/img/products/woman/falda-1.png",
+            "assets/img/products/woman/falda-2.png"
         ],
         tags: ["falda", "dama", "escolar", "pliegues"],
         status: "available"
