@@ -290,11 +290,8 @@ class MenuCountdownSystem {
                     <p class="meal-description">${meal?.description || 'Descripción no disponible'}</p>
                     <div id="${finalCountdownId}" class="meal-countdown-container"></div>
                     ${meal ? `
-                    <button class="meal-details-btn" data-meal='${JSON.stringify(meal)}' data-meal-type="${mealType}" data-date="${menuDate}">
+                    <button class="btn meal-details-btn" data-meal='${JSON.stringify(meal)}' data-meal-type="${mealType}" data-date="${menuDate}">
                         Ver detalles
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-                        </svg>
                     </button>
                     ` : ''}
                 </div>
@@ -642,11 +639,8 @@ class MenuCountdownSystem {
                     <p class="meal-description">${meal?.description || 'Descripción no disponible'}</p>
                     <div id="${finalCountdownId}" class="meal-countdown-container"></div>
                     ${meal ? `
-                    <button class="meal-details-btn" data-meal='${JSON.stringify(meal)}' data-meal-type="${mealType}" data-date="${menuDate}">
+                    <button class=" btn meal-details-btn" data-meal='${JSON.stringify(meal)}' data-meal-type="${mealType}" data-date="${menuDate}">
                         Ver detalles
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-                        </svg>
                     </button>
                     ` : ''}
                 </div>
