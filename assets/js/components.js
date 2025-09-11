@@ -411,7 +411,7 @@ function loadFooter() {
                             <svg viewBox="0 0 24 24" width="16" height="16" class="contact-icon">
                                 <path fill="currentColor" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
                             </svg>
-                            A. El Estudiante S/N, Copani
+                            Av. El Estudiante S/N, Copani
                         </li>
                         <li class="contact-item">
                             <svg viewBox="0 0 24 24" width="16" height="16" class="contact-icon">
@@ -451,7 +451,7 @@ function loadFooter() {
             </div>
             
             <div class="footer-bottom">
-                <p class="copyright">&copy; ${new Date().getFullYear()} Blog Escolar. Todos los derechos reservados.</p>
+                <p class="copyright">&copy; ${new Date().getFullYear()} Blog Escolar | Todos los derechos reservados.</p>
             </div>
         </div>
     `;

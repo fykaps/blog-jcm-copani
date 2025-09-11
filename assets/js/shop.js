@@ -1,5 +1,5 @@
 /**
- * Sistema de Tienda Escolar - Versión Profesional con Paginación Mejorada
+ * Sistema de Tienda Escolar - Versión Profesional con Estadísticas
  * Con modal de productos, filtros, búsqueda y diseño responsive
  */
 
@@ -27,9 +27,67 @@ class ShopSystem {
         this.setupFilters();
         this.setupSorting();
         this.setupSearch();
-        this.setupItemsPerPageSelector();
         this.setupProductModal();
         this.setupPagination();
+        this.updateShopStats();
+        this.setupCategoryFilters();
+    }
+
+    // ======================
+    //  ESTADÍSTICAS DE TIENDA
+    // ======================
+
+    updateShopStats() {
+        const totalProducts = this.products.length;
+
+        // Contar categorías únicas
+        const uniqueCategories = new Set(this.products.map(product => product.category));
+        const totalCategories = uniqueCategories.size;
+
+        // Actualizar los elementos del DOM
+        this.updateStatElement('products-stat', totalProducts);
+        this.updateStatElement('categories-stat', totalCategories);
+
+        // Iniciar animación de los contadores
+        this.animateShopStats();
+    }
+
+    updateStatElement(statId, value) {
+        const element = document.querySelector(`[data-stat="${statId}"]`);
+        if (element) {
+            element.setAttribute('data-count', value);
+            element.textContent = '0'; // Reset para la animación
+        }
+    }
+
+    animateShopStats() {
+        const statElements = document.querySelectorAll('.shop-stat-number');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const statElement = entry.target;
+                    const target = parseInt(statElement.getAttribute('data-count'));
+                    const duration = 1500;
+                    const increment = target / (duration / 16);
+
+                    let current = 0;
+
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= target) {
+                            clearInterval(timer);
+                            current = target;
+                        }
+                        statElement.textContent = Math.floor(current);
+                    }, 16);
+
+                    observer.unobserve(statElement);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        statElements.forEach(stat => observer.observe(stat));
     }
 
     // ======================
@@ -143,7 +201,7 @@ class ShopSystem {
                         ${product.colors && product.colors.length > 0 ? `
                         <div class="product-colors">
                             ${product.colors.map(color => `
-                                <div class="color-swatch" data-color="${color}">
+                                <div class="color-swatch" data-color="${color}" style="background-color: ${this.getColorValue(color)}">
                                     <span class="color-tooltip">${color}</span>
                                 </div>
                             `).join('')}
@@ -292,7 +350,9 @@ class ShopSystem {
                 this.renderProductsGrid();
             });
         });
+    }
 
+    setupCategoryFilters() {
         // Filtros de categorías en sidebar
         document.querySelectorAll('.category-filter').forEach(button => {
             button.addEventListener('click', (e) => {
@@ -343,19 +403,6 @@ class ShopSystem {
                 }
             });
         }
-    }
-
-    setupItemsPerPageSelector() {
-        const itemsPerPageSelect = document.getElementById('items-per-page');
-        if (!itemsPerPageSelect) return;
-
-        itemsPerPageSelect.value = this.options.productsPerPage;
-
-        itemsPerPageSelect.addEventListener('change', (e) => {
-            this.options.productsPerPage = parseInt(e.target.value);
-            this.currentPage = 1;
-            this.renderProductsGrid();
-        });
     }
 
     resetFilters() {
@@ -498,7 +545,7 @@ class ShopSystem {
                             <svg width="16" height="16" viewBox="0 0 24 24">
                                 <path fill="currentColor" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
                             </svg>
-                            <span>Calle Principal 123, Ciudad</span>
+                            <span>Av. El Estudiante S/N, Copani</span>
                         </div>
                     </div>
 

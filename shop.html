@@ -26,21 +26,61 @@
         <header id="main-header" class="header-fixed"></header>
 
         <main class="container">
-            <!-- Hero Section -->
+            <!-- Hero Section para Tienda -->
             <section class="shop-hero animate-fade-in">
+                <div class="shop-hero-decoration shop-hero-decoration-circle"></div>
+                <div class="shop-hero-decoration shop-hero-decoration-square"></div>
+
+                <div class="shop-hero-image" aria-hidden="true">
+                    <img src="assets/img/heros/shop-hero.jpg" alt="" loading="eager" decoding="async">
+                </div>
+
                 <div class="shop-hero-content">
+                    <nav class="breadcrumb-nav animate-fade-in" aria-label="Miga de pan">
+                        <ol class="breadcrumb-list">
+                            <li class="breadcrumb-item">
+                                <a href="index.html" class="breadcrumb-link">Inicio</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <span class="breadcrumb-current">Tienda</span>
+                            </li>
+                        </ol>
+                    </nav>
+
                     <h1 class="animate-slide-up">Tienda Escolar</h1>
+
                     <p class="shop-hero-description animate-slide-up delay-1">
                         Uniformes y materiales de la más alta calidad para nuestros estudiantes.
-                        Contacta con la institución para más información.
+                        Todo lo que necesitas para el año escolar con los colores y diseños oficiales de la institución.
                     </p>
-                    <div class="hero-actions animate-slide-up delay-2">
-                        <a href="#products-section" class="btn btn-primary" aria-label="Ver productos">
-                            Ver Productos
+
+                    <div class="shop-hero-actions animate-slide-up delay-2">
+                        <a href="#products-section" class="btn btn-primary btn-lg">
+                            <span>Ver Productos</span>
+                            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                                <path fill="currentColor"
+                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                            </svg>
                         </a>
-                        <a href="contact.html" class="btn btn-secondary" aria-label="Contactar">
-                            Contactar
+                        <a href="#contact-info" class="btn btn-secondary btn-lg">
+                            <span>Contactar</span>
+                            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                                <path fill="currentColor"
+                                    d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z" />
+                            </svg>
                         </a>
+                    </div>
+
+                    <!-- Estadísticas de la tienda -->
+                    <div class="shop-stats animate-fade-in delay-3">
+                        <div class="shop-stat-item">
+                            <span class="shop-stat-number" data-stat="products-stat" data-count="0">0</span>
+                            <span class="shop-stat-label">Productos</span>
+                        </div>
+                        <div class="shop-stat-item">
+                            <span class="shop-stat-number" data-stat="categories-stat" data-count="0">0</span>
+                            <span class="shop-stat-label">Categorías</span>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -50,11 +90,9 @@
                 <div class="controls-container">
                     <div class="shop-filters">
                         <button class="filter-button active" data-filter="all">Todos</button>
-                        <button class="filter-button" data-filter="uniforme">Uniformes</button>
                         <button class="filter-button" data-filter="chompa">Chompas</button>
                         <button class="filter-button" data-filter="falda">Faldas</button>
                         <button class="filter-button" data-filter="sombrero">Sombreros</button>
-                        <button class="filter-button" data-filter="combo">Combos</button>
                     </div>
 
                     <div class="search-sort-container">
@@ -74,18 +112,6 @@
                             <option value="name-asc">Nombre: A-Z</option>
                             <option value="name-desc">Nombre: Z-A</option>
                         </select>
-
-                        <!-- Selector de productos por página -->
-                        <div class="items-per-page-selector">
-                            <label for="items-per-page">Productos por página:</label>
-                            <select id="items-per-page" class="items-per-page-select">
-                                <option value="4">4</option>
-                                <option value="8" selected>8</option>
-                                <option value="12">16</option>
-                                <option value="16">32</option>
-                                <option value="20">64</option>
-                            </select>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -117,16 +143,14 @@
                         <h3>Categorías</h3>
                         <div class="category-filters">
                             <a href="#" class="category-filter active" data-filter="all">Todos los productos</a>
-                            <a href="#" class="category-filter" data-filter="uniforme">Uniformes</a>
                             <a href="#" class="category-filter" data-filter="chompa">Chompas</a>
                             <a href="#" class="category-filter" data-filter="falda">Faldas</a>
                             <a href="#" class="category-filter" data-filter="sombrero">Sombreros</a>
-                            <a href="#" class="category-filter" data-filter="combo">Combos</a>
                         </div>
                     </div>
 
                     <!-- Widget de información de contacto -->
-                    <div class="sidebar-widget animate-slide-left delay-6">
+                    <div class="sidebar-widget animate-slide-left delay-6" id="contact-info">
                         <h3>Información de Contacto</h3>
                         <div class="contact-info">
                             <div class="info-item">
@@ -148,14 +172,14 @@
                                     <path fill="currentColor"
                                         d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
                                 </svg>
-                                <span>Calle Principal 123, Ciudad</span>
+                                <span>Av. El Estudiante S/N, Copani</span>
                             </div>
                             <div class="info-item">
                                 <svg width="20" height="20" viewBox="0 0 24 24">
                                     <path fill="currentColor"
-                                        d="M12 11.5A2.5 2.5 0 0 1 9.5 9A2.5 2.5 0 0 1 12 6.5A2.5 2.5 0 0 1 14.5 9a2.5 2.5 0 0 1-2.5 2.5M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7z" />
+                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm.75 11H12c-.41 0-.75-.34-.75-.75V7c0-.41.34-.75.75-.75s.75.34.75.75v4.25H16c.41 0 .75.34.75.75s-.34.75-.75.75h-3.25z" />
                                 </svg>
-                                <span>Lunes a Viernes: 8:00 AM - 4:00 PM</span>
+                                <span>Lunes a Viernes: 8:15 - 15:00</span>
                             </div>
                         </div>
                     </div>
