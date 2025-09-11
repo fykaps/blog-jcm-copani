@@ -1115,13 +1115,13 @@ img {
 /* HERO: MENÚ/COMEDOR */
 .hero-menu {
   background: linear-gradient(135deg, 
-        var(--color-secondary-800) 0%, 
-        var(--color-gray-600) 50%, 
+        var(--color-primary-600) 0%, 
+        var(--color-success) 50%, 
         var(--color-primary-600) 100%);
 }
 
 .hero-menu .section-hero-decoration-square {
-  background: linear-gradient(45deg, var(--color-secondary-400) 0%, transparent 70%);
+  background: linear-gradient(45deg, var(--color-primary-400) 0%, transparent 70%);
 }
 
 /* HERO: GALERÍAS */
