@@ -13,9 +13,9 @@
     display: flex;
     align-items: center;
     background: linear-gradient(135deg, 
-        var(--color-secondary-700) 0%, 
-        var(--color-secondary-500) 50%, 
-        var(--color-primary-600) 100%);
+    var(--color-warning-dark) 0%, 
+    var(--color-warning) 50%, 
+    var(--color-primary-600) 100%);
 }
 
 .shop-hero::before {
@@ -113,7 +113,7 @@
 .shop-hero-decoration-square {
     width: 10rem;
     height: 10rem;
-    background: linear-gradient(45deg, var(--color-primary-400) 0%, transparent 70%);
+    background: linear-gradient(45deg, var(--color-warning-light) 0%, transparent 70%);
     opacity: 0.1;
     position: absolute;
     bottom: -3rem;
