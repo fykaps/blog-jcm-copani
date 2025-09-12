@@ -2,6 +2,25 @@
 const eventsData = [
     {
         id: 1,
+        date: "2025-09-03",
+        startTime: "14:00",
+        endTime: "15:00",
+        title: "Concurso Crea y Emprende 2025 - Etapa IE",
+        description: "El IES José Carlos Mariátegui de Copani desarrolló la etapa institucional del Concurso Nacional Crea y Emprende 2025 en el patio principal del colegio. En esta fase, los estudiantes presentaron proyectos innovadores, fortaleciendo sus competencias en emprendimiento, creatividad y solución de problemas con impacto social.",
+        topics: [
+            "Presentación de ideas de negocio por estudiantes",
+            "Evaluación institucional de propuestas",
+            "Fomento del emprendimiento juvenil",
+            "Selección de representantes para la etapa UGEL"
+        ],
+        location: "Patio principal - IES José Carlos Mariátegui, Copani",
+        category: "Académico",
+        image: "assets/img/events/evento-2025-09-03-crea-y-emprende-etapa-ie.jpg",
+        featured: true,
+        status: "completed"
+    },
+    {
+        id: 2,
         date: "2025-09-04",
         startTime: "13:00",
         endTime: "14:30",
@@ -15,7 +34,7 @@ const eventsData = [
         status: "active"
     },
     {
-        id: 2,
+        id: 3,
         date: "2025-09-10",
         startTime: "08:00",
         endTime: "10:00",
@@ -28,6 +47,27 @@ const eventsData = [
         featured: true,
         status: "active"
     },
+    {
+        id: 4,
+        date: "2025-09-16",
+        startTime: "09:00",
+        endTime: "16:00",
+        title: "Concurso Crea y Emprende 2025 - Etapa UGEL (Expo Feria)",
+        description: "La etapa UGEL del Concurso Nacional Crea y Emprende 2025 se llevará a cabo en el Coliseo Municipal de Yunguyo. Los equipos seleccionados de las diferentes instituciones educativas presentarán sus proyectos en una Expo Feria, mostrando soluciones innovadoras con impacto social, económico y ambiental.",
+        topics: [
+            "Expo Feria de proyectos emprendedores",
+            "Evaluación interinstitucional",
+            "Fomento de la creatividad y la innovación",
+            "Clasificación a la etapa DRE"
+        ],
+        location: "Coliseo Municipal de Yunguyo",
+        category: "Académico",
+        image: "assets/img/events/evento-2025-09-15-crea-y-emprende-etapa-ugel.jpg",
+        featured: true,
+        status: "scheduled"
+    }
+
+
     // {
     //     id: 2,
     //     date: "2025-06-15",

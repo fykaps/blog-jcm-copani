@@ -75,6 +75,31 @@ const meetingsData = [
     },
     {
         id: 4,
+        date: "2025-08-19",
+        startTime: "09:00",
+        endTime: "11:00",
+        title: "Escuela de padres - Prevención y desarrollo",
+        description: "Sesión formativa para padres sobre prevención del cáncer de cuello uterino y desarrollo integral de los estudiantes.",
+        agenda: [
+            "Charla médica: Prevención del cáncer de cuello uterino",
+            "Desarrollo emocional en adolescentes",
+            "Estrategias de apoyo académico en casa",
+            "Entrega de boletas de notas",
+            "Espacio de reflexión"
+        ],
+        participants: ["Padres de familia", "Especialistas en salud", "Psicólogos escolares"],
+        location: "Sala de usos múltiples (SUM)",
+        category: "Formativo",
+        organizer: "Departamento de bienestar estudiantil",
+        required: false,
+        minAttendance: 1,
+        status: "scheduled",
+        materials: ["Guía de prevención", "Material de apoyo psicológico", "Evaluación formativa"],
+        recording: false,
+        followUpRequired: true
+    },
+    {
+        id: 5,
         date: "2025-09-15",
         startTime: "09:30",
         endTime: "12:00",

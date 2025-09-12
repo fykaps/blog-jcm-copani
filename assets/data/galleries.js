@@ -74,4 +74,19 @@ const galleryData = [
         date: "2025-06-25",
         description: "Hoy rendimos homenaje a quienes con esfuerzo, dedicación y amor por la tierra, cultivan el alimento que llega a nuestras mesas. ¡Feliz Día del Campesino! Su labor es la raíz que sostiene a nuestra sociedad."
     },
+    {
+        id: 5,
+        title: "Concurso Crea y Emprende 2025 - Etapa IE",
+        coverImage: "assets/img/galleries/crea-y-emprende-2025-etapa-ie/cover.jpg",
+        media: [
+            { type: "image", url: "assets/img/galleries/crea-y-emprende-2025-etapa-ie/img1.jpg", caption: "Estudiantes presentando sus proyectos en el patio principal" },
+            { type: "image", url: "assets/img/galleries/crea-y-emprende-2025-etapa-ie/img2.jpg", caption: "Jurado evaluando las ideas innovadoras de los participantes" },
+            // { type: "video", url: "assets/video/galleries/crea-y-emprende-2025/video1.mp4", caption: "Momento de la premiación en la etapa institucional", poster: "assets/img/galleries/crea-y-emprende-2025/video-poster.jpg" },
+            // { type: "image", url: "assets/img/galleries/crea-y-emprende-2025/img3.jpg", caption: "Equipo ganador celebrando con entusiasmo" }
+        ],
+        category: "Académico",
+        date: "2025-09-03",
+        description: "La etapa institucional del Concurso Nacional Crea y Emprende 2025 se desarrolló en el patio principal del IES José Carlos Mariátegui. Los estudiantes mostraron su creatividad y espíritu emprendedor presentando proyectos innovadores con impacto social."
+    }
+
 ];
