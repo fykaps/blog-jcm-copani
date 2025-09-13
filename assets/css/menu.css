@@ -331,7 +331,7 @@
     font-size: var(--text-sm);
     font-weight: var(--font-bold);
     color: rgba(255, 255, 255, 0.9);
-    background: var(--color-primary);
+    background: var(--color-primary-600);
     padding: var(--space-1) var(--space-2);
     border-radius: var(--radius-full);
     display: inline-block;
