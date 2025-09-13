@@ -138,7 +138,7 @@ class EventSystem {
     const daysInMonth = lastDay.getDate();
 
     const monthEvents = this.events.filter(event => {
-      const eventDate = new Date(event.date);
+      const eventDate = this.parseLocalDate(event.date);
       return eventDate.getMonth() === this.currentMonth &&
         eventDate.getFullYear() === this.currentYear;
     });
@@ -830,8 +830,10 @@ class EventSystem {
 
   calculateEventStatus(event) {
     const now = new Date();
-    const eventStart = new Date(`${event.date}T${event.startTime}`);
-    const eventEnd = new Date(`${event.date}T${event.endTime}`);
+    const eventStart = this.parseLocalDate(event.date);
+    eventStart.setHours(...event.startTime.split(':').map(Number));
+    const eventEnd = this.parseLocalDate(event.date);
+    eventEnd.setHours(...event.endTime.split(':').map(Number));
 
     const states = {
       UPCOMING: 'upcoming',
@@ -1004,24 +1006,37 @@ class EventSystem {
   //  FUNCIONES UTILITARIAS
   // ======================
 
+  parseLocalDate(dateStr) {
+    if (!dateStr) return new Date();
+
+    const parts = dateStr.split('-');
+    if (parts.length !== 3) return new Date(dateStr);
+
+    return new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+  }
+
   formatDay(dateStr) {
-    const date = new Date(dateStr);
+    const date = this.parseLocalDate(dateStr);
     return date.getDate();
   }
 
   formatMonth(dateStr) {
-    const date = new Date(dateStr);
+    const date = this.parseLocalDate(dateStr);
     return date.toLocaleDateString('es-ES', { month: 'short' }).toUpperCase();
   }
 
   formatShortMonth(dateStr) {
-    const date = new Date(dateStr);
+    const date = this.parseLocalDate(dateStr);
     return date.toLocaleDateString('es-ES', { month: 'short' }).slice(0, 3);
   }
 
   formatFullDate(dateStr) {
-    const date = new Date(dateStr);
-    return date.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' });
+    const date = this.parseLocalDate(dateStr);
+    return date.toLocaleDateString('es-ES', {
+      weekday: 'short',
+      day: 'numeric',
+      month: 'short'
+    });
   }
 
   getMonthName(monthIndex) {
