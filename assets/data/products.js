@@ -107,44 +107,44 @@ const productsData = [
         tags: ["sombrero", "unisex", "protección solar", "verano"],
         status: "available"
     },
-    // {
-    //     id: 7,
-    //     name: "Combo Uniforme Completo Varón",
-    //     category: "combo",
-    //     subcategory: "varon",
-    //     description: "Combo completo que incluye uniforme, chompa y sombrero para varones. Contactar para más información.",
-    //     features: [
-    //         "Incluye: uniforme, chompa y sombrero",
-    //         "Calidad garantizada en todos los productos",
-    //         "Disponible en tallas coordinadas"
-    //     ],
-    //     sizes: ["S", "M", "L", "XL"],
-    //     colors: ["Azul marino"],
-    //     images: [
-    //         "assets/img/products/combo-varon-1.jpg",
-    //         "assets/img/products/combo-varon-2.jpg"
-    //     ],
-    //     tags: ["combo", "varon", "completo"],
-    //     status: "available"
-    // },
-    // {
-    //     id: 8,
-    //     name: "Combo Uniforme Completo Dama",
-    //     category: "combo",
-    //     subcategory: "dama",
-    //     description: "Combo completo que incluye uniforme, chompa, falda y sombrero para damas. Contactar para más información.",
-    //     features: [
-    //         "Incluye: uniforme, chompa, falda y sombrero",
-    //         "Calidad premium garantizada",
-    //         "Disponible en tallas coordinadas"
-    //     ],
-    //     sizes: ["XS", "S", "M", "L"],
-    //     colors: ["Azul marino"],
-    //     images: [
-    //         "assets/img/products/combo-dama-1.jpg",
-    //         "assets/img/products/combo-dama-2.jpg"
-    //     ],
-    //     tags: ["combo", "dama", "completo"],
-    //     status: "available"
-    // }
+    {
+        id: 4,
+        name: "Combo Uniforme Completo Varón",
+        category: "combo",
+        subcategory: "varon",
+        description: "Combo completo que incluye uniforme, chompa y sombrero para varones. Contactar para más información.",
+        features: [
+            "Incluye: uniforme, chompa y sombrero",
+            "Calidad garantizada en todos los productos",
+            "Disponible en tallas coordinadas"
+        ],
+        sizes: ["S", "M", "L", "XL"],
+        colors: ["Azul marino", "Bordeaux",],
+        images: [
+            "assets/img/products/man/combo-varon-1.png",
+            // "assets/img/products/man/combo-varon-2.png"
+        ],
+        tags: ["combo", "varon", "completo"],
+        status: "available"
+    },
+    {
+        id: 5,
+        name: "Combo Uniforme Completo Dama",
+        category: "combo",
+        subcategory: "dama",
+        description: "Combo completo que incluye uniforme, chompa, falda y sombrero para damas. Contactar para más información.",
+        features: [
+            "Incluye: uniforme, chompa, falda y sombrero",
+            "Calidad premium garantizada",
+            "Disponible en tallas coordinadas"
+        ],
+        sizes: ["XS", "S", "M", "L"],
+        colors: ["Azul marino", "Bordeaux",],
+        images: [
+            "assets/img/products/woman/combo-dama-1.png",
+            // "assets/img/products/woman/combo-dama-2.png"
+        ],
+        tags: ["combo", "dama", "completo"],
+        status: "available"
+    }
 ];
