@@ -9,6 +9,8 @@
  * - Sistema de conteo de medios con colores distintivos
  * - Diseño responsive
  * - Estados de carga
+ * CORREGIDO: Problema de zona horaria en fechas
+ * CORREGIDO: Ordenamiento por fecha más reciente primero
  */
 
 class GalleryManager {
@@ -16,6 +18,7 @@ class GalleryManager {
         this.galleryData = galleryData;
         this.options = {
             eventsPerPage: 6,
+            recentGalleriesCount: 3,
             ...options
         };
         this.currentFilter = 'all';
@@ -27,8 +30,63 @@ class GalleryManager {
         this.imageObserver = null;
     }
 
+    // ======================
+    //  UTILIDADES DE FECHA (CORREGIDAS)
+    // ======================
+
+    /**
+     * Parsea una fecha en formato YYYY-MM-DD sin problemas de zona horaria
+     * @param {string} dateStr - Fecha en formato YYYY-MM-DD
+     * @returns {Date} - Objeto Date correctamente ajustado
+     */
+    parseLocalDate(dateStr) {
+        if (!dateStr) return new Date();
+
+        const parts = dateStr.split('-');
+        if (parts.length !== 3) return new Date(dateStr);
+
+        // Crear fecha en zona horaria local (sin ajuste UTC)
+        return new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+    }
+
+    /**
+     * Formatea una fecha en español sin problemas de zona horaria
+     * @param {string} dateString - Fecha en formato YYYY-MM-DD
+     * @returns {string} - Fecha formateada
+     */
+    formatDate(dateString) {
+        try {
+            const date = this.parseLocalDate(dateString);
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return date.toLocaleDateString('es-ES', options);
+        } catch (error) {
+            console.error('Error formateando fecha:', error);
+            return dateString;
+        }
+    }
+
+    /**
+     * Ordena las galerías por fecha (más recientes primero)
+     * @param {Array} galleries - Array de galerías
+     * @returns {Array} - Galerías ordenadas por fecha
+     */
+    sortGalleriesByDate(galleries) {
+        return [...galleries].sort((a, b) => {
+            const dateA = this.parseLocalDate(a.date);
+            const dateB = this.parseLocalDate(b.date);
+            return dateB - dateA; // Más recientes primero
+        });
+    }
+
+    // ======================
+    //  MÉTODOS PRINCIPALES (CON FECHAS CORREGIDAS)
+    // ======================
+
     init() {
         if (this.initialized) return;
+
+        // Ordenar todos los datos por fecha al inicializar
+        this.galleryData = this.sortGalleriesByDate(this.galleryData);
 
         this.showLoadingState();
         this.displayGallery();
@@ -41,19 +99,16 @@ class GalleryManager {
         this.initialized = true;
     }
 
-
     // ======================
-    //  GALERÍAS RECIENTES
+    //  GALERÍAS RECIENTES (CON FECHAS CORREGIDAS)
     // ======================
 
     displayRecentGalleries() {
         const container = document.getElementById('recent-galleries-container');
         if (!container) return;
 
-        // Obtener galerías más recientes (ordenadas por fecha)
-        const recentGalleries = [...this.galleryData]
-            .sort((a, b) => new Date(b.date) - new Date(a.date))
-            .slice(0, this.options.recentGalleriesCount);
+        // Obtener galerías más recientes (ya están ordenadas por sortGalleriesByDate)
+        const recentGalleries = this.galleryData.slice(0, this.options.recentGalleriesCount);
 
         if (recentGalleries.length === 0) {
             container.innerHTML = '<p class="no-galleries">No hay galerías recientes</p>';
@@ -83,24 +138,8 @@ class GalleryManager {
         this.setupRecentGalleryImages();
     }
 
-    setupRecentGalleryImages() {
-        const galleryImages = document.querySelectorAll('.recent-gallery-image');
-        galleryImages.forEach(container => {
-            const backgroundImage = container.style.backgroundImage;
-            const imageUrl = backgroundImage.replace('url("', '').replace('")', '');
-
-            // Precargar imagen
-            const img = new Image();
-            img.src = imageUrl;
-            img.onload = () => {
-                container.style.backgroundImage = `url('${imageUrl}')`;
-                container.classList.add('loaded');
-            };
-        });
-    }
-
     // ======================
-    //  ESTADÍSTICAS DE GALERÍA
+    //  ESTADÍSTICAS DE GALERÍA (CON FECHAS CORREGIDAS)
     // ======================
 
     calculateGalleryStats() {
@@ -150,60 +189,10 @@ class GalleryManager {
         };
     }
 
-    updateGalleryStats() {
-        const stats = this.calculateGalleryStats();
-
-        // Actualizar elementos del DOM
-        this.updateStatElement('total-galleries', stats.totalGalleries);
-        this.updateStatElement('total-photos', stats.totalPhotos);
-        this.updateStatElement('total-videos', stats.totalVideos);
-        this.updateStatElement('total-audios', stats.totalAudios);
-
-        // Iniciar animación de contadores
-        this.animateGalleryStats();
-    }
-
-    updateStatElement(statId, value) {
-        const element = document.querySelector(`[data-stat="${statId}"]`);
-        if (element) {
-            element.setAttribute('data-count', value);
-            element.textContent = '0'; // Reset para animación
-        }
-    }
-
-    animateGalleryStats() {
-        const statElements = document.querySelectorAll('.gallery-stat-number[data-stat]');
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const statElement = entry.target;
-                    const target = parseInt(statElement.getAttribute('data-count'));
-                    const duration = 1500;
-                    const increment = target / (duration / 16);
-
-                    let current = 0;
-
-                    const timer = setInterval(() => {
-                        current += increment;
-                        if (current >= target) {
-                            clearInterval(timer);
-                            current = target;
-                        }
-                        statElement.textContent = Math.floor(current);
-                    }, 16);
-
-                    observer.unobserve(statElement);
-                }
-            });
-        }, { threshold: 0.5 });
-
-        statElements.forEach(stat => observer.observe(stat));
-    }
-
     // ======================
     //  RENDERIZADO PRINCIPAL
     // ======================
+
     showLoadingState() {
         const container = document.getElementById('galleries-container');
         if (!container) return;
@@ -228,10 +217,12 @@ class GalleryManager {
         container.style.opacity = '0';
         container.style.transition = 'opacity 0.3s ease';
 
-        // Filtrar eventos
+        // Filtrar eventos y ordenar por fecha
         this.filteredEvents = filter === 'all'
-            ? [...this.galleryData]
-            : this.galleryData.filter(event => event.category === filter);
+            ? [...this.galleryData] // Ya están ordenados por fecha
+            : this.sortGalleriesByDate(
+                this.galleryData.filter(event => event.category === filter)
+            );
 
         this.totalPages = Math.ceil(this.filteredEvents.length / this.options.eventsPerPage);
 
@@ -274,7 +265,7 @@ class GalleryManager {
     }
 
     // ======================
-    //  PAGINACIÓN (similar a news.js)
+    //  PAGINACIÓN
     // ======================
 
     renderPagination() {
@@ -452,6 +443,7 @@ class GalleryManager {
         `;
     }
 
+
     getMediaCount(media) {
         const counts = {
             image: media.filter(m => m.type === 'image').length,
@@ -505,10 +497,11 @@ class GalleryManager {
     getCategoryDisplayName(category) {
         const categories = {
             'celebration': 'Celebración',
-            // 'sports': 'Deportes',
-            // 'cultural': 'Cultural',
-            // 'social': 'Social',
-            // 'other': 'Otros'
+            'academic': 'Académico',
+            'sport': 'Deporte',
+            'cultural': 'Cultural',
+            'social': 'Social',
+            'other': 'Otros'
         };
 
         return categories[category] || category;
@@ -561,18 +554,76 @@ class GalleryManager {
         });
     }
 
+    setupRecentGalleryImages() {
+        const galleryImages = document.querySelectorAll('.recent-gallery-image');
+        galleryImages.forEach(container => {
+            const backgroundImage = container.style.backgroundImage;
+            const imageUrl = backgroundImage.replace('url("', '').replace('")', '');
+
+            // Precargar imagen
+            const img = new Image();
+            img.src = imageUrl;
+            img.onload = () => {
+                container.style.backgroundImage = `url('${imageUrl}')`;
+                container.classList.add('loaded');
+            };
+        });
+    }
+
+    updateGalleryStats() {
+        const stats = this.calculateGalleryStats();
+
+        // Actualizar elementos del DOM
+        this.updateStatElement('total-galleries', stats.totalGalleries);
+        this.updateStatElement('total-photos', stats.totalPhotos);
+        this.updateStatElement('total-videos', stats.totalVideos);
+        this.updateStatElement('total-audios', stats.totalAudios);
+
+        // Iniciar animación de contadores
+        this.animateGalleryStats();
+    }
+
+    updateStatElement(statId, value) {
+        const element = document.querySelector(`[data-stat="${statId}"]`);
+        if (element) {
+            element.setAttribute('data-count', value);
+            element.textContent = '0'; // Reset para animación
+        }
+    }
+
+    animateGalleryStats() {
+        const statElements = document.querySelectorAll('.gallery-stat-number[data-stat]');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const statElement = entry.target;
+                    const target = parseInt(statElement.getAttribute('data-count'));
+                    const duration = 1500;
+                    const increment = target / (duration / 16);
+
+                    let current = 0;
+
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= target) {
+                            clearInterval(timer);
+                            current = target;
+                        }
+                        statElement.textContent = Math.floor(current);
+                    }, 16);
+
+                    observer.unobserve(statElement);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        statElements.forEach(stat => observer.observe(stat));
+    }
+
     truncateDescription(text, maxLength) {
         if (!text || text.length <= maxLength) return text || 'Sin descripción disponible';
         return text.substring(0, maxLength) + '...';
-    }
-
-    formatDate(dateString) {
-        try {
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            return new Date(dateString).toLocaleDateString('es-ES', options);
-        } catch (error) {
-            return dateString;
-        }
     }
 
     destroy() {
