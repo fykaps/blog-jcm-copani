@@ -7,6 +7,7 @@
  * - Gestión de likes y vistas
  * - Carga diferida de imágenes mejorada
  * - Estadísticas automáticas para el hero
+ * - CORRECCIÓN: Problema de zona horaria en fechas
  */
 
 class NewsManager {
@@ -27,6 +28,78 @@ class NewsManager {
         this.initialized = false;
         this.imageObserver = null; // Observer para imágenes
     }
+
+    // ======================
+    //  UTILIDADES DE FECHA (CORREGIDAS)
+    // ======================
+
+    /**
+     * Convierte una fecha en formato YYYY-MM-DD a objeto Date sin problemas de zona horaria
+     * @param {string} dateStr - Fecha en formato YYYY-MM-DD
+     * @returns {Date} - Objeto Date correctamente ajustado
+     */
+    parseLocalDate(dateStr) {
+        if (!dateStr) return new Date();
+
+        const parts = dateStr.split('-');
+        if (parts.length !== 3) return new Date(dateStr);
+
+        // Crear fecha en zona horaria local (sin ajuste UTC)
+        return new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+    }
+
+    /**
+     * Formatea una fecha al formato local sin problemas de zona horaria
+     * @param {string} dateStr - Fecha en formato YYYY-MM-DD
+     * @returns {string} - Fecha formateada correctamente
+     */
+    formatLocalDate(dateStr) {
+        const date = this.parseLocalDate(dateStr);
+        return date.toLocaleDateString('es-ES', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        });
+    }
+
+    /**
+     * Formatea una fecha completa en español
+     * @param {string} dateStr - Fecha en formato YYYY-MM-DD
+     * @returns {string} - Fecha completa formateada
+     */
+    formatFullLocalDate(dateStr) {
+        const date = this.parseLocalDate(dateStr);
+        return date.toLocaleDateString('es-ES', {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        });
+    }
+
+    /**
+     * Formatea una fecha para mostrar en la UI
+     * @param {string} dateStr - Fecha en formato YYYY-MM-DD
+     * @returns {string} - Fecha formateada
+     */
+    formatDate(dateString) {
+        const date = this.parseLocalDate(dateString);
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        return date.toLocaleDateString('es-ES', options);
+    }
+
+    /**
+     * Obtiene el timestamp de una fecha para ordenamiento
+     * @param {string} dateStr - Fecha en formato YYYY-MM-DD
+     * @returns {number} - Timestamp para ordenamiento
+     */
+    getDateTimestamp(dateStr) {
+        return this.parseLocalDate(dateStr).getTime();
+    }
+
+    // ======================
+    //  MÉTODOS PRINCIPALES (CON FECHAS CORREGIDAS)
+    // ======================
 
     init() {
         if (this.initialized) return;
@@ -116,7 +189,7 @@ class NewsManager {
     }
 
     // ======================
-    //  RENDERIZADO PRINCIPAL
+    //  RENDERIZADO PRINCIPAL (CON FECHAS CORREGIDAS)
     // ======================
 
     renderNewsList(filter = 'all', searchQuery = '') {
@@ -154,8 +227,8 @@ class NewsManager {
             filteredNews = filteredNews.filter(news => news.tags.includes(searchQuery));
         }
 
-        // Ordenar por fecha (más recientes primero)
-        filteredNews.sort((a, b) => new Date(b.date) - new Date(a.date));
+        // Ordenar por fecha (más recientes primero) - USANDO FECHAS CORREGIDAS
+        filteredNews.sort((a, b) => this.getDateTimestamp(b.date) - this.getDateTimestamp(a.date));
 
         this.activeNews = filteredNews;
         this.totalPages = Math.ceil(filteredNews.length / this.options.newsPerPage);
@@ -565,8 +638,9 @@ class NewsManager {
         const container = document.getElementById('recent-news-container');
         if (!container) return;
 
+        // Ordenar por fecha usando el método corregido
         const recentNews = [...this.news]
-            .sort((a, b) => new Date(b.date) - new Date(a.date))
+            .sort((a, b) => this.getDateTimestamp(b.date) - this.getDateTimestamp(a.date))
             .slice(0, 4);
 
         container.innerHTML = recentNews.length === 0 ?
@@ -755,12 +829,6 @@ class NewsManager {
     getViews(newsId) {
         const views = JSON.parse(localStorage.getItem('newsViews')) || {};
         return views[newsId] || 0;
-    }
-
-    formatDate(dateString) {
-        const date = new Date(dateString);
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        return date.toLocaleDateString('es-ES', options);
     }
 
     showConfetti() {
