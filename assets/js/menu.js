@@ -13,6 +13,21 @@ class MenuCountdownSystem {
     this.init();
   }
 
+  /**
+ * Parsea una fecha en formato YYYY-MM-DD sin problemas de zona horaria
+ * @param {string} dateStr - Fecha en formato YYYY-MM-DD
+ * @returns {Date} - Objeto Date correctamente ajustado
+ */
+  parseLocalDate(dateStr) {
+    if (!dateStr) return new Date();
+
+    const parts = dateStr.split('-');
+    if (parts.length !== 3) return new Date(dateStr);
+
+    // Crear fecha en zona horaria local (sin ajuste UTC)
+    return new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+  }
+
   init() {
     this.renderAllSections();
     this.renderSupportScheduleCards();
@@ -136,7 +151,7 @@ class MenuCountdownSystem {
     const todayTime = this.currentDate.getTime();
 
     return this.menuData.reduce((acc, menu) => {
-      const menuDate = new Date(menu.date);
+      const menuDate = this.parseLocalDate(menu.date); // Usar parseLocalDate
       const menuTime = menuDate.getTime();
       const dayDiff = Math.floor((todayTime - menuTime) / (1000 * 60 * 60 * 24));
 
@@ -354,12 +369,16 @@ class MenuCountdownSystem {
     const now = new Date();
     const today = this.formatDate(now);
 
+    // Usar parseLocalDate en lugar de new Date() para evitar problemas de zona horaria
+    const menuDateObj = this.parseLocalDate(menuDate);
+    const todayObj = this.parseLocalDate(today);
+
     // Verificar si el menú es para hoy
     if (menuDate !== today) {
-      const menuDateObj = new Date(menuDate);
       if (menuDateObj > now) {
         // Menú futuro - calcular tiempo hasta el inicio
-        const startTime = new Date(`${menuDate}T${meal.start}`);
+        const startTime = new Date(menuDateObj);
+        startTime.setHours(...meal.start.split(':').map(Number));
         const timeRemaining = startTime - now;
         return {
           status: 'pending',
@@ -372,8 +391,11 @@ class MenuCountdownSystem {
     }
 
     // Para menús de hoy, calcular tiempos exactos
-    const startTime = new Date(`${today}T${meal.start}`);
-    const endTime = new Date(`${today}T${meal.end}`);
+    const startTime = new Date(todayObj);
+    startTime.setHours(...meal.start.split(':').map(Number));
+
+    const endTime = new Date(todayObj);
+    endTime.setHours(...meal.end.split(':').map(Number));
 
     if (now < startTime) {
       // Evento pendiente - contar hacia startTime
@@ -1203,7 +1225,7 @@ class MenuCountdownSystem {
   }
 
   getDayFromDate(dateString) {
-    const date = new Date(dateString);
+    const date = this.parseLocalDate(dateString);
     const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
     return days[date.getDay()];
   }
@@ -1224,8 +1246,11 @@ class MenuCountdownSystem {
     if (!dateString) return 'Fecha no definida';
 
     try {
-      const [year, month, day] = dateString.split('-');
-      if (!year || !month || !day) return dateString;
+      const date = this.parseLocalDate(dateString);
+      const day = date.getDate().toString().padStart(2, '0');
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const year = date.getFullYear();
+
       return `${day}/${month}/${year}`;
     } catch (error) {
       console.error('Error al formatear fecha:', error);
