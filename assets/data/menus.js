@@ -5,12 +5,12 @@
 const weeklyMenu = [
     {
         day: "Lunes",
-        date: "2025-09-08",
+        date: "2025-09-15",
         cook: "Felicita Yujra Jimenez",
-        phone: "931893693",
+        phone: "+51 931 893 693",
         helpers: {
-            names: ["Olga Bernabé", "Lidia Herrera"],
-            grade: "5to B"
+            names: ["Felipa Copari", "Lidia Villanueva"],
+            grade: "1ro A"
         },
         breakfast: {
             start: "09:35",
@@ -52,12 +52,12 @@ const weeklyMenu = [
     },
     {
         day: "Martes",
-        date: "2025-09-09",
+        date: "2025-09-16",
         cook: "Felicita Yujra Jimenez",
-        phone: "931893693",
+        phone: "+51 931 893 693",
         helpers: {
             names: ["Patricia Ramírez", "Laura González"],
-            grade: "4to B"
+            grade: "1ro A"
         },
         breakfast: {
             start: "09:35",
@@ -98,12 +98,12 @@ const weeklyMenu = [
     },
     {
         day: "Miércoles",
-        date: "2025-09-10",
+        date: "2025-09-17",
         cook: "Felicita Yujra Jimenez",
-        phone: "931893693",
+        phone: "+51 931 893 693",
         helpers: {
             names: ["Sofía Martínez", "Elena Sánchez"],
-            grade: "4to A"
+            grade: "1ro A"
         },
         breakfast: {
             start: "09:35",
@@ -144,12 +144,12 @@ const weeklyMenu = [
     },
     {
         day: "Jueves",
-        date: "2025-09-11",
+        date: "2025-09-18",
         cook: "Felicita Yujra Jimenez",
-        phone: "931893693",
+        phone: "+51 931 893 693",
         helpers: {
             names: ["Matías Oro", "Elsa Plata"],
-            grade: "3ro A"
+            grade: "1ro A"
         },
         breakfast: {
             start: "09:35",
@@ -191,12 +191,12 @@ const weeklyMenu = [
     },
     {
         day: "Viernes",
-        date: "2025-09-12",
+        date: "2025-09-19",
         cook: "Felicita Yujra Jimenez",
-        phone: "931893693",
+        phone: "+51 931 893 693",
         helpers: {
             names: ["Olga Bernabé", "Lidia Herrera"],
-            grade: "5to B"
+            grade: "1ro A"
         },
         breakfast: {
             start: "09:35",

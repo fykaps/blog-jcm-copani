@@ -1008,6 +1008,7 @@ class MenuCountdownSystem {
                         
                         <div class="meal-detail-status">
                             ${menuInfo.cook ? `<p class="text-center mb-0">Cocinera: ${menuInfo.cook}</p>` : ''}
+                            ${menuInfo.phone ? `<p class="text-center mb-0">Teléfono: ${menuInfo.phone}</p>` : ''}
                             ${menuInfo.helpers ? `<p class="text-center">Ayudantes: ${menuInfo.helpers.names.join(' y ')} (${menuInfo.helpers.grade})</p>` : ''}
                         </div>
                     </div>
