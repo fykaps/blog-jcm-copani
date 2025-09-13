@@ -15,6 +15,8 @@ class MenuCountdownSystem {
 
   init() {
     this.renderAllSections();
+    this.renderSupportScheduleCards();
+    this.renderFullSupportSchedule();
     this.startCountdowns();
     this.setupEventListeners();
 
@@ -842,6 +844,154 @@ class MenuCountdownSystem {
     scheduleHTML += '</div>';
 
     supportScheduleSection.innerHTML = scheduleHTML;
+  }
+
+  renderSupportScheduleCards() {
+    const supportScheduleSection = document.getElementById('support-schedule');
+    if (!supportScheduleSection) return;
+
+    const today = this.currentDate;
+    const todayFormatted = this.formatDate(today);
+
+    // Obtener todos los días únicos con sus ayudantes
+    const scheduleData = this.menuData.map(menu => {
+      const isToday = menu.date === todayFormatted;
+      const menuDate = new Date(menu.date);
+      const now = new Date();
+
+      let status = 'pending';
+      if (menuDate < now) status = 'completed';
+      if (isToday) status = 'today';
+
+      return {
+        day: menu.day,
+        date: menu.date,
+        helpers: menu.helpers,
+        isToday: isToday,
+        status: status
+      };
+    });
+
+    // Ordenar por fecha (más reciente primero)
+    scheduleData.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    let scheduleHTML = `
+    <div class="sidebar-support-cards">
+  `;
+
+    scheduleData.forEach(item => {
+      const displayDate = this.formatDisplayDate(item.date);
+
+      scheduleHTML += `
+      <div class="sidebar-support-card ${item.isToday ? 'today' : ''}">
+        <div class="sidebar-support-date">
+          <span class="sidebar-support-day">${item.day}</span>
+          <span>${displayDate}</span>
+        </div>
+        <div class="sidebar-support-helpers">
+          ${item.helpers.names.map((name, index) => `
+            <div class="sidebar-support-helper">
+              <span class="sidebar-support-helper-name">${name}</span>
+              ${index === 0 ? `<span class="sidebar-support-helper-grade">${item.helpers.grade}</span>` : ''}
+            </div>
+          `).join('')}
+        </div>
+        <span class="sidebar-support-status ${item.status}">
+          ${item.status === 'today' ? 'Hoy' : item.status === 'completed' ? 'Completado' : 'Pendiente'}
+        </span>
+      </div>
+    `;
+    });
+
+    scheduleHTML += '</div>';
+
+    supportScheduleSection.innerHTML = scheduleHTML;
+  }
+
+  /**
+   * Renderizar cronograma completo de madres de apoyo
+   */
+  renderFullSupportSchedule() {
+    const fullScheduleSection = document.getElementById('full-support-schedule');
+    if (!fullScheduleSection) return;
+
+    const today = this.currentDate;
+    const todayFormatted = this.formatDate(today);
+
+    const scheduleData = this.menuData.map(menu => {
+      const isToday = menu.date === todayFormatted;
+      const menuDate = new Date(menu.date);
+      const now = new Date();
+
+      let status = 'pending';
+      if (menuDate < now) status = 'completed';
+      if (isToday) status = 'today';
+
+      return {
+        day: menu.day,
+        date: menu.date,
+        helpers: menu.helpers,
+        isToday: isToday,
+        status: status
+      };
+    });
+
+    // Ordenar por fecha
+    scheduleData.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    let scheduleHTML = '';
+
+    scheduleData.forEach(item => {
+      const displayDate = this.formatDisplayDate(item.date);
+
+      scheduleHTML += `
+      <div class="support-card ${item.isToday ? 'today' : ''}">
+        <div class="support-card-header">
+          <div class="support-card-date">
+            <span class="support-card-day">${item.day}</span>
+            <span class="support-card-full-date">${displayDate}</span>
+          </div>
+        </div>
+        <div class="support-card-body">
+          <div class="support-card-helpers">
+            ${item.helpers.names.map(name => `
+              <div class="support-helper">
+                <div class="support-helper-avatar">
+                  ${name.charAt(0).toUpperCase()}
+                </div>
+                <div class="support-helper-info">
+                  <div class="support-helper-name">${name}</div>
+                  <div class="support-helper-grade">${item.helpers.grade}</div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+        <div class="support-card-footer">
+          <span class="support-card-status ${item.status}">
+            ${item.status === 'today' ? 'Hoy' : item.status === 'completed' ? 'Completado' : 'Pendiente'}
+          </span>
+          <div class="support-card-actions">
+            <button class="support-action-btn" aria-label="Contactar">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+              </svg>
+            </button>
+            <button class="support-action-btn" aria-label="Más información">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+    });
+
+    const cardsContainer = fullScheduleSection.querySelector('.support-schedule-cards');
+    if (cardsContainer) {
+      cardsContainer.innerHTML = scheduleHTML;
+    }
   }
 
   setupEventListeners() {
