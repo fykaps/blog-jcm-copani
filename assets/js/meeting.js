@@ -20,6 +20,60 @@ class MeetingSystem {
         this.init();
     }
 
+
+    // ======================
+    //  UTILIDADES DE FECHA (CORREGIDAS)
+    // ======================
+
+    /**
+     * Parsea una fecha en formato YYYY-MM-DD sin problemas de zona horaria
+     * @param {string} dateStr - Fecha en formato YYYY-MM-DD
+     * @returns {Date} - Objeto Date correctamente ajustado
+     */
+    parseLocalDate(dateStr) {
+        if (!dateStr) return new Date();
+
+        const parts = dateStr.split('-');
+        if (parts.length !== 3) return new Date(dateStr);
+
+        // Crear fecha en zona horaria local (sin ajuste UTC)
+        return new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+    }
+
+    /**
+     * Obtiene el día del mes de una fecha sin problemas de zona horaria
+     * @param {string} dateStr - Fecha en formato YYYY-MM-DD
+     * @returns {number} - Día del mes
+     */
+    formatDay(dateStr) {
+        const date = this.parseLocalDate(dateStr);
+        return date.getDate();
+    }
+
+    /**
+     * Obtiene el nombre corto del mes de una fecha
+     * @param {string} dateStr - Fecha en formato YYYY-MM-DD
+     * @returns {string} - Nombre corto del mes en mayúsculas
+     */
+    formatMonth(dateStr) {
+        const date = this.parseLocalDate(dateStr);
+        return date.toLocaleDateString('es-ES', { month: 'short' }).toUpperCase();
+    }
+
+    /**
+     * Formatea una fecha completa en español
+     * @param {string} dateStr - Fecha en formato YYYY-MM-DD
+     * @returns {string} - Fecha completa formateada
+     */
+    formatFullDate(dateStr) {
+        const date = this.parseLocalDate(dateStr);
+        return date.toLocaleDateString('es-ES', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        });
+    }
+
     init() {
         this.renderMeetingsList();
         this.renderMeetingFilters();
@@ -42,33 +96,34 @@ class MeetingSystem {
         const currentMonth = now.getMonth();
         const currentYear = now.getFullYear();
 
-        // Reuniones de este mes
+        // Reuniones de este mes (usando parseLocalDate)
         const thisMonthMeetings = this.meetings.filter(meeting => {
-            const meetingDate = new Date(meeting.date);
+            const meetingDate = this.parseLocalDate(meeting.date);
             return meetingDate.getMonth() === currentMonth &&
                 meetingDate.getFullYear() === currentYear;
         });
 
         // Reuniones programadas (próximas)
         const upcomingMeetings = this.meetings.filter(meeting => {
-            const meetingDate = new Date(`${meeting.date}T${meeting.startTime}`);
+            const meetingDate = this.parseLocalDate(meeting.date);
+            meetingDate.setHours(...meeting.startTime.split(':').map(Number));
             return meeting.status === 'scheduled' && meetingDate >= now;
         });
 
         // Reuniones de hoy
         const todayMeetings = this.meetings.filter(meeting => {
-            const meetingDate = new Date(meeting.date);
+            const meetingDate = this.parseLocalDate(meeting.date);
             const today = new Date();
             return meetingDate.toDateString() === today.toDateString() &&
                 meeting.status === 'scheduled';
         });
 
-        // Calcular porcentaje de asistencia (promedio de todas las reuniones completadas)
+        // Calcular porcentaje de asistencia
         const completedMeetings = this.meetings.filter(meeting =>
             meeting.status === 'completed' && meeting.attendance
         );
 
-        let averageAttendance = 95; // Valor por defecto
+        let averageAttendance = 95;
         if (completedMeetings.length > 0) {
             const totalAttendance = completedMeetings.reduce((sum, meeting) =>
                 sum + meeting.attendance, 0
@@ -306,12 +361,17 @@ class MeetingSystem {
         const upcomingMeetings = this.meetings
             .filter(meeting => {
                 if (meeting.status !== 'scheduled') return false;
-                const meetingDate = new Date(`${meeting.date}T${meeting.startTime}`);
+                const meetingDate = this.parseLocalDate(meeting.date);
+                meetingDate.setHours(...meeting.startTime.split(':').map(Number));
                 return meetingDate >= now && meetingDate <= twoWeeksFromNow;
             })
             .sort((a, b) => {
-                const dateA = new Date(`${a.date}T${a.startTime}`);
-                const dateB = new Date(`${b.date}T${b.startTime}`);
+                const dateA = this.parseLocalDate(a.date);
+                dateA.setHours(...a.startTime.split(':').map(Number));
+
+                const dateB = this.parseLocalDate(b.date);
+                dateB.setHours(...b.startTime.split(':').map(Number));
+
                 return dateA - dateB;
             })
             .slice(0, 5); // Mostrar máximo 5
@@ -367,8 +427,12 @@ class MeetingSystem {
         const importantMeetings = this.meetings
             .filter(meeting => meeting.required && meeting.status === 'scheduled')
             .sort((a, b) => {
-                const dateA = new Date(`${a.date}T${a.startTime}`);
-                const dateB = new Date(`${b.date}T${b.startTime}`);
+                const dateA = this.parseLocalDate(a.date);
+                dateA.setHours(...a.startTime.split(':').map(Number));
+
+                const dateB = this.parseLocalDate(b.date);
+                dateB.setHours(...b.startTime.split(':').map(Number));
+
                 return dateA - dateB;
             })
             .slice(0, 3); // Mostrar máximo 3
@@ -432,10 +496,19 @@ class MeetingSystem {
         });
     }
 
+    // ======================
+    //  MÉTODOS PRINCIPALES (CON FECHAS CORREGIDAS)
+    // ======================
+
     calculateMeetingStatus(meeting) {
         const now = new Date();
-        const meetingStart = new Date(`${meeting.date}T${meeting.startTime}`);
-        const meetingEnd = new Date(`${meeting.date}T${meeting.endTime}`);
+
+        // Usar parseLocalDate en lugar de new Date() para evitar problemas de zona horaria
+        const meetingStart = this.parseLocalDate(meeting.date);
+        meetingStart.setHours(...meeting.startTime.split(':').map(Number));
+
+        const meetingEnd = this.parseLocalDate(meeting.date);
+        meetingEnd.setHours(...meeting.endTime.split(':').map(Number));
 
         const states = {
             UPCOMING: 'upcoming',
@@ -698,7 +771,10 @@ class MeetingSystem {
     }
 
     renderMeetingModalContent(meeting) {
-        const meetingDate = new Date(`${meeting.date}T${meeting.startTime}`);
+        // Usar parseLocalDate para evitar problemas de zona horaria
+        const meetingDate = this.parseLocalDate(meeting.date);
+        meetingDate.setHours(...meeting.startTime.split(':').map(Number));
+
         const formattedDate = meetingDate.toLocaleDateString('es-ES', {
             weekday: 'long',
             day: 'numeric',
@@ -1068,25 +1144,6 @@ class MeetingSystem {
         };
 
         return names[category] || category;
-    }
-
-    formatDay(dateStr) {
-        const date = new Date(dateStr);
-        return date.getDate();
-    }
-
-    formatMonth(dateStr) {
-        const date = new Date(dateStr);
-        return date.toLocaleDateString('es-ES', { month: 'short' }).toUpperCase();
-    }
-
-    formatFullDate(dateStr) {
-        const date = new Date(dateStr);
-        return date.toLocaleDateString('es-ES', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric'
-        });
     }
 
     destroy() {
