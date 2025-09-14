@@ -2,7 +2,86 @@
  * Sistema de visualización de horarios de clases con temporizador en tiempo real
  * Incluye CountdownSystem integrado para cuenta regresiva profesional
  * Versión profesional con modal de contacto de profesores y diseño ecommerce
+ * CORREGIDO: Problemas de zona horaria en fechas
  */
+
+// ======================
+//  UTILIDADES DE FECHA (CORREGIDAS)
+// ======================
+
+/**
+ * Parsear fecha local sin problemas de zona horaria
+ * @param {string} dateStr - Fecha en formato YYYY-MM-DD
+ * @returns {Date} - Objeto Date correctamente ajustado
+ */
+function parseLocalDate(dateStr) {
+    if (!dateStr) return new Date();
+
+    const parts = dateStr.split('-');
+    if (parts.length !== 3) return new Date(dateStr);
+
+    // Crear fecha en zona horaria local (sin ajuste UTC)
+    return new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+}
+
+/**
+ * Formatear fecha local para mostrar
+ * @param {string} dateStr - Fecha en formato YYYY-MM-DD
+ * @returns {string} - Fecha formateada
+ */
+function formatLocalDate(dateStr) {
+    const date = parseLocalDate(dateStr);
+    return date.toLocaleDateString('es-ES', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+    });
+}
+
+/**
+ * Obtener día del mes sin problemas de zona horaria
+ * @param {string} dateStr - Fecha en formato YYYY-MM-DD
+ * @returns {number} - Día del mes
+ */
+function getLocalDay(dateStr) {
+    const date = parseLocalDate(dateStr);
+    return date.getDate();
+}
+
+/**
+ * Obtener nombre del mes
+ * @param {string} dateStr - Fecha en formato YYYY-MM-DD
+ * @returns {string} - Nombre del mes
+ */
+function getLocalMonthName(dateStr) {
+    const date = parseLocalDate(dateStr);
+    return date.toLocaleDateString('es-ES', { month: 'long' });
+}
+
+/**
+ * Obtener nombre corto del mes
+ * @param {string} dateStr - Fecha en formato YYYY-MM-DD
+ * @returns {string} - Nombre corto del mes
+ */
+function getLocalShortMonthName(dateStr) {
+    const date = parseLocalDate(dateStr);
+    return date.toLocaleDateString('es-ES', { month: 'short' }).toUpperCase();
+}
+
+/**
+ * Formatear fecha completa en español
+ * @param {string} dateStr - Fecha en formato YYYY-MM-DD
+ * @returns {string} - Fecha completa formateada
+ */
+function formatFullLocalDate(dateStr) {
+    const date = parseLocalDate(dateStr);
+    return date.toLocaleDateString('es-ES', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+    });
+}
 
 class CountdownSystem {
     constructor(options = {}) {
@@ -51,11 +130,20 @@ class CountdownSystem {
     }
 
     /**
-     * Parsear diferentes formatos de fecha
+     * Parsear diferentes formatos de fecha (CORREGIDO)
      */
     parseDate(date) {
         if (date instanceof Date) return date;
-        if (typeof date === 'string') return new Date(date);
+        if (typeof date === 'string') {
+            // Si es un string de tiempo (HH:MM), crear fecha con hora actual
+            if (date.includes(':')) {
+                const now = new Date();
+                const [hours, minutes] = date.split(':').map(Number);
+                return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes);
+            }
+            // Si es un string de fecha, usar parseLocalDate
+            return parseLocalDate(date);
+        }
         if (typeof date === 'number') return new Date(date);
 
         console.error('CountdownSystem: Formato de fecha no válido');
@@ -428,6 +516,10 @@ class ScheduleSystem {
         statElements.forEach(stat => observer.observe(stat));
     }
 
+    // ======================
+    //  MÉTODOS DE FECHA (CORREGIDOS)
+    // ======================
+
     getCurrentTime() {
         const now = new Date();
         return now.toTimeString().slice(0, 5); // Formato HH:MM
@@ -607,7 +699,7 @@ class ScheduleSystem {
                 </span>
                 <span class="class-status">${status.text}</span>
                 ${countdownHTML}
-                ${typeHTML}                                
+                ${typeHTML}
             </div>
         </li>`;
     }
@@ -656,6 +748,10 @@ class ScheduleSystem {
         });
     }
 
+    // ======================
+    //  MÉTODOS PRINCIPALES (CON FECHAS CORREGIDAS)
+    // ======================
+
     initializeCountdown(item, startTime, endTime, status, countdownId) {
         const now = new Date();
         const today = now.toISOString().split('T')[0];
@@ -664,10 +760,11 @@ class ScheduleSystem {
         let message;
 
         if (status.status === 'pending') {
-            targetDate = new Date(`${today}T${startTime}`);
+            // Usar parseLocalDate para crear la fecha correctamente
+            targetDate = this.parseTimeToDate(today, startTime);
             message = 'Inicia en';
         } else {
-            targetDate = new Date(`${today}T${endTime}`);
+            targetDate = this.parseTimeToDate(today, endTime);
             message = 'Termina en';
         }
 
@@ -686,6 +783,21 @@ class ScheduleSystem {
 
         this.countdownInstances.push({ instance, element: countdownElement });
     }
+
+    /**
+     * Parsear tiempo a fecha sin problemas de zona horaria
+     * @param {string} dateStr - Fecha en formato YYYY-MM-DD
+     * @param {string} timeStr - Tiempo en formato HH:MM
+     * @returns {Date} - Objeto Date correctamente ajustado
+     */
+    parseTimeToDate(dateStr, timeStr) {
+        const date = parseLocalDate(dateStr);
+        const [hours, minutes] = timeStr.split(':').map(Number);
+
+        date.setHours(hours, minutes, 0, 0);
+        return date;
+    }
+
 
     startRealTimeUpdates() {
         // Actualizar cada minuto
@@ -750,9 +862,9 @@ class ScheduleSystem {
         let targetDate;
 
         if (status.status === 'pending') {
-            targetDate = new Date(`${today}T${startTime}`);
+            targetDate = this.parseTimeToDate(today, startTime);
         } else {
-            targetDate = new Date(`${today}T${endTime}`);
+            targetDate = this.parseTimeToDate(today, endTime);
         }
 
         const countdownElement = document.getElementById(countdownId);
