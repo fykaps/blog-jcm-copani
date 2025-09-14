@@ -28,7 +28,7 @@
 <body>
     <div id="app">
         <!-- Header dinámico -->
-        <header id="main-header" class="header-fixed" aria-label="Cabecera principal"></header>
+        <header id="main-header" class="header-fixed"></header>
 
         <!-- Contenido principal -->
         <main class="container" id="main-content">
@@ -67,358 +67,89 @@
                                 <path fill="currentColor" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z" />
                             </svg>
                         </a>
-                        <button id="creator-btn" class="btn btn-secondary btn-lg">
-                            <span>Conoce al Creador</span>
-                            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-                                <path fill="currentColor"
-                                    d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                            </svg>
-                        </button>
-                    </div>
-
-                    <div class="section-stats animate-fade-in delay-3">
-                        <div class="section-stat-item">
-                            <span class="section-stat-number" data-count="25">0</span>
-                            <span class="section-stat-label">Años de Historia</span>
-                        </div>
-                        <div class="section-stat-item">
-                            <span class="section-stat-number" data-count="85">0</span>
-                            <span class="section-stat-label">Profesores</span>
-                        </div>
-                        <div class="section-stat-item">
-                            <span class="section-stat-number" data-count="1500">0</span>
-                            <span class="section-stat-label">Estudiantes</span>
-                        </div>
                     </div>
                 </div>
+
+                <div class="section-hero-image" aria-hidden="true">
+                    <img src="assets/img/heros/about-hero.jpg" alt="" loading="eager" decoding="async">
+                </div>
             </section>
+
             <!-- Contenido modular -->
             <div class="about-content">
                 <!-- Sección Propósito -->
-                <article class="about-section animate-fade-in delay-2" aria-labelledby="purpose-heading">
+                <article id="purpose-section" class="about-section animate-fade-in delay-2"
+                    aria-labelledby="purpose-heading">
                     <div class="section-header">
                         <h2 id="purpose-heading">Quiénes somos</h2>
                         <div class="section-divider"></div>
                     </div>
                     <div class="section-content">
-                        <p>Somos la Institución Educativa Secundaria con Jornada Escolar Completa “José Carlos
-                            Mariátegui”. Brindamos educación a estudiantes de 1°, 2°, 3°, 4° y 5° grado de nivel
-                            Secundaria del distrito de Copani. Nuestros estudiantes hablan el idioma castellano y aimara
-                            y provienen de familias dedicadas a actividades agrícolas principalmente y en pequeña escala
-                            a la ganadería, pesca y comercio. La institución educativa se encuentra ubicado en el
-                            distrito de Copani, provincia de Yunguyo, región Puno y se caracteriza por ser una comunidad
-                            emprendedora con identidad local, regional y nacional.</p>
+                        <!-- La información de la escuela se cargará dinámicamente aquí -->
+                    </div>
+                </article>
 
+                <!-- Sección Misión y Visión -->
+                <article id="mission" class="about-section animate-fade-in delay-3" aria-labelledby="mission-heading">
+                    <div class="section-header">
+                        <h2 id="mission-heading">Misión y Visión</h2>
+                        <div class="section-divider"></div>
+                    </div>
+                    <div class="section-content">
                         <div class="mission-vision">
-                            <div class="mission-card hover-scale" tabindex="0">
-                                <div class="card-icon">
-                                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                                        <path fill="currentColor"
-                                            d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm-1.06 13.54L7.4 12l1.41-1.41 2.12 2.12 4.24-4.24 1.41 1.41-5.64 5.66z" />
-                                    </svg>
-                                </div>
-                                <h3>Misión</h3>
-                                <p>Somos una comunidad educativa de sólida organización con mística de trabajo, tiene
-                                    como misión brindar una educación de calidad, con metodología activa para el
-                                    desarrollo de competencias orientadas a la investigación y el liderazgo, con cultura
-                                    emprendedora y conciencia ecológica encaminada al desarrollo de la autonomía para la
-                                    trasformación integral como actores protagónicos para trascender en la sociedad
-                                    globalizada.</p>
-                            </div>
-
-                            <div class="vision-card hover-scale" tabindex="0">
-                                <div class="card-icon">
-                                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                                        <path fill="currentColor"
-                                            d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
-                                    </svg>
-                                </div>
-                                <h3>Visión</h3>
-                                <p>Al 2027 seremos una Institución Educativa transcendente y con estándares de calidad
-                                    en los aprendizajes, con participación protagónica de los agentes educativos, como
-                                    personas dignas, libres, proactivas, autónomas que vivencien principios, valores y
-                                    derechos; promoviendo el cuidado y preservación del medio ambiente, la investigación
-                                    e innovación, afirmando nuestra identidad y compromiso con el desarrollo de la
-                                    región, en concordancia con el perfil de egreso del CNEB</p>
-                            </div>
+                            <!-- Se cargará dinámicamente -->
                         </div>
                     </div>
                 </article>
 
                 <!-- Sección Historia -->
-                <article class="about-section animate-fade-in delay-3" aria-labelledby="history-heading">
+                <article class="about-section animate-fade-in delay-4" aria-labelledby="history-heading">
                     <div class="section-header">
                         <h2 id="history-heading">Nuestra Historia</h2>
                         <div class="section-divider"></div>
                     </div>
                     <div class="section-content">
-                        <div class="timeline">
-                            <div class="timeline-item" tabindex="0">
-                                <div class="timeline-date">1984</div>
-                                <div class="timeline-content hover-scale">
-                                    <h3>Fundación</h3>
-                                    <p>La Institución Educativa Secundaria «José Carlos Mariátegui» de Copani, fue
-                                        creada mediante Resolución Directoral N° 7635-84-Sétima Región de Educación
-                                        Puno, con fecha 22 de mayo del año 1984; inicialmente funcionó como Colegio
-                                        Mixto atendiendo a 70 estudiantes de primero al quinto grado. Cuenta con una
-                                        extensión territorial de 33 600 metros cuadrados y con área construida de 4,200
-                                        metros cuadrados, ubicado a 18 km. con respecto a la capital de la provincia de
-                                        Yunguyo y pertenece a la jurisdicción de la Unidad de Gestión Educativa Local
-                                        Yunguyo.
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div class="timeline-item" tabindex="0">
-                                <div class="timeline-date">1987</div>
-                                <div class="timeline-content hover-scale">
-                                    <h3>Expansión</h3>
-                                    <p>Posteriormente fue reconocido como Colegio Estatal con Resolución Directoral N°
-                                        1026-87-DRE en el año de 1987, como Colegio de Educación Secundaria de Copani,
-                                        finalmente se regulariza la creación y funcionamiento como C.E.S. «José Carlos
-                                        Mariátegui» de Copani con Código Modular N° 1029321, señalándose como fecha de
-                                        aniversario el día 22 de mayo de cada año, con Resolución Directoral N°
-                                        7635-DREP de fecha 23 de noviembre de 1999. Desde el año 2015 viene funcionando
-                                        como institución educativa con Jornada Escolar Completa, Desde su creación se ha
-                                        tenido la satisfacción de formar líderes y profesionales que se encuentran
-                                        desempeñándose con éxito en diferentes ciudades del distrito, provincia, región
-                                        y país. Los docentes han demostrado y siguen demostrando entrega y compromiso en
-                                        la formación y desarrollo integral de los estudiantes, contribuyendo al
-                                        desarrollo social cultural y económico de la población. Así mismo, desde su
-                                        creación la institución educativa viene cosechando lauros en la evaluación
-                                        censal de estudiantes (ECE), en concursos de conocimientos, deportivos,
-                                        artísticos y científicos tecnológicos; lo que nos anima a seguir trabajando de
-                                        manera corporativa para seguir por la senda de la calidad educativa y lograr
-                                        alcanzar las metas propuestas como institución de bien social.</p>
-                                </div>
-                            </div>
-
-                            <div class="timeline-item" tabindex="0">
-                                <div class="timeline-date">2025</div>
-                                <div class="timeline-content hover-scale">
-                                    <h3>Actualidad</h3>
-                                    <p>Se ha convertido en la principal fuente de información institucional, con
-                                        actualizaciones semanales y una audiencia creciente.</p>
-                                </div>
-                            </div>
+                        <div id="timeline-container" class="timeline">
+                            <!-- Se cargará dinámicamente -->
                         </div>
                     </div>
                 </article>
 
                 <!-- Sección Equipo -->
-                <article class="about-section animate-fade-in delay-4" aria-labelledby="team-heading">
+                <article id="team-section" class="about-section animate-fade-in delay-5" aria-labelledby="team-heading">
                     <div class="section-header">
                         <h2 id="team-heading">Nuestro Equipo</h2>
                         <div class="section-divider"></div>
                     </div>
                     <div class="section-content">
                         <div class="team-grid">
-                            <div class="team-member hover-scale" tabindex="0">
-                                <div class="member-image">
-                                    <img src="assets/img/teams/teachers.jpg" alt="Equipo de profesores" loading="lazy">
-                                </div>
-                                <div class="member-info">
-                                    <h3>Profesores</h3>
-                                    <p>Contribuyen con artículos educativos y reportes de actividades académicas.</p>
-                                </div>
-                            </div>
-
-                            <div class="team-member hover-scale" tabindex="0">
-                                <div class="member-image">
-                                    <img src="assets/img/teams/students.jpg" alt="Estudiantes reporteros"
-                                        loading="lazy">
-                                </div>
-                                <div class="member-info">
-                                    <h3>Estudiantes</h3>
-                                    <p>Miembros del club de periodismo escolar que redactan noticias y entrevistas.</p>
-                                </div>
-                            </div>
-
-                            <div class="team-member hover-scale" tabindex="0">
-                                <div class="member-image">
-                                    <img src="assets/img/teams/staff.jpg" alt="Personal administrativo" loading="lazy">
-                                </div>
-                                <div class="member-info">
-                                    <h3>Administrativo</h3>
-                                    <p>Proporcionan información oficial sobre políticas y eventos institucionales.</p>
-                                </div>
-                            </div>
+                            <!-- Se cargará dinámicamente -->
                         </div>
                     </div>
                 </article>
 
                 <!-- Sección Valores -->
-                <article class="about-section animate-fade-in delay-5" aria-labelledby="values-heading">
+                <article class="about-section animate-fade-in delay-6" aria-labelledby="values-heading">
                     <div class="section-header">
                         <h2 id="values-heading">Nuestros Valores</h2>
                         <div class="section-divider"></div>
                     </div>
                     <div class="section-content">
                         <div class="values-grid">
-                            <!-- Ética -->
-                            <div class="value-card hover-scale" tabindex="0">
-                                <div class="value-icon">
-                                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                                        <path fill="currentColor"
-                                            d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z" />
-                                    </svg>
-                                </div>
-                                <h3>Ética</h3>
-                                <p>Que inspira una educación promotora de los valores de paz, solidaridad, justicia,
-                                    libertad, honestidad, tolerancia, responsabilidad, trabajo, verdad y pleno respeto a
-                                    las normas de convivencia; que fortalece la conciencia moral individual y hace
-                                    posible una sociedad basada en el ejercicio permanente de la responsabilidad
-                                    ciudadana.</p>
-                            </div>
-
-                            <!-- Equidad -->
-                            <div class="value-card hover-scale" tabindex="0">
-                                <div class="value-icon">
-                                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                                        <path fill="currentColor"
-                                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 16c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm3-7.5h-2v-2h-2v2H9V13h2v2h2v-2h2v-2.5z" />
-                                    </svg>
-                                </div>
-                                <h3>Equidad</h3>
-                                <p>Que garantiza a todas iguales oportunidades de acceso, permanencia y trato en un
-                                    sistema educativo de calidad.</p>
-                            </div>
-
-                            <!-- Inclusión -->
-                            <div class="value-card hover-scale" tabindex="0">
-                                <div class="value-icon">
-                                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                                        <path fill="currentColor"
-                                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-                                        <circle cx="19" cy="5" r="2" fill="currentColor" />
-                                    </svg>
-                                </div>
-                                <h3>Inclusión</h3>
-                                <p>Que incorpora a las personas con discapacidad, grupos sociales excluidos, marginados
-                                    y vulnerables, especialmente en el ámbito rural, sin distinción de etnia, religión,
-                                    sexo u otra causa de discriminación, contribuyendo así a la eliminación de la
-                                    pobreza, la exclusión y las desigualdades.</p>
-                            </div>
-
-                            <!-- Calidad -->
-                            <div class="value-card hover-scale" tabindex="0">
-                                <div class="value-icon">
-                                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                                        <path fill="currentColor"
-                                            d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
-                                    </svg>
-                                </div>
-                                <h3>Calidad</h3>
-                                <p>que asegura condiciones adecuadas para una educación integral, pertinente, abierta,
-                                    flexible y permanente</p>
-                            </div>
-
-                            <!-- Democracia -->
-                            <div class="value-card hover-scale" tabindex="0">
-                                <div class="value-icon">
-                                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                                        <path fill="currentColor"
-                                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 16v-2h2v2h-2zm1-14c4.42 0 8 3.58 8 8 0 1.85-.63 3.55-1.69 4.9l-1.43-1.43c.69-1.07 1.12-2.35 1.12-3.47 0-3.31-2.69-6-6-6s-6 2.69-6 6c0 1.12.43 2.4 1.12 3.47l-1.43 1.43C4.63 15.55 4 13.85 4 12c0-4.42 3.58-8 8-8z" />
-                                    </svg>
-                                </div>
-                                <h3>Democracia</h3>
-                                <p>Que promueve el respeto irrestricto a los derechos humanos, la libertad de
-                                    conciencia, pensamiento y opinión, el ejercicio pleno de la ciudadanía y el
-                                    reconocimiento de la voluntad popular; y que contribuye a la tolerancia mutua en las
-                                    relaciones entre las personas y entre mayorías y minorías, así como al
-                                    fortalecimiento del Estado de Derecho.</p>
-                            </div>
-
-                            <!-- Interculturalidad -->
-                            <div class="value-card hover-scale" tabindex="0">
-                                <div class="value-icon">
-                                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                                        <path fill="currentColor"
-                                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.05-12.83c-1.33 0-2.42 1.09-2.42 2.42s1.09 2.42 2.42 2.42 2.42-1.09 2.42-2.42-1.09-2.42-2.42-2.42zm-.05 10c-2.33 0-4.32-1.45-5.12-3.5h1.67c.69 1.19 1.97 2 3.45 2s2.76-.81 3.45-2h1.67c-.8 2.05-2.79 3.5-5.12 3.5z" />
-                                    </svg>
-                                </div>
-                                <h3>Interculturalidad</h3>
-                                <p>que asume como riqueza la diversidad cultural, étnica y lingüística del país, y
-                                    encuentra en el reconocimiento y respeto a las diferencias, así como en el mutuo
-                                    conocimiento y actitud de aprendizaje del otro, sustento para la convivencia
-                                    armónica y el intercambio entre las diversas culturas del mundo.</p>
-                            </div>
-
-                            <!-- Conciencia Ambiental -->
-                            <div class="value-card hover-scale" tabindex="0">
-                                <div class="value-icon">
-                                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                                        <path fill="currentColor"
-                                            d="M12 3c-4.96 0-9 4.04-9 9s4.04 9 9 9 9-4.04 9-9-4.04-9-9-9zm0 16c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zm.32-12.39c-1.43 0-2.59 1.16-2.59 2.59 0 .76.33 1.44.86 1.91-.3 2.31-1.37 4.14-2.01 5.01.81-.15 3.5-1.14 4.74-3.89.18.03.36.05.55.05 1.43 0 2.59-1.16 2.59-2.59s-1.16-2.59-2.59-2.59c-.19 0-.37.02-.55.05z" />
-                                    </svg>
-                                </div>
-                                <h3>Conciencia Ambiental</h3>
-                                <p>Que motiva el respeto, cuidado y conservación del entorno natural como garantía para
-                                    el desenvolvimiento de la vida.</p>
-                            </div>
-
-                            <!-- Creatividad y la Innovación -->
-                            <div class="value-card hover-scale" tabindex="0">
-                                <div class="value-icon">
-                                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                                        <path fill="currentColor"
-                                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
-                                    </svg>
-                                </div>
-                                <h3>Creatividad y la Innovación</h3>
-                                <p>Que promueven la producción de nuevos conocimientos en todos los campos del saber, el
-                                    arte y la cultura.</p>
-                            </div>
+                            <!-- Se cargará dinámicamente -->
                         </div>
                     </div>
                 </article>
 
                 <!-- Sección Contacto -->
-                <article class="about-section animate-fade-in delay-6" aria-labelledby="contact-heading">
+                <article class="about-section animate-fade-in delay-7" aria-labelledby="contact-heading">
                     <div class="section-header">
                         <h2 id="contact-heading">Contacto</h2>
                         <div class="section-divider"></div>
                     </div>
                     <div class="section-content">
                         <div class="contact-info">
-                            <div class="contact-card hover-scale" tabindex="0">
-                                <div class="contact-icon">
-                                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                                        <path fill="currentColor"
-                                            d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h3>Dirección</h3>
-                                    <p>Av. El Estudiante S/N, Copani</p>
-                                </div>
-                            </div>
-
-                            <div class="contact-card hover-scale" tabindex="0">
-                                <div class="contact-icon">
-                                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                                        <path fill="currentColor"
-                                            d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56-.35-.12-.74-.03-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h3>Teléfono</h3>
-                                    <p>(123) 456-7890</p>
-                                </div>
-                            </div>
-
-                            <div class="contact-card hover-scale" tabindex="0">
-                                <div class="contact-icon">
-                                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                                        <path fill="currentColor"
-                                            d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h3>Email</h3>
-                                    <p>contacto@colegio.edu</p>
-                                </div>
-                            </div>
+                            <!-- Se cargará dinámicamente -->
                         </div>
 
                         <div class="contact-cta">
@@ -431,31 +162,6 @@
 
         <!-- Footer dinámico -->
         <footer id="main-footer" aria-label="Pie de página"></footer>
-
-        <!-- Modal de la Creadora -->
-        <div id="creator-modal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="modal-title">
-            <div class="modal-content">
-                <button class="modal-close" aria-label="Cerrar modal">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <path fill="currentColor"
-                            d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
-                    </svg>
-                </button>
-                <div class="creator-modal-content">
-                    <div class="creator-image">
-                        <img src="assets/img/creator.jpg" alt="Retrato de KAG" loading="lazy">
-                    </div>
-                    <div class="creator-info">
-                        <h3 id="modal-title">KAG</h3>
-                        <p class="creator-grade">1ro A</p>
-                        <div class="creator-bio">
-                            <p>Estudiante apasionada por la tecnología y comunicación, creadora de este blog escolar
-                                como proyecto para mejorar la comunicación en nuestra institución educativa.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <!-- Botón scroll top -->
         <button id="scroll-top" class="scroll-top-btn" aria-label="Subir al inicio">
@@ -470,67 +176,9 @@
     <script src="assets/js/main.js" defer></script>
     <script src="assets/js/scroll-top.js" defer></script>
 
-    <!-- Script específico para about -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Control del modal de la creadora
-            const modal = document.getElementById('creator-modal');
-            const openBtn = document.getElementById('creator-btn');
-            const closeBtn = document.querySelector('.modal-close');
-
-            function openModal() {
-                modal.classList.add('active');
-                document.body.style.overflow = 'hidden';
-                modal.setAttribute('aria-hidden', 'false');
-            }
-
-            function closeModal() {
-                modal.classList.remove('active');
-                document.body.style.overflow = '';
-                modal.setAttribute('aria-hidden', 'true');
-            }
-
-            openBtn.addEventListener('click', openModal);
-            closeBtn.addEventListener('click', closeModal);
-
-            // Cerrar al hacer clic fuera del contenido
-            modal.addEventListener('click', function (e) {
-                if (e.target === modal) {
-                    closeModal();
-                }
-            });
-
-            // Cerrar con tecla Escape
-            document.addEventListener('keydown', function (e) {
-                if (e.key === 'Escape' && modal.classList.contains('active')) {
-                    closeModal();
-                }
-            });
-
-            // Focus trapping para accesibilidad
-            const focusableElements = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
-            const modalContent = modal.querySelector('.modal-content');
-            const focusableContent = modalContent.querySelectorAll(focusableElements);
-            const firstFocusableElement = focusableContent[0];
-            const lastFocusableElement = focusableContent[focusableContent.length - 1];
-
-            modal.addEventListener('keydown', function (e) {
-                if (e.key !== 'Tab') return;
-
-                if (e.shiftKey) {
-                    if (document.activeElement === firstFocusableElement) {
-                        lastFocusableElement.focus();
-                        e.preventDefault();
-                    }
-                } else {
-                    if (document.activeElement === lastFocusableElement) {
-                        firstFocusableElement.focus();
-                        e.preventDefault();
-                    }
-                }
-            });
-        });
-    </script>
+    <!-- Datos y sistema para about -->
+    <script src="assets/data/about-us.js" defer></script>
+    <script src="assets/js/about.js" defer></script>
 </body>
 
 </html>
