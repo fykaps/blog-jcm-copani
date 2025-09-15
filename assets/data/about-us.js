@@ -82,7 +82,7 @@ const aboutData = {
             role: "Apoyo Institucional",
             bioShort: "Proporcionan información oficial sobre políticas y eventos institucionales.",
             bio: "El personal administrativo garantiza que la información oficial sea precisa y esté actualizada. Gestionan la comunicación institucional, coordinan eventos y aseguran que toda la comunidad educativa tenga acceso a la información relevante de manera oportuna.",
-            image: "assets/img/team/staff.jpg",
+            image: "assets/img/about-us/teams/staff.jpg",
             achievements: [
                 "Gestión eficiente de comunicación institucional",
                 "Organización de eventos escolares y comunitarios",
