@@ -58,7 +58,7 @@ const aboutData = {
             bio: "Nuestro equipo docente está compuesto por profesionales altamente capacitados y comprometidos con la educación de calidad. Cada profesor aporta su experiencia y conocimiento para enriquecer el contenido del blog y mantener a la comunidad informada sobre las actividades académicas.",
             image: "assets/img/about-us/teams/teachers.jpg",
             achievements: [
-                "Más de 85 profesionales en diferentes áreas",
+                "27 profesionales en diferentes áreas",
                 "Capacitación continua en metodologías educativas",
                 "Comprometidos con la innovación pedagógica"
             ]
@@ -126,8 +126,8 @@ const aboutData = {
 
     contact: {
         address: "Av. El Estudiante S/N, Copani, Yunguyo, Puno",
-        phone: "(051) 925633564",
-        email: "contacto@jsm.edu.pe"
+        phone: "(051) 925 633 564",
+        email: "contacto@jcm.edu.pe"
     },
 
     creator: {

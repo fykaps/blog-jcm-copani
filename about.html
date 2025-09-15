@@ -2,7 +2,6 @@
 <html lang="es" class="no-js">
 
 <head>
-    <!-- Metadatos mejorados -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
@@ -31,8 +30,8 @@
         <header id="main-header" class="header-fixed"></header>
 
         <!-- Contenido principal -->
-        <main class="container" id="main-content">
-            <!-- Hero para Acerca de -->
+        <main class="container">
+            <!-- Hero para Eventos con Estadísticas Completas -->
             <section class="section-hero hero-about animate-fade-in">
                 <div class="section-hero-decoration section-hero-decoration-square"></div>
                 <div class="section-hero-decoration section-hero-decoration-square"></div>
@@ -48,135 +47,126 @@
                                 <a href="index.html" class="breadcrumb-link">Inicio</a>
                             </li>
                             <li class="breadcrumb-item">
-                                <span class="breadcrumb-current">Acerca de</span>
+                                <span class="breadcrumb-current">Eventos</span>
                             </li>
                         </ol>
                     </nav>
 
-                    <h1 class="animate-slide-up">Nuestra Historia</h1>
-
-                    <p class="section-hero-description animate-slide-up delay-1">
+                    <h1 class="hero-title">Nuestra Historia y Valores</h1>
+                    <p class="hero-description">
                         Conoce el equipo, valores y propósito detrás de nuestra institución educativa
                         y nuestro compromiso con la excelencia académica.
                     </p>
-
-                    <div class="section-hero-actions animate-slide-up delay-2">
-                        <a href="#mission" class="btn btn-primary btn-lg">
-                            <span>Nuestra Misión</span>
-                            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-                                <path fill="currentColor" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z" />
-                            </svg>
-                        </a>
+                    <div class="hero-actions">
+                        <a href="#mission" class="btn btn-primary">Nuestra Misión</a>
+                        <a href="#team" class="btn btn-secondary">Conoce al Equipo</a>
                     </div>
                 </div>
             </section>
 
-            <!-- Contenido principal -->
-            <main class="container" id="main-content">
-                <!-- Contenido modular -->
-                <div class="about-content">
-                    <!-- Sección Propósito -->
-                    <article id="purpose-section" class="about-section" aria-labelledby="purpose-heading">
-                        <div class="section-header">
-                            <h2 id="purpose-heading">Nuestra Institución</h2>
-                            <div class="section-divider"></div>
-                        </div>
-                        <div class="section-content">
-                            <!-- La información de la escuela se cargará dinámicamente aquí -->
-                        </div>
-                    </article>
-
-                    <!-- Sección Misión y Visión -->
-                    <article id="mission" class="about-section" aria-labelledby="mission-heading">
-                        <div class="section-header">
-                            <h2 id="mission-heading">Misión y Visión</h2>
-                        </div>
-                        <div class="section-content">
-                            <div class="mission-vision">
-                                <!-- Se cargará dinámicamente -->
-                            </div>
-                        </div>
-                    </article>
-
-                    <!-- Sección Historia con Pestañas -->
-                    <article class="about-section" aria-labelledby="history-heading">
-                        <div class="section-header">
-                            <h2 id="history-heading">Nuestra Historia</h2>
-                        </div>
-                        <div class="section-content">
-                            <div id="timeline-container" class="timeline">
-                                <!-- Timeline con pestañas se cargará dinámicamente -->
-                            </div>
-                        </div>
-                    </article>
-
-                    <!-- Sección Equipo -->
-                    <article id="team-section" class="about-section" aria-labelledby="team-heading">
-                        <div class="section-header">
-                            <h2 id="team-heading">Nuestro Equipo</h2>
-                        </div>
-                        <div class="section-content">
-                            <div class="team-grid">
-                                <!-- Se cargará dinámicamente -->
-                            </div>
-                        </div>
-                    </article>
-
-                    <!-- Sección Valores -->
-                    <article class="about-section" aria-labelledby="values-heading">
-                        <div class="section-header">
-                            <h2 id="values-heading">Nuestros Valores</h2>
-                        </div>
-                        <div class="section-content">
-                            <div class="values-grid">
-                                <!-- Se cargará dinámicamente -->
-                            </div>
-                        </div>
-                    </article>
-
-                    <!-- Sección Contacto -->
-                    <article class="about-section" aria-labelledby="contact-heading">
-                        <div class="section-header">
-                            <h2 id="contact-heading">Contacto</h2>
-                        </div>
-                        <div class="section-content">
-                            <div class="contact-info">
-                                <!-- Se cargará dinámicamente -->
-                            </div>
-
-                            <div class="contact-cta">
-                                <a href="contact.html" class="btn btn-primary btn-lg">
-                                    <span>Contáctanos</span>
-                                    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-                                        <path fill="currentColor"
-                                            d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-2 14H6v-6h12v6zm0-8H6V6h12v4z" />
-                                    </svg>
-                                </a>
-                            </div>
-                        </div>
-                    </article>
+            <!-- School Info Section -->
+            <section id="school" class="about-section">
+                <div class="section-header">
+                    <h2>Nuestra Institución</h2>
+                    <p class="section-subtitle">IES José Carlos Mariátegui - Formando líderes desde 1984</p>
                 </div>
-            </main>
+                <div class="school-info-container">
+                    <!-- Se cargará dinámicamente -->
+                </div>
+            </section>
 
-            <!-- Footer dinámico -->
-            <footer id="main-footer" aria-label="Pie de página"></footer>
+            <!-- Mission & Vision Section -->
+            <section id="mission" class="about-section mission-vision-section">
+                <div class="section-header">
+                    <h2>Misión y Visión</h2>
+                    <p class="section-subtitle">Los pilares que guían nuestra institución</p>
+                </div>
+                <div class="mission-vision-container">
+                    <!-- Se cargará dinámicamente -->
+                </div>
+            </section>
 
-            <!-- Botón scroll top -->
-            <button id="scroll-top" class="scroll-top-btn" aria-label="Subir al inicio">
-                <svg viewBox="0 0 24 24" width="24" height="24">
-                    <path fill="currentColor" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
-                </svg>
-            </button>
+            <!-- Timeline Section -->
+            <section id="history" class="about-section timeline-section">
+                <div class="section-header">
+                    <h2>Nuestra Historia</h2>
+                    <p class="section-subtitle">Más de 40 años de excelencia educativa</p>
+                </div>
+                <div class="timeline-container" id="timeline-container">
+                    <!-- Se cargará dinámicamente -->
+                </div>
+            </section>
+
+            <!-- Team Section -->
+            <section id="team" class="about-section team-section">
+                <div class="section-header">
+                    <h2>Nuestro Equipo</h2>
+                    <p class="section-subtitle">Profesionales comprometidos con la educación</p>
+                </div>
+                <div class="team-grid">
+                    <!-- Se cargará dinámicamente -->
+                </div>
+            </section>
+
+            <!-- Values Section -->
+            <section class="about-section values-section">
+                <div class="section-header">
+                    <h2>Nuestros Valores</h2>
+                    <p class="section-subtitle">Principios que definen nuestra identidad</p>
+                </div>
+                <div class="values-grid">
+                    <!-- Se cargará dinámicamente -->
+                </div>
+            </section>
+
+            <!-- Contact Section -->
+            <section class="about-section contact-section">
+                <div class="section-header">
+                    <h2>Contacto</h2>
+                    <p class="section-subtitle">Estamos aquí para responder tus preguntas</p>
+                </div>
+                <div class="contact-container">
+                    <div class="about-contact-info">
+                        <!-- Se cargará dinámicamente -->
+                    </div>
+                    <div class="contact-cta">
+                        <a href="contact.html" class="btn btn-primary">Contáctanos</a>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer dinámico -->
+        <footer id="main-footer"></footer>
+
+        <!-- Botón scroll top -->
+        <button id="scroll-top" class="scroll-top-btn" aria-label="Volver al inicio">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+                <path fill="currentColor" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
+            </svg>
+        </button>
+
+        <!-- Modal -->
+        <div class="about-modal" id="about-modal">
+            <div class="modal-overlay"></div>
+            <div class="modal-container">
+                <button class="modal-close" aria-label="Cerrar modal">
+                    <svg viewBox="0 0 24 24" width="24" height="24">
+                        <path fill="currentColor"
+                            d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                    </svg>
+                </button>
+                <div class="modal-content" id="modal-content"></div>
+            </div>
+        </div>
     </div>
 
-    <!-- Scripts optimizados -->
-    <script src="assets/js/components.js" defer></script>
-    <script src="assets/js/main.js" defer></script>
-    <script src="assets/js/scroll-top.js" defer></script>
-
-    <!-- Datos y sistema para about -->
-    <script src="assets/data/about-us.js" defer></script>
-    <script src="assets/js/about.js" defer></script>
+    <!-- Scripts -->
+    <script src="assets/js/components.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/scroll-top.js"></script>
+    <script src="assets/data/about-us.js"></script>
+    <script src="assets/js/about.js"></script>
 </body>
 
 </html>

@@ -1,19 +1,14 @@
 /**
- * SISTEMA "ACERCA DE" - REDISEÑO PROFESIONAL
- * Con timeline en pestañas y diseño ecommerce
+ * SISTEMA "ACERCA DE" - REDISEÑO PROFESIONAL OPTIMIZADO
+ * Con timeline en pestañas y diseño moderno compacto
  */
 
-class AboutSystemPremium {
-    constructor(aboutData, options = {}) {
+class AboutSystem {
+    constructor(aboutData) {
         this.aboutData = aboutData;
-        this.options = {
-            animationDuration: 300,
-            ...options
-        };
         this.modal = null;
         this.activeModal = null;
-        this.currentTimelineTab = '2020s';
-
+        this.currentTimelineTab = '1980s';
         this.init();
     }
 
@@ -27,8 +22,6 @@ class AboutSystemPremium {
         this.setupEventListeners();
         this.setupModal();
         this.setupIntersectionObserver();
-
-        // Inicializar la primera pestaña del timeline
         this.showTimelineDecade(this.currentTimelineTab);
     }
 
@@ -40,66 +33,58 @@ class AboutSystemPremium {
         const school = this.aboutData.schoolInfo;
         if (!school) return;
 
-        const heroSection = document.querySelector('.about-hero');
-        if (heroSection) {
-            const statsHTML = `
-                <div class="school-stats animate-fade-in delay-3">
-                    <div class="stat-item">
-                        <span class="stat-number" data-count="${school.stats.years}">0</span>
-                        <span class="stat-label">Años de Historia</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number" data-count="${school.stats.teachers}">0</span>
-                        <span class="stat-label">Profesores</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number" data-count="${school.stats.students}">0</span>
-                        <span class="stat-label">Estudiantes</span>
-                    </div>
-                </div>
-            `;
+        const container = document.querySelector('.school-info-container');
+        if (!container) return;
 
-            const heroContent = heroSection.querySelector('.about-hero-content');
-            if (heroContent) {
-                heroContent.insertAdjacentHTML('beforeend', statsHTML);
-            }
-        }
-
-        const purposeSection = document.getElementById('purpose-section');
-        if (purposeSection) {
-            const schoolInfoHTML = `
-                <div class="school-info-container animate-fade-in">
-                    <div class="school-logo-container">
-                        <img src="${school.logo}" alt="${school.name}" class="school-logo" loading="lazy">
-                    </div>
-                    <div class="school-details">
-                        <h3>${school.name}</h3>
-                        <p class="school-motto">${school.motto}</p>
-                        <p class="school-description">${school.description}</p>
-                        <div class="school-meta">
-                            <p><strong>Fundado:</strong> ${school.founded}</p>
-                            <p><strong>Director:</strong> ${school.director}</p>
-                            <p><strong>Ubicación:</strong> ${school.location}</p>
-                        </div>
-                    </div>
-                    <div class="school-image-container">
-                        <img src="${school.image}" alt="Instalaciones del ${school.name}" class="school-image" loading="lazy">
-                    </div>
+        const statsHTML = `
+            <div class="school-stats">
+                <div class="stat-item">
+                    <span class="stat-number" data-count="${school.stats.years}">0</span>
+                    <span class="stat-label">Años de Historia</span>
                 </div>
-            `;
-            purposeSection.querySelector('.section-content').innerHTML = schoolInfoHTML;
-        }
+                <div class="stat-item">
+                    <span class="stat-number" data-count="${school.stats.teachers}">0</span>
+                    <span class="stat-label">Profesores</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" data-count="${school.stats.students}">0</span>
+                    <span class="stat-label">Estudiantes</span>
+                </div>
+            </div>
+        `;
+
+        const schoolInfoHTML = `
+            <div class="school-logo-container">
+                <img src="${school.logo}" alt="${school.name}" class="school-logo" loading="lazy">
+            </div>
+            <div class="school-details">
+                <h3>${school.name}</h3>
+                <p class="school-motto">${school.motto}</p>
+                <p class="school-description">${school.description}</p>
+                <div class="school-meta">
+                    <p><strong>Fundado:</strong> ${school.founded}</p>
+                    <p><strong>Director:</strong> ${school.director}</p>
+                    <p><strong>Ubicación:</strong> ${school.location}</p>
+                </div>
+                ${statsHTML}
+            </div>
+            <div class="school-image-container">
+                <img src="${school.image}" alt="Instalaciones del ${school.name}" class="school-image" loading="lazy">
+            </div>
+        `;
+
+        container.innerHTML = schoolInfoHTML;
     }
 
     renderMissionVision() {
         const missionVision = this.aboutData.missionVision;
         if (!missionVision) return;
 
-        const container = document.querySelector('.mission-vision');
+        const container = document.querySelector('.mission-vision-container');
         if (!container) return;
 
         container.innerHTML = `
-            <div class="mission-card hover-scale animate-fade-in delay-1" tabindex="0">
+            <div class="mission-card">
                 <div class="card-icon">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path fill="currentColor"
@@ -110,7 +95,7 @@ class AboutSystemPremium {
                 <p>${missionVision.mission}</p>
             </div>
 
-            <div class="vision-card hover-scale animate-fade-in delay-2" tabindex="0">
+            <div class="vision-card">
                 <div class="card-icon">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path fill="currentColor"
@@ -137,7 +122,7 @@ class AboutSystemPremium {
         const tabsHTML = Object.keys(decades).map(decade => `
             <button class="timeline-tab ${decade === this.currentTimelineTab ? 'active' : ''}" 
                     data-decade="${decade}">
-                ${decade}
+                ${decade.replace('s', '')}s
             </button>
         `).join('');
 
@@ -149,7 +134,7 @@ class AboutSystemPremium {
                     <h3 class="timeline-decade-title">${decade.replace('s', '')}s</h3>
                     <div class="timeline-items">
                         ${items.map(item => `
-                            <div class="timeline-item animate-fade-in">
+                            <div class="timeline-item">
                                 <div class="timeline-year">${item.year}</div>
                                 <h3>${item.title}</h3>
                                 <p>${item.description}</p>
@@ -161,13 +146,11 @@ class AboutSystemPremium {
         `).join('');
 
         container.innerHTML = `
-            <div class="timeline-tabs">
-                <nav class="timeline-nav">
-                    ${tabsHTML}
-                </nav>
-                <div class="timeline-content-wrapper">
-                    ${contentHTML}
-                </div>
+            <nav class="timeline-nav">
+                ${tabsHTML}
+            </nav>
+            <div class="timeline-content-wrapper">
+                ${contentHTML}
             </div>
         `;
     }
@@ -188,7 +171,7 @@ class AboutSystemPremium {
 
         // Ordenar cada década por año
         Object.keys(decades).forEach(decade => {
-            decades[decade].sort((a, b) => parseInt(b.year) - parseInt(a.year));
+            decades[decade].sort((a, b) => parseInt(a.year) - parseInt(b.year));
         });
 
         return decades;
@@ -216,8 +199,8 @@ class AboutSystemPremium {
         if (!container) return;
 
         container.innerHTML = team.map((member, index) => `
-            <div class="team-member hover-scale animate-fade-in delay-${index % 3}" 
-                 tabindex="0" data-member-id="${member.id}">
+            <div class="team-member" 
+                 data-member-id="${member.id}">
                 <div class="member-image">
                     <img src="${member.image}" alt="${member.name}" loading="lazy">
                     <div class="member-overlay">
@@ -241,7 +224,7 @@ class AboutSystemPremium {
         if (!container) return;
 
         container.innerHTML = values.map((value, index) => `
-            <div class="value-card hover-scale animate-fade-in delay-${index % 3}" tabindex="0">
+            <div class="value-card">
                 <div class="value-icon">
                     ${value.icon}
                 </div>
@@ -261,7 +244,7 @@ class AboutSystemPremium {
         if (!container) return;
 
         container.innerHTML = `
-            <div class="about-contact-card hover-scale animate-fade-in delay-1" tabindex="0">
+            <div class="about-contact-card">
                 <div class="about-contact-icon">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path fill="currentColor"
@@ -274,7 +257,7 @@ class AboutSystemPremium {
                 </div>
             </div>
 
-            <div class="about-contact-card hover-scale animate-fade-in delay-2" tabindex="0">
+            <div class="about-contact-card">
                 <div class="about-contact-icon">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path fill="currentColor"
@@ -287,7 +270,7 @@ class AboutSystemPremium {
                 </div>
             </div>
 
-            <div class="about-contact-card hover-scale animate-fade-in delay-3" tabindex="0">
+            <div class="about-contact-card">
                 <div class="about-contact-icon">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path fill="currentColor"
@@ -487,15 +470,14 @@ let aboutSystem;
 document.addEventListener('DOMContentLoaded', () => {
     try {
         if (typeof aboutData !== 'undefined') {
-            aboutSystem = new AboutSystemPremium(aboutData);
-            window.aboutSystem = aboutSystem;
+            aboutSystem = new AboutSystem(aboutData);
         } else {
             console.error('Error: aboutData no está definido');
-            this.showErrorMessage();
+            showErrorMessage();
         }
     } catch (error) {
         console.error('Error al inicializar AboutSystem:', error);
-        this.showErrorMessage();
+        showErrorMessage();
     }
 });
 
@@ -510,5 +492,5 @@ function showErrorMessage() {
         <h3>Error al cargar la información</h3>
         <p>Los datos no están disponibles en este momento</p>
     `;
-    document.querySelector('.about-content')?.appendChild(errorDiv);
+    document.querySelector('.about-container')?.appendChild(errorDiv);
 }

@@ -1,22 +1,44 @@
 /* ==============================================
-   ABOUT PAGE - REDISEÑO PROFESIONAL ECOMMERCE
+   ABOUT PAGE - REDISEÑO MODERNO Y COMPACTO
    ============================================== */
 
-/* School Info - Estilo Tarjeta */
+/* Section Styles */
+.about-section {
+    margin-bottom: var(--space-10);
+    padding: 0 var(--space-4);
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: var(--space-6);
+}
+
+.section-header h2 {
+    font-size: var(--text-3xl);
+    color: var(--color-primary-800);
+    margin-bottom: var(--space-2);
+}
+
+.section-subtitle {
+    font-size: var(--text-lg);
+    color: var(--text-light);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* School Info */
 .school-info-container {
+    background: var(--bg-primary);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-lg);
     display: grid;
     grid-template-columns: 1fr;
     gap: var(--space-6);
-    background: var(--bg-primary);
-    border-radius: var(--radius-2xl);
-    padding: var(--space-6);
-    box-shadow: var(--shadow-lg);
-    margin-bottom: var(--space-8);
 }
 
 .school-logo-container {
     text-align: center;
-    padding: var(--space-4);
 }
 
 .school-logo {
@@ -51,7 +73,7 @@
 }
 
 .school-description {
-    font-size: var(--text-lg);
+    font-size: var(--text-base);
     line-height: var(--leading-relaxed);
     margin-bottom: var(--space-4);
     color: var(--text-color);
@@ -69,6 +91,7 @@
     display: flex;
     align-items: center;
     gap: var(--space-2);
+    justify-content: center;
 }
 
 .school-meta strong {
@@ -88,6 +111,33 @@
     box-shadow: var(--shadow-lg);
 }
 
+.school-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+    margin-top: var(--space-6);
+}
+
+.stat-item {
+    text-align: center;
+    padding: var(--space-4);
+    background: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+}
+
+.stat-number {
+    display: block;
+    font-size: var(--text-3xl);
+    font-weight: var(--font-bold);
+    color: var(--color-primary);
+    margin-bottom: var(--space-2);
+}
+
+.stat-label {
+    font-size: var(--text-sm);
+    color: var(--text-light);
+}
+
 @media (min-width: 768px) {
     .school-info-container {
         grid-template-columns: 120px 1fr 1fr;
@@ -99,24 +149,23 @@
         text-align: left;
     }
 
-    .school-meta {
-        grid-template-columns: 1fr;
+    .school-meta p {
+        justify-content: flex-start;
     }
 }
 
-/* Mission & Vision - Estilo Tarjetas Premium */
-.mission-vision {
+/* Mission & Vision */
+.mission-vision-container {
     display: grid;
     grid-template-columns: 1fr;
     gap: var(--space-6);
-    margin: var(--space-8) 0;
 }
 
 .mission-card,
 .vision-card {
     background: var(--bg-primary);
     padding: var(--space-6);
-    border-radius: var(--radius-2xl);
+    border-radius: var(--radius-xl);
     text-align: center;
     box-shadow: var(--shadow-lg);
     transition: all var(--duration-300) var(--ease-in-out);
@@ -145,7 +194,7 @@
 
 .mission-card:hover,
 .vision-card:hover {
-    transform: translateY(-8px);
+    transform: translateY(-4px);
     box-shadow: var(--shadow-xl);
 }
 
@@ -182,14 +231,14 @@
 }
 
 @media (min-width: 768px) {
-    .mission-vision {
+    .mission-vision-container {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
-/* Timeline con Pestañas - Estilo Moderno */
-.timeline-tabs {
-    margin: var(--space-8) 0;
+/* Timeline */
+.timeline-container {
+    margin: var(--space-6) 0;
 }
 
 .timeline-nav {
@@ -199,10 +248,11 @@
     margin-bottom: var(--space-6);
     border-bottom: 2px solid var(--border-color);
     padding-bottom: var(--space-2);
+    justify-content: center;
 }
 
 .timeline-tab {
-    padding: var(--space-3) var(--space-5);
+    padding: var(--space-3) var(--space-4);
     background: var(--bg-secondary);
     border: none;
     border-radius: var(--radius-lg) var(--radius-lg) 0 0;
@@ -317,11 +367,7 @@
     font-size: var(--text-lg);
 }
 
-/* Team Section - Estilo Grid Moderno */
-.team-section {
-    margin: var(--space-8) 0;
-}
-
+/* Team Section */
 .team-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -339,13 +385,13 @@
 }
 
 .team-member:hover {
-    transform: translateY(-8px);
+    transform: translateY(-4px);
     box-shadow: var(--shadow-xl);
 }
 
 .member-image {
     position: relative;
-    height: 250px;
+    height: 200px;
     overflow: hidden;
 }
 
@@ -382,7 +428,7 @@
 }
 
 .team-member:hover .member-image img {
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 
 .team-member:hover .member-overlay span {
@@ -414,17 +460,16 @@
     line-height: var(--leading-relaxed);
 }
 
-/* Values Section - Estilo Icon Grid */
+/* Values Section */
 .values-grid {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: var(--space-4);
-    margin-bottom: var(--space-6);
 }
 
 .value-card {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: var(--space-3);
     padding: var(--space-4);
     background: var(--bg-primary);
@@ -434,39 +479,26 @@
     border: 1px solid var(--border-color);
 }
 
-.value-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, var(--color-primary-50) 0%, transparent 100%);
-    opacity: 0;
-    transition: opacity var(--duration-300);
-}
-
 .value-card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-2px);
     box-shadow: var(--shadow-lg);
-}
-
-.value-card:hover::before {
-    opacity: 1;
 }
 
 .value-icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
     flex-shrink: 0;
+    background: var(--color-primary-100);
+    border-radius: var(--radius);
+    padding: var(--space-2);
 }
 
 .value-icon svg {
-    width: 3rem;
-    height: 3rem;
+    width: 24px;
+    height: 24px;
     color: var(--color-primary);
 }
 
@@ -477,16 +509,19 @@
 }
 
 .value-card p {
-    text-align: center;
-    margin-top: var(--space-6);
+    color: var(--text-light);
+    font-size: var(--text-sm);
+    line-height: var(--leading-relaxed);
 }
 
+/* Contact Section */
+.contact-container {
+    background: var(--bg-primary);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-lg);
+}
 
-
-
-
-
-/* Contact Section - Estilo Moderno */
 .about-contact-info {
     display: grid;
     grid-template-columns: 1fr;
@@ -499,17 +534,14 @@
     align-items: center;
     gap: var(--space-3);
     padding: var(--space-4);
-    background: var(--bg-primary);
+    background: var(--bg-secondary);
     border-radius: var(--radius-lg);
     transition: all var(--duration-300) var(--ease-in-out);
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--border-color);
 }
 
 .about-contact-card:hover {
     transform: translateX(4px);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--color-primary-300);
+    box-shadow: var(--shadow-md);
 }
 
 .about-contact-icon {
@@ -535,54 +567,203 @@
     font-size: var(--text-lg);
 }
 
-.about-contact-cta {
+.contact-cta {
     text-align: center;
-    margin-top: var(--space-6);
+}
+
+/* Modal Styles */
+.about-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: var(--z-modal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--duration-300) var(--ease-in-out);
+}
+
+.about-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+}
+
+.modal-container {
+    position: relative;
+    background: var(--bg-primary);
+    border-radius: var(--radius-2xl);
+    max-width: 600px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-2xl);
+    transform: scale(0.9);
+    transition: transform var(--duration-300) var(--ease-in-out);
+}
+
+.about-modal.active .modal-container {
+    transform: scale(1);
+}
+
+.modal-close {
+    position: absolute;
+    top: var(--space-4);
+    right: var(--space-4);
+    background: var(--bg-secondary);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all var(--duration-200);
+}
+
+.modal-close:hover {
+    background: var(--color-gray-200);
+    transform: rotate(90deg);
+}
+
+.modal-content {
+    padding: var(--space-8) var(--space-6) var(--space-6);
+}
+
+.team-modal-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+}
+
+.team-member-image {
+    text-align: center;
+}
+
+.team-member-image img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: var(--shadow-lg);
+}
+
+.team-member-info h2 {
+    color: var(--color-primary-800);
+    margin-bottom: var(--space-2);
+    text-align: center;
+}
+
+.team-member-role {
+    color: var(--color-primary);
+    font-weight: var(--font-medium);
+    text-align: center;
+    margin-bottom: var(--space-4);
+}
+
+.team-member-bio {
+    margin-bottom: var(--space-4);
+    line-height: var(--leading-relaxed);
+}
+
+.team-member-achievements h3 {
+    color: var(--color-primary-700);
+    margin-bottom: var(--space-3);
+}
+
+.team-member-achievements ul {
+    list-style: none;
+    padding: 0;
+}
+
+.team-member-achievements li {
+    padding: var(--space-2) 0;
+    border-bottom: 1px solid var(--border-color);
+    position: relative;
+    padding-left: var(--space-4);
+}
+
+.team-member-achievements li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--color-success);
+    font-weight: var(--font-bold);
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .about-hero h1 {
+    .about-hero {
+        min-height: 50vh;
+        margin: var(--space-4) var(--space-2) var(--space-6);
+    }
+
+    .hero-title {
         font-size: var(--text-3xl);
     }
-    
-    .about-hero p {
-        font-size: var(--text-lg);
+
+    .hero-actions {
+        flex-direction: column;
+        align-items: center;
     }
-    
+
     .school-info-container {
         grid-template-columns: 1fr;
         text-align: center;
     }
-    
+
     .school-details {
         text-align: center;
     }
-    
-    .mission-vision {
+
+    .school-meta p {
+        justify-content: center;
+    }
+
+    .mission-vision-container {
         grid-template-columns: 1fr;
     }
-    
+
     .timeline-nav {
         flex-direction: column;
         gap: var(--space-1);
     }
-    
+
     .timeline-tab {
         border-radius: var(--radius);
         text-align: center;
     }
-    
+
     .team-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .values-grid {
         grid-template-columns: 1fr;
     }
+
+    .modal-container {
+        width: 95%;
+        margin: var(--space-4);
+    }
 }
 
-/* Animaciones personalizadas */
+/* Animations */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -595,6 +776,7 @@
 }
 
 .animate-fade-in {
+    opacity: 0;
     animation: fadeIn 0.6s var(--ease-out) forwards;
 }
 
@@ -608,4 +790,17 @@
 
 .delay-3 {
     animation-delay: 0.3s;
+}
+
+/* Utilities */
+.text-center {
+    text-align: center;
+}
+
+.mb-0 {
+    margin-bottom: 0 !important;
+}
+
+.mt-0 {
+    margin-top: 0 !important;
 }
