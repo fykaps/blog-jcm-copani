@@ -4,8 +4,10 @@
 
 /* Section Styles */
 .about-section {
-    margin-bottom: var(--space-10);
-    padding: 0 var(--space-4);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+    margin: var(--space-8) 0;
 }
 
 .section-header {

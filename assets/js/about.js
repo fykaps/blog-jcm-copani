@@ -36,23 +36,6 @@ class AboutSystem {
         const container = document.querySelector('.school-info-container');
         if (!container) return;
 
-        const statsHTML = `
-            <div class="school-stats">
-                <div class="stat-item">
-                    <span class="stat-number" data-count="${school.stats.years}">0</span>
-                    <span class="stat-label">Años de Historia</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number" data-count="${school.stats.teachers}">0</span>
-                    <span class="stat-label">Profesores</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number" data-count="${school.stats.students}">0</span>
-                    <span class="stat-label">Estudiantes</span>
-                </div>
-            </div>
-        `;
-
         const schoolInfoHTML = `
             <div class="school-logo-container">
                 <img src="${school.logo}" alt="${school.name}" class="school-logo" loading="lazy">
@@ -66,7 +49,6 @@ class AboutSystem {
                     <p><strong>Director:</strong> ${school.director}</p>
                     <p><strong>Ubicación:</strong> ${school.location}</p>
                 </div>
-                ${statsHTML}
             </div>
             <div class="school-image-container">
                 <img src="${school.image}" alt="Instalaciones del ${school.name}" class="school-image" loading="lazy">
