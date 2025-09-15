@@ -102,7 +102,7 @@ const meetingsData = [
         id: 5,
         date: "2025-09-15",
         startTime: "09:30",
-        endTime: "12:00",
+        endTime: "13:00",
         title: "Reunión ordinaria de padres de familia - APAFA",
         description: "La Dirección en coordinación con la APAFA del IES 'José Carlos Mariátegui' de Copani convoca a los padres de familia a una reunión ordinaria para tratar asuntos de gestión institucional y recursos escolares.",
         agenda: [
