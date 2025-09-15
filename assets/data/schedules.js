@@ -279,7 +279,7 @@ const classSchedules = {
         // 2do B
         { grade: "2do B", subject: "Desarrollo Personal", teacher: "Mario Estrada Pacohuanca", start: "08:15", end: "09:35", type: "Normal" },
         { grade: "2do B", subject: "Receso", start: "09:35", end: "09:50", type: "receso", isBreak: true },
-        { grade: "2ro B", subject: "Educación Física", teacher: "Nestor Rene Cruz Paye", start: "09:50", end: "11:10", type: "Normal" },
+        { grade: "2do B", subject: "Educación Física", teacher: "Nestor Rene Cruz Paye", start: "09:50", end: "11:10", type: "Normal" },
         { grade: "2do B", subject: "Educación Religiosa", teacher: "Fidel Severiano Cruz Tiquilloca", start: "11:10", end: "12:30", type: "Normal" },
         { grade: "2do B", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
         { grade: "2do B", subject: "Inglés", teacher: "Madelaine Gonzalo Segura", start: "13:00", end: "13:40", type: "Normal" },
@@ -487,7 +487,7 @@ const classSchedules = {
         { grade: "5to B", subject: "Receso", start: "09:35", end: "09:50", type: "receso", isBreak: true },
         { grade: "5to B", subject: "Educación para el Trabajo", teacher: "Esteban Jaime Asqui Flores", start: "09:50", end: "10:30", type: "Normal" },
         { grade: "5to B", subject: "Tutoría", teacher: "Esteban Jaime Asqui Flores", start: "10:30", end: "11:50", type: "Normal" },
-        { grade: "5to A", subject: "Educación Física", teacher: "Nestor Rene Cruz Paye", start: "11:50", end: "12:30", type: "Normal" },
+        { grade: "5to B", subject: "Educación Física", teacher: "Nestor Rene Cruz Paye", start: "11:50", end: "12:30", type: "Normal" },
         { grade: "5to B", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
         { grade: "5to B", subject: "Inglés", teacher: "Ronal David Aguilar Mamani", start: "13:00", end: "13:40", type: "Normal" },
         { grade: "5to B", subject: "Comunicación", teacher: "Eliseo Rene Calisaya Huanchi", start: "13:40", end: "15:00", type: "Normal" },
@@ -639,7 +639,7 @@ const classSchedules = {
         { grade: "2do A", subject: "Comunicación", teacher: "Joel Calisaya Enriquez", start: "09:50", end: "11:10", type: "Normal" },
         { grade: "2do A", subject: "Educación Religiosa", teacher: "Fidel Severiano Cruz Tiquilloca", start: "11:10", end: "12:30", type: "Normal" },
         { grade: "2do A", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
-        { grade: "2ro A", subject: "Arte y Cultura", teacher: "Nestor Palomino Manzano", start: "13:00", end: "13:40", type: "Normal" },
+        { grade: "2do A", subject: "Arte y Cultura", teacher: "Nestor Palomino Manzano", start: "13:00", end: "13:40", type: "Normal" },
         { grade: "2do A", subject: "Matemáticas", teacher: "Heydi Maria Estrada Sucasayiri", start: "13:40", end: "15:00", type: "Normal" },
 
         // 2do B
@@ -758,13 +758,13 @@ const classSchedules = {
         { grade: "2do A", subject: "Arte y Cultura", teacher: "Nestor Palomino Manzano", start: "09:50", end: "11:10", type: "Normal" },
         { grade: "2do A", subject: "Inglés", teacher: "Madelaine Gonzalo Segura", start: "11:10", end: "12:30", type: "Normal" },
         { grade: "2do A", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
-        { grade: "2ro A", subject: "Educación Física", teacher: "Nestor Rene Cruz Paye", start: "13:00", end: "13:40", type: "Normal" },
+        { grade: "2do A", subject: "Educación Física", teacher: "Nestor Rene Cruz Paye", start: "13:00", end: "13:40", type: "Normal" },
         { grade: "2do A", subject: "Ciencia y Tecnología", teacher: "Alfonso Aruquipa Ccuno", start: "13:40", end: "15:00", type: "Normal" },
 
         // 2do B
         { grade: "2do B", subject: "Ciencias Sociales", teacher: "Edgar Henry Quispe Vargas", start: "08:15", end: "09:35", type: "Normal" },
         { grade: "2do B", subject: "Receso", start: "09:35", end: "09:50", type: "receso", isBreak: true },
-        { grade: "2ro B", subject: "Aimara", teacher: "Julio Flores Quispe", start: "09:50", end: "11:10", type: "Normal" },
+        { grade: "2do B", subject: "Aimara", teacher: "Julio Flores Quispe", start: "09:50", end: "11:10", type: "Normal" },
         { grade: "2do B", subject: "Ciencia y Tecnología", teacher: "Alfonso Aruquipa Ccuno", start: "11:10", end: "12:30", type: "Normal" },
         { grade: "2do B", subject: "Receso", start: "12:30", end: "13:00", type: "receso", isBreak: true },
         { grade: "2do B", subject: "Comunicación", teacher: "Joel Calisaya Enriquez", start: "13:00", end: "14:20", type: "Normal" },

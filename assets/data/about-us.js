@@ -65,15 +65,15 @@ const aboutData = {
         },
         {
             id: "team-2",
-            name: "Estudiantes Reporteros",
-            role: "Club de Periodismo Escolar",
-            bioShort: "Miembros del club de periodismo escolar que redactan noticias y entrevistas.",
-            bio: "Los estudiantes del club de periodismo escolar son los encargados de investigar, redactar y publicar las noticias más relevantes de nuestra institución. Desarrollan habilidades de comunicación, investigación y trabajo en equipo mientras mantienen informada a la comunidad educativa.",
-            image: "assets/img/team/students.jpg",
+            name: "Equipo del Blog Institucional",
+            role: "Proyecto Crea y Emprende - Etapa UGEL",
+            bioShort: "Cinco estudiantes lideran el desarrollo y actualización del blog institucional, una iniciativa ganadora del concurso Crea y Emprende.",
+            bio: "Este equipo está conformado por cinco estudiantes que participan en el proyecto de innovación educativa presentado en el concurso Crea y Emprende del Ministerio de Educación. La iniciativa —ideada por una estudiante del 1° Grado 'A' y ganadora en la etapa institucional— consiste en un blog dinámico y funcional que centraliza la información de la institución en tiempo real. Cada integrante cumple un rol específico: redacción, fotografía, edición, diseño web y gestión de contenido. El blog incluye secciones como noticias, eventos, reuniones, vida escolar, tienda y galerías, las cuales son actualizadas constantemente por los propios estudiantes.",
+            image: "assets/img/about-us/teams/students.jpg",
             achievements: [
-                "Ganadores del concurso regional de periodismo escolar 2024",
-                "Publicación de más de 50 artículos en el último año",
-                "Entrevistas a personalidades locales y educativas"
+                "Ganadores de la etapa institucional del concurso Crea y Emprende 2025",
+                "Selección para representar a la institución en la etapa UGEL",
+                "Implementación activa del blog con contenido en tiempo real"
             ]
         },
         {
