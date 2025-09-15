@@ -95,32 +95,32 @@ const aboutData = {
         {
             name: "Ética",
             description: "Que inspira una educación promotora de los valores de paz, solidaridad, justicia, libertad, honestidad, tolerancia, responsabilidad, trabajo, verdad y pleno respeto a las normas de convivencia.",
-            icon: `<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>`
+            icon: `<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 14h4v-2h-4v2zm0-3h4V7h-4v5z"/></svg>`
         },
         {
             name: "Equidad",
             description: "Que garantiza a todas iguales oportunidades de acceso, permanencia y trato en un sistema educativo de calidad.",
-            icon: `<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 16c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm3-7.5h-2v-2h-2v2H9V13h2v2h2v-2h2v-2.5z"/></svg>`
+            icon: `<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>`
         },
         {
             name: "Inclusión",
             description: "Que incorpora a las personas con discapacidad, grupos sociales excluidos, marginados y vulnerables, especialmente en el ámbito rural.",
-            icon: `<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/><circle cx="19" cy="5" r="2" fill="currentColor"/></svg>`
+            icon: `<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3-8c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3z"/></svg>`
         },
         {
             name: "Calidad",
             description: "Que asegura condiciones adecuadas para una educación integral, pertinente, abierta, flexible y permanente.",
-            icon: `<svg viewBox="0 0 24 24"><path fill="currentColor" d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"/></svg>`
+            icon: `<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>`
         },
         {
             name: "Democracia",
             description: "Que promueve el respeto irrestricto a los derechos humanos, la libertad de conciencia, pensamiento y opinión.",
-            icon: `<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 16v-2h2v2h-2zm1-14c4.42 0 8 3.58 8 8 0 1.85-.63 3.55-1.69 4.9l-1.43-1.43c.69-1.07 1.12-2.35 1.12-3.47 0-3.31-2.69-6-6-6s-6 2.69-6 6c0 1.12.43 2.4 1.12 3.47l-1.43 1.43C4.63 15.55 4 13.85 4 12c0-4.42 3.58-8 8-8z"/></svg>`
+            icon: `<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v2h-2V7zm0 3h2v2h-2v-2zm0 3h2v2h-2v-2z"/></svg>`
         },
         {
             name: "Interculturalidad",
             description: "Que asume como riqueza la diversidad cultural, étnica y lingüística del país, y encuentra en el reconocimiento y respeto a las diferencias.",
-            icon: `<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.05-12.83c-1.33 0-2.42 1.09-2.42 2.42s1.09 2.42 2.42 2.42 2.42-1.09 2.42-2.42-1.09-2.42-2.42-2.42zm-.05 10c-2.33 0-4.32-1.45-5.12-3.5h1.67c.69 1.19 1.97 2 3.45 2s2.76-.81 3.45-2h1.67c-.8 2.05-2.79 3.5-5.12 3.5z"/></svg>`
+            icon: `<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5-8c0-2.21 1.79-4 4-4s4 1.79 4 4-1.79 4-4 4-4-1.79-4-4z"/></svg>`
         }
     ],
 

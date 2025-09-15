@@ -487,14 +487,14 @@
 
 
 /* Contact Section - Estilo Moderno */
-.contact-info {
+.about-contact-info {
     display: grid;
     grid-template-columns: 1fr;
     gap: var(--space-4);
     margin-bottom: var(--space-6);
 }
 
-.contact-card {
+.about-contact-card {
     display: flex;
     align-items: center;
     gap: var(--space-3);
@@ -506,13 +506,13 @@
     border: 1px solid var(--border-color);
 }
 
-.contact-card:hover {
+.about-contact-card:hover {
     transform: translateX(4px);
     box-shadow: var(--shadow-lg);
     border-color: var(--color-primary-300);
 }
 
-.contact-icon {
+.about-contact-icon {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -524,18 +524,18 @@
     flex-shrink: 0;
 }
 
-.contact-icon svg {
+.about-contact-icon svg {
     width: 24px;
     height: 24px;
 }
 
-.contact-card h3 {
+.about-contact-card h3 {
     color: var(--color-primary-700);
     margin-bottom: var(--space-1);
     font-size: var(--text-lg);
 }
 
-.contact-cta {
+.about-contact-cta {
     text-align: center;
     margin-top: var(--space-6);
 }
