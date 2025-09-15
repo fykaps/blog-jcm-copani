@@ -32,21 +32,22 @@ const weeklyMenu = [
         lunch: {
             start: "14:30",
             end: "15:30",
-            name: "Tallarines rojos con carne y ensalada de beterraga",
-            description: "Plato de pasta con salsa de tomate y carne molida",
+            name: "Lentejas guisadas con arroz y ensalada criolla",
+            description: "Plato nutritivo de lentejas cocidas con verduras, acompañado de arroz y ensalada fresca",
             ingredients: [
-                "Tallarines",
-                "Carne molida",
-                "Tomate",
+                "Lentejas",
                 "Cebolla",
                 "Ajo",
-                "Beterraga",
-                "Limón",
+                "Zanahoria",
+                "Tomate",
                 "Aceite vegetal",
                 "Sal",
-                "Especias"
+                "Especias",
+                "Arroz",
+                "Lechuga",
+                "Limón"
             ],
-            image: "assets/img/menus/almuerzo/almuerzo5.png",
+            image: "assets/img/menus/almuerzo/almuerzo1.png",
             additional: "Pera"
         }
     },
@@ -79,21 +80,24 @@ const weeklyMenu = [
         lunch: {
             start: "12:30",
             end: "13:00",
-            name: "Pescado sudado con arroz y ensalada criolla",
-            description: "Plato rico en omega 3 y proteínas",
+            name: "Arroz chaufa de pollo y salchicha con papas fritas",
+            description: "Plato fusión de la gastronomía chino-peruana, preparado con arroz salteado en sillao, pollo, salchicha, verduras, huevo y kion, acompañado con papas fritas crocantes.",
             ingredients: [
-                "Pescado fresco",
-                "Arroz",
-                "Cebolla",
-                "Tomate",
-                "Limón",
-                "Cilantro",
+                "Arroz cocido",
+                "Pollo en trozos",
+                "Salchicha picada",
+                "Papas fritas",
+                "Huevo",
+                "Cebolla china",
+                "Pimiento",
+                "Kion (jengibre)",
+                "Ajo",
+                "Sillao (salsa de soya)",
                 "Aceite vegetal",
-                "Sal",
-                "Especias"
+                "Sal"
             ],
-            image: "assets/img/menus/almuerzo/almuerzo2.jpg",
-            additional: "Piña"
+            image: "assets/img/menus/almuerzo/almuerzo2.png",
+            additional: "Manzana"
         }
     },
     {
@@ -125,21 +129,23 @@ const weeklyMenu = [
         lunch: {
             start: "12:30",
             end: "13:00",
-            name: "Lentejas con arroz y ensalada de pepino",
-            description: "Plato vegetariano rico en hierro y proteínas",
+            name: "Asado de carne con arroz",
+            description: "Plato tradicional de carne de res cocida lentamente en una salsa casera de verduras y especias, acompañado de arroz blanco.",
             ingredients: [
-                "Lentejas",
-                "Arroz",
-                "Pepino",
-                "Tomate",
+                "Carne de res",
                 "Cebolla",
-                "Limón",
-                "Aceite vegetal",
+                "Ajo",
+                "Tomate",
+                "Zanahoria",
+                "Pimiento",
+                "Laurel",
+                "Pimienta",
                 "Sal",
-                "Especias"
+                "Aceite vegetal",
+                "Arroz"
             ],
-            image: "assets/img/menus/almuerzo/almuerzo3.jpg",
-            additional: "Papaya"
+            image: "assets/img/menus/almuerzo/almuerzo3.png",
+            additional: "Gelatina"
         }
     },
     {
@@ -171,22 +177,26 @@ const weeklyMenu = [
         lunch: {
             start: "12:30",
             end: "13:00",
-            name: "Ají de gallina con arroz y papa sancochada",
-            description: "Plato tradicional peruano",
+            name: "Crema de arveja con pescado frito y ensalada criolla",
+            description: "Plato nutritivo que combina una suave crema de arvejas verdes con papas, acompañado de pescado frito crocante y ensalada criolla a base de cebolla y tomate, ideal para una comida balanceada.",
             ingredients: [
-                "Gallina",
-                "Arroz",
+                "Arvejas verdes",
                 "Papa",
-                "Ají amarillo",
-                "Pan remojado",
-                "Leche evaporada",
-                "Nuez moscada",
+                "Zanahoria",
+                "Cebolla",
+                "Ajo",
                 "Aceite vegetal",
                 "Sal",
-                "Especias"
+                "Filete de pescado (merluza o similar)",
+                "Harina o chuño",
+                "Huevo",
+                "Pimienta",
+                "Cebolla roja",
+                "Tomate",
+                "Limón"
             ],
-            image: "assets/img/menus/almuerzo/almuerzo4.jpg",
-            additional: "Sandía"
+            image: "assets/img/menus/almuerzo/almuerzo4.png",
+            additional: "Mandarina"
         }
     },
     {
@@ -218,22 +228,25 @@ const weeklyMenu = [
         lunch: {
             start: "12:30",
             end: "13:00",
-            name: "Tallarines rojos con carne y ensalada de beterraga",
-            description: "Plato de pasta con salsa de tomate y carne molida",
+            name: "Lomo saltado con arroz, papas fritas y huevo frito",
+            description: "Plato tradicional peruano que consiste en tiras de carne de res salteadas con cebolla roja, tomate, ají amarillo, ajo, vinagre y salsa de soya, servido con arroz blanco, papas fritas crocantes y un huevo frito con yema líquida encima.",
             ingredients: [
-                "Tallarines",
-                "Carne molida",
+                "Carne de res",
+                "Cebolla roja",
                 "Tomate",
-                "Cebolla",
+                "Ají amarillo",
                 "Ajo",
-                "Beterraga",
-                "Limón",
-                "Aceite vegetal",
+                "Vinagre",
+                "Sillao (salsa de soya)",
+                "Pimienta",
                 "Sal",
-                "Especias"
+                "Aceite vegetal",
+                "Arroz",
+                "Papas",
+                "Huevos"
             ],
             image: "assets/img/menus/almuerzo/almuerzo5.png",
-            additional: "Pera"
+            additional: "Plátano"
         }
     }
 ];

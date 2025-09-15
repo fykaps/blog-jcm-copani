@@ -1,16 +1,18 @@
 /**
- * Sistema de Información "Acerca de" - Versión Premium
- * Con diseño moderno, modales interactivos y animaciones
+ * SISTEMA "ACERCA DE" - REDISEÑO PROFESIONAL
+ * Con timeline en pestañas y diseño ecommerce
  */
 
-class AboutSystem {
+class AboutSystemPremium {
     constructor(aboutData, options = {}) {
         this.aboutData = aboutData;
         this.options = {
+            animationDuration: 300,
             ...options
         };
         this.modal = null;
         this.activeModal = null;
+        this.currentTimelineTab = '2020s';
 
         this.init();
     }
@@ -18,14 +20,16 @@ class AboutSystem {
     init() {
         this.renderSchoolInfo();
         this.renderMissionVision();
-        this.renderHistoryTimeline();
+        this.renderTimelineTabs();
         this.renderTeamMembers();
         this.renderValues();
         this.renderContactInfo();
-        this.renderCreatorSection();
         this.setupEventListeners();
         this.setupModal();
         this.setupIntersectionObserver();
+
+        // Inicializar la primera pestaña del timeline
+        this.showTimelineDecade(this.currentTimelineTab);
     }
 
     // ======================
@@ -36,26 +40,26 @@ class AboutSystem {
         const school = this.aboutData.schoolInfo;
         if (!school) return;
 
-        const heroSection = document.querySelector('.section-hero');
+        const heroSection = document.querySelector('.about-hero');
         if (heroSection) {
             const statsHTML = `
-                <div class="section-stats animate-fade-in delay-3">
-                    <div class="section-stat-item">
-                        <span class="section-stat-number" data-count="${school.stats.years}">0</span>
-                        <span class="section-stat-label">Años de Historia</span>
+                <div class="school-stats animate-fade-in delay-3">
+                    <div class="stat-item">
+                        <span class="stat-number" data-count="${school.stats.years}">0</span>
+                        <span class="stat-label">Años de Historia</span>
                     </div>
-                    <div class="section-stat-item">
-                        <span class="section-stat-number" data-count="${school.stats.teachers}">0</span>
-                        <span class="section-stat-label">Profesores</span>
+                    <div class="stat-item">
+                        <span class="stat-number" data-count="${school.stats.teachers}">0</span>
+                        <span class="stat-label">Profesores</span>
                     </div>
-                    <div class="section-stat-item">
-                        <span class="section-stat-number" data-count="${school.stats.students}">0</span>
-                        <span class="section-stat-label">Estudiantes</span>
+                    <div class="stat-item">
+                        <span class="stat-number" data-count="${school.stats.students}">0</span>
+                        <span class="stat-label">Estudiantes</span>
                     </div>
                 </div>
             `;
 
-            const heroContent = heroSection.querySelector('.section-hero-content');
+            const heroContent = heroSection.querySelector('.about-hero-content');
             if (heroContent) {
                 heroContent.insertAdjacentHTML('beforeend', statsHTML);
             }
@@ -64,13 +68,13 @@ class AboutSystem {
         const purposeSection = document.getElementById('purpose-section');
         if (purposeSection) {
             const schoolInfoHTML = `
-                <div class="school-info-container">
+                <div class="school-info-container animate-fade-in">
                     <div class="school-logo-container">
                         <img src="${school.logo}" alt="${school.name}" class="school-logo" loading="lazy">
                     </div>
                     <div class="school-details">
                         <h3>${school.name}</h3>
-                        <p class="school-motto">"${school.motto}"</p>
+                        <p class="school-motto">${school.motto}</p>
                         <p class="school-description">${school.description}</p>
                         <div class="school-meta">
                             <p><strong>Fundado:</strong> ${school.founded}</p>
@@ -83,7 +87,7 @@ class AboutSystem {
                     </div>
                 </div>
             `;
-            purposeSection.querySelector('.section-content').insertAdjacentHTML('afterbegin', schoolInfoHTML);
+            purposeSection.querySelector('.section-content').innerHTML = schoolInfoHTML;
         }
     }
 
@@ -95,7 +99,7 @@ class AboutSystem {
         if (!container) return;
 
         container.innerHTML = `
-            <div class="mission-card hover-scale" tabindex="0">
+            <div class="mission-card hover-scale animate-fade-in delay-1" tabindex="0">
                 <div class="card-icon">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path fill="currentColor"
@@ -106,7 +110,7 @@ class AboutSystem {
                 <p>${missionVision.mission}</p>
             </div>
 
-            <div class="vision-card hover-scale" tabindex="0">
+            <div class="vision-card hover-scale animate-fade-in delay-2" tabindex="0">
                 <div class="card-icon">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path fill="currentColor"
@@ -119,43 +123,89 @@ class AboutSystem {
         `;
     }
 
-    renderHistoryTimeline() {
+    renderTimelineTabs() {
         const milestones = this.aboutData.milestones;
         if (!milestones || !milestones.length) return;
 
         const container = document.getElementById('timeline-container');
         if (!container) return;
 
-        // Versión desktop (con líneas)
-        const desktopTimeline = milestones.map((item, index) => `
-            <div class="timeline-item ${index % 2 === 0 ? 'left' : 'right'}">
-                <div class="timeline-year">${item.year}</div>
-                <div class="timeline-content">
-                    <h3>${item.title}</h3>
-                    <p>${item.description}</p>
-                </div>
-            </div>
+        // Agrupar hitos por década
+        const decades = this.groupMilestonesByDecade(milestones);
+
+        // Crear pestañas de navegación
+        const tabsHTML = Object.keys(decades).map(decade => `
+            <button class="timeline-tab ${decade === this.currentTimelineTab ? 'active' : ''}" 
+                    data-decade="${decade}">
+                ${decade}
+            </button>
         `).join('');
 
-        // Versión mobile (sin líneas)
-        const mobileTimeline = milestones.map(item => `
-            <div class="timeline-mobile-item">
-                <div class="timeline-mobile-year">${item.year}</div>
-                <div class="timeline-mobile-content">
-                    <h3>${item.title}</h3>
-                    <p>${item.description}</p>
+        // Crear contenedor de contenido
+        const contentHTML = Object.entries(decades).map(([decade, items]) => `
+            <div class="timeline-content ${decade === this.currentTimelineTab ? 'active' : ''}" 
+                 id="timeline-${decade}">
+                <div class="timeline-decade">
+                    <h3 class="timeline-decade-title">${decade.replace('s', '')}s</h3>
+                    <div class="timeline-items">
+                        ${items.map(item => `
+                            <div class="timeline-item animate-fade-in">
+                                <div class="timeline-year">${item.year}</div>
+                                <h3>${item.title}</h3>
+                                <p>${item.description}</p>
+                            </div>
+                        `).join('')}
+                    </div>
                 </div>
             </div>
         `).join('');
 
         container.innerHTML = `
-            <div class="timeline-desktop">
-                ${desktopTimeline}
-            </div>
-            <div class="timeline-mobile">
-                ${mobileTimeline}
+            <div class="timeline-tabs">
+                <nav class="timeline-nav">
+                    ${tabsHTML}
+                </nav>
+                <div class="timeline-content-wrapper">
+                    ${contentHTML}
+                </div>
             </div>
         `;
+    }
+
+    groupMilestonesByDecade(milestones) {
+        const decades = {};
+
+        milestones.forEach(milestone => {
+            const year = parseInt(milestone.year);
+            const decade = `${Math.floor(year / 10) * 10}s`;
+
+            if (!decades[decade]) {
+                decades[decade] = [];
+            }
+
+            decades[decade].push(milestone);
+        });
+
+        // Ordenar cada década por año
+        Object.keys(decades).forEach(decade => {
+            decades[decade].sort((a, b) => parseInt(b.year) - parseInt(a.year));
+        });
+
+        return decades;
+    }
+
+    showTimelineDecade(decade) {
+        // Actualizar pestañas activas
+        document.querySelectorAll('.timeline-tab').forEach(tab => {
+            tab.classList.toggle('active', tab.dataset.decade === decade);
+        });
+
+        // Actualizar contenido activo
+        document.querySelectorAll('.timeline-content').forEach(content => {
+            content.classList.toggle('active', content.id === `timeline-${decade}`);
+        });
+
+        this.currentTimelineTab = decade;
     }
 
     renderTeamMembers() {
@@ -165,12 +215,13 @@ class AboutSystem {
         const container = document.querySelector('.team-grid');
         if (!container) return;
 
-        container.innerHTML = team.map(member => `
-            <div class="team-member hover-scale" tabindex="0" data-member-id="${member.id}">
+        container.innerHTML = team.map((member, index) => `
+            <div class="team-member hover-scale animate-fade-in delay-${index % 3}" 
+                 tabindex="0" data-member-id="${member.id}">
                 <div class="member-image">
                     <img src="${member.image}" alt="${member.name}" loading="lazy">
                     <div class="member-overlay">
-                        <span>Ver más</span>
+                        <span>Ver perfil</span>
                     </div>
                 </div>
                 <div class="member-info">
@@ -189,13 +240,15 @@ class AboutSystem {
         const container = document.querySelector('.values-grid');
         if (!container) return;
 
-        container.innerHTML = values.map(value => `
-            <div class="value-card hover-scale" tabindex="0">
+        container.innerHTML = values.map((value, index) => `
+            <div class="value-card hover-scale animate-fade-in delay-${index % 3}" tabindex="0">
                 <div class="value-icon">
                     ${value.icon}
                 </div>
-                <h3>${value.name}</h3>
-                <p>${value.description}</p>
+                <div>
+                    <h3>${value.name}</h3>
+                    <p>${value.description}</p>
+                </div>
             </div>
         `).join('');
     }
@@ -208,7 +261,7 @@ class AboutSystem {
         if (!container) return;
 
         container.innerHTML = `
-            <div class="contact-card hover-scale" tabindex="0">
+            <div class="contact-card hover-scale animate-fade-in delay-1" tabindex="0">
                 <div class="contact-icon">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path fill="currentColor"
@@ -221,7 +274,7 @@ class AboutSystem {
                 </div>
             </div>
 
-            <div class="contact-card hover-scale" tabindex="0">
+            <div class="contact-card hover-scale animate-fade-in delay-2" tabindex="0">
                 <div class="contact-icon">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path fill="currentColor"
@@ -234,7 +287,7 @@ class AboutSystem {
                 </div>
             </div>
 
-            <div class="contact-card hover-scale" tabindex="0">
+            <div class="contact-card hover-scale animate-fade-in delay-3" tabindex="0">
                 <div class="contact-icon">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path fill="currentColor"
@@ -247,36 +300,6 @@ class AboutSystem {
                 </div>
             </div>
         `;
-    }
-
-    renderCreatorSection() {
-        const creator = this.aboutData.creator;
-        if (!creator) return;
-
-        const section = document.createElement('section');
-        section.className = 'about-section creator-section animate-fade-in';
-        section.id = 'creator-section';
-
-        section.innerHTML = `
-            <div class="section-header">
-                <h2>La Creadora</h2>
-                <div class="section-divider"></div>
-            </div>
-            <div class="creator-content">
-                <button class="creator-button" id="creator-button" data-creator-id="${creator.id}">
-                    <div class="creator-avatar">
-                        <img src="${creator.image}" alt="${creator.name}" loading="lazy">
-                    </div>
-                    <span>Conoce a la creadora</span>
-                </button>
-                <p class="creator-short-bio">${creator.shortBio}</p>
-            </div>
-        `;
-
-        const aboutContent = document.querySelector('.about-content');
-        if (aboutContent) {
-            aboutContent.insertBefore(section, aboutContent.children[3]);
-        }
     }
 
     // ======================
@@ -310,31 +333,6 @@ class AboutSystem {
                 this.closeModal();
             }
         });
-    }
-
-    showCreatorModal(creatorId) {
-        const creator = this.aboutData.creator;
-        if (!creator || creator.id !== creatorId) return;
-
-        const modalContent = `
-            <div class="creator-modal-content">
-                <div class="creator-image">
-                    <img src="${creator.image}" alt="${creator.name}" loading="lazy">
-                </div>
-                <div class="creator-info">
-                    <h2>${creator.name}</h2>
-                    <p class="creator-grade">${creator.grade}</p>
-                    <div class="creator-bio">
-                        <p>${creator.bio}</p>
-                    </div>
-                    <div class="creator-social">
-                        <p><strong>Contacto:</strong> ${creator.contact}</p>
-                    </div>
-                </div>
-            </div>
-        `;
-
-        this.openModal(modalContent);
     }
 
     showTeamMemberModal(memberId) {
@@ -405,7 +403,7 @@ class AboutSystem {
                     entry.target.classList.add('in-view');
 
                     // Animar estadísticas si es el elemento de estadísticas
-                    if (entry.target.classList.contains('section-stats')) {
+                    if (entry.target.classList.contains('school-stats')) {
                         this.animateStats();
                     }
                 }
@@ -419,7 +417,7 @@ class AboutSystem {
     }
 
     animateStats() {
-        const statElements = document.querySelectorAll('.section-stat-number');
+        const statElements = document.querySelectorAll('.stat-number');
 
         statElements.forEach(element => {
             const target = parseInt(element.getAttribute('data-count'));
@@ -444,16 +442,15 @@ class AboutSystem {
     // ======================
 
     setupEventListeners() {
-        // Evento para el botón de la creadora
+        // Evento para las pestañas del timeline
         document.addEventListener('click', (e) => {
-            const creatorBtn = e.target.closest('#creator-button');
+            const timelineTab = e.target.closest('.timeline-tab');
             const teamMember = e.target.closest('.team-member');
 
-            if (creatorBtn) {
+            if (timelineTab) {
                 e.preventDefault();
-                this.activeModal = creatorBtn;
-                const creatorId = creatorBtn.getAttribute('data-creator-id');
-                this.showCreatorModal(creatorId);
+                const decade = timelineTab.dataset.decade;
+                this.showTimelineDecade(decade);
             } else if (teamMember) {
                 e.preventDefault();
                 this.activeModal = teamMember;
@@ -490,7 +487,7 @@ let aboutSystem;
 document.addEventListener('DOMContentLoaded', () => {
     try {
         if (typeof aboutData !== 'undefined') {
-            aboutSystem = new AboutSystem(aboutData);
+            aboutSystem = new AboutSystemPremium(aboutData);
             window.aboutSystem = aboutSystem;
         } else {
             console.error('Error: aboutData no está definido');
