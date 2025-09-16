@@ -16,70 +16,59 @@
 function parseLocalDate(dateStr) {
     if (!dateStr) return new Date();
 
+    // Si ya es un objeto Date, devolverlo
+    if (dateStr instanceof Date) return dateStr;
+
+    // Si es string con formato de fecha completa
+    if (typeof dateStr === 'string' && dateStr.includes('T')) {
+        return new Date(dateStr);
+    }
+
+    // Para formato YYYY-MM-DD
     const parts = dateStr.split('-');
-    if (parts.length !== 3) return new Date(dateStr);
+    if (parts.length === 3) {
+        // Crear fecha en zona horaria local (sin ajuste UTC)
+        return new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+    }
 
-    // Crear fecha en zona horaria local (sin ajuste UTC)
-    return new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+    // Para otros formatos, usar el constructor normal
+    return new Date(dateStr);
 }
 
 /**
- * Formatear fecha local para mostrar
- * @param {string} dateStr - Fecha en formato YYYY-MM-DD
- * @returns {string} - Fecha formateada
+ * Calcular fecha objetivo para countdowns - NUEVA FUNCIÓN
+ * @param {string} targetDay - Día de la semana objetivo
+ * @param {string} timeStr - Hora en formato HH:MM
+ * @returns {Date} - Fecha objetivo correcta
  */
-function formatLocalDate(dateStr) {
-    const date = parseLocalDate(dateStr);
-    return date.toLocaleDateString('es-ES', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-    });
-}
+function calculateTargetDate(targetDay, timeStr) {
+    const now = new Date();
+    const currentDayIndex = now.getDay(); // 0 (Domingo) a 6 (Sábado)
 
-/**
- * Obtener día del mes sin problemas de zona horaria
- * @param {string} dateStr - Fecha en formato YYYY-MM-DD
- * @returns {number} - Día del mes
- */
-function getLocalDay(dateStr) {
-    const date = parseLocalDate(dateStr);
-    return date.getDate();
-}
+    // Mapeo de nombres de días a índices
+    const dayMap = {
+        'Domingo': 0, 'Lunes': 1, 'Martes': 2, 'Miércoles': 3,
+        'Jueves': 4, 'Viernes': 5, 'Sábado': 6
+    };
 
-/**
- * Obtener nombre del mes
- * @param {string} dateStr - Fecha en formato YYYY-MM-DD
- * @returns {string} - Nombre del mes
- */
-function getLocalMonthName(dateStr) {
-    const date = parseLocalDate(dateStr);
-    return date.toLocaleDateString('es-ES', { month: 'long' });
-}
+    const targetDayIndex = dayMap[targetDay];
+    if (targetDayIndex === undefined) return null;
 
-/**
- * Obtener nombre corto del mes
- * @param {string} dateStr - Fecha en formato YYYY-MM-DD
- * @returns {string} - Nombre corto del mes
- */
-function getLocalShortMonthName(dateStr) {
-    const date = parseLocalDate(dateStr);
-    return date.toLocaleDateString('es-ES', { month: 'short' }).toUpperCase();
-}
+    // Calcular diferencia de días
+    let daysToAdd = targetDayIndex - currentDayIndex;
+    if (daysToAdd < 0) {
+        daysToAdd += 7; // Ir a la próxima semana
+    }
 
-/**
- * Formatear fecha completa en español
- * @param {string} dateStr - Fecha en formato YYYY-MM-DD
- * @returns {string} - Fecha completa formateada
- */
-function formatFullLocalDate(dateStr) {
-    const date = parseLocalDate(dateStr);
-    return date.toLocaleDateString('es-ES', {
-        weekday: 'long',
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-    });
+    // Crear fecha objetivo
+    const targetDate = new Date(now);
+    targetDate.setDate(now.getDate() + daysToAdd);
+
+    // Establecer la hora específica
+    const [hours, minutes] = timeStr.split(':').map(Number);
+    targetDate.setHours(hours, minutes, 0, 0);
+
+    return targetDate;
 }
 
 class CountdownSystem {
@@ -110,8 +99,15 @@ class CountdownSystem {
     /**
      * Inicializar cuenta regresiva
      */
-    init(targetDate, container) {
-        this.targetDate = this.parseDate(targetDate);
+
+    init(targetDate, container, targetDay = null, timeStr = null) {
+        // Si se proporciona día objetivo y hora, calcular fecha correctamente
+        if (targetDay && timeStr) {
+            this.targetDate = calculateTargetDate(targetDay, timeStr);
+        } else {
+            this.targetDate = this.parseDate(targetDate);
+        }
+
         this.container = container;
 
         if (!this.targetDate || !this.container) {
@@ -405,7 +401,7 @@ class ScheduleDetailSystem {
 
         this.currentTab = null;
         this.intervals = [];
-        this.countdownInstances = [];
+        this.countdownInstances = new Map(); // Cambiado a Map para mejor gestión
         this.init();
     }
 
@@ -429,18 +425,6 @@ class ScheduleDetailSystem {
     timeToMinutes(timeStr) {
         const [hours, minutes] = timeStr.split(':').map(Number);
         return hours * 60 + minutes;
-    }
-
-    formatCountdown(minutes) {
-        if (minutes <= 0) return '0m 0s';
-
-        const hours = Math.floor(minutes / 60);
-        const mins = minutes % 60;
-
-        if (hours > 0) {
-            return `${hours}h ${mins}m`;
-        }
-        return `${mins}m`;
     }
 
     // ===== FUNCIONES PRINCIPALES =====
@@ -738,38 +722,76 @@ class ScheduleDetailSystem {
             const start = item.dataset.start;
             const end = item.dataset.end;
             const countdownId = item.dataset.countdownId;
-            const status = this.getClassStatus({ start, end });
+            const dayName = this.currentTab;
 
-            if (status.timeRemaining > 0 && countdownId) {
-                this.initializeCountdown(item, start, end, status, countdownId);
+            // Solo inicializar countdowns para el día actual en la pestaña activa
+            if (countdownId && dayName) {
+                const status = this.getClassStatusForDay({ start, end }, dayName);
+
+                if (status.timeRemaining > 0) {
+                    this.initializeCountdown(item, start, end, status, countdownId, dayName);
+                } else {
+                    // Limpiar countdown si no es necesario
+                    const countdownElement = document.getElementById(countdownId);
+                    if (countdownElement) {
+                        countdownElement.innerHTML = '';
+                    }
+                }
             }
         });
+    }
+
+    /**
+ * Obtener estado de clase para un día específico - NUEVA FUNCIÓN
+ */
+    getClassStatusForDay(cls, dayName) {
+        const currentTime = this.getCurrentTime();
+        const today = new Date();
+        const currentDayName = this.getDayName(today);
+        const isToday = dayName === currentDayName;
+        const isPast = this.getDayIndex(dayName) < this.getDayIndex(currentDayName);
+
+        if (isToday) {
+            return this.getClassStatus(cls);
+        } else if (isPast) {
+            return {
+                status: 'completed',
+                text: 'Completada',
+                class: 'status-completed',
+                timeRemaining: 0
+            };
+        } else {
+            const daysDiff = this.calculateDaysDifference(dayName, currentDayName);
+            return this.getFutureClassStatus(cls.start, cls.end, currentTime, daysDiff);
+        }
     }
 
     // ======================
     //  MÉTODOS PRINCIPALES (CON FECHAS CORREGIDAS)
     // ======================
 
-    initializeCountdown(item, startTime, endTime, status, countdownId) {
-        const now = new Date();
-        const today = now.toISOString().split('T')[0];
-
+    initializeCountdown(item, startTime, endTime, status, countdownId, dayName) {
         let targetDate;
         let message;
 
         if (status.status === 'pending') {
-            // Usar parseLocalDate para crear la fecha correctamente
-            targetDate = this.parseTimeToDate(today, startTime);
+            targetDate = calculateTargetDate(dayName, startTime);
             message = 'Inicia en';
         } else {
-            targetDate = this.parseTimeToDate(today, endTime);
+            targetDate = calculateTargetDate(dayName, endTime);
             message = 'Termina en';
         }
 
         const countdownElement = document.getElementById(countdownId);
         if (!countdownElement) return;
 
-        // Crear nueva instancia de CountdownSystem
+        // Limpiar instancia previa si existe
+        if (this.countdownInstances.has(countdownId)) {
+            this.countdownInstances.get(countdownId).destroy();
+            this.countdownInstances.delete(countdownId);
+        }
+
+        // Crear nueva instancia de CountdownSystem con información del día
         const instance = new CountdownSystem({
             format: 'minimal',
             precision: 'seconds',
@@ -777,26 +799,16 @@ class ScheduleDetailSystem {
                 // Recargar cuando un countdown termine
                 this.updateAllStatuses();
             }
-        }).init(targetDate, countdownElement);
+        }).init(targetDate, countdownElement, dayName, status.status === 'pending' ? startTime : endTime);
 
-        this.countdownInstances.push({ instance, element: countdownElement });
-    }
-
-    /**
-     * Parsear tiempo a fecha sin problemas de zona horaria
-     * @param {string} dateStr - Fecha en formato YYYY-MM-DD
-     * @param {string} timeStr - Tiempo en formato HH:MM
-     * @returns {Date} - Objeto Date correctamente ajustado
-     */
-    parseTimeToDate(dateStr, timeStr) {
-        const date = parseLocalDate(dateStr);
-        const [hours, minutes] = timeStr.split(':').map(Number);
-
-        date.setHours(hours, minutes, 0, 0);
-        return date;
+        // Almacenar referencia
+        this.countdownInstances.set(countdownId, instance);
     }
 
     loadTab(dayName) {
+        // Limpiar countdowns existentes antes de cambiar de pestaña
+        this.cleanupCountdowns();
+
         const urlParams = new URLSearchParams(window.location.search);
         const grade = urlParams.get('grade');
         const currentTime = this.getCurrentTime();
@@ -823,6 +835,11 @@ class ScheduleDetailSystem {
 
         // Actualizar estados
         this.updateClassStatuses(grade, dayName);
+
+        // Inicializar countdowns para la nueva pestaña
+        setTimeout(() => {
+            this.initializeAllCountdowns();
+        }, 100);
 
         // Scroll suave a la sección
         document.querySelector('.schedule-tab-content').scrollIntoView({
@@ -868,15 +885,23 @@ class ScheduleDetailSystem {
                 statusElement.textContent = isBreak && status.status === 'in-progress' ? 'En receso' : status.text;
             }
 
-            // Actualizar countdown si existe
-            const countdownId = item.dataset.countdownId;
-            if (status.timeRemaining > 0 && countdownId) {
-                this.updateCountdown(item, cls.start, cls.end, status, countdownId);
+            // Solo manejar countdowns si es el día actual
+            if (isToday) {
+                const countdownId = item.dataset.countdownId;
+                if (status.timeRemaining > 0 && countdownId) {
+                    // El countdown se inicializará en initializeAllCountdowns
+                } else {
+                    // Limpiar countdown si existe
+                    const countdownElement = item.querySelector('.countdown-container');
+                    if (countdownElement) {
+                        countdownElement.innerHTML = '';
+                    }
+                }
             } else {
-                // Limpiar countdown si existe
+                // Para días que no son hoy, limpiar cualquier countdown
                 const countdownElement = item.querySelector('.countdown-container');
                 if (countdownElement) {
-                    countdownElement.remove();
+                    countdownElement.innerHTML = '';
                 }
             }
         });
@@ -1101,8 +1126,8 @@ class ScheduleDetailSystem {
 
     cleanupCountdowns() {
         // Destruir todas las instancias de countdown
-        this.countdownInstances.forEach(({ instance }) => instance.destroy());
-        this.countdownInstances = [];
+        this.countdownInstances.forEach(instance => instance.destroy());
+        this.countdownInstances.clear();
     }
 
     destroy() {
