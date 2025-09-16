@@ -154,7 +154,7 @@ const weeklyMenu = [
         cook: "Felicita Yujra Jimenez",
         phone: "+51 931 893 693",
         helpers: {
-            names: ["Matías Oro", "Elsa Plata"],
+            names: ["Mónica Quispe", "Elsa Torres"],
             grade: "1ro A"
         },
         breakfast: {
@@ -205,7 +205,7 @@ const weeklyMenu = [
         cook: "Felicita Yujra Jimenez",
         phone: "+51 931 893 693",
         helpers: {
-            names: ["Olga Bernabé", "Lidia Herrera"],
+            names: ["Olga Bernabé", "Juana Herrera"],
             grade: "1ro A"
         },
         breakfast: {
