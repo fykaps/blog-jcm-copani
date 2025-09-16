@@ -176,7 +176,7 @@ class MenuCountdownSystem {
     // Renderizar otras secciones
     this.renderTodayMenu(classified.today[0]);
     this.renderUpcomingMenus(classified.upcoming.slice(0, 3));
-    this.renderSupportSchedule();
+    // this.renderSupportSchedule();
 
     // Registrar contadores después de renderizar
     this.registerAllCountdowns(classified);
@@ -801,48 +801,48 @@ class MenuCountdownSystem {
     upcomingMenusSection.innerHTML = content;
   }
 
-  renderSupportSchedule() {
-    const supportScheduleSection = document.getElementById('support-schedule');
-    if (!supportScheduleSection) return;
+  // renderSupportSchedule() {
+  //   const supportScheduleSection = document.getElementById('support-schedule');
+  //   if (!supportScheduleSection) return;
 
-    const today = this.currentDate;
-    const todayFormatted = this.formatDate(today);
+  //   const today = this.currentDate;
+  //   const todayFormatted = this.formatDate(today);
 
-    const scheduleData = this.menuData.map(menu => {
-      const isToday = menu.date === todayFormatted;
-      return {
-        day: menu.day,
-        date: menu.date,
-        helpers: menu.helpers,
-        isToday: isToday
-      };
-    });
+  //   const scheduleData = this.menuData.map(menu => {
+  //     const isToday = menu.date === todayFormatted;
+  //     return {
+  //       day: menu.day,
+  //       date: menu.date,
+  //       helpers: menu.helpers,
+  //       isToday: isToday
+  //     };
+  //   });
 
-    let scheduleHTML = `
-            <div class="schedule-grid">
-                <div class="schedule-header">
-                    <span>Día</span>
-                    <span>Fecha</span>
-                    <span>Madres de Apoyo</span>
-                    <span>Grado</span>
-                </div>
-        `;
+  //   let scheduleHTML = `
+  //           <div class="schedule-grid">
+  //               <div class="schedule-header">
+  //                   <span>Día</span>
+  //                   <span>Fecha</span>
+  //                   <span>Madres de Apoyo</span>
+  //                   <span>Grado</span>
+  //               </div>
+  //       `;
 
-    scheduleData.forEach(item => {
-      scheduleHTML += `
-                <div class="schedule-row ${item.isToday ? 'today' : ''}">
-                    <span class="schedule-day">${item.day}</span>
-                    <span class="schedule-date">${this.formatDisplayDate(item.date)}</span>
-                    <span class="schedule-helpers">${item.helpers.names.join(' y ')}</span>
-                    <span class="schedule-grade">${item.helpers.grade}</span>
-                </div>
-            `;
-    });
+  //   scheduleData.forEach(item => {
+  //     scheduleHTML += `
+  //               <div class="schedule-row ${item.isToday ? 'today' : ''}">
+  //                   <span class="schedule-day">${item.day}</span>
+  //                   <span class="schedule-date">${this.formatDisplayDate(item.date)}</span>
+  //                   <span class="schedule-helpers">${item.helpers.names.join(' y ')}</span>
+  //                   <span class="schedule-grade">${item.helpers.grade}</span>
+  //               </div>
+  //           `;
+  //   });
 
-    scheduleHTML += '</div>';
+  //   scheduleHTML += '</div>';
 
-    supportScheduleSection.innerHTML = scheduleHTML;
-  }
+  //   supportScheduleSection.innerHTML = scheduleHTML;
+  // }
 
   renderSupportScheduleCards() {
     const supportScheduleSection = document.getElementById('support-schedule');

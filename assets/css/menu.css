@@ -619,58 +619,58 @@
   color: var(--status-completed);
 }
 
-.schedule-grid {
+/* .schedule-grid {
     display: grid;
     grid-template-columns: 1fr;
     border-radius: var(--radius-lg);
     overflow: hidden;
     box-shadow: var(--shadow-md);
     background: var(--color-white);
-}
+} */
 
-.schedule-header {
+/* .schedule-header {
     display: grid;
     grid-template-columns: 1fr 1fr 2fr 1fr;
     background: var(--color-primary-600);
     color: var(--color-white);
     padding: var(--space-3) var(--space-4);
     font-weight: var(--font-semibold);
-}
+} */
 
-.schedule-row {
+/* .schedule-row {
     display: grid;
     grid-template-columns: 1fr 1fr 2fr 1fr;
     padding: var(--space-3) var(--space-4);
     border-bottom: 1px solid var(--border-color);
     align-items: center;
-}
+} */
 
-.schedule-row:last-child {
+/* .schedule-row:last-child {
     border-bottom: none;
-}
+} */
 
-.schedule-row.today {
+/* .schedule-row.today {
     background: var(--color-primary-50);
     border-left: 4px solid var(--color-primary-500);
     font-weight: var(--font-semibold);
-}
+} */
 
-.schedule-day {
+/* .schedule-day {
     font-weight: var(--font-semibold);
-}
+} */
 
-.schedule-date {
+/* .schedule-date {
     color: var(--color-gray-600);
-}
+} */
 
-.schedule-helpers {
+/* .schedule-helpers {
     color: var(--color-gray-800);
-}
+} */
 
-.schedule-grade {
+/* .schedule-grade {
     font-size: var(--text-sm);
     color: var(--color-gray-600);
-}
+} */
 
 /* Próximos menús en sidebar */
 .upcoming-menu-item {
@@ -932,11 +932,11 @@
         grid-template-columns: 1fr;
     }
     
-    .schedule-header,
+    /* .schedule-header,
     .schedule-row {
         grid-template-columns: 1fr;
         gap: var(--space-2);
-    }
+    } */
     
     .modal-content {
         width: 95%;
