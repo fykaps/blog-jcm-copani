@@ -370,7 +370,7 @@ const classSchedules = {
     ],
     "Martes": [
         // 1ro A
-        { grade: "1ro A", subject: "Arte y Cultura", teacher: "Nestor Palomino Manzano", start: "08:15", end: "09:35", type: "Normal" },
+        { grade: "1ro A", subject: "Arte y Cultura", teacher: "Nestor Palomino Manzano", start: "00:15", end: "02:35", type: "Normal" },
         { grade: "1ro A", subject: "Receso", start: "09:35", end: "09:50", type: "receso", isBreak: true },
         { grade: "1ro A", subject: "Matemáticas", teacher: "David Mengoa Mamani", start: "09:50", end: "11:10", type: "Normal" },
         { grade: "1ro A", subject: "Educación Religiosa", teacher: "Vidal Quiñonez Quispe", start: "11:10", end: "12:30", type: "Normal" },
@@ -379,7 +379,7 @@ const classSchedules = {
         { grade: "1ro A", subject: "Ciencia y Tecnología", teacher: "Alfonso Aruquipa Ccuno", start: "14:20", end: "15:00", type: "Normal" },
 
         // 1do B
-        { grade: "1ro B", subject: "Ciencia y Tecnología", teacher: "Alfonso Aruquipa Ccuno", start: "08:15", end: "09:35", type: "Normal" },
+        { grade: "1ro B", subject: "Ciencia y Tecnología", teacher: "Alfonso Aruquipa Ccuno", start: "00:15", end: "02:35", type: "Normal" },
         { grade: "1ro B", subject: "Receso", start: "09:35", end: "09:50", type: "receso", isBreak: true },
         { grade: "1ro B", subject: "Inglés", teacher: "Violeta Miriam Alberssi Tisnado", start: "09:50", end: "11:10", type: "Normal" },
         { grade: "1ro B", subject: "Ciencias Sociales", teacher: "Violeta Miriam Alberssi Tisnado", start: "11:10", end: "12:30", type: "Normal" },

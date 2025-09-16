@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="assets/css/base.css">
     <link rel="stylesheet" href="assets/css/schedule.css">
     <link rel="stylesheet" href="assets/css/teacher-search.css">
+    <link rel="stylesheet" href="assets/css/current-courses.css">
     <link rel="stylesheet" href="assets/css/menu.css">
     <link rel="icon" href="assets/img/favicon.ico">
 </head>
@@ -150,11 +151,25 @@
                         </div>
                     </div>
 
-                    <!-- Widget de Horarios -->
-                    <div class="sidebar-widget" aria-labelledby="horarios-widget-heading">
-                        <h3 id="horarios-widget-heading">Horario Escolar</h3>
-                        <div class="schedule-container" id="horario-actual">
-                            <!-- Se llenará dinámicamente con JS -->
+                    <!-- Dentro del aside sidebar, después del widget de horarios -->
+                    <div class="sidebar-widget current-courses-widget animate-slide-left delay-7">
+                        <div class="current-courses-header">
+                            <h3>
+                                <svg viewBox="0 0 24 24" width="20" height="20" style="margin-right: 8px;">
+                                    <path fill="currentColor"
+                                        d="M18 10c0 3.31-2.69 6-6 6s-6-2.69-6-6 2.69-6 6-6 6 2.69 6 6z" />
+                                </svg>
+                                Cursos en Vivo
+                            </h3>
+                            <div class="live-indicator">
+                                <span class="live-badge">EN VIVO</span>
+                            </div>
+                        </div>
+                        <div class="current-courses-container" id="current-courses-container">
+                            <div class="current-courses-loading">
+                                <div class="loading-spinner"></div>
+                                <p>Cargando cursos en tiempo real...</p>
+                            </div>
                         </div>
                     </div>
                 </aside>
@@ -176,6 +191,7 @@
     <script src="assets/js/main.js"></script>
     <script src="assets/js/schedule.js"></script>
     <script src="assets/js/teacher-search.js"></script>
+    <script src="assets/js/current-courses.js"></script>
     <script src="assets/js/scroll-top.js"></script>
     <script src="assets/data/schedules.js"></script>
 </body>
