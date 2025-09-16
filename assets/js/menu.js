@@ -14,10 +14,10 @@ class MenuCountdownSystem {
   }
 
   /**
- * Parsea una fecha en formato YYYY-MM-DD sin problemas de zona horaria
- * @param {string} dateStr - Fecha en formato YYYY-MM-DD
- * @returns {Date} - Objeto Date correctamente ajustado
- */
+   * Parsea una fecha en formato YYYY-MM-DD sin problemas de zona horaria
+   * @param {string} dateStr - Fecha en formato YYYY-MM-DD
+   * @returns {Date} - Objeto Date correctamente ajustado
+   */
   parseLocalDate(dateStr) {
     if (!dateStr) return new Date();
 
@@ -151,7 +151,7 @@ class MenuCountdownSystem {
     const todayTime = this.currentDate.getTime();
 
     return this.menuData.reduce((acc, menu) => {
-      const menuDate = this.parseLocalDate(menu.date); // Usar parseLocalDate
+      const menuDate = this.parseLocalDate(menu.date);
       const menuTime = menuDate.getTime();
       const dayDiff = Math.floor((todayTime - menuTime) / (1000 * 60 * 60 * 24));
 
@@ -276,7 +276,6 @@ class MenuCountdownSystem {
         `;
   }
 
-  // Función createMealCard corregida con estados visibles
   createMealCard(meal, title, menuDate = '', countdownId = '') {
     const mealType = title.toLowerCase();
     const finalCountdownId = countdownId || this.generateCountdownId(mealType, menuDate);
@@ -316,9 +315,7 @@ class MenuCountdownSystem {
         `;
   }
 
-  // Generar IDs más únicos para evitar conflictos
   generateCountdownId(mealType, menuDate, suffix = '') {
-    // Limpiar la fecha para usarla en ID (remover caracteres especiales)
     const cleanDate = menuDate.replace(/-/g, '');
     return `countdown-${mealType}-${cleanDate}${suffix ? '-' + suffix : ''}`;
   }
@@ -348,9 +345,7 @@ class MenuCountdownSystem {
         `;
   }
 
-  // Y en el método registerAllCountdowns, agregar el registro para createMealCard
   registerAllCountdowns(classified) {
-    // Registrar todos los contadores para todas las secciones
     const allMenus = [...classified.today, ...classified.upcoming, ...classified.attended];
 
     allMenus.forEach(menu => {
@@ -369,14 +364,11 @@ class MenuCountdownSystem {
     const now = new Date();
     const today = this.formatDate(now);
 
-    // Usar parseLocalDate en lugar de new Date() para evitar problemas de zona horaria
     const menuDateObj = this.parseLocalDate(menuDate);
     const todayObj = this.parseLocalDate(today);
 
-    // Verificar si el menú es para hoy
     if (menuDate !== today) {
       if (menuDateObj > now) {
-        // Menú futuro - calcular tiempo hasta el inicio
         const startTime = new Date(menuDateObj);
         startTime.setHours(...meal.start.split(':').map(Number));
         const timeRemaining = startTime - now;
@@ -385,12 +377,10 @@ class MenuCountdownSystem {
           timeRemaining: this.calculateTimeUnits(timeRemaining)
         };
       } else {
-        // Menú pasado - completado
         return { status: 'completed', timeRemaining: null };
       }
     }
 
-    // Para menús de hoy, calcular tiempos exactos
     const startTime = new Date(todayObj);
     startTime.setHours(...meal.start.split(':').map(Number));
 
@@ -398,21 +388,18 @@ class MenuCountdownSystem {
     endTime.setHours(...meal.end.split(':').map(Number));
 
     if (now < startTime) {
-      // Evento pendiente - contar hacia startTime
       const timeRemaining = startTime - now;
       return {
         status: 'pending',
         timeRemaining: this.calculateTimeUnits(timeRemaining)
       };
     } else if (now >= startTime && now <= endTime) {
-      // Evento en proceso - contar hacia endTime
       const timeRemaining = endTime - now;
       return {
         status: 'in-progress',
         timeRemaining: this.calculateTimeUnits(timeRemaining)
       };
     } else {
-      // Evento completado
       return { status: 'completed', timeRemaining: null };
     }
   }
@@ -456,7 +443,6 @@ class MenuCountdownSystem {
   renderCountdownContent(status, timeRemaining, mealType) {
     const mealName = mealType === 'breakfast' ? 'desayuno' : 'almuerzo';
 
-    // Si timeRemaining es null (estado completado)
     if (timeRemaining === null) {
       return `
             <div class="meal-status-badge completed">
@@ -565,11 +551,9 @@ class MenuCountdownSystem {
         const { status, timeRemaining } = this.calculateMealStatus(meal, menuDate);
         const safeTimeRemaining = timeRemaining || null;
 
-        // Determinar qué estilo de contador usar basado en el ID
         if (containerId.includes('sidebar')) {
           container.innerHTML = this.renderSidebarCountdownContent(status, safeTimeRemaining, mealType);
 
-          // Actualizar también el estado en la tarjeta del sidebar
           const mealCard = container.closest('.sidebar-meal-card');
           if (mealCard) {
             const statusElement = mealCard.querySelector('.sidebar-meal-status');
@@ -581,7 +565,6 @@ class MenuCountdownSystem {
         } else {
           container.innerHTML = this.renderCountdownContent(status, safeTimeRemaining, mealType);
 
-          // Actualizar también el indicador de estado en la imagen
           const mealCard = container.closest('.meal-card');
           if (mealCard) {
             const statusIndicator = mealCard.querySelector('.meal-status-indicator');
@@ -602,7 +585,6 @@ class MenuCountdownSystem {
     const container = document.getElementById(containerId);
 
     if (container) {
-      // Determinar qué estilo de contador usar basado en el ID
       if (containerId.includes('sidebar')) {
         container.innerHTML = this.renderSidebarCountdownContent(status, timeRemaining, mealType);
       } else {
@@ -614,7 +596,6 @@ class MenuCountdownSystem {
   renderTodayMenu(menu) {
     const todayMenuSection = document.getElementById('menu-del-dia');
     if (!todayMenuSection) return;
-
 
     if (!menu) {
       todayMenuSection.innerHTML = `
@@ -650,7 +631,6 @@ class MenuCountdownSystem {
 
     todayMenuSection.innerHTML = content;
 
-    // Registrar contadores
     if (menu.breakfast) {
       const breakfastId = `sidebar-breakfast-countdown-${menu.date.replace(/-/g, '')}`;
       this.registerCountdown(breakfastId, menu.breakfast, 'breakfast', menu.date);
@@ -666,16 +646,13 @@ class MenuCountdownSystem {
     const mealType = title.toLowerCase();
     const finalCountdownId = countdownId || this.generateCountdownId(mealType, menuDate, 'sidebar');
 
-    // Registrar el contador si existe la comida
     if (meal) {
       this.registerCountdown(finalCountdownId, meal, mealType, menuDate);
     }
 
-    // Calcular estado inicial para mostrar inmediatamente
     const { state } = this.calculateMealStatus(meal, menuDate);
     const statusClass = this.getStatusClass(state);
 
-    // Si no hay comida, mostrar estado vacío
     if (!meal) {
       return `
             <div class="sidebar-meal-card" data-meal="null" data-meal-type="${mealType}" data-date="${menuDate}">
@@ -724,7 +701,6 @@ class MenuCountdownSystem {
     `;
   }
 
-  // Función para renderizar el contador en formato sidebar
   renderSidebarCountdownContent(status, timeRemaining, mealType) {
     if (timeRemaining === null) {
       return `<span>Completado</span>`;
@@ -831,7 +807,6 @@ class MenuCountdownSystem {
     const today = this.currentDate;
     const todayFormatted = this.formatDate(today);
 
-    // Obtener todos los días únicos con sus ayudantes
     const scheduleData = this.menuData.map(menu => {
       const isToday = menu.date === todayFormatted;
       return {
@@ -878,11 +853,17 @@ class MenuCountdownSystem {
     // Obtener todos los días únicos con sus ayudantes
     const scheduleData = this.menuData.map(menu => {
       const isToday = menu.date === todayFormatted;
+
+      // CORRECCIÓN: Comparar solo fechas sin hora
       const menuDate = new Date(menu.date);
       const now = new Date();
 
+      // Normalizar fechas para comparar solo día, mes y año
+      const normalizedMenuDate = new Date(menuDate.getFullYear(), menuDate.getMonth(), menuDate.getDate());
+      const normalizedNow = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
       let status = 'pending';
-      if (menuDate < now) status = 'completed';
+      if (normalizedMenuDate < normalizedNow) status = 'completed';
       if (isToday) status = 'today';
 
       return {
@@ -935,9 +916,6 @@ class MenuCountdownSystem {
     supportScheduleSection.innerHTML = scheduleHTML;
   }
 
-  /**
-   * Renderizar cronograma completo de madres de apoyo
-   */
   renderFullSupportSchedule() {
     const fullScheduleSection = document.getElementById('full-support-schedule');
     if (!fullScheduleSection) return;
@@ -947,11 +925,17 @@ class MenuCountdownSystem {
 
     const scheduleData = this.menuData.map(menu => {
       const isToday = menu.date === todayFormatted;
+
+      // CORRECCIÓN: Comparar solo fechas sin hora
       const menuDate = new Date(menu.date);
       const now = new Date();
 
+      // Normalizar fechas para comparar solo día, mes y año
+      const normalizedMenuDate = new Date(menuDate.getFullYear(), menuDate.getMonth(), menuDate.getDate());
+      const normalizedNow = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
       let status = 'pending';
-      if (menuDate < now) status = 'completed';
+      if (normalizedMenuDate < normalizedNow) status = 'completed';
       if (isToday) status = 'today';
 
       return {
@@ -1023,39 +1007,34 @@ class MenuCountdownSystem {
 
   setupEventListeners() {
     document.addEventListener('click', (e) => {
-      // 1. Manejar clic en botones de detalles (si aún existen)
       const detailsBtn = e.target.closest('.meal-details-btn');
       if (detailsBtn) {
         e.preventDefault();
         this.handleMealDetailsClick(detailsBtn);
-        return; // Salir después de manejar este evento
+        return;
       }
 
-      // 2. Manejar clic en tarjetas del sidebar
       const sidebarCard = e.target.closest('.sidebar-meal-card');
       if (sidebarCard) {
         e.preventDefault();
         this.handleSidebarCardClick(sidebarCard);
-        return; // Salir después de manejar este evento
+        return;
       }
 
-      // 3. Manejar clic en elementos de lista (si los tienes)
       const listItem = e.target.closest('.meal-list-item');
       if (listItem) {
         e.preventDefault();
         this.handleListItemClick(listItem);
-        return; // Salir después de manejar este evento
+        return;
       }
     });
   }
-
 
   handleMealDetailsClick(btn) {
     const mealData = JSON.parse(btn.getAttribute('data-meal'));
     const mealType = btn.getAttribute('data-meal-type');
     const date = btn.getAttribute('data-date');
 
-    // Encontrar el menú completo para obtener información de cocinera y ayudantes
     const menuCard = btn.closest('.menu-card');
     let menuInfo = {};
 
@@ -1077,19 +1056,16 @@ class MenuCountdownSystem {
   handleSidebarCardClick(card) {
     const mealDataStr = card.getAttribute('data-meal');
 
-    // Verificar si la tarjeta tiene datos de comida (no es una tarjeta vacía)
     if (mealDataStr && mealDataStr !== '' && mealDataStr !== 'null') {
       try {
         const mealData = JSON.parse(mealDataStr);
         const mealType = card.getAttribute('data-meal-type');
         const date = card.getAttribute('data-date');
 
-        // Encontrar el menú completo
         let menuInfo = {};
         const menuSection = card.closest('.sidebar-widget');
 
         if (menuSection) {
-          // Buscar información adicional si está disponible
           const menuTitle = menuSection.querySelector('h3')?.textContent;
           if (menuTitle && menuTitle.includes('Hoy')) {
             const today = this.formatDate(new Date());
@@ -1115,7 +1091,6 @@ class MenuCountdownSystem {
         const mealType = item.getAttribute('data-meal-type');
         const date = item.getAttribute('data-date');
 
-        // Encontrar el menú completo
         let menuInfo = {};
         const menuCard = item.closest('.menu-card');
 
@@ -1195,7 +1170,6 @@ class MenuCountdownSystem {
 
     document.body.appendChild(modal);
 
-    // Activar modal con animación
     setTimeout(() => {
       modal.classList.add('active');
     }, 10);
@@ -1216,7 +1190,6 @@ class MenuCountdownSystem {
 
     document.addEventListener('keydown', escHandler);
 
-    // Limpiar event listener cuando se cierre el modal
     modal.addEventListener('transitionend', () => {
       if (!modal.classList.contains('active')) {
         document.removeEventListener('keydown', escHandler);
