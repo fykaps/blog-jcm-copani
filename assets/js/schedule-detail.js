@@ -1,7 +1,86 @@
 /**
  * Sistema de Detalle de Horarios - Versión Mejorada
  * Con el mismo diseño y funcionalidades que schedule.js
+ * CORREGIDO: Problemas de zona horaria en fechas
  */
+
+// ======================
+//  UTILIDADES DE FECHA (CORREGIDAS) - AÑADIDAS
+// ======================
+
+/**
+ * Parsear fecha local sin problemas de zona horaria
+ * @param {string} dateStr - Fecha en formato YYYY-MM-DD
+ * @returns {Date} - Objeto Date correctamente ajustado
+ */
+function parseLocalDate(dateStr) {
+    if (!dateStr) return new Date();
+
+    const parts = dateStr.split('-');
+    if (parts.length !== 3) return new Date(dateStr);
+
+    // Crear fecha en zona horaria local (sin ajuste UTC)
+    return new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+}
+
+/**
+ * Formatear fecha local para mostrar
+ * @param {string} dateStr - Fecha en formato YYYY-MM-DD
+ * @returns {string} - Fecha formateada
+ */
+function formatLocalDate(dateStr) {
+    const date = parseLocalDate(dateStr);
+    return date.toLocaleDateString('es-ES', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+    });
+}
+
+/**
+ * Obtener día del mes sin problemas de zona horaria
+ * @param {string} dateStr - Fecha en formato YYYY-MM-DD
+ * @returns {number} - Día del mes
+ */
+function getLocalDay(dateStr) {
+    const date = parseLocalDate(dateStr);
+    return date.getDate();
+}
+
+/**
+ * Obtener nombre del mes
+ * @param {string} dateStr - Fecha en formato YYYY-MM-DD
+ * @returns {string} - Nombre del mes
+ */
+function getLocalMonthName(dateStr) {
+    const date = parseLocalDate(dateStr);
+    return date.toLocaleDateString('es-ES', { month: 'long' });
+}
+
+/**
+ * Obtener nombre corto del mes
+ * @param {string} dateStr - Fecha en formato YYYY-MM-DD
+ * @returns {string} - Nombre corto del mes
+ */
+function getLocalShortMonthName(dateStr) {
+    const date = parseLocalDate(dateStr);
+    return date.toLocaleDateString('es-ES', { month: 'short' }).toUpperCase();
+}
+
+/**
+ * Formatear fecha completa en español
+ * @param {string} dateStr - Fecha en formato YYYY-MM-DD
+ * @returns {string} - Fecha completa formateada
+ */
+function formatFullLocalDate(dateStr) {
+    const date = parseLocalDate(dateStr);
+    return date.toLocaleDateString('es-ES', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+    });
+}
 
 class CountdownSystem {
     constructor(options = {}) {
@@ -50,11 +129,20 @@ class CountdownSystem {
     }
 
     /**
-     * Parsear diferentes formatos de fecha
+     * Parsear diferentes formatos de fecha (CORREGIDO)
      */
     parseDate(date) {
         if (date instanceof Date) return date;
-        if (typeof date === 'string') return new Date(date);
+        if (typeof date === 'string') {
+            // Si es un string de tiempo (HH:MM), crear fecha con hora actual
+            if (date.includes(':')) {
+                const now = new Date();
+                const [hours, minutes] = date.split(':').map(Number);
+                return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes);
+            }
+            // Si es un string de fecha, usar parseLocalDate
+            return parseLocalDate(date);
+        }
         if (typeof date === 'number') return new Date(date);
 
         console.error('CountdownSystem: Formato de fecha no válido');
@@ -363,6 +451,7 @@ class ScheduleDetailSystem {
         this.setupEventListeners();
     }
 
+
     displayGradeSchedule() {
         const container = document.getElementById('grade-schedule-detail');
         if (!container) return;
@@ -430,18 +519,6 @@ class ScheduleDetailSystem {
                         </svg>
                         <span id="current-time">${currentTime}</span>
                     </div>
-                   <!-- <div class="detail-meta-item">
-                        <svg class="detail-meta-icon" viewBox="0 0 24 24" aria-hidden="true">
-                            <path fill="currentColor" d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/>
-                        </svg>
-                        <span id="current-date">${currentTime}</span>
-                    </div>
-                    <div class="detail-meta-item">
-                        <svg class="detail-meta-icon" viewBox="0 0 24 24" aria-hidden="true">
-                            <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
-                        </svg>
-                        <span id="current-class">Cargando clase actual...</span>
-                    </div> -->
                 </div>
             </div>
         </section>
@@ -669,6 +746,10 @@ class ScheduleDetailSystem {
         });
     }
 
+    // ======================
+    //  MÉTODOS PRINCIPALES (CON FECHAS CORREGIDAS)
+    // ======================
+
     initializeCountdown(item, startTime, endTime, status, countdownId) {
         const now = new Date();
         const today = now.toISOString().split('T')[0];
@@ -677,10 +758,11 @@ class ScheduleDetailSystem {
         let message;
 
         if (status.status === 'pending') {
-            targetDate = new Date(`${today}T${startTime}`);
+            // Usar parseLocalDate para crear la fecha correctamente
+            targetDate = this.parseTimeToDate(today, startTime);
             message = 'Inicia en';
         } else {
-            targetDate = new Date(`${today}T${endTime}`);
+            targetDate = this.parseTimeToDate(today, endTime);
             message = 'Termina en';
         }
 
@@ -698,6 +780,20 @@ class ScheduleDetailSystem {
         }).init(targetDate, countdownElement);
 
         this.countdownInstances.push({ instance, element: countdownElement });
+    }
+
+    /**
+     * Parsear tiempo a fecha sin problemas de zona horaria
+     * @param {string} dateStr - Fecha en formato YYYY-MM-DD
+     * @param {string} timeStr - Tiempo en formato HH:MM
+     * @returns {Date} - Objeto Date correctamente ajustado
+     */
+    parseTimeToDate(dateStr, timeStr) {
+        const date = parseLocalDate(dateStr);
+        const [hours, minutes] = timeStr.split(':').map(Number);
+
+        date.setHours(hours, minutes, 0, 0);
+        return date;
     }
 
     loadTab(dayName) {
