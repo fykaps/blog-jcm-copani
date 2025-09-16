@@ -1,37 +1,13 @@
 /* ==============================================
    Estilos para el widget de cursos en tiempo real
+   con el diseño específico solicitado
    ============================================== */
 
-.current-courses-widget {
-  background: var(--bg-primary);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  overflow: hidden;
-  transition: all var(--duration-300) var(--ease-in-out);
-  margin-bottom: var(--space-6);
-}
-
-.current-courses-widget:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
 .current-courses-header {
-  padding: var(--space-4);
-  background: linear-gradient(135deg, var(--color-primary-600), var(--color-primary-700));
   color: white;
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
-
-.current-courses-header h3 {
-  margin: 0;
-  color: white;
-  font-size: var(--text-lg);
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
 }
 
 .live-indicator {
@@ -63,12 +39,6 @@
   display: block;
 }
 
-.current-courses-container {
-  padding: var(--space-4);
-  max-height: 400px;
-  overflow-y: auto;
-}
-
 .no-current-courses {
   text-align: center;
   padding: var(--space-6);
@@ -77,14 +47,12 @@
 }
 
 .current-course-card {
-  background: var(--bg-secondary);
+  background: white;
   border-radius: var(--radius);
   padding: var(--space-3);
-  margin-bottom: var(--space-3);
+  margin-bottom: var(--space-2);
   border-left: 4px solid var(--color-primary);
   transition: all var(--duration-300) var(--ease-in-out);
-  position: relative;
-  overflow: hidden;
 }
 
 .current-course-card:last-child {
@@ -96,108 +64,79 @@
   box-shadow: var(--shadow-sm);
 }
 
-.current-course-header {
+.course-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   margin-bottom: var(--space-2);
 }
 
-.current-course-grade {
-  font-weight: var(--font-semibold);
+.course-grade {
+  font-weight: var(--font-bold);
   color: var(--color-primary);
-  font-size: var(--text-sm);
-  background: var(--color-primary-50);
-  padding: var(--space-1) var(--space-2);
-  border-radius: var(--radius);
-}
-
-.current-course-time {
-  font-size: var(--text-xs);
-  color: var(--color-gray-600);
-  background: var(--color-gray-100);
-  padding: var(--space-1) var(--space-2);
-  border-radius: var(--radius);
-  font-variant-numeric: tabular-nums;
-}
-
-.current-course-subject {
-  font-weight: var(--font-semibold);
-  color: var(--color-gray-800);
-  margin-bottom: var(--space-1);
   font-size: var(--text-base);
-}
-
-.current-course-teacher {
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  color: var(--color-gray-600);
-  font-size: var(--text-sm);
-  margin-bottom: var(--space-2);
 }
 
-.current-course-countdown {
-  background: var(--color-warning-light);
+.course-time {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--color-gray-600);
+}
+
+.course-time-icon {
+  display: flex;
+  align-items: center;
+}
+
+.course-countdown {
+  background: var(--color-success-light);
   padding: var(--space-2);
   border-radius: var(--radius);
   text-align: center;
   margin-top: var(--space-2);
 }
 
-.countdown-label {
-  font-size: var(--text-xs);
-  color: var(--color-warning-dark);
-  margin-bottom: var(--space-1);
-  font-weight: var(--font-semibold);
-}
-
 .countdown-value {
-  font-size: var(--text-lg);
+  font-size: var(--text-xs);
   font-weight: var(--font-bold);
-  color: var(--color-warning-dark);
+  color: var(--color-success);
   font-variant-numeric: tabular-nums;
+  letter-spacing: 0.5px;
 }
 
-.course-transition-enter {
-  opacity: 0;
-  transform: translateY(20px);
+.course-details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
 }
 
-.course-transition-enter-active {
-  opacity: 1;
-  transform: translateY(0);
-  transition: all var(--duration-300) var(--ease-out);
+.course-detail {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
 }
 
-.course-transition-exit {
-  opacity: 1;
-  transform: translateY(0);
+.course-detail-icon {
+  display: flex;
+  align-items: center;
+  color: var(--color-primary);
+  flex-shrink: 0;
 }
 
-.course-transition-exit-active {
-  opacity: 0;
-  transform: translateY(-20px);
-  transition: all var(--duration-300) var(--ease-in);
+.course-subject {
+  font-weight: var(--font-semibold);
+  color: var(--color-gray-800);
 }
 
-/* Scrollbar personalizado para el contenedor */
-.current-courses-container::-webkit-scrollbar {
-  width: 6px;
-}
-
-.current-courses-container::-webkit-scrollbar-track {
-  background: var(--color-gray-100);
-  border-radius: var(--radius);
-}
-
-.current-courses-container::-webkit-scrollbar-thumb {
-  background: var(--color-gray-300);
-  border-radius: var(--radius);
-}
-
-.current-courses-container::-webkit-scrollbar-thumb:hover {
-  background: var(--color-gray-400);
+.course-teacher {
+  color: var(--color-gray-600);
 }
 
 /* Estados de carga */
@@ -212,19 +151,14 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-  .current-course-header {
+  .course-header {
     flex-direction: column;
+    align-items: flex-start;
     gap: var(--space-2);
   }
   
-  .current-course-time {
+  .course-time {
     align-self: flex-start;
-  }
-  
-  .current-courses-header {
-    flex-direction: column;
-    gap: var(--space-2);
-    text-align: center;
   }
   
   .live-indicator {
@@ -243,4 +177,56 @@
   100% {
     box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
   }
+}
+
+/* Transiciones suaves para los cursos */
+.current-course-card {
+    transition: all 0.3s ease;
+}
+
+.current-course-card.slide-in {
+    animation: slideInRight 0.3s ease forwards;
+}
+
+.current-course-card.slide-out {
+    animation: slideOutLeft 0.3s ease forwards;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOutLeft {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+}
+
+/* Efecto de destacado para nuevos cursos */
+.current-course-card.highlight {
+    animation: highlightPulse 2s ease;
+}
+
+@keyframes highlightPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+    }
 }
