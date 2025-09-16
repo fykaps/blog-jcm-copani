@@ -1,13 +1,13 @@
 /**
- * Sistema de Cursos en Tiempo Real
- * Muestra todos los cursos con estado "En curso" en tiempo real
- * con cuenta regresiva en formato HH:MM:SS y la interfaz específica solicitada
+ * Sistema de Cursos en Tiempo Real - VERSIÓN CORREGIDA
+ * Usa el mismo sistema de fechas y temporizador que schedule.js
+ * para evitar desfases en la cuenta regresiva
  */
 
 class CurrentCoursesSystem {
     constructor() {
         this.currentCourses = [];
-        this.countdownIntervals = new Map();
+        this.countdownInstances = [];
         this.updateInterval = null;
         this.container = null;
         this.icons = {
@@ -29,6 +29,10 @@ class CurrentCoursesSystem {
         this.render();
     }
 
+    // ======================
+    //  MÉTODOS DE FECHA (USANDO LOS MISMOS QUE SCHEDULE.JS)
+    // ======================
+
     getCurrentTime() {
         const now = new Date();
         return now.toTimeString().slice(0, 5); // Formato HH:MM
@@ -37,6 +41,20 @@ class CurrentCoursesSystem {
     timeToMinutes(timeStr) {
         const [hours, minutes] = timeStr.split(':').map(Number);
         return hours * 60 + minutes;
+    }
+
+    /**
+     * Parsear tiempo a fecha sin problemas de zona horaria
+     * @param {string} timeStr - Tiempo en formato HH:MM
+     * @returns {Date} - Objeto Date correctamente ajustado
+     */
+    parseTimeToDate(timeStr) {
+        const now = new Date();
+        const [hours, minutes] = timeStr.split(':').map(Number);
+
+        // Crear nueva fecha con la hora actual pero con el tiempo especificado
+        const date = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0, 0);
+        return date;
     }
 
     getCurrentCourses() {
@@ -54,11 +72,14 @@ class CurrentCoursesSystem {
             const endMinutes = this.timeToMinutes(cls.end);
 
             if (nowMinutes >= startMinutes && nowMinutes < endMinutes) {
-                const timeRemaining = endMinutes - nowMinutes;
+                const timeRemainingMs = this.parseTimeToDate(cls.end).getTime() - Date.now();
+                const timeRemainingMinutes = Math.max(0, Math.floor(timeRemainingMs / 60000));
+
                 currentCourses.push({
                     ...cls,
-                    timeRemaining,
-                    endsAt: cls.end
+                    timeRemaining: timeRemainingMinutes,
+                    endsAt: cls.end,
+                    endsAtDate: this.parseTimeToDate(cls.end)
                 });
             }
         });
@@ -72,15 +93,9 @@ class CurrentCoursesSystem {
         return days[date.getDay()];
     }
 
-    formatTimeRemaining(minutes) {
-        if (minutes <= 0) return '00:00:00';
-
-        const hours = Math.floor(minutes / 60);
-        const mins = minutes % 60;
-        const secs = 0; // Segundos siempre 0 ya que actualizamos por minutos
-
-        return `${hours.toString().padStart(2, '0')}h: ${mins.toString().padStart(2, '0')}m: ${secs.toString().padStart(2, '0')}s`;
-    }
+    // ======================
+    //  RENDERIZADO
+    // ======================
 
     render() {
         this.currentCourses = this.getCurrentCourses();
@@ -139,62 +154,51 @@ class CurrentCoursesSystem {
         return `${course.grade}-${course.start}-${course.end}-${course.subject}`.replace(/\s+/g, '-').toLowerCase();
     }
 
+    formatTimeRemaining(minutes) {
+        if (minutes <= 0) return '00:00:00';
+
+        const hours = Math.floor(minutes / 60);
+        const mins = minutes % 60;
+        const secs = 0; // Segundos siempre 0 ya que actualizamos por minutos
+
+        return `${hours.toString().padStart(2, '0')}h: ${mins.toString().padStart(2, '0')}m: ${secs.toString().padStart(2, '0')}s`;
+    }
+
+    // ======================
+    //  SISTEMA DE COUNTDOWN (USANDO LA MISMA CLASE QUE SCHEDULE.JS)
+    // ======================
+
     initializeCountdowns() {
-        // Limpiar intervalos anteriores
-        this.countdownIntervals.forEach(intervalId => clearInterval(intervalId));
-        this.countdownIntervals.clear();
+        // Limpiar instancias anteriores
+        this.cleanupCountdowns();
 
         this.currentCourses.forEach(course => {
             const courseId = this.getCourseId(course);
             const countdownElement = document.getElementById(`countdown-${courseId}`);
 
-            if (countdownElement) {
-                this.startCountdown(countdownElement, course.timeRemaining, courseId);
+            if (countdownElement && course.endsAtDate) {
+                this.initializeCountdown(countdownElement, course.endsAtDate, courseId);
             }
         });
     }
 
-    startCountdown(element, initialMinutes, courseId) {
-        let remainingMinutes = initialMinutes;
-        let remainingSeconds = 0;
-
-        const updateCountdown = () => {
-            if (remainingMinutes <= 0 && remainingSeconds <= 0) {
-                clearInterval(this.countdownIntervals.get(courseId));
-                this.countdownIntervals.delete(courseId);
+    initializeCountdown(element, targetDate, courseId) {
+        // Usar la misma clase CountdownSystem que schedule.js
+        const instance = new CountdownSystem({
+            format: 'minimal',
+            precision: 'seconds',
+            onComplete: () => {
+                // Cuando un countdown termine, verificar si hay cambios
                 this.checkForUpdates();
-                return;
             }
+        }).init(targetDate, element);
 
-            // Decrementar segundos
-            if (remainingSeconds > 0) {
-                remainingSeconds--;
-            } else {
-                // Cuando segundos llegan a 0, decrementar minutos y resetear segundos
-                if (remainingMinutes > 0) {
-                    remainingMinutes--;
-                    remainingSeconds = 59;
-                }
-            }
-
-            // Actualizar el elemento con el formato HH:MM:SS
-            const hours = Math.floor(remainingMinutes / 60);
-            const mins = remainingMinutes % 60;
-            const secs = remainingSeconds;
-
-            element.textContent = `${hours.toString().padStart(2, '0')}h: ${mins.toString().padStart(2, '0')}m: ${secs.toString().padStart(2, '0')}s`;
-        };
-
-        // Inicializar con 0 segundos
-        remainingSeconds = 0;
-
-        // Actualizar inmediatamente
-        updateCountdown();
-
-        // Configurar intervalo para actualizar cada segundo
-        const intervalId = setInterval(updateCountdown, 1000);
-        this.countdownIntervals.set(courseId, intervalId);
+        this.countdownInstances.push({ instance, element, courseId });
     }
+
+    // ======================
+    //  ACTUALIZACIONES EN TIEMPO REAL
+    // ======================
 
     checkForUpdates() {
         // Verificar si hay cambios en los cursos actuales
@@ -215,26 +219,56 @@ class CurrentCoursesSystem {
         }, 15000);
     }
 
+    // ======================
+    //  LIMPIEZA
+    // ======================
+
+    cleanupCountdowns() {
+        // Destruir todas las instancias de countdown
+        this.countdownInstances.forEach(({ instance }) => {
+            if (instance && typeof instance.destroy === 'function') {
+                instance.destroy();
+            }
+        });
+        this.countdownInstances = [];
+    }
+
     destroy() {
         if (this.updateInterval) {
             clearInterval(this.updateInterval);
         }
 
-        this.countdownIntervals.forEach(intervalId => {
-            clearInterval(intervalId);
-        });
-        this.countdownIntervals.clear();
+        this.cleanupCountdowns();
     }
 }
 
+// ======================
+//  INICIALIZACIÓN MEJORADA
+// ======================
+
 // Inicializar cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
-    // Esperar a que los datos de horarios estén cargados
+    // Esperar a que tanto los datos de horarios como CountdownSystem estén disponibles
     const initInterval = setInterval(() => {
-        if (typeof getTodaySchedule === 'function') {
+        if (typeof getTodaySchedule === 'function' && typeof CountdownSystem === 'function') {
             clearInterval(initInterval);
-            window.currentCoursesSystem = new CurrentCoursesSystem();
-            window.currentCoursesSystem.init();
+
+            // Pequeña espera adicional para asegurar que todo esté cargado
+            setTimeout(() => {
+                try {
+                    window.currentCoursesSystem = new CurrentCoursesSystem();
+                    window.currentCoursesSystem.init();
+                } catch (error) {
+                    console.error('Error al inicializar CurrentCoursesSystem:', error);
+                }
+            }, 100);
         }
     }, 100);
+});
+
+// Manejar recarga de la página
+window.addEventListener('beforeunload', () => {
+    if (window.currentCoursesSystem) {
+        window.currentCoursesSystem.destroy();
+    }
 });

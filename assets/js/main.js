@@ -164,4 +164,5 @@ document.addEventListener('DOMContentLoaded', () => {
     // Cargar funcionalidades adicionales si existen
     if (typeof loadNews === 'function') loadNews();
     if (typeof loadMenu === 'function') loadMenu();
+    if (typeof loadSchedule === 'function') loadSchedule();
 });
