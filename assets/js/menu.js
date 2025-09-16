@@ -441,7 +441,8 @@ class MenuCountdownSystem {
   }
 
   renderCountdownContent(status, timeRemaining, mealType) {
-    const mealName = mealType === 'breakfast' ? 'desayuno' : 'almuerzo';
+    console.log(mealType)
+    const mealName = mealType === 'desayuno' ? 'desayuno' : 'almuerzo';
 
     if (timeRemaining === null) {
       return `
