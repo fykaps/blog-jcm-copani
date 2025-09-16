@@ -8,7 +8,41 @@
  * - Navegación por teclado
  * - Sistema de breadcrumbs
  * - Totalmente responsivo
+ * CORREGIDO: Problema de zona horaria en fechas
  */
+
+// ======================
+//  UTILIDADES DE FECHA (CORREGIDAS) - AÑADIDAS
+// ======================
+
+/**
+ * Parsear fecha local sin problemas de zona horaria
+ * @param {string} dateStr - Fecha en formato YYYY-MM-DD
+ * @returns {Date} - Objeto Date correctamente ajustado
+ */
+function parseLocalDate(dateStr) {
+    if (!dateStr) return new Date();
+
+    const parts = dateStr.split('-');
+    if (parts.length !== 3) return new Date(dateStr);
+
+    // Crear fecha en zona horaria local (sin ajuste UTC)
+    return new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+}
+
+/**
+ * Formatear fecha local para mostrar
+ * @param {string} dateStr - Fecha en formato YYYY-MM-DD
+ * @returns {string} - Fecha formateada
+ */
+function formatLocalDate(dateStr) {
+    const date = parseLocalDate(dateStr);
+    return date.toLocaleDateString('es-ES', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+}
 
 class EventDetailManager {
     constructor() {
@@ -712,8 +746,8 @@ class EventDetailManager {
     }
 
     formatDate(dateString) {
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        return new Date(dateString).toLocaleDateString('es-ES', options);
+        // Usar la función corregida formatLocalDate
+        return formatLocalDate(dateString);
     }
 }
 
