@@ -4,12 +4,81 @@
  * - Sistema de comentarios
  * - Compartir en redes sociales
  * - Gestión de likes y vistas
+ * - CORRECCIÓN: Problemas de zona horaria en fechas
  */
 
 class NewsDetailManager {
     constructor() {
         this.newsId = null;
         this.news = null;
+    }
+
+    // ======================
+    //  UTILIDADES DE FECHA (CORREGIDAS) - AÑADIDAS
+    // ======================
+
+    /**
+     * Convierte una fecha en formato YYYY-MM-DD a objeto Date sin problemas de zona horaria
+     * @param {string} dateStr - Fecha en formato YYYY-MM-DD
+     * @returns {Date} - Objeto Date correctamente ajustado
+     */
+    parseLocalDate(dateStr) {
+        if (!dateStr) return new Date();
+
+        const parts = dateStr.split('-');
+        if (parts.length !== 3) return new Date(dateStr);
+
+        // Crear fecha en zona horaria local (sin ajuste UTC)
+        return new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+    }
+
+    /**
+     * Formatea una fecha al formato local sin problemas de zona horaria
+     * @param {string} dateStr - Fecha en formato YYYY-MM-DD
+     * @returns {string} - Fecha formateada correctamente
+     */
+    formatLocalDate(dateStr) {
+        const date = this.parseLocalDate(dateStr);
+        return date.toLocaleDateString('es-ES', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        });
+    }
+
+    /**
+     * Formatea una fecha completa en español
+     * @param {string} dateStr - Fecha en formato YYYY-MM-DD
+     * @returns {string} - Fecha completa formateada
+     */
+    formatFullLocalDate(dateStr) {
+        const date = this.parseLocalDate(dateStr);
+        return date.toLocaleDateString('es-ES', {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        });
+    }
+
+    /**
+     * Formatea una fecha para mostrar en la UI
+     * @param {string} dateStr - Fecha en formato YYYY-MM-DD
+     * @returns {string} - Fecha formateada
+     */
+    formatDate(dateString) {
+        const date = this.parseLocalDate(dateString);
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        return date.toLocaleDateString('es-ES', options);
+    }
+
+    /**
+     * Obtiene el timestamp de una fecha para ordenamiento
+     * @param {string} dateStr - Fecha en formato YYYY-MM-DD
+     * @returns {number} - Timestamp para ordenamiento
+     */
+    getDateTimestamp(dateStr) {
+        return this.parseLocalDate(dateStr).getTime();
     }
 
     init() {
@@ -321,22 +390,29 @@ class NewsDetailManager {
             return;
         }
 
-        container.innerHTML = commentsToShow.map(comment => `
+        container.innerHTML = commentsToShow.map(comment => {
+            // Manejar comentarios sin nombre (usar "Anónimo" como valor por defecto)
+            const commentName = comment.name || 'Anónimo';
+            const commentDate = comment.date ? this.formatDate(comment.date) : 'Fecha desconocida';
+            const commentContent = comment.content || 'Sin contenido';
+
+            return `
             <div class="comment">
                 <div class="comment-header">
                     <div class="comment-author">
                         <div class="comment-avatar">
-                            ${comment.name.charAt(0).toUpperCase()}
+                            ${commentName.charAt(0).toUpperCase()}
                         </div>
-                        <span>${comment.name}</span>
+                        <span>${commentName}</span>
                     </div>
-                    <span class="comment-date">${this.formatDate(comment.date)}</span>
+                    <span class="comment-date">${commentDate}</span>
                 </div>
                 <div class="comment-content">
-                    <p>${comment.content}</p>
+                    <p>${commentContent}</p>
                 </div>
             </div>
-        `).join('');
+            `;
+        }).join('');
     }
 
     addComment() {
@@ -461,12 +537,6 @@ class NewsDetailManager {
     getViews(newsId) {
         const views = JSON.parse(localStorage.getItem('newsViews')) || {};
         return views[newsId] || 0;
-    }
-
-    formatDate(dateString) {
-        const date = new Date(dateString);
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        return date.toLocaleDateString('es-ES', options);
     }
 
     showConfetti() {
