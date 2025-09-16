@@ -30,8 +30,8 @@ const weeklyMenu = [
             additional: ""
         },
         lunch: {
-            start: "14:30",
-            end: "15:30",
+            start: "12:30",
+            end: "13:00",
             name: "Lentejas guisadas con arroz y ensalada criolla",
             description: "Plato nutritivo de lentejas cocidas con verduras, acompañado de arroz y ensalada fresca",
             ingredients: [
